@@ -1,19 +1,20 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole;
+namespace MezzioTest\Swoole;
 
-use Psr\Container\ContainerInterface;
+use Mezzio\Swoole\StaticResourceHandler;
+use Mezzio\Swoole\StaticResourceHandlerFactory;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use ReflectionProperty;
-use Zend\Expressive\Swoole\StaticResourceHandler;
-use Zend\Expressive\Swoole\StaticResourceHandlerFactory;
 
 class StaticResourceHandlerFactoryTest extends TestCase
 {
@@ -44,7 +45,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
     public function testFactoryConfiguresHandlerBasedOnConfiguration()
     {
         $config = [
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
                         'document-root' => __DIR__ . '/TestAsset',
@@ -82,7 +83,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
         $handler = $factory($this->container->reveal());
 
         $this->assertAttributeSame(
-            $config['zend-expressive-swoole']['swoole-http-server']['static-files']['document-root'],
+            $config['mezzio-swoole']['swoole-http-server']['static-files']['document-root'],
             'docRoot',
             $handler
         );
@@ -102,7 +103,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
             $middleware
         );
         $this->assertAttributeSame(
-            $config['zend-expressive-swoole']['swoole-http-server']['static-files']['type-map'],
+            $config['mezzio-swoole']['swoole-http-server']['static-files']['type-map'],
             'typeMap',
             $contentTypeFilter
         );
@@ -112,7 +113,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
             $middleware
         );
         $this->assertAttributeSame(
-            $config['zend-expressive-swoole']['swoole-http-server']['static-files']['clearstatcache-interval'],
+            $config['mezzio-swoole']['swoole-http-server']['static-files']['clearstatcache-interval'],
             'interval',
             $clearStatsCache
         );

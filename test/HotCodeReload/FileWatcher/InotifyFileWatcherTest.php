@@ -1,16 +1,17 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\HotCodeReload\FileWatcher;
+namespace MezzioTest\Swoole\HotCodeReload\FileWatcher;
 
+use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use PHPUnit\Framework\TestCase;
-use Zend\Expressive\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 
 class InotifyFileWatcherTest extends TestCase
 {

@@ -1,6 +1,6 @@
 # Command Line Tooling
 
-This package ships the vendor binary `zend-expressive-swoole`. It provides the
+This package ships the vendor binary `mezzio-swoole`. It provides the
 following commands:
 
 - `start` to start the server
@@ -11,7 +11,7 @@ following commands:
 You may obtain help for each command using the `help` meta-command:
 
 ```bash
-$ ./vendor/bin/zend-expressive-swoole help start
+$ ./vendor/bin/mezzio-swoole help start
 ```
 
 The `stop`, `status`, and `reload` commands are sufficiently generic to work
@@ -29,8 +29,8 @@ The `start` command will start the web server using the following steps:
   whether or not to daemonize the server (provided via the `--daemonize` or `-d`
   option).
 
-- It pulls the `Zend\Expressive\Application` and
-  `Zend\Expressive\MiddlewareFactory` services from the container.
+- It pulls the `Mezzio\Application` and
+  `Mezzio\MiddlewareFactory` services from the container.
 
 - It loads the `config/pipeline.php` and `config/routes.php` files, invoking
   their return values with the application, middleware factory, and dependency
@@ -39,7 +39,7 @@ The `start` command will start the web server using the following steps:
 - It calls the `run()` method of the application instance.
 
 These are roughly the steps taken within the application bootstrap
-(`public/index.php`) of the Expressive skeleton application.
+(`public/index.php`) of the Mezzio skeleton application.
 
 ### Writing a custom start command
 
@@ -77,10 +77,10 @@ use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zend\Expressive\Application;
-use Zend\Expressive\MiddlewareFactory;
-use Zend\Expressive\Swoole\Command\StartCommand as BaseStartCommand;
-use Zend\Expressive\Swoole\PidManager;
+use Mezzio\Application;
+use Mezzio\MiddlewareFactory;
+use Mezzio\Swoole\Command\StartCommand as BaseStartCommand;
+use Mezzio\Swoole\PidManager;
 
 class StartCommand extends BaseStartCommand
 {
@@ -100,10 +100,10 @@ class StartCommand extends BaseStartCommand
             'worker_num' => $input->getOption('num-workers') ?? self::DEFAULT_NUM_WORKERS,
         ]);
 
-        /** @var \Zend\Expressive\Application $app */
+        /** @var \Mezzio\Application $app */
         $app = $this->container->get(Application::class);
 
-        /** @var \Zend\Expressive\MiddlewareFactory $factory */
+        /** @var \Mezzio\MiddlewareFactory $factory */
         $factory = $this->container->get(MiddlewareFactory::class);
 
         // Execute programmatic/declarative middleware pipeline and routing
@@ -150,13 +150,13 @@ class StartCommandFactory
 ```
 
 If this is all you're changing, you can map this new command to the existing
-`Zend\Expressive\Swoole\Command\StartCommand` service within your configuration:
+`Mezzio\Swoole\Command\StartCommand` service within your configuration:
 
 ```php
 // in config/autoload/dependencies.global.php:
 
 use App\Command\StartCommandFactory;
-use Zend\Expressive\Swoole\Command\StartCommand;
+use Mezzio\Swoole\Command\StartCommand;
 
 return [
     'dependencies' => [
@@ -167,5 +167,5 @@ return [
 ];
 ```
 
-Since the `zend-expressive-swoole` binary uses your application configuration
+Since the `mezzio-swoole` binary uses your application configuration
 and container, this will substitute your command for the shipped command!
