@@ -1,14 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\Log;
+namespace MezzioTest\Swoole\Log;
 
+use Mezzio\Swoole\Log\AccessLogDataMap;
+use Mezzio\Swoole\Log\AccessLogFormatterInterface;
+use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
@@ -17,10 +22,6 @@ use Psr\Log\LogLevel;
 use ReflectionClass;
 use ReflectionProperty;
 use Swoole\Http\Request;
-use Zend\Expressive\Swoole\Log\AccessLogDataMap;
-use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface;
-use Zend\Expressive\Swoole\Log\Psr3AccessLogDecorator;
-use Zend\Expressive\Swoole\StaticResourceHandler\StaticResourceResponse;
 
 class Psr3AccessLogDecoratorTest extends TestCase
 {

@@ -1,22 +1,22 @@
 # Static Resources
 
 One feature of a web server is the ability to serve static files from your
-filesystem. zend-expressive-swoole provides that capability as well.
+filesystem. mezzio-swoole provides that capability as well.
 
 To enable this, the package provides an alternate
-[`RequestHandlerRunner`](https://docs.zendframework.com/zend-httphandlerrunner/runner/)
-implementation via the class `Zend\Expressive\Swoole\SwooleRequestHandlerRunner`
+[`RequestHandlerRunner`](https://docs.laminas.dev/laminas-httphandlerrunner/runner/)
+implementation via the class `Mezzio\Swoole\SwooleRequestHandlerRunner`
 that performs two duties:
 
 - If a static resource is matched, it serves that.
 - Otherwise, it passes off handling to the composed application pipeline.
 
 Internally, the `SwooleRequestHandlerRunner` composes another class, a 
-`Zend\Expressive\Swoole\StaticResourceHandlerInterface` instance. This instance
+`Mezzio\Swoole\StaticResourceHandlerInterface` instance. This instance
 is passed the Swoole request and response, and returns a value indicating
 whether or not it was able to identify and serve a matching static resource.
 
-Our default implementation, `Zend\Expressive\Swoole\StaticResourceHandler`,
+Our default implementation, `Mezzio\Swoole\StaticResourceHandler`,
 provides an approach that checks an incoming request path against a list of
 known extensions, and a configured document root. If the extension matches, it
 then checks to see if the file exists in the document root. If it does, it will
@@ -36,8 +36,8 @@ serve it.
 > use Psr\Container\ContainerInterface;
 > use Psr\Http\Message\ServerRequestInterface;
 > use Swoole\Http\Server as SwooleHttpServer;
-> use Zend\Expressive\ApplicationPipeline;
-> use Zend\Expressive\Swoole;
+> use Mezzio\ApplicationPipeline;
+> use Mezzio\Swoole;
 >
 > function (ContainerInterface $container) : Swoole\SwooleRequestHandlerRunner
 > {
@@ -55,14 +55,14 @@ serve it.
 > }
 > ```
 >
-> If you are using the default factory provided (`Zend\Expressive\Swoole\SwooleRequestHandlerRunnerFactory`),
+> If you are using the default factory provided (`Mezzio\Swoole\SwooleRequestHandlerRunnerFactory`),
 > you can also disable the functionality via configuration. To do this, set the
-> `zend-expressive-swoole.swoole-http-server.static-files.enable` flag to
+> `mezzio-swoole.swoole-http-server.static-files.enable` flag to
 > boolean `false`:
 >
 > ```php
 > return [
->     'zend-expressive-swoole' => [
+>     'mezzio-swoole' => [
 >         'swoole-http-server' => [
 >             'static-files' => [
 >                 'enable' => false,
@@ -166,7 +166,7 @@ The following demonstrates all currently available configuration options:
 // config/autoload/swoole.local.php
 
 return [
-    'zend-expressive-swoole' => [
+    'mezzio-swoole' => [
         'swoole-http-server' => [
             'static-files' => [
                 // Since 2.1.0: Set to false to disable any serving of static
@@ -241,7 +241,7 @@ return [
 > ### Default extension/content-types
 >
 > By default, we serve files with extensions in the whitelist defined in the
-> constant `Zend\Expressive\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS`,
+> constant `Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS`,
 > which is derived from a [list of common web MIME types maintained by Mozilla](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types).
 
 ### Configuration Example
@@ -260,7 +260,7 @@ The example which follows provides the following options:
 // config/autoload/swoole.local.php
 
 return [
-    'zend-expressive-swoole' => [
+    'mezzio-swoole' => [
         'swoole-http-server' => [
             'static-files' => [
                 'enable'        => true,
@@ -311,11 +311,11 @@ return [
 ## Writing Middleware
 
 Static resource middleware must implement
-`Zend\Expressive\Swoole\StaticResourceHandler\MiddlewareInterface`, which
+`Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface`, which
 defines the following:
 
 ```php
-namespace Zend\Expressive\Swoole\StaticResourceHandler;
+namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Swoole\Http\Request;
 
@@ -337,7 +337,7 @@ interface MiddlewareInterface
 The `$next` argument has the following signature:
 
 ```php
-namespace Zend\Expressive\Swoole\StaticResourceHandler;
+namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Swoole\Http\Request;
 
@@ -359,7 +359,7 @@ $response = $next($request, $filename);
 ```
 
 Middleware either produces or manipulates a
-`Zend\Expressive\Swoole\StaticResourceHandler\StaticResourceResponse` instance.
+`Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse` instance.
 That class looks like the following:
 
 ```php
@@ -432,12 +432,12 @@ resource was matched by the request, and then to serve it.
 
 If you want to provide an alternative mechanism for doing so (e.g., to serve
 files out of a caching server), you will need to implement
-`Zend\Expressive\Swoole\StaticResourceHandlerInterface`:
+`Mezzio\Swoole\StaticResourceHandlerInterface`:
 
 ```php
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
@@ -460,5 +460,5 @@ interface StaticResourceHandlerInterface
 ```
 
 Once implemented, map the service
-`Zend\Expressive\Swoole\StaticResourceHandlerInterface` to a factory that
+`Mezzio\Swoole\StaticResourceHandlerInterface` to a factory that
 returns your custom implementation within your `dependencies` configuration.

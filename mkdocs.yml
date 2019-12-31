@@ -5,7 +5,7 @@ extra:
   versions:
     - v2
     - v1
-pages:
+nav:
     - Home: index.md
     - v2:
       - Introduction: v2/intro.md
@@ -31,6 +31,6 @@ pages:
       - "_static-resources": static-resources.md
       - "_logging": logging.md
       - "_how-it-works": how_it_works.md
-site_name: 'zend-expressive-swoole'
-site_description: 'Swoole support for Expressive'
-repo_url: 'https://github.com/zendframework/zend-expressive-swoole'
+site_name: 'mezzio-swoole'
+site_description: 'Swoole support for Mezzio'
+repo_url: 'https://github.com/mezzio/mezzio-swoole'
