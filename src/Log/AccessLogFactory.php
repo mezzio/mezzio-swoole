@@ -1,13 +1,14 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole\Log;
+namespace Mezzio\Swoole\Log;
 
 use Psr\Container\ContainerInterface;
 
@@ -19,7 +20,7 @@ use Psr\Container\ContainerInterface;
  * it will look for and use the following configuration, if found:
  *
  * <code>
- * 'zend-expressive-swoole' => [
+ * 'mezzio-swoole' => [
  *     'swoole-http-server' => [
  *         'logger' => [
  *             'logger-name' => string, // the name of a service resolving a Psr\Log\LoggerInterface instance
@@ -37,7 +38,7 @@ class AccessLogFactory
     public function __invoke(ContainerInterface $container) : AccessLogInterface
     {
         $config = $container->has('config') ? $container->get('config') : [];
-        $config = $config['zend-expressive-swoole']['swoole-http-server']['logger'] ?? [];
+        $config = $config['mezzio-swoole']['swoole-http-server']['logger'] ?? [];
 
         return new Psr3AccessLogDecorator(
             $this->getLogger($container),
@@ -50,6 +51,10 @@ class AccessLogFactory
     {
         if ($container->has(AccessLogFormatterInterface::class)) {
             return $container->get(AccessLogFormatterInterface::class);
+        }
+
+        if ($container->has(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)) {
+            return $container->get(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class);
         }
 
         return new AccessLogFormatter(

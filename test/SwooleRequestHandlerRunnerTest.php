@@ -1,14 +1,24 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole;
+namespace MezzioTest\Swoole;
 
+use Laminas\Diactoros\Response;
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Response\ServerRequestErrorResponseGenerator;
+use Mezzio\Swoole\HotCodeReload\Reloader;
+use Mezzio\Swoole\PidManager;
+use Mezzio\Swoole\ServerFactory;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use Mezzio\Swoole\StaticResourceHandlerInterface;
+use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,15 +27,6 @@ use ReflectionClass;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\Diactoros\Response;
-use Zend\Expressive\Response\ServerRequestErrorResponseGenerator;
-use Zend\Expressive\Swoole\HotCodeReload\Reloader;
-use Zend\Expressive\Swoole\PidManager;
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunner;
-use Zend\Expressive\Swoole\ServerFactory;
-use Zend\Expressive\Swoole\StaticResourceHandlerInterface;
-use Zend\Expressive\Swoole\StaticResourceHandler\StaticResourceResponse;
-use Zend\HttpHandlerRunner\RequestHandlerRunner;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {

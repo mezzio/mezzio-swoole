@@ -1,20 +1,21 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\HotCodeReload;
+namespace MezzioTest\Swoole\HotCodeReload;
 
+use Laminas\ServiceManager\ServiceManager;
+use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
+use Mezzio\Swoole\Log\StdoutLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface;
-use Zend\Expressive\Swoole\HotCodeReload\ReloaderFactory;
-use Zend\Expressive\Swoole\Log\StdoutLogger;
-use Zend\ServiceManager\ServiceManager;
 
 class ReloaderFactoryTest extends TestCase
 {
@@ -53,7 +54,7 @@ class ReloaderFactoryTest extends TestCase
         $this->container->configure([
             'services' => [
                 'config' => [
-                    'zend-expressive-swoole' => [
+                    'mezzio-swoole' => [
                         'hot-code-reload' => [
                             'interval' => 999,
                         ],
@@ -86,7 +87,7 @@ class ReloaderFactoryTest extends TestCase
         yield 'empty hot-code-reload' => [
             [
                 'config' => [
-                    'zend-expressive-swoole' => [
+                    'mezzio-swoole' => [
 
                     ],
                 ],

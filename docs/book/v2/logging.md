@@ -25,14 +25,14 @@ equal to 400).
 ## Access Logs
 
 Technically, the `SwooleRequestHandlerRunner` doesn't use PSR-3 loggers
-directly, but, rather, instances of `Zend\Expressive\Swoole\Log\AccessLogInterface`.
+directly, but, rather, instances of `Mezzio\Swoole\Log\AccessLogInterface`.
 This package-specific interface extends the PSR-3 interface to add two methods:
 
 ```php
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Request;
-use Zend\Expressive\Swoole\StaticResourceHandler\StaticResourceResponse;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 
 interface AccessLogInterface extends LoggerInterface
 {
@@ -49,7 +49,7 @@ interface AccessLogInterface extends LoggerInterface
 ```
 
 To allow usage of a standard PSR-3 logger, we also provide a decorator,
-`Zend\Expressive\Swoole\Log\Psr3AccessLogDecorator`, which decorates the PSR-3
+`Mezzio\Swoole\Log\Psr3AccessLogDecorator`, which decorates the PSR-3
 logger and provides a standard implementation for the two methods listed above.
 If you have defined a PSR-3 `LoggerInterface` service in your application, it
 will be used automatically.
@@ -65,7 +65,7 @@ You can refer to the [Apache mod_log_config documentation](http://httpd.apache.o
 in order to understand the available placeholders available for format strings.
 
 Formatting is provided to the `Psr3AccessLogDecorator` via instances of the
-interface `Zend\Expressive\Swoole\Log\AccessLogFormatterInterface`:
+interface `Mezzio\Swoole\Log\AccessLogFormatterInterface`:
 
 ```php
 interface AccessLogFormatterInterface
@@ -99,11 +99,11 @@ runner.
 
 ### Manual usage
 
-If you are manually instantiating a `Zend\Expressive\Swoole\SwooleRequestHandlerRunner`
+If you are manually instantiating a `Mezzio\Swoole\SwooleRequestHandlerRunner`
 instance, you may provide it as the seventh argument to the constructor:
 
 ```php
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunner;
+use Mezzio\Swoole\SwooleRequestHandlerRunner;
 
 $runner = new SwooleRequestHandlerRunner(
     $application,
@@ -120,7 +120,7 @@ $runner = new SwooleRequestHandlerRunner(
 
 If you are using a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, the
 `SwooleRequestHandlerRunnerFactory` will retrieve a log instance using the
-`Zend\Expressive\Swoole\Log\AccessLogInterface` service.
+`Mezzio\Swoole\Log\AccessLogInterface` service.
 
 You have two options for substituting your own logger from there.
 
@@ -128,7 +128,7 @@ First, if you already have a service which resolves to a `Psr\Log\LoggerInterfac
 you can configure it by providing its name:
 
 ```php
-'zend-expressive-swoole' => [
+'mezzio-swoole' => [
     'swoole-http-server' => [
         'logger' => [
             'logger-name' => 'my_logger', // define the logger service name here
@@ -138,11 +138,11 @@ you can configure it by providing its name:
 ```
 
 If you don't want to manually provide the service name but you are okay with re-using your
-existing PSR-3 logger, the provided `Zend\Expressive\Swoole\Log\AccessLogFactory` will use
+existing PSR-3 logger, the provided `Mezzio\Swoole\Log\AccessLogFactory` will use
 the `Psr\Log\LoggerInterface` service to create a `Psr3AccessLogDecorator` instance.
 
-> Since 2.4.0, the `Zend\Expressive\Swoole\Log\AccessLogFactory` will resolve the logger instance by using the `Zend\Expressive\Swoole\Log\SwooleLogger` service.
-> If you were manually using this factory, you should register the service to the `Zend\Expressive\Swoole\Log\SwooleLoggerFactory`.
+> Since 2.4.0, the `Mezzio\Swoole\Log\AccessLogFactory` will resolve the logger instance by using the `Mezzio\Swoole\Log\SwooleLogger` service.
+> If you were manually using this factory, you should register the service to the `Mezzio\Swoole\Log\SwooleLoggerFactory`.
 
 This factory also allows you to specify a custom `AccessLogFormatterInterface`
 instance if you want. It will look up a service by the fully-qualified interface
@@ -152,7 +152,7 @@ instance for you.
 In both cases the factory will also look at the following configuration values:
 
 ```php
-'zend-expressive-swoole' => [
+'mezzio-swoole' => [
     'swoole-http-server' => [
         'logger' => [
             'format' => string, // one of the AccessLogFormatter::FORMAT_*

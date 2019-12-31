@@ -1,21 +1,22 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\HotCodeReload;
+namespace MezzioTest\Swoole\HotCodeReload;
 
+use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use Mezzio\Swoole\HotCodeReload\Reloader;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Swoole\Server as SwooleServer;
-use Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface;
-use Zend\Expressive\Swoole\HotCodeReload\Reloader;
 
 class ReloaderTest extends TestCase
 {
