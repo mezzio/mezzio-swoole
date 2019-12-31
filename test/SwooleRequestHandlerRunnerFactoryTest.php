@@ -1,29 +1,30 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole;
+namespace MezzioTest\Swoole;
 
+use Mezzio\ApplicationPipeline;
+use Mezzio\Response\ServerRequestErrorResponseGenerator;
+use Mezzio\Swoole\Exception\InvalidConfigException;
+use Mezzio\Swoole\Log\AccessLogInterface;
+use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
+use Mezzio\Swoole\Log\StdoutLogger;
+use Mezzio\Swoole\PidManager;
+use Mezzio\Swoole\ServerFactory;
+use Mezzio\Swoole\StaticResourceHandlerInterface;
+use Mezzio\Swoole\SwooleRequestHandlerRunner;
+use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Expressive\ApplicationPipeline;
-use Zend\Expressive\Response\ServerRequestErrorResponseGenerator;
-use Zend\Expressive\Swoole\Exception\InvalidConfigException;
-use Zend\Expressive\Swoole\PidManager;
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunner;
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunnerFactory;
-use Zend\Expressive\Swoole\ServerFactory;
-use Zend\Expressive\Swoole\StaticResourceHandlerInterface;
-use Zend\Expressive\Swoole\Log\AccessLogInterface;
-use Zend\Expressive\Swoole\Log\Psr3AccessLogDecorator;
-use Zend\Expressive\Swoole\Log\StdoutLogger;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
