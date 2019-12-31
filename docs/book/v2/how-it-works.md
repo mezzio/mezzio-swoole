@@ -1,6 +1,6 @@
 # How it works
 
-When you run an Expressive application using Swoole, you will execute PHP from
+When you run an Mezzio application using Swoole, you will execute PHP from
 the command line interface, **without using a web server**.
 
 This sounds a bit strange in PHP, though it will be familiar to [Node.js](https://nodejs.org)
@@ -9,10 +9,10 @@ developers; the execution model under Swoole is similar to that technology.
 The HTTP server of Swoole is a PHP class that offers callbacks on a number of events,
 using the `on(string $name, callable $action)` method.
 
-The request handler implemented in zend-expressive-swoole is a runner that
-enables the execution of an Expressive application inside the `on('request')`
+The request handler implemented in mezzio-swoole is a runner that
+enables the execution of an Mezzio application inside the `on('request')`
 event of `Swoole\Http\Server`. This runner is implemented in the
-`Zend\Expressive\Swoole\SwooleRequestHandlerRunner` class.
+`Mezzio\Swoole\SwooleRequestHandlerRunner` class.
 
 The basic implementation acts similar to the following:
 
@@ -48,13 +48,13 @@ public function run() : void
 
 This package provides a bridge between `Swoole\Http\Request` (`$request`) and
 [PSR-7](https://www.php-fig.org/psr/psr-7/) requests (`$psr7Request`;
-specifically as implemented by [zend-diactoros](https://docs.zendframework.com/zend-diactoros))
-via the class `Zend\Expressive\Swoole\ServerRequestSwooleFactory`.
+specifically as implemented by [laminas-diactoros](https://docs.laminas.dev/laminas-diactoros))
+via the class `Mezzio\Swoole\ServerRequestSwooleFactory`.
 
-It also provides a Swoole-specific emitter, `Zend\Expressive\Swoole\SwooleEmitter`,
+It also provides a Swoole-specific emitter, `Mezzio\Swoole\SwooleEmitter`,
 that converts a PSR-7 response to a `Swoole\Http\Response` instance.
 
-When you run an Expressive application using zend-expressive-swoole, you will
+When you run an Mezzio application using mezzio-swoole, you will
 notice a bunch of PHP processes running. By default, Swoole executes 4 *worker*
 (or *reactor*) processes and 1 *master* process, for a total of 5 PHP processes.
 
@@ -67,11 +67,11 @@ HTTP requests in parallel. The architecture is built for scaling.
 
 ## Performance
 
-The ZF developers performed a benchmark running the default [zend-expressive-skeleton](https://github.com/zendframework/zend-expressive-skeleton)
+The Laminas developers performed a benchmark running the default [mezzio-skeleton](https://github.com/mezzio/mezzio-skeleton)
 application with Swoole 4.0.1, nginx 1.12.1, and Apache 2.4.27 (with mod_php)
 using PHP 7.2.7.
 
-The results demonstrated that **Expressive with Swoole runs 4 to 5 times faster
+The results demonstrated that **Mezzio with Swoole runs 4 to 5 times faster
 than nginx or Apache**.
 
 This impressive result is primarily due to the shared memory approach of Swoole.
@@ -80,7 +80,7 @@ be freed after a request. This allows application configuration and artifacts
 (such as middleware and handlers) to persist between requests and processes.
 
 Under Swoole 4.1+, for even better performance, you can enable the option
-`zend-expressive-swoole.enable_coroutine`. When this
+`mezzio-swoole.enable_coroutine`. When this
 is enabled, Swoole will run most I/O processes in coroutines. Doing so provides
 approximately **10 times faster performance** than without coroutines, meaning a
 Swoole-based application can be 40 to 50 times faster than running under nginx

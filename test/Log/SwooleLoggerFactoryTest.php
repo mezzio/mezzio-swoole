@@ -1,17 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\Log;
+namespace MezzioTest\Swoole\Log;
 
+use Mezzio\Swoole\Log\StdoutLogger;
+use Mezzio\Swoole\Log\SwooleLoggerFactory;
 use PHPUnit\Framework\TestCase;
-use Zend\Expressive\Swoole\Log\StdoutLogger;
-use Zend\Expressive\Swoole\Log\SwooleLoggerFactory;
 
 class SwooleLoggerFactoryTest extends TestCase
 {
@@ -27,11 +28,11 @@ class SwooleLoggerFactoryTest extends TestCase
     {
         yield 'no config' => [null];
         yield 'empty config' => [[]];
-        yield 'empty zend-expressive-swoole' => [['zend-expressive-swoole' => []]];
-        yield 'empty swoole-http-server' => [['zend-expressive-swoole' => [
+        yield 'empty mezzio-swoole' => [['mezzio-swoole' => []]];
+        yield 'empty swoole-http-server' => [['mezzio-swoole' => [
             'swoole-http-server' => [],
         ]]];
-        yield 'empty logger' => [['zend-expressive-swoole' => [
+        yield 'empty logger' => [['mezzio-swoole' => [
             'swoole-http-server' => [
                 'logger' => [],
             ],
