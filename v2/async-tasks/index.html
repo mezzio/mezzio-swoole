@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Swoole support for Mezzio">  
+    <link rel="canonical" href="https://docs.mezzio.dev/v2/async-tasks/">
+    <link rel="shortcut icon" href="/img/trademark-laminas-foundation-rgb.svg">
+
+    <title>Async Tasks - mezzio-swoole - Laminas Docs</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body id="page-top" class="mezzio">
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        
+        <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+        </a>
+        <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
+            Documentation
+        </a>
+
+        
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
+                </li>
+            </ul>
+
+            
+            
+                <div class="d-block d-sm-none">
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+        </ul>
+    </div>
+
+                </div>
+            
+
+            
+            <div class="d-block d-sm-none">
+                <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+    <header class="header">
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="col-6 offset-md-2">
+                <h1 class="header__title">
+                    Mezzio
+
+                    
+                        <small class="header__subtitle">mezzio-swoole</small>
+                    
+                </h1>
+            </div>
+
+            
+            <div class="col-4 text-sm-right">
+                
+                    
+<div class="version-selector">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+                v2
+            
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            
+                
+                    <li class="dropdown-menu__item dropdown-menu__item--selected">
+                        <a href="../intro/">
+                            
+                                v2 (latest)
+                            
+                        </a>
+                    </li>
+                
+            
+                
+                    <li class="dropdown-menu__item">
+                        <a href="../../v1/intro/">
+                            
+                                v1
+                            
+                        </a>
+                    </li>
+                
+            
+        </ul>
+    </div>
+</div>
+
+
+                    <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                    <a href="https://github.com/mezzio/mezzio-swoole/" class="header__link header__link--github" title="Go to repository of mezzio-swoole">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#configuring-the-server-process" class="toc__link">Configuring the Server Process</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#task-event-handlers" class="toc__link">Task Event Handlers</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#an-example-task-worker" class="toc__link">An example task worker</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#triggering-tasks-in-middleware" class="toc__link">Triggering Tasks in Middleware</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+            </div>
+            <div class="col-md-7 col-sm-12 content" role="main" data-spy="scroll" data-target=".toc">
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="">Overview</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">mezzio-swoole</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Reference</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Async Tasks</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Reference</h2>
+    
+
+    <h1 id="triggering-async-tasks">Triggering Async Tasks</h1>
+<p>Application resources requiring lengthy processing are not uncommon. In order to
+prevent these processes from impacting user experience, particularly when the
+user does not need to wait for the process to complete, we often delegate these
+to a <a href="https://en.wikipedia.org/wiki/Message_queue">message queue</a>.</p>
+<p>While message queues are powerful, they also require additional infrastructure
+for your application, and can be hard to justify when you have a small number of
+heavy processes, or a small number of users.</p>
+<p>In order to facilitate async processing, Swoole servers provides task worker
+processes, allowing your application to trigger tasks without the need for an
+external message queue, and without impacting the server worker processes
+&mdash; allowing your application to continue responding to requests while the
+server processes your task.</p>
+<h2 id="configuring-the-server-process">Configuring the Server Process</h2>
+<p>In order to take advantage of this feature, you will first need to configure the
+server to start up task workers. In your local configuration for the server,
+you'll need to add <code>task_worker_num</code>. The number of workers you configure define
+the number of concurrent tasks that can be executed at once. Tasks are queued in
+the order that they triggered, meaning that a <code>task_worker_num</code> of 1 will offer
+no concurrency and tasks will execute one after the other.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>&#39;mezzio-swoole&#39; =&gt; [</span>
+<span class=x>    &#39;swoole-http-server&#39; =&gt; [</span>
+<span class=x>        &#39;host&#39; =&gt; &#39;127.0.0.1&#39;,</span>
+<span class=x>        &#39;port&#39; =&gt; 8080,</span>
+<span class=x>        &#39;options&#39; =&gt; [</span>
+<span class=x>            &#39;worker_num&#39;      =&gt; 4, // The number of HTTP Server Workers</span>
+<span class=x>            &#39;task_worker_num&#39; =&gt; 4, // The number of Task Workers</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>];</span>
+</pre></div></p>
+<blockquote>
+<h3>No CLI option for task_worker_num</h3>
+<p>Unlike <code>worker_num</code>, there is no CLI option for <code>task_worker_num</code>. This is
+because enabling the task worker also requires registering a task worker
+with the server. To prevent accidental startup failures due to passing an
+option to specify the number of task workers without having registered a
+task worker, we omitted the CLI option.</p>
+</blockquote>
+<h2 id="task-event-handlers">Task Event Handlers</h2>
+<p>When task workers are enabled, the Swoole server will now <strong>require</strong> that you
+register two event callbacks with the server; without them, the server will
+refuse to start.</p>
+<p>The two events are:</p>
+<ul>
+<li><code>task</code>, which will define the code for handling tasks.</li>
+<li><code>finish</code>, which will execute when a task has completed.</li>
+</ul>
+<h3>Registering the Handlers</h3>
+<p>The signature for the <code>task</code> event handler is:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>function (</span>
+<span class=x>    \Swoole\Http\Server $server,</span>
+<span class=x>    int $taskId,</span>
+<span class=x>    int $sourceWorkerId,</span>
+<span class=x>    $dataForWorker</span>
+<span class=x>) : void</span>
+</pre></div></p>
+<p>where:</p>
+<ul>
+<li><code>$server</code> is the main HTTP server process</li>
+<li><code>$taskId</code> is a number that increments each time the server triggers a new task.</li>
+<li><code>$sourceWorkerId</code> is an integer that defines the worker process that is
+  executing the workload.</li>
+<li><code>$dataForWorker</code> contains the value passed to the <code>$server-&gt;task()</code> method
+  when initially triggering the task. This value can be any PHP value, with the
+  exception of a <code>resource</code>.</li>
+</ul>
+<p>To register the handler with the server, you must call it's <code>on()</code> method,
+<strong>before</strong> the server has been started:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>$server-&gt;on(&#39;task&#39;, $callable);</span>
+</pre></div></p>
+<p>As previously mentioned, you must also register an event handler for the
+<code>finish</code> event. This callback for this event should have the following
+signature:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>function (</span>
+<span class=x>    \Swoole\Http\Server $server,</span>
+<span class=x>    int $taskId,</span>
+<span class=x>    $userData</span>
+<span class=x>) : void</span>
+</pre></div></p>
+<p>The first two parameters are identical to the <code>task</code> event handler. The
+<code>$userData</code> parameter will contain the return value of the <code>task</code> event
+handler. </p>
+<p>Registering your callable for the <code>finish</code> event is accomplished like this:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>$server-&gt;on(&#39;finish&#39;, $callable);</span>
+</pre></div></p>
+<blockquote>
+<h3>There can be only one</h3>
+<p>There can be <strong>only one</strong> event handler per event type. Subsequent calls to
+<code>on('&lt;EventName&gt;')</code> replace the previously registered callable.</p>
+<h3>Finishing a task</h3>
+<p>If you do not return anything from your <code>task</code> event handler, the
+<code>finish</code> handler <strong>will not be called</strong>. The Swoole documentation recommends
+that the task worker callback manually finish the task in these situations:</p>
+<pre class=codehilite><code class=language-php>
+$server-&gt;finish('');
+</code></pre>
+<p>Even if you do not call the above method, the handler <strong>must</strong> be defined, or
+the server will refuse to start.</p>
+</blockquote>
+<h2 id="an-example-task-worker">An example task worker</h2>
+<p>The following example code illustrates a task worker with logging capabilities
+that uses a message notifier to process data:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// In src/App/TaskWorker.php:</span>
+
+<span class=x>namespace App;</span>
+
+<span class=x>use Psr\EventDispatcher\MessageInterface;</span>
+<span class=x>use Psr\EventDispatcher\MessageNotifierInterface;</span>
+<span class=x>use Psr\Log\LoggerInterface;</span>
+<span class=x>use Throwable;</span>
+
+<span class=x>class TaskWorker</span>
+<span class=x>{</span>
+<span class=x>    private $notifier;</span>
+<span class=x>    private $logger;</span>
+
+<span class=x>    public function __construct(LoggerInterface $logger, MessageNotifierInterface $notifier)</span>
+<span class=x>    {</span>
+<span class=x>        $this-&gt;logger = $logger;</span>
+<span class=x>        $this-&gt;notifier = $notifier;</span>
+<span class=x>    }</span>
+
+<span class=x>    public function __invoke($server, $taskId, $fromId, $data)</span>
+<span class=x>    {</span>
+<span class=x>        if (! $data instanceof MessageInterface) {</span>
+<span class=x>            $this-&gt;logger-&gt;error(&#39;Invalid data type provided to task worker: {type}&#39;, [</span>
+<span class=x>                &#39;type&#39; =&gt; is_object($data) ? get_class($data) : gettype($data)</span>
+<span class=x>            ]);</span>
+<span class=x>            return;</span>
+<span class=x>        }</span>
+
+<span class=x>        $this-&gt;logger-&gt;notice(&#39;Starting work on task {taskId} using data: {data}&#39;, [</span>
+<span class=x>            &#39;taskId&#39; =&gt; $taskId,</span>
+<span class=x>            &#39;data&#39; =&gt; json_encode($data),</span>
+<span class=x>        ]);</span>
+
+<span class=x>        try {</span>
+<span class=x>            $this-&gt;notifier-&gt;notify($data);</span>
+<span class=x>        } catch (Throwable $e) {</span>
+<span class=x>            $this-&gt;logger-&gt;error(&#39;Error processing task {taskId}: {error}&#39;, [</span>
+<span class=x>                &#39;taskId&#39; =&gt; $taskId,</span>
+<span class=x>                &#39;error&#39; =&gt; $e-&gt;getTraceAsString(),</span>
+<span class=x>            ]);</span>
+<span class=x>        }</span>
+
+<span class=x>        // Notify the server that processing of the task has finished:</span>
+<span class=x>        $server-&gt;finish(&#39;&#39;);</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>This invokable class needs to be attached to the <code>$server-&gt;on('task')</code> event
+before the server has started. The easiest place to accomplish this is in a
+<a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>
+targeting the Swoole HTTP server. First, we'll create the delegator factory:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// In src/App/TaskWorkerDelegator.php:</span>
+
+<span class=x>namespace App;</span>
+
+<span class=x>use Psr\Container\ContainerInterface;</span>
+<span class=x>use Psr\Log\LoggerInterface;</span>
+<span class=x>use Swoole\Http\Server as HttpServer;</span>
+
+<span class=x>class TaskWorkerDelegator</span>
+<span class=x>{</span>
+<span class=x>    public function __invoke(ContainerInterface $container, $serviceName, callable $callback) : HttpServer</span>
+<span class=x>    {</span>
+<span class=x>        $server = $callback();</span>
+<span class=x>        $logger = $container-&gt;get(LoggerInterface::class);</span>
+
+<span class=x>        $server-&gt;on(&#39;task&#39;, $container-&gt;get(TaskWorker::class));</span>
+<span class=x>        $server-&gt;on(&#39;finish&#39;, function ($server, $taskId, $data) use ($logger) {</span>
+<span class=x>            $logger-&gt;notice(&#39;Task #{taskId} has finished processing&#39;, [&#39;taskId&#39; =&gt; $taskId]);</span>
+<span class=x>        });</span>
+
+<span class=x>        return $server;</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>Next, we'll register it with our container:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// In config/autoload/dependencies.php:</span>
+
+<span class=x>return [</span>
+<span class=x>    &#39;dependencies&#39; =&gt; [</span>
+<span class=x>        &#39;delegators&#39; =&gt; [</span>
+<span class=x>            \Swoole\Http\Server::class =&gt; [</span>
+<span class=x>                \App\TaskWorkerDelegator::class,</span>
+<span class=x>            ],</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>];</span>
+</pre></div></p>
+<p>With this in place, we can now trigger tasks within our application. In the
+scenario outlined above, the task worker expects <em>messages</em>; it then <em>notifies</em>
+listeners of that message so they may respond to it.</p>
+<h2 id="triggering-tasks-in-middleware">Triggering Tasks in Middleware</h2>
+<p>Considering that this library provides an application runner for middleware
+applications, you will likely trigger tasks from within your middleware or
+request handlers. In each case, you will need to compose the Swoole HTTP server
+instance as a class dependency, as tasks are triggered via the server via its
+<code>task()</code> method. The method can accept any value except a resource as an
+argument.</p>
+<p>In the example below, <code>ContactMessage</code> will implement the <code>MessageInterface</code>
+from the above example. The request handler uses values from the request to
+create the <code>ContactMessage</code> instance, and then create a task from it. It then
+immediately returns a response.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// in src/App/Handler/TaskTriggeringHandler.php:</span>
+
+<span class=x>namespace App\Handler;</span>
+
+<span class=x>use Psr\Http\Message\ResponseFactoryInterface;</span>
+<span class=x>use Psr\Http\Message\ResponseInterface;</span>
+<span class=x>use Psr\Http\Message\ServerRequestInterface;</span>
+<span class=x>use Psr\Http\Server\RequestHandlerInterface;</span>
+<span class=x>use Swoole\Http\Server as HttpServer;</span>
+<span class=x>use Mezzio\Template\TemplateRendererInterface;</span>
+
+<span class=x>class TaskTriggeringHandler implements RequestHandlerInterface</span>
+<span class=x>{</span>
+<span class=x>    private $responseFactory;</span>
+<span class=x>    private $server;</span>
+<span class=x>    private $template;</span>
+
+<span class=x>    public function __construct(</span>
+<span class=x>        HttpServer $server,</span>
+<span class=x>        TemplateRendererInterface $template,</span>
+<span class=x>        ResponseFactoryInterface $responseFactory</span>
+<span class=x>    ) {</span>
+<span class=x>        $this-&gt;server          = $server;</span>
+<span class=x>        $this-&gt;template        = $template;</span>
+<span class=x>        $this-&gt;responseFactory = $responseFactory;</span>
+<span class=x>    }</span>
+
+<span class=x>    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
+<span class=x>    {</span>
+<span class=x>        // Gather data from request</span>
+<span class=x>        $data = $request-&gt;getParsedBody();</span>
+
+<span class=x>        // A fictonal event describing a contact request:</span>
+<span class=x>        $event = new ContactEvent([</span>
+<span class=x>            &#39;to&#39;      =&gt; $data[&#39;email&#39;],</span>
+<span class=x>            &#39;subject&#39; =&gt; $data[&#39;subject&#39;],</span>
+<span class=x>            &#39;message&#39; =&gt; $data[&#39;message&#39;],</span>
+<span class=x>        ]);</span>
+
+<span class=x>        // task() returns a task identifier, if you want to use it; otherwise,</span>
+<span class=x>        // you can ignore the return value.</span>
+<span class=x>        $taskIdentifier = $this-&gt;server-&gt;task($event);</span>
+
+<span class=x>        // The task() method is asynchronous, so execution continues immediately.</span>
+<span class=x>        $response = ($this-&gt;responseFactory()-&gt;createResponse())</span>
+<span class=x>            -&gt;withHeader(&#39;Content-Type&#39;, &#39;text/html&#39;);</span>
+<span class=x>        $response-&gt;getBody()-&gt;write($this-&gt;template-&gt;render(&#39;contact::thank-you&#39;, []);</span>
+<span class=x>        return $response;</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../logging/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../table/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+
+    <div class="help-wanted">
+        <p>
+            Found a mistake or want to contribute to the documentation?
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/async-tasks.md" target="_blank" class="help-wanted__link">
+                Edit this page on GitHub!
+            </a>
+        </p>
+    </div>
+
+                
+            </div>
+            <div class="col-md-3 col-sm-12 sidebar">
+                
+                    <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+        </ul>
+    </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+    <div class="container">
+
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="footer__button" href="#page-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 offset-md-2">
+                <h5>Laminas</h5>
+                <ul>
+                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
+                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+
+            
+            <div class="col-md-4 offset-md-2">
+                <h4 class="footer__headline">Support</h4>
+                <ul class="support__list">
+                    <li class="support__list-item">
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://laminas.dev/chat" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://github.com/laminas" class="support__link" title="Github"><i class="fa fa-github"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://twitter.com/getlaminas" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">License</h4>
+                <p>
+                    Code licensed under <a
+                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                </p>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">Copyright</h4>
+                <p>
+                    <!--Built with love by the Laminas team with the help of our
+                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        let base_url = '../..',
+            project  = "mezzio",
+            siteName = 'mezzio-swoole';
+    </script>
+    <script src="/js/scripts.js"></script>
+        <script src="../../search/main.js"></script>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search in mezzio-swoole" id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

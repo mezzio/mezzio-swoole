@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Swoole support for Mezzio">  
+    <link rel="canonical" href="https://docs.mezzio.dev/v2/command-line/">
+    <link rel="shortcut icon" href="/img/trademark-laminas-foundation-rgb.svg">
+
+    <title>Command Line Tooling - mezzio-swoole - Laminas Docs</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body id="page-top" class="mezzio">
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        
+        <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+        </a>
+        <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
+            Documentation
+        </a>
+
+        
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
+                </li>
+            </ul>
+
+            
+            
+                <div class="d-block d-sm-none">
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+        </ul>
+    </div>
+
+                </div>
+            
+
+            
+            <div class="d-block d-sm-none">
+                <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+    <header class="header">
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="col-6 offset-md-2">
+                <h1 class="header__title">
+                    Mezzio
+
+                    
+                        <small class="header__subtitle">mezzio-swoole</small>
+                    
+                </h1>
+            </div>
+
+            
+            <div class="col-4 text-sm-right">
+                
+                    
+<div class="version-selector">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+                v2
+            
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            
+                
+                    <li class="dropdown-menu__item dropdown-menu__item--selected">
+                        <a href="../intro/">
+                            
+                                v2 (latest)
+                            
+                        </a>
+                    </li>
+                
+            
+                
+                    <li class="dropdown-menu__item">
+                        <a href="../../v1/intro/">
+                            
+                                v1
+                            
+                        </a>
+                    </li>
+                
+            
+        </ul>
+    </div>
+</div>
+
+
+                    <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                    <a href="https://github.com/mezzio/mezzio-swoole/" class="header__link header__link--github" title="Go to repository of mezzio-swoole">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#the-start-command" class="toc__link">The start command</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+            </div>
+            <div class="col-md-7 col-sm-12 content" role="main" data-spy="scroll" data-target=".toc">
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="">Overview</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">mezzio-swoole</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Reference</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Command Line Tooling</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Reference</h2>
+    
+
+    <h1 id="command-line-tooling">Command Line Tooling</h1>
+<p>This package ships the vendor binary <code>mezzio-swoole</code>. It provides the
+following commands:</p>
+<ul>
+<li><code>start</code> to start the server</li>
+<li><code>stop</code> to stop the server (when run in daemonized mode)</li>
+<li><code>reload</code> to reload the server (when run in daemonized mode)</li>
+<li><code>status</code> to determine the server status (running or not running)</li>
+</ul>
+<p>You may obtain help for each command using the <code>help</code> meta-command:</p>
+<p> <div class=codehilite><pre><span></span>$ ./vendor/bin/mezzio-swoole <span class=nb>help</span> start
+</pre></div></p>
+<p>The <code>stop</code>, <code>status</code>, and <code>reload</code> commands are sufficiently generic to work
+regardless of runtime or application, as they work directly with the Swoole
+process manager. The <code>start</code> command, however, may need customizations if you
+have customized your application bootstrap.</p>
+<h2 id="the-start-command">The start command</h2>
+<p>The <code>start</code> command will start the web server using the following steps:</p>
+<ul>
+<li>
+<p>It pulls the <code>Swoole\Http\Server</code> service from the application dependency
+  injection container, and calls <code>set()</code> on it with options denoting the number
+  of workers to run (provided via the <code>--num-workers</code> or <code>-w</code> option), and
+  whether or not to daemonize the server (provided via the <code>--daemonize</code> or <code>-d</code>
+  option).</p>
+</li>
+<li>
+<p>It pulls the <code>Mezzio\Application</code> and
+  <code>Mezzio\MiddlewareFactory</code> services from the container.</p>
+</li>
+<li>
+<p>It loads the <code>config/pipeline.php</code> and <code>config/routes.php</code> files, invoking
+  their return values with the application, middleware factory, and dependency
+  injection container instances.</p>
+</li>
+<li>
+<p>It calls the <code>run()</code> method of the application instance.</p>
+</li>
+</ul>
+<p>These are roughly the steps taken within the application bootstrap
+(<code>public/index.php</code>) of the Mezzio skeleton application.</p>
+<h3>Writing a custom start command</h3>
+<p>If your application needs alternate bootstrapping (e.g., if you have modified
+the <code>public/index.php</code>, or if you are using this package with a different
+middleware runtime), we recommend writing a custom <code>start</code> command.</p>
+<p>As an example, let's say you have altered your application such that you're
+defining your routes in multiple files, and instead of:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>(require &#39;config/routes.php&#39;)($app, $factory, $container);</span>
+</pre></div></p>
+<p>you instead have something like:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>$handle = opendir(&#39;config/routes/&#39;);</span>
+<span class=x>while (false !== ($entry = readdir($handle))) {</span>
+<span class=x>    if (false === strrpos($entry, &#39;.php&#39;)) {</span>
+<span class=x>        continue;</span>
+<span class=x>    }</span>
+<span class=x>    (require $entry)($app, $factory, $container);</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>You could write a command such as the following:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// In src/App/Command/StartCommand.php:</span>
+
+<span class=x>namespace App\Command;</span>
+
+<span class=x>use Psr\Container\ContainerInterface;</span>
+<span class=x>use Swoole\Http\Server as SwooleHttpServer;</span>
+<span class=x>use Symfony\Component\Console\Input\InputInterface;</span>
+<span class=x>use Symfony\Component\Console\Output\OutputInterface;</span>
+<span class=x>use Mezzio\Application;</span>
+<span class=x>use Mezzio\MiddlewareFactory;</span>
+<span class=x>use Mezzio\Swoole\Command\StartCommand as BaseStartCommand;</span>
+<span class=x>use Mezzio\Swoole\PidManager;</span>
+
+<span class=x>class StartCommand extends BaseStartCommand</span>
+<span class=x>{</span>
+<span class=x>    protected function execute(InputInterface $input, OutputInterface $output) : int</span>
+<span class=x>    {</span>
+<span class=x>        // This functionality is identical to the base start command, and should</span>
+<span class=x>        // be copy and pasted to your implementation:</span>
+<span class=x>        $this-&gt;pidManager = $this-&gt;container-&gt;get(PidManager::class);</span>
+<span class=x>        if ($this-&gt;isRunning()) {</span>
+<span class=x>            $output-&gt;writeln(&#39;&lt;error&gt;Server is already running!&lt;/error&gt;&#39;);</span>
+<span class=x>            return 1;</span>
+<span class=x>        }</span>
+
+<span class=x>        $server = $this-&gt;container-&gt;get(SwooleHttpServer::class);</span>
+<span class=x>        $server-&gt;set([</span>
+<span class=x>            &#39;daemonize&#39; =&gt; $input-&gt;getOption(&#39;daemonize&#39;),</span>
+<span class=x>            &#39;worker_num&#39; =&gt; $input-&gt;getOption(&#39;num-workers&#39;) ?? self::DEFAULT_NUM_WORKERS,</span>
+<span class=x>        ]);</span>
+
+<span class=x>        /** @var \Mezzio\Application $app */</span>
+<span class=x>        $app = $this-&gt;container-&gt;get(Application::class);</span>
+
+<span class=x>        /** @var \Mezzio\MiddlewareFactory $factory */</span>
+<span class=x>        $factory = $this-&gt;container-&gt;get(MiddlewareFactory::class);</span>
+
+<span class=x>        // Execute programmatic/declarative middleware pipeline and routing</span>
+<span class=x>        // configuration statements</span>
+<span class=x>        (require &#39;config/pipeline.php&#39;)($app, $factory, $this-&gt;container);</span>
+
+<span class=x>        //</span>
+<span class=x>        // This is the new code from above:</span>
+<span class=x>        //</span>
+<span class=x>        $handle = opendir(getcwd() . &#39;/config/routes/&#39;);</span>
+<span class=x>        while (false !== ($entry = readdir($handle))) {</span>
+<span class=x>            if (false === strrpos($entry, &#39;.php&#39;)) {</span>
+<span class=x>                continue;</span>
+<span class=x>            }</span>
+<span class=x>            (require $entry)($app, $factory, $container);</span>
+<span class=x>        }</span>
+
+<span class=x>        // And now we return to the original code:</span>
+
+<span class=x>        // Run the application</span>
+<span class=x>        $app-&gt;run();</span>
+
+<span class=x>        return 0;</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>You will also need to write a factory for the class:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// In src/App/Command/StartCommandFactory.php:</span>
+
+<span class=x>namespace App\Command;</span>
+
+<span class=x>use Psr\Container\ContainerInterface;</span>
+
+<span class=x>class StartCommandFactory</span>
+<span class=x>{</span>
+<span class=x>    public function __invoke(ContainerInterface $container) : StartCommand</span>
+<span class=x>    {</span>
+<span class=x>        return new StartCommand($container);</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>If this is all you're changing, you can map this new command to the existing
+<code>Mezzio\Swoole\Command\StartCommand</code> service within your configuration:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// in config/autoload/dependencies.global.php:</span>
+
+<span class=x>use App\Command\StartCommandFactory;</span>
+<span class=x>use Mezzio\Swoole\Command\StartCommand;</span>
+
+<span class=x>return [</span>
+<span class=x>    &#39;dependencies&#39; =&gt; [</span>
+<span class=x>        &#39;factories&#39; =&gt; [</span>
+<span class=x>            StartCommand::class =&gt; StartCommandFactory::class,</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>];</span>
+</pre></div></p>
+<p>Since the <code>mezzio-swoole</code> binary uses your application configuration
+and container, this will substitute your command for the shipped command!</p>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../hot-code-reload/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../how-it-works/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+
+    <div class="help-wanted">
+        <p>
+            Found a mistake or want to contribute to the documentation?
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/command-line.md" target="_blank" class="help-wanted__link">
+                Edit this page on GitHub!
+            </a>
+        </p>
+    </div>
+
+                
+            </div>
+            <div class="col-md-3 col-sm-12 sidebar">
+                
+                    <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+        </ul>
+    </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+    <div class="container">
+
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="footer__button" href="#page-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 offset-md-2">
+                <h5>Laminas</h5>
+                <ul>
+                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
+                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+
+            
+            <div class="col-md-4 offset-md-2">
+                <h4 class="footer__headline">Support</h4>
+                <ul class="support__list">
+                    <li class="support__list-item">
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://laminas.dev/chat" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://github.com/laminas" class="support__link" title="Github"><i class="fa fa-github"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://twitter.com/getlaminas" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">License</h4>
+                <p>
+                    Code licensed under <a
+                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                </p>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">Copyright</h4>
+                <p>
+                    <!--Built with love by the Laminas team with the help of our
+                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        let base_url = '../..',
+            project  = "mezzio",
+            siteName = 'mezzio-swoole';
+    </script>
+    <script src="/js/scripts.js"></script>
+        <script src="../../search/main.js"></script>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search in mezzio-swoole" id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

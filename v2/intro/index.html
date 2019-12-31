@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Swoole support for Mezzio">  
+    <link rel="canonical" href="https://docs.mezzio.dev/v2/intro/">
+    <link rel="shortcut icon" href="/img/trademark-laminas-foundation-rgb.svg">
+
+    <title>Introduction - mezzio-swoole - Laminas Docs</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body id="page-top" class="mezzio">
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        
+        <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+        </a>
+        <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
+            Documentation
+        </a>
+
+        
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
+                </li>
+            </ul>
+
+            
+            
+                <div class="d-block d-sm-none">
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Introduction</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+        </ul>
+    </div>
+
+                </div>
+            
+
+            
+            <div class="d-block d-sm-none">
+                <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+    <header class="header">
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="col-6 offset-md-2">
+                <h1 class="header__title">
+                    Mezzio
+
+                    
+                        <small class="header__subtitle">mezzio-swoole</small>
+                    
+                </h1>
+            </div>
+
+            
+            <div class="col-4 text-sm-right">
+                
+                    
+<div class="version-selector">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+                v2
+            
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            
+                
+                    <li class="dropdown-menu__item dropdown-menu__item--selected">
+                        <a href="./">
+                            
+                                v2 (latest)
+                            
+                        </a>
+                    </li>
+                
+            
+                
+                    <li class="dropdown-menu__item">
+                        <a href="../../v1/intro/">
+                            
+                                v1
+                            
+                        </a>
+                    </li>
+                
+            
+        </ul>
+    </div>
+</div>
+
+
+                    <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                    <a href="https://github.com/mezzio/mezzio-swoole/" class="header__link header__link--github" title="Go to repository of mezzio-swoole">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#install-swoole" class="toc__link">Install swoole</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#install-mezzio-swoole" class="toc__link">Install mezzio-swoole</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#swoole-with-mezzio" class="toc__link">Swoole with Mezzio</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+            </div>
+            <div class="col-md-7 col-sm-12 content" role="main" data-spy="scroll" data-target=".toc">
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="">Overview</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">mezzio-swoole</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Introduction</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+
+
+
+    
+    
+
+    <h1 id="swoole">Swoole</h1>
+<p><a href="https://www.swoole.co.uk/">Swoole</a> is a PECL extension for developing
+asynchronous applications in PHP. It enables PHP developers to write
+high-performance, scalable, concurrent TCP, UDP, Unix socket, HTTP, or Websocket
+services without requiring in-depth knowledge about non-blocking I/O programming
+or the low-level Linux kernel.</p>
+<h2 id="install-swoole">Install swoole</h2>
+<p>You can install the Swoole extension on Linux or Mac environments using the
+following commands:</p>
+<p> <div class=codehilite><pre><span></span>$ pecl install swoole
+</pre></div></p>
+<p>For more information on the extension, <a href="https://pecl.php.net/package/swoole">visit its package details on PECL</a>.</p>
+<h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
+<p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
+<p> <div class=codehilite><pre><span></span>$ composer require mezzio/mezzio-swoole
+</pre></div></p>
+<h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
+<p>mezzio-swoole enables an Mezzio application to be executed with
+the <a href="https://www.swoole.co.uk/">Swoole</a> extension. This means you can run the
+application from the command line, <strong>without requiring a web server</strong>.</p>
+<p>You can run the application using the following command:</p>
+<p> <div class=codehilite><pre><span></span>$ ./vendor/bin/mezzio-swoole start
+</pre></div></p>
+<p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
+<blockquote>
+<h3>Other commands</h3>
+<p>To get a list of all available commands, run the command without arguments:</p>
+<pre class=codehilite><code class=language-bash>
+$ ./vendor/bin/mezzio-swoole
+</code></pre>
+<p>If you add the argument <code>help</code> before any command name, the tooling will
+provide you with more detailed information on that command.</p>
+<h3>Mezzio skeleton versions prior to 3.1.0</h3>
+<p>The above will work immediately after installing mezzio-swoole if you
+are using a version of <a href="https://github.com/mezzio/mezzio-skeleton">mezzio-skeleton</a>
+from 3.1.0 or later.</p>
+<p>For applications based on previous versions of the skeleton, you will need to
+create a configuration file such as <code>config/autoload/mezzio-swoole.global.php</code>
+or <code>config/autoload/mezzio-swoole.local.php</code> with the following
+contents:</p>
+<pre class=codehilite><code class=language-php>
+&lt;?php
+use Mezzio\Swoole\ConfigProvider;
+
+return (new ConfigProvider())();
+</code></pre>
+</blockquote>
+<p>You can change the host address and/or host name as well as the port using a
+configuration file, as follows:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// In config/autoload/swoole.local.php:</span>
+<span class=x>return [</span>
+<span class=x>    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class=x>        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class=x>            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
+<span class=x>            &#39;port&#39; =&gt; 9501,</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>];</span>
+</pre></div></p>
+<h3>Providing additional Swoole configuration</h3>
+<p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify
+any accepted Swoole settings. For instance, the following configuration
+demonstrates enabling SSL:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>// config/autoload/swoole.local.php</span>
+<span class=x>return [</span>
+<span class=x>    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class=x>        // Available in Swoole 4.1 and up; enables coroutine support</span>
+<span class=x>        // for most I/O operations:</span>
+<span class=x>        &#39;enable_coroutine&#39; =&gt; true,</span>
+
+<span class=x>        // Configure Swoole HTTP Server:</span>
+<span class=x>        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class=x>            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
+<span class=x>            &#39;port&#39; =&gt; 9501,</span>
+<span class=x>            &#39;mode&#39; =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;</span>
+<span class=x>                                   // SWOOLE_BASE is the default</span>
+<span class=x>            &#39;protocol&#39; =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server</span>
+<span class=x>            &#39;options&#39; =&gt; [</span>
+<span class=x>                // Set the SSL certificate and key paths for SSL support:</span>
+<span class=x>                &#39;ssl_cert_file&#39; =&gt; &#39;path/to/ssl.crt&#39;,</span>
+<span class=x>                &#39;ssl_key_file&#39; =&gt; &#39;path/to/ssl.key&#39;,</span>
+<span class=x>                // Whether or not the HTTP server should use coroutines;</span>
+<span class=x>                // enabled by default, and generally should not be disabled:</span>
+<span class=x>                &#39;enable_coroutine&#39; =&gt; true,</span>
+
+<span class=x>                // Overwrite the default location of the pid file;</span>
+<span class=x>                // required when you want to run multiple instances of your service in different ports:</span>
+<span class=x>                &#39;pid_file&#39; =&gt; &#39;path/to/pid_file.pid&#39;,</span>
+<span class=x>            ],</span>
+
+<span class=x>            // Since 2.1.0: Set the process name prefix.</span>
+<span class=x>            // The master process will be named `{prefix}-master`,</span>
+<span class=x>            // worker processes will be named `{prefix}-worker-{id}`,</span>
+<span class=x>            // and task worker processes will be named `{prefix}-task-worker-{id}`</span>
+<span class=x>            &#39;process-name&#39; =&gt; &#39;your-app&#39;,</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>];</span>
+</pre></div></p>
+<blockquote>
+<h3>SSL support</h3>
+<p>By default, Swoole is not compiled with SSL support. To enable SSL in Swoole, it
+must be configured with the <code>--enable-openssl</code> or
+<code>--with-openssl-dir=/path/to/openssl</code> option.</p>
+</blockquote>
+<h3>Serving static files</h3>
+<p>We support serving static files. By default, we serve files with extensions in
+the whitelist defined in the constant <code>Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS</code>,
+which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">list of common web MIME types maintained by Mozilla</a>.
+Our static resource capabilities are fairly comprehensive; please see the
+<a href="../static-resources/">chapter on static resources</a> for full details on
+configuration.</p>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../..">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../static-resources/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+
+    <div class="help-wanted">
+        <p>
+            Found a mistake or want to contribute to the documentation?
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/intro.md" target="_blank" class="help-wanted__link">
+                Edit this page on GitHub!
+            </a>
+        </p>
+    </div>
+
+                
+            </div>
+            <div class="col-md-3 col-sm-12 sidebar">
+                
+                    <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Introduction</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+        </ul>
+    </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+    <div class="container">
+
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="footer__button" href="#page-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 offset-md-2">
+                <h5>Laminas</h5>
+                <ul>
+                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
+                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+
+            
+            <div class="col-md-4 offset-md-2">
+                <h4 class="footer__headline">Support</h4>
+                <ul class="support__list">
+                    <li class="support__list-item">
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://laminas.dev/chat" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://github.com/laminas" class="support__link" title="Github"><i class="fa fa-github"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://twitter.com/getlaminas" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">License</h4>
+                <p>
+                    Code licensed under <a
+                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                </p>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">Copyright</h4>
+                <p>
+                    <!--Built with love by the Laminas team with the help of our
+                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        let base_url = '../..',
+            project  = "mezzio",
+            siteName = 'mezzio-swoole';
+    </script>
+    <script src="/js/scripts.js"></script>
+        <script src="../../search/main.js"></script>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search in mezzio-swoole" id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

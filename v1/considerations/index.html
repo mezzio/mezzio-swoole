@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Swoole support for Mezzio">  
+    <link rel="canonical" href="https://docs.mezzio.dev/v1/considerations/">
+    <link rel="shortcut icon" href="/img/trademark-laminas-foundation-rgb.svg">
+
+    <title>Considerations when using Swoole - mezzio-swoole - Laminas Docs</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body id="page-top" class="mezzio">
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        
+        <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+        </a>
+        <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
+            Documentation
+        </a>
+
+        
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
+                </li>
+            </ul>
+
+            
+            
+                <div class="d-block d-sm-none">
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Intro</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+        </ul>
+    </div>
+
+                </div>
+            
+
+            
+            <div class="d-block d-sm-none">
+                <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+    <header class="header">
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="col-6 offset-md-2">
+                <h1 class="header__title">
+                    Mezzio
+
+                    
+                        <small class="header__subtitle">mezzio-swoole</small>
+                    
+                </h1>
+            </div>
+
+            
+            <div class="col-4 text-sm-right">
+                
+                    
+<div class="version-selector">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+                v1
+            
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            
+                
+                    <li class="dropdown-menu__item">
+                        <a href="../../v2/intro/">
+                            
+                                v2 (latest)
+                            
+                        </a>
+                    </li>
+                
+            
+                
+                    <li class="dropdown-menu__item dropdown-menu__item--selected">
+                        <a href="../intro/">
+                            
+                                v1
+                            
+                        </a>
+                    </li>
+                
+            
+        </ul>
+    </div>
+</div>
+
+
+                    <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                    <a href="https://github.com/mezzio/mezzio-swoole/" class="header__link header__link--github" title="Go to repository of mezzio-swoole">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#long-running-processes" class="toc__link">Long-running processes</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#sessions" class="toc__link">Sessions</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#stateless-services" class="toc__link">Stateless services</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+            </div>
+            <div class="col-md-7 col-sm-12 content" role="main" data-spy="scroll" data-target=".toc">
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="">Overview</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">mezzio-swoole</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Reference</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Considerations when using Swoole</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../..">Switch to the latest (v2) version.</a>
+        </p>
+    </div>
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Reference</h2>
+    
+
+    <h1 id="considerations-when-using-swoole">Considerations when using Swoole</h1>
+<p>Because Swoole uses an event loop, and because it is able to load your
+application exactly once, you must take several precautions when using it to
+serve your application.</p>
+<h2 id="long-running-processes">Long-running processes</h2>
+<p>When using the Swoole HTTP server, your application runs within an <a href="https://en.wikipedia.org/wiki/Event_loop">event
+loop</a>. One benefit of this is that you
+can then <a href="https://www.swoole.co.uk/docs/modules/swoole-event-loop#public-static-void-swoole-event-defer-mixed-callback"><em>defer</em></a>
+execution of code until the next tick of the loop. This can be used to delay
+long-running code from executing until after a response has been sent to the
+client, which can obviate the need for tools such as message queues.</p>
+<p>The problem, however, is that when a worker <em>does</em> begin to handle the deferred
+functionality, it will run as long as needed until the work is done. This then
+means that the worker is <em>blocked</em> from handling new requests until that work is
+done.</p>
+<p>If you have enough workers, or the number of such long-running processes if few
+and far-between, this may not be an issue for you. However, it is a commonly
+documented issue in other similar systems such as Node.js. <strong>The solution in these
+cases is the same as for general PHP applications: add a message queue to your
+systems infrastructure, and delegate such work to the message queue instead.</strong></p>
+<blockquote>
+<h3>PDO Coroutine Support</h3>
+<p>Please be aware that enabling coroutine support with <code>Swoole\Runtime::enableCoroutine()</code>
+only decorates MySql PDO connections with coroutines; other drivers (e.g.,
+pdo_pgsql) remain blocking as of Swoole 4.1.2.  &gt; For more details,
+<a href="https://github.com/swoole/swoole-src/issues/2051">visit the related bug report on the Swoole issue tracker</a>.</p>
+</blockquote>
+<h2 id="sessions">Sessions</h2>
+<p>Because Swoole runs as a PHP CLI application, it generally does not play well
+with the PHP Session extension. However, there are alternatives.</p>
+<h3>mezzio-session-cache</h3>
+<p><a href="https://docs.mezzio.dev/mezzio-session-cache/">mezzio-session-cache</a>
+provides a persistence adapter for <a href="https://docs.mezzio.dev/mezzio-session/">mezzio-session</a>
+that uses a <a href="https://www.php-fig.org/psr/psr-6/">PSR-6 CacheItemPoolInterface implementation</a>
+for storing and retrieving sessions. This approach requires that you setup a
+backend cache storage for your session data.</p>
+<h3>psr7-sessions/storageless</h3>
+<p><a href="https://github.com/psr7-sessions/storageless">PSR7Session</a> provides session
+middleware that uses <a href="https://tools.ietf.org/html/rfc7519">JWT tokens</a> within
+the session cookie to transmit session data between the server and client.
+This approach requires no central session storage, but does impose limits on the
+amount of information you can store in a session.</p>
+<h2 id="stateless-services">Stateless services</h2>
+<p>The typical PHP model is that the engine is fired up, runs your code, and then
+tears down again, <em>for every single request</em>. As such, PHP is said to have a
+"shared nothing architecture". This is a tremendous boon to developers, as they
+can ignore things found in lower level languages, such as garbage cleanup,
+memory management, and more.</p>
+<p>This model also comes with a cost: every single request requires bootstrapping
+your application. Benchmarks we have performed show that bootstrapping is often
+the most expensive operation in applications, often accounting for 25-50% of
+total resource usage and execution time.</p>
+<p>One reason technologies such as Swoole can provide a performance boost is due to
+the fact that they can bootstrap your application exactly once, often during
+startup. This alone can account for the performance boost of many applications.</p>
+<p>However, it has a price: you now need to consider what changes may happen inside
+the various classes in your dependency injection container, and the impact those
+changes may have on later requests, or even other requests happening
+concurrently.</p>
+<p>As one example: <a href="https://docs.mezzio.dev/mezzio/v3/features/template/intro/">mezzio-template</a>
+provides an interface, <code>TemplateRendererInterface</code>, that allows you to render a
+template. That interface also allows you to provide template paths, and default
+parameters to pass to every template, and these methods are often invoked within
+factories or delegators in order to configure the renderer implementation.
+However, we have <a href="https://docs.mezzio.dev/mezzio/v3/cookbook/access-common-data-in-templates/">also documented using <code>addDefaultParam()</code> for passing values
+discovered in the request to later handlers</a>.
+This practice accumulates <em>state</em> in the renderer that can cause problems later:</p>
+<ul>
+<li>
+<p>Flash messages discovered in one request might then be pushed to templates
+  renderered in subsequent requests &mdash; when they are no longer in scope. </p>
+</li>
+<li>
+<p>User details from one request might persist to a template rendered for an
+  unauthenticated user in another request, exposing information.</p>
+</li>
+</ul>
+<p>These are clearly problematic behaviors!</p>
+<p>As such, you must guard against state in services you provide in your dependency
+injection container, as any state changes have ramifications for other requests.
+Write services to be stateless, and/or mark state-changing methods as
+<code>@internal</code> to prevent users from calling them in non-bootstrap code.</p>
+<p>If the services are provided by a third party, you have a few options:</p>
+<ul>
+<li>
+<p>Decorating an existing service that implements an interface to make it
+  stateless.</p>
+</li>
+<li>
+<p>Extending a service to make state-changing methods no-ops.</p>
+</li>
+<li>
+<p>Injecting factories that produce the stateful services, instead of the service
+  itself.</p>
+</li>
+</ul>
+<p>We'll look at each in detail.</p>
+<h3>Decoration</h3>
+<p>If a service implements an interface, you can decorate the service to make it
+stateless. Well-written interfaces will be stateless by design, and not provide
+methods meant to internally change state. In these situations, you can create a
+proxy class that decorates the original service:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>class ProxyService implements OriginalInterface</span>
+<span class=x>{</span>
+<span class=x>    /** @var OriginalInterface */</span>
+<span class=x>    private $proxy;</span>
+
+<span class=x>    public function __construct(OriginalInterface $proxy)</span>
+<span class=x>    {</span>
+<span class=x>        $this-&gt;proxy = $proxy;</span>
+<span class=x>    }</span>
+
+<span class=x>    public function someMethodDefinedInInterface(string $argument) : Result</span>
+<span class=x>    {</span>
+<span class=x>        return $this-&gt;proxy-&gt;someMethodDefinedInInterface($argument);</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>You would then:</p>
+<ul>
+<li>Map the factory for the original service to the implementation name.</li>
+<li>Create a factory that consumes the original service, and produces the proxy.</li>
+<li>Map the interface name to the factory that creates the proxy.</li>
+</ul>
+<p> <div class=codehilite><pre><span></span><span class=x>// in config/autoload/dependencies.global.php:</span>
+
+<span class=x>return [</span>
+<span class=x>    &#39;dependencies&#39; =&gt; [</span>
+<span class=x>        &#39;factories&#39; =&gt; [</span>
+<span class=x>            OriginalImplementation::class =&gt; OriginalImplementationFactory::class,</span>
+<span class=x>            OriginalInterface::class =&gt; ProxyServiceFactory::class,</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>];</span>
+</pre></div></p>
+<p>If you were writing to the interface, and not the implementation, you can now
+guarantee that any non-interface methods that changed state can now no longer be
+called.</p>
+<p>If the interface itself defines methods that modify state, we recommend writing
+a proxy that implements those methods as no-ops and/or that raises exceptions
+when those methods are invoked. (The latter approach ensures that you discover
+quickly when code is exercising those methods.) In each case, you would then use
+a <a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>,
+to decorate the original instance in the proxy class:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>function (ContainerInterface $container, string $name, callable $callback)</span>
+<span class=x>{</span>
+<span class=x>    return new ProxyService($callback());</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>(You can also use the delegator factory approach with the previous proxy service
+example.)</p>
+<h3>Extension</h3>
+<p>When a service does not implement an interface, but exposes methods that change
+internal state, you can extend the original class to make the methods that
+change state into no-ops, or have them raise exceptions. (The latter approach
+ensures that you discover quickly when code is exercising those methods.)</p>
+<p>As an example, let's say you have a class <code>DataMapper</code> that defines a method
+<code>setTable()</code> in it, and that method would change the database table the mapper
+would query. This is a potentially bad situation!</p>
+<p>We could extend the class as follows:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>class StatelessDataMapper extends DataMapper</span>
+<span class=x>{</span>
+<span class=x>    public function setTable(string $table) : void</span>
+<span class=x>    {</span>
+<span class=x>        throw new \DomainException(sprintf(</span>
+<span class=x>            &#39;%s should not be called in production code!&#39;,</span>
+<span class=x>            __METHOD__</span>
+<span class=x>        ));</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>In your factory that creates an instance of <code>DataMapper</code>, have it instead return
+a <code>StatelessDataMapper</code> instance, and you're now safe.</p>
+<h3>Factories</h3>
+<p>Another approach is to modify your consuming code to accept a <em>factory</em> that
+will produce the service you'll consume, instead of the service itself. This
+approach ensures that the service is created only when needed, mitigating any
+state change issues.</p>
+<p>As an example, consider the following middleware that currently consumes a
+template renderer:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>use Psr\Http\Message\ResponseInterface;</span>
+<span class=x>use Psr\Http\Message\ServerRequestInterface;</span>
+<span class=x>use Psr\Http\Server\RequestHandlerInterface;</span>
+<span class=x>use Laminas\Diactoros\Response\HtmlResponse;</span>
+<span class=x>use Mezzio\Template\TemplateRendererInterface;</span>
+
+<span class=x>class SomeHandler implements RequestHandlerInterface</span>
+<span class=x>{</span>
+<span class=x>    /** @var TemplateRendererInterface */</span>
+<span class=x>    private $renderer;</span>
+
+<span class=x>    public function __construct(TemplateRendererInterface $renderer)</span>
+<span class=x>    {</span>
+<span class=x>        $this-&gt;renderer = $renderer;</span>
+<span class=x>    }</span>
+
+<span class=x>    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
+<span class=x>    {</span>
+<span class=x>        return new HtmlResponse($this-&gt;renderer-&gt;render(</span>
+<span class=x>            &#39;app::some-handler&#39;,</span>
+<span class=x>            []</span>
+<span class=x>        ));</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>What we will do is modify it to accept a <em>callable</em> to the constructor. We will
+then call that factory <em>just before</em> we need the renderer; we <em>will not</em> store
+the result in the handler, as we want to ensure we have a new instance each
+time.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>use Psr\Http\Message\ResponseInterface;</span>
+<span class=x>use Psr\Http\Message\ServerRequestInterface;</span>
+<span class=x>use Psr\Http\Server\RequestHandlerInterface;</span>
+<span class=x>use Laminas\Diactoros\Response\HtmlResponse;</span>
+<span class=x>use Mezzio\Template\TemplateRendererInterface;</span>
+
+<span class=x>class SomeHandler implements RequestHandlerInterface</span>
+<span class=x>{</span>
+<span class=x>    /** @var callable */</span>
+<span class=x>    private $rendererFactory;</span>
+
+<span class=x>    public function __construct(callable $rendererFactory)</span>
+<span class=x>    {</span>
+<span class=x>        $this-&gt;rendererFactory = $rendererFactory;</span>
+<span class=x>    }</span>
+
+<span class=x>    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
+<span class=x>    {</span>
+<span class=x>        /** @var TemplateRendererInterface $renderer */</span>
+<span class=x>        $renderer = ($this-&gt;rendererFactory)();</span>
+<span class=x>        return new HtmlResponse($renderer-&gt;render(</span>
+<span class=x>            &#39;app::some-handler&#39;,</span>
+<span class=x>            []</span>
+<span class=x>        ));</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>From here, we create a factory for our dependency injection container that will
+return the factory we use here. As an example, if we are using the <a href="https://docs.mezzio.dev/mezzio/v3/features/template/laminas-view/">laminas-view
+integration</a>,
+we might do the following:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>use Psr\Container\ContainerInterface;</span>
+<span class=x>use Mezzio\Template\TemplateRendererInterface;</span>
+<span class=x>use Mezzio\LaminasView\LaminasViewRendererFactory;</span>
+
+<span class=x>class LaminasViewRendererFactoryFactory</span>
+<span class=x>{</span>
+<span class=x>    public function __invoke(ContainerInterface $container) : callable</span>
+<span class=x>    {</span>
+<span class=x>        $factory = new LaminasViewRendererFactory();</span>
+<span class=x>        return function () use ($container, $factory) : TemplateRendererInterface {</span>
+<span class=x>            return $factory($container);</span>
+<span class=x>        };</span>
+<span class=x>    }</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>If we mapped this to the "service" <code>Mezzio\Template\TemplateRendererInterfaceFactory</code>,
+our factory for the <code>SomeHandler</code> class would then look like:</p>
+<p> <div class=codehilite><pre><span></span><span class=x>use Mezzio\Template\TemplateRendererInterfaceFactory;</span>
+
+<span class=x>function (ContainerInterface $container) : SomeHandler</span>
+<span class=x>{</span>
+<span class=x>    return new SomeHandler(</span>
+<span class=x>        $container-&gt;get(TemplateRendererInterfaceFactory::class)</span>
+<span class=x>    );</span>
+<span class=x>}</span>
+</pre></div></p>
+<p>This approach ensures we get a new instance with known state at precisely the
+moment we wish to execute the functionality. By ensuring we <em>do not</em> store the
+instance in any way, we also ensure it is garbage collected when the instance
+goes out of scope (i.e., when the method ends).</p>
+<blockquote>
+<h3>Handling the template data problem</h3>
+<p>If we want our services to be stateless, how do we handle problems such as the 
+<a href="https://docs.mezzio.dev/mezzio/v3/cookbook/access-common-data-in-templates/">documented <code>addDefaultParam()</code> issue referenced earlier</a>?</p>
+<p>In this case, the original problem was "how do we get common request data into
+templates?" The solution originally provided was to alter the state of the
+template renderer. Another solution, however, is one we've also documented
+previously: <a href="https://docs.mezzio.dev/mezzio/v3/cookbook/passing-data-between-middleware/">use server attributes to pass data between middleware</a>.</p>
+<p>In this particular case, the middleware documented in the original solution
+could be modified to provide data to a request attribute, instead of altering
+the state of the template renderer. It might then become:</p>
+<pre class=codehilite><code class=language-php>
+namespace App\Middleware;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Mezzio\Router\RouteResult;
+use Mezzio\Session\Authentication\UserInterface;
+use Mezzio\Session\Flash\FlashMessagesInterface;
+
+class TemplateDefaultsMiddleware implements MiddlewareInterface
+{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    {
+        $routeResult = $request-&gt;getAttribute(RouteResult::class);
+        $flashMessages = $request-&gt;getAttribute(FlashMessagesInterface::class);
+
+        $defaults = [
+            // Inject the current user, or null if there isn't one.
+            // This is named security so it will not interfere with your user admin pages
+            'security' =&gt; $request-&gt;getAttribute(UserInterface::class),
+
+            // Inject the currently matched route name.
+            'matchedRouteName' =&gt; $routeResult ? $routeResult-&gt;getMatchedRouteName() : null,
+
+            // Inject all flash messages
+            'notifications' =&gt; $flashMessages ? $flashMessages-&gt;getFlashes() : [],
+        ];
+
+        return $handler-&gt;handle($request-&gt;withAttribute(__CLASS__, $defaults));
+    }
+}
+</code></pre>
+<p>Once that change is made, you would then change your handler to do the
+following:</p>
+<ul>
+<li>Pull that attribute, providing a default <code>[]</code> value.</li>
+<li>Merge the pulled value with any local values when rendering the template.</li>
+</ul>
+<p>For example:</p>
+<pre class=codehilite><code class=language-php>
+$defaultParams = $request-&gt;getAttribute(TemplateDefaultsMiddleware::class, []);
+return new HtmlResponse($renderer-&gt;render(
+    'some::template',
+    array_merge($defaultParams, [
+        // handler-specific parameters here
+    ])
+));
+</code></pre>
+<p>This approach, while it requires more work on the part of handler authors,
+ensures that the renderer state does not vary between requests, making it
+safer for usage with Swoole and other long-running processes.</p>
+</blockquote>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../how-it-works/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../../intro/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+
+    <div class="help-wanted">
+        <p>
+            Found a mistake or want to contribute to the documentation?
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v1/considerations.md" target="_blank" class="help-wanted__link">
+                Edit this page on GitHub!
+            </a>
+        </p>
+    </div>
+
+                
+            </div>
+            <div class="col-md-3 col-sm-12 sidebar">
+                
+                    <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">mezzio-swoole</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Intro</a>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Reference</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Considerations when using Swoole</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                
+            
+        </ul>
+    </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+    <div class="container">
+
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="footer__button" href="#page-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 offset-md-2">
+                <h5>Laminas</h5>
+                <ul>
+                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
+                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+
+            
+            <div class="col-md-4 offset-md-2">
+                <h4 class="footer__headline">Support</h4>
+                <ul class="support__list">
+                    <li class="support__list-item">
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://laminas.dev/chat" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://github.com/laminas" class="support__link" title="Github"><i class="fa fa-github"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://twitter.com/getlaminas" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">License</h4>
+                <p>
+                    Code licensed under <a
+                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                </p>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">Copyright</h4>
+                <p>
+                    <!--Built with love by the Laminas team with the help of our
+                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        let base_url = '../..',
+            project  = "mezzio",
+            siteName = 'mezzio-swoole';
+    </script>
+    <script src="/js/scripts.js"></script>
+        <script src="../../search/main.js"></script>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search in mezzio-swoole" id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
