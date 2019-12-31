@@ -1,36 +1,15 @@
 docs_dir: docs/book
 site_dir: docs/html
 extra:
-  current_version: v2
-  versions:
-    - v2
-    - v1
+    current_version: v2
+    versions: [v2, v1]
+    project: Mezzio
+    project_url: 'https://docs.mezzio.dev'
 nav:
-    - Home: index.md
-    - v2:
-      - Introduction: v2/intro.md
-      - Reference:
-        - "Static Resources": v2/static-resources.md
-        - Logging: v2/logging.md
-        - "Async Tasks": v2/async-tasks.md
-        - "Using Swoole Tables": v2/table.md
-        - "Hot Code Reloading": v2/hot-code-reload.md
-        - "Command Line Tooling": v2/command-line.md
-        - "How it works": v2/how-it-works.md
-        - "Considerations when using Swoole": v2/considerations.md
-        - Migration: v2/migration.md
-    - v1:
-      - Intro: v1/intro.md
-      - Reference:
-        - "Static Resources": v1/static-resources.md
-        - Logging: v1/logging.md
-        - "How it works": v1/how-it-works.md
-        - "Considerations when using Swoole": v1/considerations.md
-    - "_ignore_legacy_pages":
-      - "_introduction": intro.md
-      - "_static-resources": static-resources.md
-      - "_logging": logging.md
-      - "_how-it-works": how_it_works.md
-site_name: 'mezzio-swoole'
+    - { Home: index.md }
+    - { v2: [{ Introduction: v2/intro.md }, { Reference: [{ 'Static Resources': v2/static-resources.md }, { Logging: v2/logging.md }, { 'Async Tasks': v2/async-tasks.md }, { 'Using Swoole Tables': v2/table.md }, { 'Hot Code Reloading': v2/hot-code-reload.md }, { 'Command Line Tooling': v2/command-line.md }, { 'How it works': v2/how-it-works.md }, { 'Considerations when using Swoole': v2/considerations.md }, { Migration: v2/migration.md }] }] }
+    - { v1: [{ Intro: v1/intro.md }, { Reference: [{ 'Static Resources': v1/static-resources.md }, { Logging: v1/logging.md }, { 'How it works': v1/how-it-works.md }, { 'Considerations when using Swoole': v1/considerations.md }] }] }
+    - { _ignore_legacy_pages: [{ _introduction: intro.md }, { _static-resources: static-resources.md }, { _logging: logging.md }, { _how-it-works: how_it_works.md }] }
+site_name: mezzio-swoole
 site_description: 'Swoole support for Mezzio'
 repo_url: 'https://github.com/mezzio/mezzio-swoole'
