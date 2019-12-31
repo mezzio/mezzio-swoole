@@ -1,13 +1,12 @@
 docs_dir: docs/book
 site_dir: docs/html
-pages:
+nav:
     - index.md
     - Introduction: intro.md
     - Reference:
       - "Static Resources": static-resources.md
       - Logging: logging.md
       - "How it works": how_it_works.md
-site_name: 'zend-expressive-swoole'
-site_description: 'Swoole support for Expressive'
-repo_url: 'https://github.com/zendframework/zend-expressive-swoole'
-copyright: 'Copyright (c) 2018 <a href="https://www.zend.com/">Zend Technologies USA Inc.</a>'
+site_name: 'mezzio-swoole'
+site_description: 'Swoole support for Mezzio'
+repo_url: 'https://github.com/mezzio/mezzio-swoole'

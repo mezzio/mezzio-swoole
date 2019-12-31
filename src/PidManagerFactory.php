@@ -1,13 +1,14 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
 use Psr\Container\ContainerInterface;
 
@@ -19,8 +20,8 @@ class PidManagerFactory
     {
         $config = $container->get('config');
         return new PidManager(
-            $config['zend-expressive-swoole']['swoole-http-server']['options']['pid_file']
-                ?? sys_get_temp_dir() . '/zend-swoole.pid'
+            $config['mezzio-swoole']['swoole-http-server']['options']['pid_file']
+                ?? sys_get_temp_dir() . '/laminas-swoole.pid'
         );
     }
 }

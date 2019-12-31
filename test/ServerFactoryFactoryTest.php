@@ -1,18 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole;
+namespace MezzioTest\Swoole;
 
+use Mezzio\Swoole\ServerFactoryFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Swoole\Process;
-use Zend\Expressive\Swoole\ServerFactoryFactory;
 
 class ServerFactoryFactoryTest extends TestCase
 {
@@ -43,7 +44,7 @@ class ServerFactoryFactoryTest extends TestCase
     public function testFactoryCreatesInstanceUsingConfigurationWhenAvailable()
     {
         $config = [
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'host' => 'localhost',
                     'port' => 9501,
@@ -77,7 +78,7 @@ class ServerFactoryFactoryTest extends TestCase
             'dispatch_mode' => 3,
         ];
         $config = [
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'host' => $host,
                     'port' => $port,
