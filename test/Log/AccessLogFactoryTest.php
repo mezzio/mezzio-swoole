@@ -1,23 +1,24 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\Log;
+namespace MezzioTest\Swoole\Log;
 
+use Mezzio\Swoole\Log\AccessLogFactory;
+use Mezzio\Swoole\Log\AccessLogFormatter;
+use Mezzio\Swoole\Log\AccessLogFormatterInterface;
+use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
+use Mezzio\Swoole\Log\StdoutLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionProperty;
-use Zend\Expressive\Swoole\Log\AccessLogFactory;
-use Zend\Expressive\Swoole\Log\AccessLogFormatter;
-use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface;
-use Zend\Expressive\Swoole\Log\Psr3AccessLogDecorator;
-use Zend\Expressive\Swoole\Log\StdoutLogger;
 
 class AccessLogFactoryTest extends TestCase
 {
@@ -37,7 +38,9 @@ class AccessLogFactoryTest extends TestCase
         $this->container->has(LoggerInterface::class)->willReturn(false);
         $this->container->get(LoggerInterface::class)->shouldNotBeCalled();
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
+        $this->container->has(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
+        $this->container->get(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->container->reveal());
 
@@ -55,7 +58,9 @@ class AccessLogFactoryTest extends TestCase
         $this->container->has(LoggerInterface::class)->willReturn(true);
         $this->container->get(LoggerInterface::class)->willReturn($this->logger);
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
+        $this->container->has(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
+        $this->container->get(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->container->reveal());
 
@@ -88,7 +93,7 @@ class AccessLogFactoryTest extends TestCase
 
         $this->container->has('config')->willReturn(true);
         $this->container->get('config')->willReturn([
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'logger' => [
                         'format' => AccessLogFormatter::FORMAT_COMBINED,
@@ -100,7 +105,9 @@ class AccessLogFactoryTest extends TestCase
         $this->container->has(LoggerInterface::class)->willReturn(false);
         $this->container->get(LoggerInterface::class)->shouldNotBeCalled();
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
+        $this->container->has(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
+        $this->container->get(\Zend\Expressive\Swoole\Log\AccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->container->reveal());
 
