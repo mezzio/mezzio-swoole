@@ -6,14 +6,14 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#5](https://github.com/zendframework/zend-expressive-swoole/pull/5) adds the ability to serve static file resources from your
+- [zendframework/zend-expressive-swoole#5](https://github.com/zendframework/zend-expressive-swoole/pull/5) adds the ability to serve static file resources from your
   configured document root. For information on the default capabilities, as well
   as how to configure the functionality, please see
-  https://docs.zendframework.com/zend-expressive-swoole/intro/#serving-static-files.
+  https://docs.mezzio.dev/mezzio-swoole/intro/#serving-static-files.
 
 ### Changed
 
-- [#9](https://github.com/zendframework/zend-expressive-swoole/pull/9) modifies how the `RequestHandlerSwooleRunner` provides logging
+- [zendframework/zend-expressive-swoole#9](https://github.com/zendframework/zend-expressive-swoole/pull/9) modifies how the `RequestHandlerSwooleRunner` provides logging
   output.  Previously, it used `printf()` directly. Now it uses a [PSR-3
   logger](https://www.php-fig.org/psr/psr-3/) instance, defaulting to an
   internal implementation that writes to STDOUT. The logger may be provided
@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#7](https://github.com/zendframework/zend-expressive-swoole/pull/7) fixes how cookies are emitted by the Swoole HTTP server. We now
+- [zendframework/zend-expressive-swoole#7](https://github.com/zendframework/zend-expressive-swoole/pull/7) fixes how cookies are emitted by the Swoole HTTP server. We now
   use the server `cookie()` method to set cookies, ensuring that multiple
   cookies are not squashed into a single `Set-Cookie` header.
 
