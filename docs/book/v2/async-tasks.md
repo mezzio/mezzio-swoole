@@ -25,7 +25,7 @@ the order that they triggered, meaning that a `task_worker_num` of 1 will offer
 no concurrency and tasks will execute one after the other.
 
 ```php
-'zend-expressive-swoole' => [
+'mezzio-swoole' => [
     'swoole-http-server' => [
         'host' => '127.0.0.1',
         'port' => 8080,
@@ -182,7 +182,7 @@ class TaskWorker
 
 This invokable class needs to be attached to the `$server->on('task')` event
 before the server has started. The easiest place to accomplish this is in a
-[delegator factory](https://docs.zendframework.com/zend-expressive/v3/features/container/delegator-factories/)
+[delegator factory](https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/)
 targeting the Swoole HTTP server. First, we'll create the delegator factory:
 
 ```php
@@ -255,7 +255,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Server as HttpServer;
-use Zend\Expressive\Template\TemplateRendererInterface;
+use Mezzio\Template\TemplateRendererInterface;
 
 class TaskTriggeringHandler implements RequestHandlerInterface
 {

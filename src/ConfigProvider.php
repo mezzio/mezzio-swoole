@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\HttpHandlerRunner\RequestHandlerRunner;
+
 use function extension_loaded;
 
 class ConfigProvider
@@ -22,7 +24,7 @@ class ConfigProvider
             ? ['dependencies' => $this->getDependencies()]
             : [];
 
-        $config['zend-expressive-swoole'] = $this->getDefaultConfig();
+        $config['mezzio-swoole'] = $this->getDefaultConfig();
 
         return $config;
     }
@@ -61,9 +63,20 @@ class ConfigProvider
             ],
             'aliases' => [
                 RequestHandlerRunner::class           => SwooleRequestHandlerRunner::class,
+
+                // Legacy Zend Framework aliases
+                \Zend\Expressive\Swoole\Command\ReloadCommand::class => Command\ReloadCommand::class,
+                \Zend\Expressive\Swoole\Command\StartCommand::class => Command\StartCommand::class,
+                \Zend\Expressive\Swoole\Command\StatusCommand::class => Command\StatusCommand::class,
+                \Zend\Expressive\Swoole\Command\StopCommand::class => Command\StopCommand::class,
+                \Zend\Expressive\Swoole\Log\AccessLogInterface::class => Log\AccessLogInterface::class,
+                \Zend\Expressive\Swoole\PidManager::class => PidManager::class,
+                \Zend\Expressive\Swoole\SwooleRequestHandlerRunner::class => SwooleRequestHandlerRunner::class,
+                \Zend\Expressive\Swoole\StaticResourceHandlerInterface::class => StaticResourceHandlerInterface::class,
+                \Zend\HttpHandlerRunner\RequestHandlerRunner::class => RequestHandlerRunner::class,
             ],
             'delegators' => [
-                'Zend\Expressive\WhoopsPageHandler' => [
+                'Mezzio\WhoopsPageHandler' => [
                     WhoopsPrettyPageHandlerDelegator::class,
                 ],
             ],

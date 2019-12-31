@@ -1,18 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\Command;
+namespace MezzioTest\Swoole\Command;
 
+use Mezzio\Swoole\Command\StartCommand;
+use Mezzio\Swoole\Command\StartCommandFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Swoole\Command\StartCommand;
-use Zend\Expressive\Swoole\Command\StartCommandFactory;
 
 class StartCommandFactoryTest extends TestCase
 {

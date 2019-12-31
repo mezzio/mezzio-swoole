@@ -1,16 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
- * Start, stop, and reload the HTTP server.
- *
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole\Command;
+namespace Mezzio\Swoole\Command;
 
 use PackageVersions\Versions;
 use Symfony\Component\Console\Application as CommandLine;
@@ -51,7 +50,7 @@ require 'vendor/autoload.php';
 $containerFile = sprintf('%s/config/container.php', $cwd);
 if (! file_exists($containerFile)) {
     fwrite(STDERR, sprintf(
-        'No container file (%s) detected; are you in an Expressive application?%s',
+        'No container file (%s) detected; are you in an Mezzio application?%s',
         $containerFile,
         PHP_EOL
     ));
@@ -59,10 +58,10 @@ if (! file_exists($containerFile)) {
 }
 
 $container = require $containerFile;
-$version   = strstr(Versions::getVersion('zendframework/zend-expressive-swoole'), '@', true);
+$version   = strstr(Versions::getVersion('mezzio/mezzio-swoole'), '@', true);
 
 // Create, populate, and run the CLI tooling
-$commandLine = new CommandLine('Expressive web server', $version);
+$commandLine = new CommandLine('Mezzio web server', $version);
 $commandLine->setAutoExit(true);
 $commandLine->setCommandLoader(new ContainerCommandLoader($container, [
     'reload' => ReloadCommand::class,
