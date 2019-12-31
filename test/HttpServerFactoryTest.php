@@ -1,22 +1,23 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole;
+namespace MezzioTest\Swoole;
 
+use Mezzio\Swoole\Exception\InvalidArgumentException;
+use Mezzio\Swoole\HttpServerFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleServer;
 use Swoole\Process;
 use Throwable;
-use Zend\Expressive\Swoole\Exception\InvalidArgumentException;
-use Zend\Expressive\Swoole\HttpServerFactory;
 
 use function array_merge;
 use function defined;
@@ -71,7 +72,7 @@ class HttpServerFactoryTest extends TestCase
     {
         $process = new Process(function (Process $worker) {
             $this->container->get('config')->willReturn([
-                'zend-expressive-swoole' => [
+                'mezzio-swoole' => [
                     'swoole-http-server' => [
                         'host' => '0.0.0.0',
                         'port' => 8081,
@@ -120,7 +121,7 @@ class HttpServerFactoryTest extends TestCase
     public function testExceptionThrownForOutOfRangePortNumber(int $port) : void
     {
         $this->container->get('config')->willReturn([
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'port' => $port,
                 ],
@@ -152,7 +153,7 @@ class HttpServerFactoryTest extends TestCase
     public function testExceptionThrownForInvalidServerMode($mode) : void
     {
         $this->container->get('config')->willReturn([
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'mode' => $mode,
                 ],
@@ -184,7 +185,7 @@ class HttpServerFactoryTest extends TestCase
     public function testExceptionThrownForInvalidSocketType($type) : void
     {
         $this->container->get('config')->willReturn([
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'protocol' => $type,
                 ],
@@ -205,7 +206,7 @@ class HttpServerFactoryTest extends TestCase
             'pid_file' => '/tmp/swoole.pid',
         ];
         $this->container->get('config')->willReturn([
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'options' => $serverOptions,
                 ],
@@ -254,7 +255,7 @@ class HttpServerFactoryTest extends TestCase
     public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions) : void
     {
         $this->container->get('config')->willReturn([
-            'zend-expressive-swoole' => [
+            'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'host' => '127.0.0.1',
                     'port' => 8080,
