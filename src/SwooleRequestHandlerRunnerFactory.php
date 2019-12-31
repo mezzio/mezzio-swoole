@@ -1,18 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
+use Mezzio\ApplicationPipeline;
+use Mezzio\Response\ServerRequestErrorResponseGenerator;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Expressive\ApplicationPipeline;
-use Zend\Expressive\Response\ServerRequestErrorResponseGenerator;
 
 class SwooleRequestHandlerRunnerFactory
 {
@@ -20,10 +21,14 @@ class SwooleRequestHandlerRunnerFactory
     {
         $staticResourceHandler = $container->has(StaticResourceHandlerInterface::class)
             ? $container->get(StaticResourceHandlerInterface::class)
-            : null;
+            : ($container->has(\Zend\Expressive\Swoole\StaticResourceHandlerInterface::class)
+                ? $container->get(\Zend\Expressive\Swoole\StaticResourceHandlerInterface::class)
+                : null);
         $logger = $container->has(Log\AccessLogInterface::class)
             ? $container->get(Log\AccessLogInterface::class)
-            : null;
+            : ($container->has(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+                ? $container->get(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+                : null);
 
         return new SwooleRequestHandlerRunner(
             $container->get(ApplicationPipeline::class),
