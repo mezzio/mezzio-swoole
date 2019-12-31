@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\HttpHandlerRunner\RequestHandlerRunner;
+
 use function extension_loaded;
 
 class ConfigProvider
@@ -22,7 +24,7 @@ class ConfigProvider
             ? ['dependencies' => $this->getDependencies()]
             : [];
 
-        $config['zend-expressive-swoole'] = $this->getDefaultConfig();
+        $config['mezzio-swoole'] = $this->getDefaultConfig();
 
         return $config;
     }
@@ -32,10 +34,10 @@ class ConfigProvider
         return [
             'swoole-http-server' => [
                 // A prefix for the process name of the master process and workers.
-                // By default the master process will be named `expressive-master`,
-                // each http worker `expressive-worker-n` and each task worker
-                // `expressive-task-worker-n` where n is the id of the worker
-                'process-name' => 'expressive',
+                // By default the master process will be named `mezzio-master`,
+                // each http worker `mezzio-worker-n` and each task worker
+                // `mezzio-task-worker-n` where n is the id of the worker
+                'process-name' => 'mezzio',
                 'options' => [
                     // We set a default for this. Without one, Swoole\Http\Server
                     // defaults to the value of `ulimit -n`. Unfortunately, in
@@ -70,9 +72,21 @@ class ConfigProvider
             'aliases' => [
                 RequestHandlerRunner::class           => SwooleRequestHandlerRunner::class,
                 StaticResourceHandlerInterface::class => StaticResourceHandler::class,
+
+                // Legacy Zend Framework aliases
+                \Zend\Expressive\Swoole\Command\ReloadCommand::class => Command\ReloadCommand::class,
+                \Zend\Expressive\Swoole\Command\StartCommand::class => Command\StartCommand::class,
+                \Zend\Expressive\Swoole\Command\StatusCommand::class => Command\StatusCommand::class,
+                \Zend\Expressive\Swoole\Command\StopCommand::class => Command\StopCommand::class,
+                \Zend\Expressive\Swoole\Log\AccessLogInterface::class => Log\AccessLogInterface::class,
+                \Zend\Expressive\Swoole\PidManager::class => PidManager::class,
+                \Zend\Expressive\Swoole\SwooleRequestHandlerRunner::class => SwooleRequestHandlerRunner::class,
+                \Zend\Expressive\Swoole\StaticResourceHandler::class => StaticResourceHandler::class,
+                \Zend\HttpHandlerRunner\RequestHandlerRunner::class => RequestHandlerRunner::class,
+                \Zend\Expressive\Swoole\StaticResourceHandlerInterface::class => StaticResourceHandlerInterface::class,
             ],
             'delegators' => [
-                'Zend\Expressive\WhoopsPageHandler' => [
+                'Mezzio\WhoopsPageHandler' => [
                     WhoopsPrettyPageHandlerDelegator::class,
                 ],
             ],
