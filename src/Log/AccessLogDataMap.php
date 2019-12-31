@@ -1,25 +1,23 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
- *
- * Parts of this class are derived from middlewares/access-log:
- * @copyright Copyright (c) 2018 Oscar Otero (https://github.com/middlewares/access-log/blob/master/LICENSE)
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole\Log;
+namespace Mezzio\Swoole\Log;
 
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Swoole\Http\Request as SwooleHttpRequest;
-use Zend\Expressive\Swoole\StaticResourceHandler\StaticResourceResponse;
 
 use function filter_var;
 use function function_exists;
-use function getenv;
 use function getcwd;
+use function getenv;
 use function gethostbyaddr;
 use function gethostname;
 use function http_build_query;

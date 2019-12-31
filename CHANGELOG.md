@@ -6,40 +6,40 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#46](https://github.com/zendframework/zend-expressive-swoole/pull/46) adds a new command for the command line tooling, `status`; the command
+- [zendframework/zend-expressive-swoole#46](https://github.com/zendframework/zend-expressive-swoole/pull/46) adds a new command for the command line tooling, `status`; the command
   simply tells you if the server is running or not.
 
-- [#43](https://github.com/zendframework/zend-expressive-swoole/pull/43) adds the class `Zend\Expressive\Swoole\WhoopsPrettyPageHandlerDelegator`,
-  and registers it to the service `Zend\Expressive\WhoopsPageHandler`. The
+- [zendframework/zend-expressive-swoole#43](https://github.com/zendframework/zend-expressive-swoole/pull/43) adds the class `Mezzio\Swoole\WhoopsPrettyPageHandlerDelegator`,
+  and registers it to the service `Mezzio\WhoopsPageHandler`. The
   delegator calls `handleUnconditionally()` on the handler in order to ensure it
   will operate under the CLI SAPI that Swoole runs under.
 
-- [#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) adds the class `Zend\Expressive\Swoole\HttpServerFactory`, which
+- [zendframework/zend-expressive-swoole#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) adds the class `Mezzio\Swoole\HttpServerFactory`, which
   generates a `Swoole\Http\Server` instance based on provided configuration; it
-  replaces the former `Zend\Expressive\Swoole\ServerFactory` (as well as the
+  replaces the former `Mezzio\Swoole\ServerFactory` (as well as the
   factory for that class). The new factory class is now registered as a factory
   for the `Swoole\Http\Server` class, which allows users to further configure
   the Swoole server instance via delegators, specifically for the purpose of
-  [enabling async task workers](https://docs.zendframework.com/zend-expressive-swoole/v2/async-tasks/).
+  [enabling async task workers](https://docs.mezzio.dev/mezzio-swoole/v2/async-tasks/).
 
 ### Changed
 
-- [#46](https://github.com/zendframework/zend-expressive-swoole/pull/46) moves the command line utilities for controlling the web server out of
-  the application runner, and into a new vendor binary, `zend-expressive-swoole`
-  (called via `./vendor/bin/zend-expressive-swoole`). This change was required
+- [zendframework/zend-expressive-swoole#46](https://github.com/zendframework/zend-expressive-swoole/pull/46) moves the command line utilities for controlling the web server out of
+  the application runner, and into a new vendor binary, `mezzio-swoole`
+  (called via `./vendor/bin/mezzio-swoole`). This change was required
   to allow us to expose the `Swoole\Http\Server` instance as a service, and has
   the added benefit that `reload` operations now will fully stop and start the
   server, allowing it to pick up configuration and code changes. **You will need
   to update any deployment scripts to use the new vendor binary.**
 
-- [#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) changes how you configure Swoole's coroutine support. Previously, you
-  would toggle the configuration flag `zend-expressive-swoole.swoole-http-server.options.enable_coroutine`;
-  you should now use the flag `zend-expressive-swoole.enable_coroutine`. The
+- [zendframework/zend-expressive-swoole#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) changes how you configure Swoole's coroutine support. Previously, you
+  would toggle the configuration flag `mezzio-swoole.swoole-http-server.options.enable_coroutine`;
+  you should now use the flag `mezzio-swoole.enable_coroutine`. The
   original flag still exists, but is now used to toggle coroutine support in the
   `Swoole\Http\Server` instance specifically.
 
-- [#42](https://github.com/zendframework/zend-expressive-swoole/pull/42) adds a discrete factory service for the `SwooleRequestHandlerRunner`, and now aliases
-  `Zend\HttpHandlerRunner\RequestHandlerRunner` to that service.
+- [zendframework/zend-expressive-swoole#42](https://github.com/zendframework/zend-expressive-swoole/pull/42) adds a discrete factory service for the `SwooleRequestHandlerRunner`, and now aliases
+  `Laminas\HttpHandlerRunner\RequestHandlerRunner` to that service.
 
 ### Deprecated
 
@@ -47,10 +47,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- [#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) removes the `Zend\Expressive\Swoole\ServerFactory` and
-  `ServerFactoryFactory` classes, as well as the `Zend\Expressive\Swoole\ServerFactory` 
+- [zendframework/zend-expressive-swoole#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) removes the `Mezzio\Swoole\ServerFactory` and
+  `ServerFactoryFactory` classes, as well as the `Mezzio\Swoole\ServerFactory` 
   service. Users should instead reference the `Swoole\Http\Server` service,
-  which is now registered via the `Zend\Expressive\Swoole\HttpServerFactory`
+  which is now registered via the `Mezzio\Swoole\HttpServerFactory`
   factory, detailed in the "Added" section above.
 
 ### Fixed
@@ -77,7 +77,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#45](https://github.com/zendframework/zend-expressive-swoole/pull/45) provides a patch that ensures that SSL support can be enabled when
+- [zendframework/zend-expressive-swoole#45](https://github.com/zendframework/zend-expressive-swoole/pull/45) provides a patch that ensures that SSL support can be enabled when
   creating the `Swoole\Http\Server` instance. SSL support requires not just the
   SSL certificate and private key, but also providing a protocol of either
   `SWOOLE_SOCK_TCP | SWOOLE_SSL` or `SWOOLE_SOCK_TCP6 | SWOOLE_SSL`.
@@ -103,22 +103,22 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#41](https://github.com/zendframework/zend-expressive-swoole/pull/41) fixes an issue that occurs when the HTTP request body is empty.
+- [zendframework/zend-expressive-swoole#41](https://github.com/zendframework/zend-expressive-swoole/pull/41) fixes an issue that occurs when the HTTP request body is empty.
   `Swoole\Http\Request::rawcontent()` returns `false` in such situations, when a
-  string is expected. `Zend\Expressive\Swoole\SwooleStream` now detects this and
+  string is expected. `Mezzio\Swoole\SwooleStream` now detects this and
   casts to an empty string.
 
 ## 1.0.0 - 2018-10-02
 
 ### Added
 
-- [#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) adds documentation covering potential issues when using a long-running
+- [zendframework/zend-expressive-swoole#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) adds documentation covering potential issues when using a long-running
   server such as Swoole, as well as how to avoid them.
 
-- [#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) adds documentation covering how to use Monolog as a PSR-3 logger for the
+- [zendframework/zend-expressive-swoole#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) adds documentation covering how to use Monolog as a PSR-3 logger for the
   Swoole server.
 
-- [#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) adds a default value of 1024 for the `max_conn` Swoole HTTP server option.
+- [zendframework/zend-expressive-swoole#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) adds a default value of 1024 for the `max_conn` Swoole HTTP server option.
   By default, Swoole uses the value of `ulimit -n` on the system; however, in
   containers and virtualized environments, this value often reports far higher
   than the host system can allow, which can lead to resource problems and
@@ -128,7 +128,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- [#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) versions the documentation, moving all URLS below the `/v1/` subpath.
+- [zendframework/zend-expressive-swoole#38](https://github.com/zendframework/zend-expressive-swoole/pull/38) versions the documentation, moving all URLS below the `/v1/` subpath.
   Redirects from the original pages to the new ones were also added.
 
 ### Deprecated
@@ -147,7 +147,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#37](https://github.com/zendframework/zend-expressive-swoole/pull/37) adds support for zendframework/zend-diactoros 2.0.0. You may use either
+- [zendframework/zend-expressive-swoole#37](https://github.com/zendframework/zend-expressive-swoole/pull/37) adds support for zendframework/zend-diactoros 2.0.0. You may use either
   a 1.Y or 2.Y version of that library with Expressive applications.
 
 ### Changed
@@ -164,7 +164,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#36](https://github.com/zendframework/zend-expressive-swoole/pull/36) fixes the call to `emitMarshalServerRequestException()` to ensure the
+- [zendframework/zend-expressive-swoole#36](https://github.com/zendframework/zend-expressive-swoole/pull/36) fixes the call to `emitMarshalServerRequestException()` to ensure the
   request is passed to it.
 
 ## 0.2.3 - 2018-09-27
@@ -187,13 +187,13 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#35](https://github.com/zendframework/zend-expressive-swoole/pull/35) fixes logging when unable to marshal a server request.
+- [zendframework/zend-expressive-swoole#35](https://github.com/zendframework/zend-expressive-swoole/pull/35) fixes logging when unable to marshal a server request.
 
 ## 0.2.2 - 2018-09-05
 
 ### Added
 
-- [#28](https://github.com/zendframework/zend-expressive-swoole/pull/28) adds a new option, `zend-expressive-swoole.swoole-http-server.options.enable_coroutine`.
+- [zendframework/zend-expressive-swoole#28](https://github.com/zendframework/zend-expressive-swoole/pull/28) adds a new option, `mezzio-swoole.swoole-http-server.options.enable_coroutine`.
   The option is only relevant for Swoole 4.1 and up. When enabled, this option
   will turn on coroutine support, which essentially wraps most blocking I/O
   operations (including PDO, Mysqli, Redis, SOAP, `stream_socket_client`,
@@ -237,21 +237,21 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#30](https://github.com/zendframework/zend-expressive-swoole/pull/30) fixes how the `Content-Length` header is passed to the Swoole response, ensuring we cast the value to a string.
+- [zendframework/zend-expressive-swoole#30](https://github.com/zendframework/zend-expressive-swoole/pull/30) fixes how the `Content-Length` header is passed to the Swoole response, ensuring we cast the value to a string.
 
 ## 0.2.0 - 2018-08-30
 
 ### Added
 
-- [#26](https://github.com/zendframework/zend-expressive-swoole/pull/26) adds comprehensive access logging capabilities via a new subnamespace,
-  `Zend\Expressive\Swoole\Log`. Capabilities include support (most) of the
+- [zendframework/zend-expressive-swoole#26](https://github.com/zendframework/zend-expressive-swoole/pull/26) adds comprehensive access logging capabilities via a new subnamespace,
+  `Mezzio\Swoole\Log`. Capabilities include support (most) of the
   Apache log format placeholders (as well as the standard formats used by Apache
   and Debian), and the ability to provide your own formatting mechanisms. Please
-  see the [logging documentation](https://docs.zendframework.com/zend-expressive-swoole/logging/)
+  see the [logging documentation](https://docs.mezzio.dev/mezzio-swoole/logging/)
   for more information.
 
-- [#20](https://github.com/zendframework/zend-expressive-swoole/pull/20) adds a new interface, `Zend\Expressive\Swoole\StaticResourceHandlerInterface`,
-  and default implementation `Zend\Expressive\Swoole\StaticResourceHandler`,
+- [zendframework/zend-expressive-swoole#20](https://github.com/zendframework/zend-expressive-swoole/pull/20) adds a new interface, `Mezzio\Swoole\StaticResourceHandlerInterface`,
+  and default implementation `Mezzio\Swoole\StaticResourceHandler`,
   used to determine if a request is for a static file, and then to serve it; the
   `SwooleRequestHandlerRunner` composes an instance now for providing static
   resource serving capabilities.
@@ -269,23 +269,23 @@ All notable changes to this project will be documented in this file, in reverse 
   - Selectively emitting `Last-Modified` headers.
   - Selectively emitting `ETag` headers.
 
-  Please see the [static resource documentation](https://docs.zendframework.com/zend-expressive-swoole/static-resources/)
+  Please see the [static resource documentation](https://docs.mezzio.dev/mezzio-swoole/static-resources/)
   for more information.
 
-- [#11](https://github.com/zendframework/zend-expressive-swoole/pull/11), [#18](https://github.com/zendframework/zend-expressive-swoole/pull/18), and [#22](https://github.com/zendframework/zend-expressive-swoole/pull/22) add the following console actions and options to
+- [zendframework/zend-expressive-swoole#11](https://github.com/zendframework/zend-expressive-swoole/pull/11), [zendframework/zend-expressive-swoole#18](https://github.com/zendframework/zend-expressive-swoole/pull/18), and [zendframework/zend-expressive-swoole#22](https://github.com/zendframework/zend-expressive-swoole/pull/22) add the following console actions and options to
   interact with the server via `public/index.php`:
   - `start` will start the server; it may be omitted, as this is the default action.
     - `--dameonize|-d` tells the server to daemonize itself when `start` is called.
     - `--num_workers|w` tells the server how many workers to spawn when starting (defaults to 4).
   - `stop` will stop the server.
-  - `reload` reloads all worker processes, but only when the zend-expressive-swoole.swoole-http-server.mode
+  - `reload` reloads all worker processes, but only when the mezzio-swoole.swoole-http-server.mode
     configuration value is set to `SWOOLE_PROCESS`.
 
 ### Changed
 
-- [#21](https://github.com/zendframework/zend-expressive-swoole/pull/21) renames `RequestHandlerSwooleRunner` (and its related factory) to `SwooleRequestHandlerRunner`.
+- [zendframework/zend-expressive-swoole#21](https://github.com/zendframework/zend-expressive-swoole/pull/21) renames `RequestHandlerSwooleRunner` (and its related factory) to `SwooleRequestHandlerRunner`.
 
-- [#20](https://github.com/zendframework/zend-expressive-swoole/pull/20) and [#26](https://github.com/zendframework/zend-expressive-swoole/pull/26) modify the collaborators and thus constructor arguments
+- [zendframework/zend-expressive-swoole#20](https://github.com/zendframework/zend-expressive-swoole/pull/20) and [zendframework/zend-expressive-swoole#26](https://github.com/zendframework/zend-expressive-swoole/pull/26) modify the collaborators and thus constructor arguments
   expected by the `SwooleRequestHandlerRunner`. The constructor now has the
   following signature:
 
@@ -294,10 +294,10 @@ All notable changes to this project will be documented in this file, in reverse 
       Psr\Http\Server\RequestHandlerInterface $handler,
       callable $serverRequestFactory,
       callable $serverRequestErrorResponseGenerator,
-      Zend\Expressive\Swoole\PidManager $pidManager,
-      Zend\Expressive\Swoole\ServerFactory $serverFactory,
-      Zend\Expressive\Swoole\StaticResourceHandlerInterface $staticResourceHandler = null,
-      Zend\Expressive\Swoole\Log\AccessLogInterface $logger = null
+      Mezzio\Swoole\PidManager $pidManager,
+      Mezzio\Swoole\ServerFactory $serverFactory,
+      Mezzio\Swoole\StaticResourceHandlerInterface $staticResourceHandler = null,
+      Mezzio\Swoole\Log\AccessLogInterface $logger = null
   ) {
   ```
 
@@ -320,14 +320,14 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#5](https://github.com/zendframework/zend-expressive-swoole/pull/5) adds the ability to serve static file resources from your
+- [zendframework/zend-expressive-swoole#5](https://github.com/zendframework/zend-expressive-swoole/pull/5) adds the ability to serve static file resources from your
   configured document root. For information on the default capabilities, as well
   as how to configure the functionality, please see
-  https://docs.zendframework.com/zend-expressive-swoole/intro/#serving-static-files.
+  https://docs.mezzio.dev/mezzio-swoole/intro/#serving-static-files.
 
 ### Changed
 
-- [#9](https://github.com/zendframework/zend-expressive-swoole/pull/9) modifies how the `RequestHandlerSwooleRunner` provides logging
+- [zendframework/zend-expressive-swoole#9](https://github.com/zendframework/zend-expressive-swoole/pull/9) modifies how the `RequestHandlerSwooleRunner` provides logging
   output.  Previously, it used `printf()` directly. Now it uses a [PSR-3
   logger](https://www.php-fig.org/psr/psr-3/) instance, defaulting to an
   internal implementation that writes to STDOUT. The logger may be provided
@@ -343,7 +343,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#7](https://github.com/zendframework/zend-expressive-swoole/pull/7) fixes how cookies are emitted by the Swoole HTTP server. We now
+- [zendframework/zend-expressive-swoole#7](https://github.com/zendframework/zend-expressive-swoole/pull/7) fixes how cookies are emitted by the Swoole HTTP server. We now
   use the server `cookie()` method to set cookies, ensuring that multiple
   cookies are not squashed into a single `Set-Cookie` header.
 
