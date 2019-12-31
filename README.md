@@ -1,11 +1,11 @@
-# zend-expressive-swoole
+# mezzio-swoole
 
-[![Build Status](https://secure.travis-ci.org/zendframework/zend-expressive-swoole.svg?branch=master)](https://secure.travis-ci.org/zendframework/zend-expressive-swoole)
-[![Coverage Status](https://coveralls.io/repos/github/zendframework/zend-expressive-swoole/badge.svg?branch=master)](https://coveralls.io/github/zendframework/zend-expressive-swoole?branch=master)
+[![Build Status](https://travis-ci.org/mezzio/mezzio-swoole.svg?branch=master)](https://travis-ci.org/mezzio/mezzio-swoole)
+[![Coverage Status](https://coveralls.io/repos/github/mezzio/mezzio-swoole/badge.svg?branch=master)](https://coveralls.io/github/mezzio/mezzio-swoole?branch=master)
 
 This library provides the support of [Swoole](https://www.swoole.co.uk/) into
-an [Expressive](https://getexpressive.org/) application. This means you can
-execute your Expressive application using Swoole directly from the command line.
+an [Mezzio](https://getmezzio.org/) application. This means you can
+execute your Mezzio application using Swoole directly from the command line.
 
 
 ## Installation
@@ -13,12 +13,12 @@ execute your Expressive application using Swoole directly from the command line.
 Run the following to install this library:
 
 ```bash
-$ composer require zendframework/zend-expressive-swoole
+$ composer require mezzio/mezzio-swoole
 ```
 
 ## Configuration
 
-After installing zend-expressive-swoole, you will need to first enable the
+After installing mezzio-swoole, you will need to first enable the
 component, and then optionally configure it.
 
 We recommend adding a new configuration file to your autoload directory,
@@ -27,7 +27,7 @@ We recommend adding a new configuration file to your autoload directory,
 ```php
 <?php
 
-use Zend\Expressive\Swoole\ConfigProvider;
+use Mezzio\Swoole\ConfigProvider;
 
 return array_merge((new ConfigProvider())(), []);
 ```
@@ -41,10 +41,10 @@ above, modify it to read as follows:
 ```php
 <?php
 
-use Zend\Expressive\Swoole\ConfigProvider;
+use Mezzio\Swoole\ConfigProvider;
 
 return array_merge((new ConfigProvider())(), [
-    'zend-expressive-swoole' => [
+    'mezzio-swoole' => [
         'swoole-http-server' => [
             'host' => 'insert hostname to use here',
             'port' => 80, // use an integer value here
@@ -53,10 +53,10 @@ return array_merge((new ConfigProvider())(), [
 ]);
 ```
 
-> ### Expressive skeleton 3.1.0 and later
+> ### Mezzio skeleton 3.1.0 and later
 >
 > If you have built your application on the 3.1.0 or later version of the
-> Expressive skeleton, you do not need to instantiate and invoke the package's
+> Mezzio skeleton, you do not need to instantiate and invoke the package's
 > `ConfigProvider`, as the skeleton supports it out of the box.
 >
 > You will only need to provide any additional configuration of the HTTP server.
@@ -64,7 +64,7 @@ return array_merge((new ConfigProvider())(), [
 ## Execute
 
 Once you have performed the configuration steps as outlined above, you can run
-an Expressive application with Swoole using the following command:
+an Mezzio application with Swoole using the following command:
 
 ```bash
 php public/index.php start
@@ -72,10 +72,10 @@ php public/index.php start
 
 ## Documentation
 
-Browse the documentation online at https://docs.zendframework.com/zend-expressive-swoole/
+Browse the documentation online at https://docs.mezzio.dev/mezzio-swoole/
 
 ## Support
 
-* [Issues](https://github.com/zendframework/zend-expressive-swoole/issues/)
-* [Chat](https://zendframework-slack.herokuapp.com/)
-* [Forum](https://discourse.zendframework.com/)
+* [Issues](https://github.com/mezzio/mezzio-swoole/issues/)
+* [Chat](https://laminas.dev/chat/)
+* [Forum](https://discourse.laminas.dev/)

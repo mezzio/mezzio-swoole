@@ -1,14 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
+use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Exception;
 use PackageVersions\Versions;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,9 +23,6 @@ use Swoole\Http\Server as SwooleHttpServer;
 use Swoole\Process as SwooleProcess;
 use Symfony\Component\Console\Application as CommandLine;
 use Throwable;
-use Zend\Expressive\Swoole\Exception;
-use Zend\HttpHandlerRunner\Emitter\EmitterInterface;
-use Zend\HttpHandlerRunner\RequestHandlerRunner;
 
 use function date;
 use function microtime;
@@ -146,8 +147,8 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     public function run() : void
     {
-        $version = strstr(Versions::getVersion('zendframework/zend-expressive-swoole'), '@', true);
-        $commandLine = new CommandLine('Expressive web server', $version);
+        $version = strstr(Versions::getVersion('mezzio/mezzio-swoole'), '@', true);
+        $commandLine = new CommandLine('Mezzio web server', $version);
         $commandLine->setAutoExit($this->exitFromCommand);
         $commandLine->add(new Command\StartCommand($this, 'start'));
         $commandLine->add(new Command\StopCommand($this, 'stop'));
