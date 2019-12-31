@@ -1,17 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole\HotCodeReload\FileWatcher;
+namespace Mezzio\Swoole\HotCodeReload\FileWatcher;
 
-use Zend\Expressive\Swoole\Exception\ExtensionNotLoadedException;
-use Zend\Expressive\Swoole\Exception\RuntimeException;
-use Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface;
+use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
+use Mezzio\Swoole\Exception\RuntimeException;
+use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 
 use function inotify_add_watch;
 use function inotify_init;

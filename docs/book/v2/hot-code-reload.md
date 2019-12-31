@@ -17,7 +17,7 @@ should not be used in production!**
 - `ext-inotify`
 
 This library ships with an [inotify](http://php.net/manual/en/book.inotify.php)
-based implementation of `Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface`.
+based implementation of `Mezzio\Swoole\HotCodeReload\FileWatcherInterface`.
 In order to use it, the `inotify` extension must be loaded.
 
 ## Configuration
@@ -28,7 +28,7 @@ The following demonstrates all currently available configuration options:
 // config/autoload/swoole.local.php
 
 return [
-    'zend-expressive-swoole' => [
+    'mezzio-swoole' => [
         'hot-code-reload' => [
             // Set to true to enable hot code reload; the default is false.
             'enable' => true,

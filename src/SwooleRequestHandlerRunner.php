@@ -1,14 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
+use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Exception;
+use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -16,10 +21,6 @@ use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
 use Throwable;
-use Zend\Expressive\Swoole\Exception;
-use Zend\Expressive\Swoole\HotCodeReload\Reloader;
-use Zend\HttpHandlerRunner\Emitter\EmitterInterface;
-use Zend\HttpHandlerRunner\RequestHandlerRunner;
 
 use function chdir;
 use function getcwd;
@@ -44,7 +45,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /**
      * Default Process Name
      */
-    public const DEFAULT_PROCESS_NAME = 'expressive';
+    public const DEFAULT_PROCESS_NAME = 'mezzio';
 
     /**
      * Keep CWD in daemon mode.

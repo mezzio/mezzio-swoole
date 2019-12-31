@@ -1,29 +1,30 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole;
+namespace MezzioTest\Swoole;
 
+use Mezzio\ApplicationPipeline;
+use Mezzio\Response\ServerRequestErrorResponseGenerator;
+use Mezzio\Swoole\HotCodeReload\Reloader;
+use Mezzio\Swoole\Log\AccessLogInterface;
+use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
+use Mezzio\Swoole\PidManager;
+use Mezzio\Swoole\ServerFactory;
+use Mezzio\Swoole\StaticResourceHandlerInterface;
+use Mezzio\Swoole\SwooleRequestHandlerRunner;
+use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\Expressive\ApplicationPipeline;
-use Zend\Expressive\Response\ServerRequestErrorResponseGenerator;
-use Zend\Expressive\Swoole\HotCodeReload\Reloader;
-use Zend\Expressive\Swoole\Log\AccessLogInterface;
-use Zend\Expressive\Swoole\Log\Psr3AccessLogDecorator;
-use Zend\Expressive\Swoole\PidManager;
-use Zend\Expressive\Swoole\ServerFactory;
-use Zend\Expressive\Swoole\StaticResourceHandlerInterface;
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunner;
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunnerFactory;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
@@ -78,7 +79,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->container
             ->get('config')
             ->willReturn([
-                'zend-expressive-swoole' => [
+                'mezzio-swoole' => [
                     'swoole-http-server' => [
                         'static-files' => [],
                     ],
@@ -164,7 +165,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->container
             ->get('config')
             ->willReturn([
-                'zend-expressive-swoole' => [
+                'mezzio-swoole' => [
                     'swoole-http-server' => [
                         'static-files' => [
                             'enable' => true,
@@ -192,7 +193,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->container
             ->get('config')
             ->willReturn([
-                'zend-expressive-swoole' => [
+                'mezzio-swoole' => [
                     'swoole-http-server' => [
                         'static-files' => [
                             'enable' => false, // Disabling static files
@@ -230,9 +231,9 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->container
             ->get('config')
             ->willReturn([
-                'zend-expressive-swoole' => [
+                'mezzio-swoole' => [
                     'swoole-http-server' => [
-                        'process-name' => 'zend-expressive-swoole-test',
+                        'process-name' => 'mezzio-swoole-test',
                     ],
                 ],
             ]);
@@ -241,7 +242,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $runner = $factory($this->container->reveal());
 
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
-        $this->assertAttributeSame('zend-expressive-swoole-test', 'processName', $runner);
+        $this->assertAttributeSame('mezzio-swoole-test', 'processName', $runner);
     }
 
     public function testFactoryWillUseConfiguredHotCodeReloaderWhenPresent()
@@ -255,7 +256,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->container
             ->get('config')
             ->willReturn([
-                'zend-expressive-swoole' => [
+                'mezzio-swoole' => [
                     'hot-code-reload' => [
                         'enable' => true,
                     ],
