@@ -1,17 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace ZendTest\Expressive\Swoole\Log;
+namespace MezzioTest\Swoole\Log;
 
+use Mezzio\Swoole\Log\AccessLogDataMap;
+use Mezzio\Swoole\Log\AccessLogFormatter;
 use PHPUnit\Framework\TestCase;
-use Zend\Expressive\Swoole\Log\AccessLogDataMap;
-use Zend\Expressive\Swoole\Log\AccessLogFormatter;
 
 class AccessLogFormatterTest extends TestCase
 {
@@ -35,10 +36,10 @@ class AccessLogFormatterTest extends TestCase
         $dataMap->getStatus()->willReturn('202'); // %s
         $dataMap->getRequestTime('begin:%d/%b/%Y:%H:%M:%S %z')->willReturn('[1234567890]'); // %t
         $dataMap->getRequestDuration('s')->willReturn('22'); // %T
-        $dataMap->getRemoteUser()->willReturn('expressive'); // %u
+        $dataMap->getRemoteUser()->willReturn('mezzio'); // %u
         $dataMap->getPath()->willReturn('/path'); // %U
-        $dataMap->getHost()->willReturn('expressive.local'); // %v
-        $dataMap->getServerName()->willReturn('expressive.local'); // %V
+        $dataMap->getHost()->willReturn('mezzio.local'); // %v
+        $dataMap->getServerName()->willReturn('mezzio.local'); // %V
         $dataMap->getRequestMessageSize('-')->willReturn('78'); // %I
         $dataMap->getResponseMessageSize('-')->willReturn('89'); // %O
         $dataMap->getTransferredSize()->willReturn('123'); // %S
@@ -69,10 +70,10 @@ class AccessLogFormatterTest extends TestCase
             '202',
             '[1234567890]',
             '22',
-            'expressive',
+            'mezzio',
             '/path',
-            'expressive.local',
-            'expressive.local',
+            'mezzio.local',
+            'mezzio.local',
             '78',
             '89',
             '123',

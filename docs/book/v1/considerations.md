@@ -46,13 +46,13 @@ the various classes in your dependency injection container, and the impact those
 changes may have on later requests, or even other requests happening
 concurrently.
 
-As one example: [zend-expressive-template](https://docs.zendframework.com/zend-expressive/v3/features/template/intro/)
+As one example: [mezzio-template](https://docs.mezzio.dev/mezzio/v3/features/template/intro/)
 provides an interface, `TemplateRendererInterface`, that allows you to render a
 template. That interface also allows you to provide template paths, and default
 parameters to pass to every template, and these methods are often invoked within
 factories or delegators in order to configure the renderer implementation.
 However, we have [also documented using `addDefaultParam()` for passing values
-discovered in the request to later handlers](https://docs.zendframework.com/zend-expressive/v3/cookbook/access-common-data-in-templates/).
+discovered in the request to later handlers](https://docs.mezzio.dev/mezzio/v3/cookbook/access-common-data-in-templates/).
 This practice accumulates _state_ in the renderer that can cause problems later:
 
 - Flash messages discovered in one request might then be pushed to templates
@@ -132,7 +132,7 @@ If the interface itself defines methods that modify state, we recommend writing
 a proxy that implements those methods as no-ops and/or that raises exceptions
 when those methods are invoked. (The latter approach ensures that you discover
 quickly when code is exercising those methods.) In each case, you would then use
-a [delegator factory](https://docs.zendframework.com/zend-expressive/v3/features/container/delegator-factories/),
+a [delegator factory](https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/),
 to decorate the original instance in the proxy class:
 
 ```php
@@ -188,8 +188,8 @@ template renderer:
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Expressive\Template\TemplateRendererInterface;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Template\TemplateRendererInterface;
 
 class SomeHandler implements RequestHandlerInterface
 {
@@ -220,8 +220,8 @@ time.
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Expressive\Template\TemplateRendererInterface;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Template\TemplateRendererInterface;
 
 class SomeHandler implements RequestHandlerInterface
 {
@@ -246,21 +246,21 @@ class SomeHandler implements RequestHandlerInterface
 ```
 
 From here, we create a factory for our dependency injection container that will
-return the factory we use here. As an example, if we are using the [zend-view
-integration](https://docs.zendframework.com/zend-expressive/v3/features/template/zend-view/),
+return the factory we use here. As an example, if we are using the [laminas-view
+integration](https://docs.mezzio.dev/mezzio/v3/features/template/laminas-view/),
 we might do the following:
 
 ```php
 
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Template\TemplateRendererInterface;
-use Zend\Expressive\ZendView\ZendViewRendererFactory;
+use Mezzio\Template\TemplateRendererInterface;
+use Mezzio\LaminasView\LaminasViewRendererFactory;
 
-class ZendViewRendererFactoryFactory
+class LaminasViewRendererFactoryFactory
 {
     public function __invoke(ContainerInterface $container) : callable
     {
-        $factory = new ZendViewRendererFactory();
+        $factory = new LaminasViewRendererFactory();
         return function () use ($container, $factory) : TemplateRendererInterface {
             return $factory($container);
         };
@@ -268,11 +268,11 @@ class ZendViewRendererFactoryFactory
 }
 ```
 
-If we mapped this to the "service" `Zend\Expressive\Template\TemplateRendererInterfaceFactory`,
+If we mapped this to the "service" `Mezzio\Template\TemplateRendererInterfaceFactory`,
 our factory for the `SomeHandler` class would then look like:
 
 ```php
-use Zend\Expressive\Template\TemplateRendererInterfaceFactory;
+use Mezzio\Template\TemplateRendererInterfaceFactory;
 
 function (ContainerInterface $container) : SomeHandler
 {
@@ -290,12 +290,12 @@ goes out of scope (i.e., when the method ends).
 > ### Handling the template data problem
 >
 > If we want our services to be stateless, how do we handle problems such as the 
-> [documented `addDefaultParam()` issue referenced earlier](https://docs.zendframework.com/zend-expressive/v3/cookbook/access-common-data-in-templates/)?
+> [documented `addDefaultParam()` issue referenced earlier](https://docs.mezzio.dev/mezzio/v3/cookbook/access-common-data-in-templates/)?
 >
 > In this case, the original problem was "how do we get common request data into
 > templates?" The solution originally provided was to alter the state of the
 > template renderer. Another solution, however, is one we've also documented
-> previously: [use server attributes to pass data between middleware](https://docs.zendframework.com/zend-expressive/v3/cookbook/passing-data-between-middleware/).
+> previously: [use server attributes to pass data between middleware](https://docs.mezzio.dev/mezzio/v3/cookbook/passing-data-between-middleware/).
 >
 > In this particular case, the middleware documented in the original solution
 > could be modified to provide data to a request attribute, instead of altering
@@ -308,9 +308,9 @@ goes out of scope (i.e., when the method ends).
 > use Psr\Http\Message\ServerRequestInterface;
 > use Psr\Http\Server\MiddlewareInterface;
 > use Psr\Http\Server\RequestHandlerInterface;
-> use Zend\Expressive\Router\RouteResult;
-> use Zend\Expressive\Session\Authentication\UserInterface;
-> use Zend\Expressive\Session\Flash\FlashMessagesInterface;
+> use Mezzio\Router\RouteResult;
+> use Mezzio\Session\Authentication\UserInterface;
+> use Mezzio\Session\Flash\FlashMessagesInterface;
 > 
 > class TemplateDefaultsMiddleware implements MiddlewareInterface
 > {

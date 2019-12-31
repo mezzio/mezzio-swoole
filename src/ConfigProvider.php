@@ -1,16 +1,17 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-expressive-swoole for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-expressive-swoole/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
 
-namespace Zend\Expressive\Swoole;
+namespace Mezzio\Swoole;
 
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\HttpHandlerRunner\RequestHandlerRunner;
 
 class ConfigProvider
 {
@@ -20,7 +21,7 @@ class ConfigProvider
             ? ['dependencies' => $this->getDependencies()]
             : [];
 
-        $config['zend-expressive-swoole'] = $this->getDefaultConfig();
+        $config['mezzio-swoole'] = $this->getDefaultConfig();
 
         return $config;
     }
@@ -45,6 +46,14 @@ class ConfigProvider
     public function getDependencies() : array
     {
         return [
+            // Legacy Zend Framework aliases
+            'aliases' => [
+                \Zend\Expressive\Swoole\Log\AccessLogInterface::class => Log\AccessLogInterface::class,
+                \Zend\Expressive\Swoole\PidManager::class => PidManager::class,
+                \Zend\HttpHandlerRunner\RequestHandlerRunner::class => RequestHandlerRunner::class,
+                \Zend\Expressive\Swoole\ServerFactory::class => ServerFactory::class,
+                \Zend\Expressive\Swoole\StaticResourceHandlerInterface::class => StaticResourceHandlerInterface::class,
+            ],
             'factories'  => [
                 Log\AccessLogInterface::class         => Log\AccessLogFactory::class,
                 PidManager::class                     => PidManagerFactory::class,
