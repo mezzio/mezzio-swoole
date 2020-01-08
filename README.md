@@ -1,6 +1,6 @@
 # mezzio-swoole
 
-[![Build Status](https://travis-ci.org/mezzio/mezzio-swoole.svg?branch=master)](https://travis-ci.org/mezzio/mezzio-swoole)
+[![Build Status](https://travis-ci.com/mezzio/mezzio-swoole.svg?branch=master)](https://travis-ci.com/mezzio/mezzio-swoole)
 [![Coverage Status](https://coveralls.io/repos/github/mezzio/mezzio-swoole/badge.svg?branch=master)](https://coveralls.io/github/mezzio/mezzio-swoole?branch=master)
 
 This library provides the support of [Swoole](https://www.swoole.co.uk/) into
