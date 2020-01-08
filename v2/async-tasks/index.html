@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -327,17 +331,16 @@ you'll need to add <code>task_worker_num</code>. The number of workers you confi
 the number of concurrent tasks that can be executed at once. Tasks are queued in
 the order that they triggered, meaning that a <code>task_worker_num</code> of 1 will offer
 no concurrency and tasks will execute one after the other.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>&#39;mezzio-swoole&#39; =&gt; [</span>
-<span class=x>    &#39;swoole-http-server&#39; =&gt; [</span>
-<span class=x>        &#39;host&#39; =&gt; &#39;127.0.0.1&#39;,</span>
-<span class=x>        &#39;port&#39; =&gt; 8080,</span>
-<span class=x>        &#39;options&#39; =&gt; [</span>
-<span class=x>            &#39;worker_num&#39;      =&gt; 4, // The number of HTTP Server Workers</span>
-<span class=x>            &#39;task_worker_num&#39; =&gt; 4, // The number of Task Workers</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>];</span>
-</pre></div></p>
+<pre class=codehilite><code class=language-php>'mezzio-swoole' =&gt; [
+    'swoole-http-server' =&gt; [
+        'host' =&gt; '127.0.0.1',
+        'port' =&gt; 8080,
+        'options' =&gt; [
+            'worker_num'      =&gt; 4, // The number of HTTP Server Workers
+            'task_worker_num' =&gt; 4, // The number of Task Workers
+        ],
+    ],
+];</code></pre>
 <blockquote>
 <h3>No CLI option for task_worker_num</h3>
 <p>Unlike <code>worker_num</code>, there is no CLI option for <code>task_worker_num</code>. This is
@@ -357,13 +360,12 @@ refuse to start.</p>
 </ul>
 <h3>Registering the Handlers</h3>
 <p>The signature for the <code>task</code> event handler is:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>function (</span>
-<span class=x>    \Swoole\Http\Server $server,</span>
-<span class=x>    int $taskId,</span>
-<span class=x>    int $sourceWorkerId,</span>
-<span class=x>    $dataForWorker</span>
-<span class=x>) : void</span>
-</pre></div></p>
+<pre class=codehilite><code class=language-php>function (
+    \Swoole\Http\Server $server,
+    int $taskId,
+    int $sourceWorkerId,
+    $dataForWorker
+) : void</code></pre>
 <p>where:</p>
 <ul>
 <li><code>$server</code> is the main HTTP server process</li>
@@ -376,23 +378,20 @@ refuse to start.</p>
 </ul>
 <p>To register the handler with the server, you must call it's <code>on()</code> method,
 <strong>before</strong> the server has been started:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>$server-&gt;on(&#39;task&#39;, $callable);</span>
-</pre></div></p>
+<pre class=codehilite><code class=language-php>$server-&gt;on('task', $callable);</code></pre>
 <p>As previously mentioned, you must also register an event handler for the
 <code>finish</code> event. This callback for this event should have the following
 signature:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>function (</span>
-<span class=x>    \Swoole\Http\Server $server,</span>
-<span class=x>    int $taskId,</span>
-<span class=x>    $userData</span>
-<span class=x>) : void</span>
-</pre></div></p>
+<pre class=codehilite><code class=language-php>function (
+    \Swoole\Http\Server $server,
+    int $taskId,
+    $userData
+) : void</code></pre>
 <p>The first two parameters are identical to the <code>task</code> event handler. The
 <code>$userData</code> parameter will contain the return value of the <code>task</code> event
 handler. </p>
 <p>Registering your callable for the <code>finish</code> event is accomplished like this:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>$server-&gt;on(&#39;finish&#39;, $callable);</span>
-</pre></div></p>
+<pre class=codehilite><code class=language-php>$server-&gt;on('finish', $callable);</code></pre>
 <blockquote>
 <h3>There can be only one</h3>
 <p>There can be <strong>only one</strong> event handler per event type. Subsequent calls to
@@ -401,7 +400,7 @@ handler. </p>
 <p>If you do not return anything from your <code>task</code> event handler, the
 <code>finish</code> handler <strong>will not be called</strong>. The Swoole documentation recommends
 that the task worker callback manually finish the task in these situations:</p>
-<pre class=codehilite><code class=language-php>
+<pre class="codehilite"><code class="language-php">
 $server-&gt;finish('');
 </code></pre>
 <p>Even if you do not call the above method, the handler <strong>must</strong> be defined, or
@@ -410,95 +409,92 @@ the server will refuse to start.</p>
 <h2 id="an-example-task-worker">An example task worker</h2>
 <p>The following example code illustrates a task worker with logging capabilities
 that uses a message notifier to process data:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// In src/App/TaskWorker.php:</span>
+<pre class=codehilite><code class=language-php>// In src/App/TaskWorker.php:
 
-<span class=x>namespace App;</span>
+namespace App;
 
-<span class=x>use Psr\EventDispatcher\MessageInterface;</span>
-<span class=x>use Psr\EventDispatcher\MessageNotifierInterface;</span>
-<span class=x>use Psr\Log\LoggerInterface;</span>
-<span class=x>use Throwable;</span>
+use Psr\EventDispatcher\MessageInterface;
+use Psr\EventDispatcher\MessageNotifierInterface;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
-<span class=x>class TaskWorker</span>
-<span class=x>{</span>
-<span class=x>    private $notifier;</span>
-<span class=x>    private $logger;</span>
+class TaskWorker
+{
+    private $notifier;
+    private $logger;
 
-<span class=x>    public function __construct(LoggerInterface $logger, MessageNotifierInterface $notifier)</span>
-<span class=x>    {</span>
-<span class=x>        $this-&gt;logger = $logger;</span>
-<span class=x>        $this-&gt;notifier = $notifier;</span>
-<span class=x>    }</span>
+    public function __construct(LoggerInterface $logger, MessageNotifierInterface $notifier)
+    {
+        $this-&gt;logger = $logger;
+        $this-&gt;notifier = $notifier;
+    }
 
-<span class=x>    public function __invoke($server, $taskId, $fromId, $data)</span>
-<span class=x>    {</span>
-<span class=x>        if (! $data instanceof MessageInterface) {</span>
-<span class=x>            $this-&gt;logger-&gt;error(&#39;Invalid data type provided to task worker: {type}&#39;, [</span>
-<span class=x>                &#39;type&#39; =&gt; is_object($data) ? get_class($data) : gettype($data)</span>
-<span class=x>            ]);</span>
-<span class=x>            return;</span>
-<span class=x>        }</span>
+    public function __invoke($server, $taskId, $fromId, $data)
+    {
+        if (! $data instanceof MessageInterface) {
+            $this-&gt;logger-&gt;error('Invalid data type provided to task worker: {type}', [
+                'type' =&gt; is_object($data) ? get_class($data) : gettype($data)
+            ]);
+            return;
+        }
 
-<span class=x>        $this-&gt;logger-&gt;notice(&#39;Starting work on task {taskId} using data: {data}&#39;, [</span>
-<span class=x>            &#39;taskId&#39; =&gt; $taskId,</span>
-<span class=x>            &#39;data&#39; =&gt; json_encode($data),</span>
-<span class=x>        ]);</span>
+        $this-&gt;logger-&gt;notice('Starting work on task {taskId} using data: {data}', [
+            'taskId' =&gt; $taskId,
+            'data' =&gt; json_encode($data),
+        ]);
 
-<span class=x>        try {</span>
-<span class=x>            $this-&gt;notifier-&gt;notify($data);</span>
-<span class=x>        } catch (Throwable $e) {</span>
-<span class=x>            $this-&gt;logger-&gt;error(&#39;Error processing task {taskId}: {error}&#39;, [</span>
-<span class=x>                &#39;taskId&#39; =&gt; $taskId,</span>
-<span class=x>                &#39;error&#39; =&gt; $e-&gt;getTraceAsString(),</span>
-<span class=x>            ]);</span>
-<span class=x>        }</span>
+        try {
+            $this-&gt;notifier-&gt;notify($data);
+        } catch (Throwable $e) {
+            $this-&gt;logger-&gt;error('Error processing task {taskId}: {error}', [
+                'taskId' =&gt; $taskId,
+                'error' =&gt; $e-&gt;getTraceAsString(),
+            ]);
+        }
 
-<span class=x>        // Notify the server that processing of the task has finished:</span>
-<span class=x>        $server-&gt;finish(&#39;&#39;);</span>
-<span class=x>    }</span>
-<span class=x>}</span>
-</pre></div></p>
+        // Notify the server that processing of the task has finished:
+        $server-&gt;finish('');
+    }
+}</code></pre>
 <p>This invokable class needs to be attached to the <code>$server-&gt;on('task')</code> event
 before the server has started. The easiest place to accomplish this is in a
 <a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>
 targeting the Swoole HTTP server. First, we'll create the delegator factory:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// In src/App/TaskWorkerDelegator.php:</span>
+<pre class=codehilite><code class=language-php>// In src/App/TaskWorkerDelegator.php:
 
-<span class=x>namespace App;</span>
+namespace App;
 
-<span class=x>use Psr\Container\ContainerInterface;</span>
-<span class=x>use Psr\Log\LoggerInterface;</span>
-<span class=x>use Swoole\Http\Server as HttpServer;</span>
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Swoole\Http\Server as HttpServer;
 
-<span class=x>class TaskWorkerDelegator</span>
-<span class=x>{</span>
-<span class=x>    public function __invoke(ContainerInterface $container, $serviceName, callable $callback) : HttpServer</span>
-<span class=x>    {</span>
-<span class=x>        $server = $callback();</span>
-<span class=x>        $logger = $container-&gt;get(LoggerInterface::class);</span>
+class TaskWorkerDelegator
+{
+    public function __invoke(ContainerInterface $container, $serviceName, callable $callback) : HttpServer
+    {
+        $server = $callback();
+        $logger = $container-&gt;get(LoggerInterface::class);
 
-<span class=x>        $server-&gt;on(&#39;task&#39;, $container-&gt;get(TaskWorker::class));</span>
-<span class=x>        $server-&gt;on(&#39;finish&#39;, function ($server, $taskId, $data) use ($logger) {</span>
-<span class=x>            $logger-&gt;notice(&#39;Task #{taskId} has finished processing&#39;, [&#39;taskId&#39; =&gt; $taskId]);</span>
-<span class=x>        });</span>
+        $server-&gt;on('task', $container-&gt;get(TaskWorker::class));
+        $server-&gt;on('finish', function ($server, $taskId, $data) use ($logger) {
+            $logger-&gt;notice('Task #{taskId} has finished processing', ['taskId' =&gt; $taskId]);
+        });
 
-<span class=x>        return $server;</span>
-<span class=x>    }</span>
-<span class=x>}</span>
-</pre></div></p>
+        return $server;
+    }
+}</code></pre>
 <p>Next, we'll register it with our container:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// In config/autoload/dependencies.php:</span>
+<pre class=codehilite><code class=language-php>// In config/autoload/dependencies.php:
 
-<span class=x>return [</span>
-<span class=x>    &#39;dependencies&#39; =&gt; [</span>
-<span class=x>        &#39;delegators&#39; =&gt; [</span>
-<span class=x>            \Swoole\Http\Server::class =&gt; [</span>
-<span class=x>                \App\TaskWorkerDelegator::class,</span>
-<span class=x>            ],</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>];</span>
-</pre></div></p>
+return [
+    'dependencies' =&gt; [
+        'delegators' =&gt; [
+            \Swoole\Http\Server::class =&gt; [
+                \App\TaskWorkerDelegator::class,
+            ],
+        ],
+    ],
+];</code></pre>
 <p>With this in place, we can now trigger tasks within our application. In the
 scenario outlined above, the task worker expects <em>messages</em>; it then <em>notifies</em>
 listeners of that message so they may respond to it.</p>
@@ -513,57 +509,56 @@ argument.</p>
 from the above example. The request handler uses values from the request to
 create the <code>ContactMessage</code> instance, and then create a task from it. It then
 immediately returns a response.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// in src/App/Handler/TaskTriggeringHandler.php:</span>
+<pre class=codehilite><code class=language-php>// in src/App/Handler/TaskTriggeringHandler.php:
 
-<span class=x>namespace App\Handler;</span>
+namespace App\Handler;
 
-<span class=x>use Psr\Http\Message\ResponseFactoryInterface;</span>
-<span class=x>use Psr\Http\Message\ResponseInterface;</span>
-<span class=x>use Psr\Http\Message\ServerRequestInterface;</span>
-<span class=x>use Psr\Http\Server\RequestHandlerInterface;</span>
-<span class=x>use Swoole\Http\Server as HttpServer;</span>
-<span class=x>use Mezzio\Template\TemplateRendererInterface;</span>
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Swoole\Http\Server as HttpServer;
+use Mezzio\Template\TemplateRendererInterface;
 
-<span class=x>class TaskTriggeringHandler implements RequestHandlerInterface</span>
-<span class=x>{</span>
-<span class=x>    private $responseFactory;</span>
-<span class=x>    private $server;</span>
-<span class=x>    private $template;</span>
+class TaskTriggeringHandler implements RequestHandlerInterface
+{
+    private $responseFactory;
+    private $server;
+    private $template;
 
-<span class=x>    public function __construct(</span>
-<span class=x>        HttpServer $server,</span>
-<span class=x>        TemplateRendererInterface $template,</span>
-<span class=x>        ResponseFactoryInterface $responseFactory</span>
-<span class=x>    ) {</span>
-<span class=x>        $this-&gt;server          = $server;</span>
-<span class=x>        $this-&gt;template        = $template;</span>
-<span class=x>        $this-&gt;responseFactory = $responseFactory;</span>
-<span class=x>    }</span>
+    public function __construct(
+        HttpServer $server,
+        TemplateRendererInterface $template,
+        ResponseFactoryInterface $responseFactory
+    ) {
+        $this-&gt;server          = $server;
+        $this-&gt;template        = $template;
+        $this-&gt;responseFactory = $responseFactory;
+    }
 
-<span class=x>    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
-<span class=x>    {</span>
-<span class=x>        // Gather data from request</span>
-<span class=x>        $data = $request-&gt;getParsedBody();</span>
+    public function handle(ServerRequestInterface $request) : ResponseInterface
+    {
+        // Gather data from request
+        $data = $request-&gt;getParsedBody();
 
-<span class=x>        // A fictonal event describing a contact request:</span>
-<span class=x>        $event = new ContactEvent([</span>
-<span class=x>            &#39;to&#39;      =&gt; $data[&#39;email&#39;],</span>
-<span class=x>            &#39;subject&#39; =&gt; $data[&#39;subject&#39;],</span>
-<span class=x>            &#39;message&#39; =&gt; $data[&#39;message&#39;],</span>
-<span class=x>        ]);</span>
+        // A fictonal event describing a contact request:
+        $event = new ContactEvent([
+            'to'      =&gt; $data['email'],
+            'subject' =&gt; $data['subject'],
+            'message' =&gt; $data['message'],
+        ]);
 
-<span class=x>        // task() returns a task identifier, if you want to use it; otherwise,</span>
-<span class=x>        // you can ignore the return value.</span>
-<span class=x>        $taskIdentifier = $this-&gt;server-&gt;task($event);</span>
+        // task() returns a task identifier, if you want to use it; otherwise,
+        // you can ignore the return value.
+        $taskIdentifier = $this-&gt;server-&gt;task($event);
 
-<span class=x>        // The task() method is asynchronous, so execution continues immediately.</span>
-<span class=x>        $response = ($this-&gt;responseFactory()-&gt;createResponse())</span>
-<span class=x>            -&gt;withHeader(&#39;Content-Type&#39;, &#39;text/html&#39;);</span>
-<span class=x>        $response-&gt;getBody()-&gt;write($this-&gt;template-&gt;render(&#39;contact::thank-you&#39;, []);</span>
-<span class=x>        return $response;</span>
-<span class=x>    }</span>
-<span class=x>}</span>
-</pre></div></p>
+        // The task() method is asynchronous, so execution continues immediately.
+        $response = ($this-&gt;responseFactory()-&gt;createResponse())
+            -&gt;withHeader('Content-Type', 'text/html');
+        $response-&gt;getBody()-&gt;write($this-&gt;template-&gt;render('contact::thank-you', []);
+        return $response;
+    }
+}</code></pre>
 
 
 
@@ -731,9 +726,10 @@ immediately returns a response.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -770,7 +766,7 @@ immediately returns a response.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -779,8 +775,8 @@ immediately returns a response.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -336,7 +340,7 @@ serve it.</p>
 <p>If you have a custom factory for the <code>SwooleRequestHandlerRunner</code>, or are
 instantiating it manually, pass a null value for the sixth argument of its
 constructor. As an example, within a factory:</p>
-<pre class=codehilite><code class=language-php>
+<pre class="codehilite"><code class="language-php">
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
@@ -362,7 +366,7 @@ function (ContainerInterface $container) : Swoole\SwooleRequestHandlerRunner
 you can also disable the functionality via configuration. To do this, set the
 <code>mezzio-swoole.swoole-http-server.static-files.enable</code> flag to
 boolean <code>false</code>:</p>
-<pre class=codehilite><code class=language-php>
+<pre class="codehilite"><code class="language-php">
 return [
     'mezzio-swoole' =&gt; [
         'swoole-http-server' =&gt; [
@@ -470,69 +474,68 @@ configuration-driven approach in order to:</p>
 <li>Configure and provide middleware.</li>
 </ul>
 <p>The following demonstrates all currently available configuration options:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// config/autoload/swoole.local.php</span>
+<pre class=codehilite><code class=language-php>// config/autoload/swoole.local.php
 
-<span class=x>return [</span>
-<span class=x>    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class=x>        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class=x>            &#39;static-files&#39; =&gt; [</span>
-<span class=x>                // Since 2.1.0: Set to false to disable any serving of static</span>
-<span class=x>                // files; all other configuration will then be ignored.</span>
-<span class=x>                &#39;enable&#39; =&gt; true,</span>
+return [
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'static-files' =&gt; [
+                // Since 2.1.0: Set to false to disable any serving of static
+                // files; all other configuration will then be ignored.
+                'enable' =&gt; true,
 
-<span class=x>                // Document root; defaults to &quot;getcwd() . &#39;/public&#39;&quot;</span>
-<span class=x>                &#39;document-root&#39; =&gt; &#39;/path/to/static/files/to/serve&#39;,</span>
+                // Document root; defaults to &quot;getcwd() . '/public'&quot;
+                'document-root' =&gt; '/path/to/static/files/to/serve',
 
-<span class=x>                // Extension =&gt; content-type map.</span>
-<span class=x>                // Keys are the extensions to map (minus any leading `.`),</span>
-<span class=x>                // values are the MIME type to use when serving them.</span>
-<span class=x>                // A default list exists if none is provided.</span>
-<span class=x>                &#39;type-map&#39; =&gt; [],</span>
+                // Extension =&gt; content-type map.
+                // Keys are the extensions to map (minus any leading `.`),
+                // values are the MIME type to use when serving them.
+                // A default list exists if none is provided.
+                'type-map' =&gt; [],
 
-<span class=x>                // How often a worker should clear the filesystem stat cache.</span>
-<span class=x>                // If not provided, it will never clear it. The value should be</span>
-<span class=x>                // an integer indicating the number of seconds between clear</span>
-<span class=x>                // operations. 0 or negative values will clear on every request.</span>
-<span class=x>                &#39;clearstatcache-interval&#39; =&gt; 3600,</span>
+                // How often a worker should clear the filesystem stat cache.
+                // If not provided, it will never clear it. The value should be
+                // an integer indicating the number of seconds between clear
+                // operations. 0 or negative values will clear on every request.
+                'clearstatcache-interval' =&gt; 3600,
 
-<span class=x>                // Which ETag algorithm to use.</span>
-<span class=x>                // Must be one of &quot;weak&quot; or &quot;strong&quot;; the default, when none is</span>
-<span class=x>                // provided, is &quot;weak&quot;.</span>
-<span class=x>                &#39;etag-type&#39; =&gt; &#39;weak|strong&#39;,</span>
+                // Which ETag algorithm to use.
+                // Must be one of &quot;weak&quot; or &quot;strong&quot;; the default, when none is
+                // provided, is &quot;weak&quot;.
+                'etag-type' =&gt; 'weak|strong',
 
-<span class=x>                // gzip options</span>
-<span class=x>                &#39;gzip&#39; =&gt; [</span>
-<span class=x>                    // Compression level to use.</span>
-<span class=x>                    // Should be an integer between 1 and 9; values less than 1</span>
-<span class=x>                    // disable compression.</span>
-<span class=x>                    &#39;level&#39; =&gt; 4,</span>
-<span class=x>                ],</span>
+                // gzip options
+                'gzip' =&gt; [
+                    // Compression level to use.
+                    // Should be an integer between 1 and 9; values less than 1
+                    // disable compression.
+                    'level' =&gt; 4,
+                ],
 
-<span class=x>                // Rules governing which server-side caching headers are emitted.</span>
-<span class=x>                // Each key must be a valid regular expression, and should match</span>
-<span class=x>                // typically only file extensions, but potentially full paths.</span>
-<span class=x>                // When a static resource matches, all associated rules will apply.</span>
-<span class=x>                &#39;directives&#39; =&gt; [</span>
-<span class=x>                    &#39;regex&#39; =&gt; [</span>
-<span class=x>                        &#39;cache-control&#39; =&gt; [</span>
-<span class=x>                            // one or more valid Cache-Control directives:</span>
-<span class=x>                            // - must-revalidate</span>
-<span class=x>                            // - no-cache</span>
-<span class=x>                            // - no-store</span>
-<span class=x>                            // - no-transform</span>
-<span class=x>                            // - public</span>
-<span class=x>                            // - private</span>
-<span class=x>                            // - max-age=\d+</span>
-<span class=x>                        ],</span>
-<span class=x>                        &#39;last-modified&#39; =&gt; bool, // Emit a Last-Modified header?</span>
-<span class=x>                        &#39;etag&#39; =&gt; bool, // Emit an ETag header?</span>
-<span class=x>                    ],</span>
-<span class=x>                ],</span>
-<span class=x>            ],</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>];</span>
-</pre></div></p>
+                // Rules governing which server-side caching headers are emitted.
+                // Each key must be a valid regular expression, and should match
+                // typically only file extensions, but potentially full paths.
+                // When a static resource matches, all associated rules will apply.
+                'directives' =&gt; [
+                    'regex' =&gt; [
+                        'cache-control' =&gt; [
+                            // one or more valid Cache-Control directives:
+                            // - must-revalidate
+                            // - no-cache
+                            // - no-store
+                            // - no-transform
+                            // - public
+                            // - private
+                            // - max-age=\d+
+                        ],
+                        'last-modified' =&gt; bool, // Emit a Last-Modified header?
+                        'etag' =&gt; bool, // Emit an ETag header?
+                    ],
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <blockquote>
 <h3>Security warning</h3>
 <p>Never add <code>php</code> as an allowed static file extension, as doing so could expose
@@ -557,141 +560,136 @@ which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HT
 <li>Sets Cache-Control, Last-Modified, and ETag directives for JS, CSS, and image files.</li>
 <li>Sets Cache-Control directives for plain text files.</li>
 </ul>
-<p> <div class=codehilite><pre><span></span><span class=x>// config/autoload/swoole.local.php</span>
+<pre class=codehilite><code class=language-php>// config/autoload/swoole.local.php
 
-<span class=x>return [</span>
-<span class=x>    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class=x>        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class=x>            &#39;static-files&#39; =&gt; [</span>
-<span class=x>                &#39;enable&#39;        =&gt; true,</span>
-<span class=x>                &#39;document-root&#39; =&gt; &#39;/var/www/htdocs&#39;,</span>
+return [
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'static-files' =&gt; [
+                'enable'        =&gt; true,
+                'document-root' =&gt; '/var/www/htdocs',
 
-<span class=x>                &#39;type-map&#39; =&gt; [</span>
-<span class=x>                    &#39;css&#39;   =&gt; &#39;text/css&#39;,</span>
-<span class=x>                    &#39;gif&#39;   =&gt; &#39;image/gif&#39;,</span>
-<span class=x>                    &#39;ico&#39;   =&gt; &#39;image/x-icon&#39;,</span>
-<span class=x>                    &#39;jpg&#39;   =&gt; &#39;image/jpg&#39;,</span>
-<span class=x>                    &#39;jpeg&#39;  =&gt; &#39;image/jpg&#39;,</span>
-<span class=x>                    &#39;js&#39;    =&gt; &#39;application/javascript&#39;,</span>
-<span class=x>                    &#39;png&#39;   =&gt; &#39;image/png&#39;,</span>
-<span class=x>                    &#39;svg&#39;   =&gt; &#39;image/svg+xml&#39;,</span>
-<span class=x>                    &#39;txt&#39;   =&gt; &#39;text/plain&#39;,</span>
-<span class=x>                ],</span>
+                'type-map' =&gt; [
+                    'css'   =&gt; 'text/css',
+                    'gif'   =&gt; 'image/gif',
+                    'ico'   =&gt; 'image/x-icon',
+                    'jpg'   =&gt; 'image/jpg',
+                    'jpeg'  =&gt; 'image/jpg',
+                    'js'    =&gt; 'application/javascript',
+                    'png'   =&gt; 'image/png',
+                    'svg'   =&gt; 'image/svg+xml',
+                    'txt'   =&gt; 'text/plain',
+                ],
 
-<span class=x>                &#39;clearstatcache-interval&#39; =&gt; 7200,</span>
+                'clearstatcache-interval' =&gt; 7200,
 
-<span class=x>                &#39;etag-type&#39; =&gt; &#39;strong&#39;,</span>
+                'etag-type' =&gt; 'strong',
 
-<span class=x>                &#39;gzip&#39; =&gt; [</span>
-<span class=x>                    &#39;level&#39; =&gt; 3,</span>
-<span class=x>                ],</span>
+                'gzip' =&gt; [
+                    'level' =&gt; 3,
+                ],
 
-<span class=x>                &#39;directives&#39; =&gt; [</span>
-<span class=x>                    &#39;/\.(css|gif|ico|jpg|jpeg|png|svg|js)$/&#39; =&gt; [</span>
-<span class=x>                        &#39;cache-control&#39; =&gt; [</span>
-<span class=x>                            &#39;public&#39;,</span>
-<span class=x>                            &#39;no-transform&#39;,</span>
-<span class=x>                        ],</span>
-<span class=x>                        &#39;last-modified&#39; =&gt; true,</span>
-<span class=x>                        &#39;etag&#39; =&gt; true,</span>
-<span class=x>                    ],</span>
-<span class=x>                    &#39;/\.txt$/&#39; =&gt; [</span>
-<span class=x>                        &#39;cache-control&#39; =&gt; [</span>
-<span class=x>                            &#39;public&#39;,</span>
-<span class=x>                            &#39;no-cache&#39;,</span>
-<span class=x>                        ],</span>
-<span class=x>                    ],</span>
-<span class=x>                ],</span>
-<span class=x>            ],</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>];</span>
-</pre></div></p>
+                'directives' =&gt; [
+                    '/\.(css|gif|ico|jpg|jpeg|png|svg|js)$/' =&gt; [
+                        'cache-control' =&gt; [
+                            'public',
+                            'no-transform',
+                        ],
+                        'last-modified' =&gt; true,
+                        'etag' =&gt; true,
+                    ],
+                    '/\.txt$/' =&gt; [
+                        'cache-control' =&gt; [
+                            'public',
+                            'no-cache',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <h2 id="writing-middleware">Writing Middleware</h2>
 <p>Static resource middleware must implement
 <code>Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface</code>, which
 defines the following:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Mezzio\Swoole\StaticResourceHandler;</span>
+<pre class=codehilite><code class=language-php>namespace Mezzio\Swoole\StaticResourceHandler;
 
-<span class=x>use Swoole\Http\Request;</span>
+use Swoole\Http\Request;
 
-<span class=x>interface MiddlewareInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * @param string $filename The discovered filename being returned.</span>
-<span class=x>     * @param callable $next has the signature:</span>
-<span class=x>     *     function (Request $request, string $filename) : StaticResourceResponse</span>
-<span class=x>     */</span>
-<span class=x>    public function __invoke(</span>
-<span class=x>        Request $request,</span>
-<span class=x>        string $filename,</span>
-<span class=x>        callable $next</span>
-<span class=x>    ) : StaticResourceResponse;</span>
-<span class=x>}</span>
-</pre></div></p>
+interface MiddlewareInterface
+{
+    /**
+     * @param string $filename The discovered filename being returned.
+     * @param callable $next has the signature:
+     *     function (Request $request, string $filename) : StaticResourceResponse
+     */
+    public function __invoke(
+        Request $request,
+        string $filename,
+        callable $next
+    ) : StaticResourceResponse;
+}</code></pre>
 <p>The <code>$next</code> argument has the following signature:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Mezzio\Swoole\StaticResourceHandler;</span>
+<pre class=codehilite><code class=language-php>namespace Mezzio\Swoole\StaticResourceHandler;
 
-<span class=x>use Swoole\Http\Request;</span>
+use Swoole\Http\Request;
 
-<span class=x>public function __invoke(</span>
-<span class=x>    Request $request,</span>
-<span class=x>    string $filename</span>
-<span class=x>) : StaticResourceResponse;</span>
-</pre></div></p>
+public function __invoke(
+    Request $request,
+    string $filename
+) : StaticResourceResponse;</code></pre>
 <p>Typically, middleware will look something like this:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>$response = $next($request, $filename);</span>
+<pre class=codehilite><code class=language-php>$response = $next($request, $filename);
 
-<span class=x>// if some request condition does not match:</span>
-<span class=x>// return $response;</span>
+// if some request condition does not match:
+// return $response;
 
-<span class=x>// Otherwise, manipulate the returned $response instance and then return it.</span>
-</pre></div></p>
+// Otherwise, manipulate the returned $response instance and then return it.</code></pre>
 <p>Middleware either produces or manipulates a
 <code>Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse</code> instance.
 That class looks like the following:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>class StaticResourceResponse</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * @param callable $responseContentCallback Callback to use when emitting</span>
-<span class=x>     *     the response body content via Swoole. Must have the signature:</span>
-<span class=x>     *     function (SwooleHttpResponse $response, string $filename) : void</span>
-<span class=x>     */</span>
-<span class=x>    public function __construct(</span>
-<span class=x>        int $status = 200,</span>
-<span class=x>        array $headers = [],</span>
-<span class=x>        bool $sendContent = true,</span>
-<span class=x>        callable $responseContentCallback = null</span>
-<span class=x>    );</span>
+<pre class=codehilite><code class=language-php>class StaticResourceResponse
+{
+    /**
+     * @param callable $responseContentCallback Callback to use when emitting
+     *     the response body content via Swoole. Must have the signature:
+     *     function (SwooleHttpResponse $response, string $filename) : void
+     */
+    public function __construct(
+        int $status = 200,
+        array $headers = [],
+        bool $sendContent = true,
+        callable $responseContentCallback = null
+    );
 
-<span class=x>    public function addHeader(string $name, string $value) : void;</span>
+    public function addHeader(string $name, string $value) : void;
 
-<span class=x>    public function disableContent() : void;</span>
+    public function disableContent() : void;
 
-<span class=x>    /**</span>
-<span class=x>     * Call this method to indicate that the request cannot be served as a</span>
-<span class=x>     * static resource. The request runner will then proceed to execute</span>
-<span class=x>     * the associated application in order to generate the response.</span>
-<span class=x>     */</span>
-<span class=x>    public function markAsFailure() : void;</span>
+    /**
+     * Call this method to indicate that the request cannot be served as a
+     * static resource. The request runner will then proceed to execute
+     * the associated application in order to generate the response.
+     */
+    public function markAsFailure() : void;
 
-<span class=x>    /**</span>
-<span class=x>     * @param callable $responseContentCallback Callback to use when emitting</span>
-<span class=x>     *     the response body content via Swoole. Must have the signature:</span>
-<span class=x>     *     function (SwooleHttpResponse $response, string $filename) : void</span>
-<span class=x>     */</span>
-<span class=x>    public function setResponseContentCallback(callable $callback) : void;</span>
+    /**
+     * @param callable $responseContentCallback Callback to use when emitting
+     *     the response body content via Swoole. Must have the signature:
+     *     function (SwooleHttpResponse $response, string $filename) : void
+     */
+    public function setResponseContentCallback(callable $callback) : void;
 
-<span class=x>    /**</span>
-<span class=x>     * Use this within a response content callback to set the associated</span>
-<span class=x>     * Content-Length of the generated response. Loggers can then query</span>
-<span class=x>     * for this information in order to provide that information in the logs.</span>
-<span class=x>     */</span>
-<span class=x>    public function setContentLength(int $length) : void;</span>
+    /**
+     * Use this within a response content callback to set the associated
+     * Content-Length of the generated response. Loggers can then query
+     * for this information in order to provide that information in the logs.
+     */
+    public function setContentLength(int $length) : void;
 
-<span class=x>    public function setStatus(int $status) : void;</span>
-<span class=x>}</span>
-</pre></div></p>
+    public function setStatus(int $status) : void;
+}</code></pre>
 <p>Most middleware will conditionally set the status, one or more headers, and
 potentially disable returning the response body (via <code>disableContent()</code>).
 Middleware that restricts access or filters out specific files will also use
@@ -715,29 +713,28 @@ resource was matched by the request, and then to serve it.</p>
 <p>If you want to provide an alternative mechanism for doing so (e.g., to serve
 files out of a caching server), you will need to implement
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code>:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>declare(strict_types=1);</span>
+<pre class=codehilite><code class=language-php>declare(strict_types=1);
 
-<span class=x>namespace Mezzio\Swoole;</span>
+namespace Mezzio\Swoole;
 
-<span class=x>use Swoole\Http\Request as SwooleHttpRequest;</span>
-<span class=x>use Swoole\Http\Response as SwooleHttpResponse;</span>
+use Swoole\Http\Request as SwooleHttpRequest;
+use Swoole\Http\Response as SwooleHttpResponse;
 
-<span class=x>interface StaticResourceHandlerInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Attempt to process a static resource based on the current request.</span>
-<span class=x>     *</span>
-<span class=x>     * If the resource cannot be processed, the method should return null.</span>
-<span class=x>     * Otherwise, it should return the StaticResourceResponse that was used</span>
-<span class=x>     * to send the Swoole response instance. The runner can then query this</span>
-<span class=x>     * for content length and status.</span>
-<span class=x>     */</span>
-<span class=x>    public function processStaticResource(</span>
-<span class=x>        SwooleHttpRequest $request,</span>
-<span class=x>        SwooleHttpResponse $response</span>
-<span class=x>    ) : ?StaticResourceHandler\StaticResourceResponse;</span>
-<span class=x>}</span>
-</pre></div></p>
+interface StaticResourceHandlerInterface
+{
+    /**
+     * Attempt to process a static resource based on the current request.
+     *
+     * If the resource cannot be processed, the method should return null.
+     * Otherwise, it should return the StaticResourceResponse that was used
+     * to send the Swoole response instance. The runner can then query this
+     * for content length and status.
+     */
+    public function processStaticResource(
+        SwooleHttpRequest $request,
+        SwooleHttpResponse $response
+    ) : ?StaticResourceHandler\StaticResourceResponse;
+}</code></pre>
 <p>Once implemented, map the service
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to a factory that
 returns your custom implementation within your <code>dependencies</code> configuration.</p>
@@ -908,9 +905,10 @@ returns your custom implementation within your <code>dependencies</code> configu
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -947,7 +945,7 @@ returns your custom implementation within your <code>dependencies</code> configu
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -956,8 +954,8 @@ returns your custom implementation within your <code>dependencies</code> configu
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

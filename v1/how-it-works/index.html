@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -285,34 +289,33 @@ enables the execution of an Mezzio application inside the <code>on('request')</c
 event of <code>Swoole\Http\Server</code>. This runner is implemented in the
 <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> class.</p>
 <p>The basic implementation looks similar to the following:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>public function run() : void</span>
-<span class=x>{</span>
-<span class=x>    $this-&gt;swooleHttpServer-&gt;on(&#39;start&#39;, function ($server) {</span>
-<span class=x>        printf(&quot;Swoole is running at %s:%s\n&quot;, $server-&gt;host, $server-&gt;port);</span>
-<span class=x>    });</span>
+<pre class=codehilite><code class=language-php>public function run() : void
+{
+    $this-&gt;swooleHttpServer-&gt;on('start', function ($server) {
+        printf(&quot;Swoole is running at %s:%s\n&quot;, $server-&gt;host, $server-&gt;port);
+    });
 
-<span class=x>    $this-&gt;swooleHttpServer-&gt;on(&#39;request&#39;, function ($request, $response) {</span>
-<span class=x>        printf(</span>
-<span class=x>            &quot;%s - %s - %s %s\n&quot;,</span>
-<span class=x>            date(&#39;Y-m-d H:i:sO&#39;, time()),</span>
-<span class=x>            $request-&gt;server[&#39;remote_addr&#39;],</span>
-<span class=x>            $request-&gt;server[&#39;request_method&#39;],</span>
-<span class=x>            $request-&gt;server[&#39;request_uri&#39;]</span>
-<span class=x>        );</span>
-<span class=x>        $emitter = new SwooleEmitter($response);</span>
-<span class=x>        try {</span>
-<span class=x>            $psr7Request = ($this-&gt;serverRequestFactory)($request);</span>
-<span class=x>        } catch (Throwable $e) {</span>
-<span class=x>            // Error in generating the request</span>
-<span class=x>            $this-&gt;emitMarshalServerRequestException($emitter, $e);</span>
-<span class=x>            return;</span>
-<span class=x>        }</span>
-<span class=x>        $emitter-&gt;emit($this-&gt;handler-&gt;handle($psr7Request));</span>
-<span class=x>    });</span>
+    $this-&gt;swooleHttpServer-&gt;on('request', function ($request, $response) {
+        printf(
+            &quot;%s - %s - %s %s\n&quot;,
+            date('Y-m-d H:i:sO', time()),
+            $request-&gt;server['remote_addr'],
+            $request-&gt;server['request_method'],
+            $request-&gt;server['request_uri']
+        );
+        $emitter = new SwooleEmitter($response);
+        try {
+            $psr7Request = ($this-&gt;serverRequestFactory)($request);
+        } catch (Throwable $e) {
+            // Error in generating the request
+            $this-&gt;emitMarshalServerRequestException($emitter, $e);
+            return;
+        }
+        $emitter-&gt;emit($this-&gt;handler-&gt;handle($psr7Request));
+    });
 
-<span class=x>    $this-&gt;swooleHttpServer-&gt;start();</span>
-<span class=x>}</span>
-</pre></div></p>
+    $this-&gt;swooleHttpServer-&gt;start();
+}</code></pre>
 <p>This package provides a bridge between <code>Swoole\Http\Request</code> (<code>$request</code>) and
 <a href="https://www.php-fig.org/psr/psr-7/">PSR-7</a> requests (<code>$psr7Request</code>;
 specifically as implemented by <a href="https://docs.laminas.dev/laminas-diactoros">laminas-diactoros</a>)
@@ -481,9 +484,10 @@ by the amount of memory); as such, performance can increase from these numbers.<
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -520,7 +524,7 @@ by the amount of memory); as such, performance can increase from these numbers.<
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/mezzio/mezzio-swoole//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -529,8 +533,8 @@ by the amount of memory); as such, performance can increase from these numbers.<
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/mezzio/mezzio-swoole//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>
