@@ -72,7 +72,7 @@ class SwooleEmitterTest extends TestCase
             ->withAddedHeader('Set-Cookie', 'bar=baz')
             ->withAddedHeader(
                 'Set-Cookie',
-                'baz=qux; Domain=somecompany.co.uk; Path=/; Expires=Wed, 09 Jun 2021 10:18:14 GMT; Secure; HttpOnly'
+                'baz=qux; Domain=somecompany.co.uk; Path=/; Expires=Wed, 09 Jun 2021 10:18:14 GMT; Secure; HttpOnly; SameSite=strict'
             );
 
         $this->assertTrue($this->emitter->emit($response));
@@ -90,7 +90,7 @@ class SwooleEmitterTest extends TestCase
             ->cookie('bar', 'baz', 0, '/', '', false, false)
             ->shouldHaveBeenCalled();
         $this->swooleResponse
-            ->cookie('baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true)
+            ->cookie('baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true, 'Strict')
             ->shouldHaveBeenCalled();
     }
 
