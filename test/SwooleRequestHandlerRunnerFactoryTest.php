@@ -96,6 +96,15 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->container
             ->get(AccessLogInterface::class)
             ->shouldNotBeCalled();
+
+        // Legacy Zend Framework class
+        $this->container
+            ->has(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+            ->willReturn(false);
+
+        $this->container
+            ->get(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+            ->shouldNotBeCalled();
     }
 
     public function configureAbsentConfiguration() : void
