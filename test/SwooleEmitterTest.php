@@ -72,8 +72,13 @@ class SwooleEmitterTest extends TestCase
             ->withAddedHeader('Set-Cookie', 'bar=baz')
             ->withAddedHeader(
                 'Set-Cookie',
-                'baz=qux; Domain=somecompany.co.uk; Path=/; Expires=Wed, 09 Jun 2021 10:18:14 GMT; Secure; HttpOnly; SameSite=strict'
-            );
+                'baz=qux; Domain=somecompany.co.uk; Path=/; Expires=Wed, 09 Jun 2021 10:18:14 GMT; Secure; HttpOnly'
+            )
+            ->withAddedHeader('Set-Cookie', 'ss1=foo1; SameSite=Strict')
+            ->withAddedHeader('Set-Cookie', 'ss2=foo2; SameSite=strict')
+            ->withAddedHeader('Set-Cookie', 'ss3=foo3; SameSite=Lax')
+            ->withAddedHeader('Set-Cookie', 'ss4=foo4; SameSite=lax')
+            ->withAddedHeader('Set-Cookie', 'ss5=foo5; SameSite=');
 
         $this->assertTrue($this->emitter->emit($response));
 
@@ -90,7 +95,24 @@ class SwooleEmitterTest extends TestCase
             ->cookie('bar', 'baz', 0, '/', '', false, false, null)
             ->shouldHaveBeenCalled();
         $this->swooleResponse
-            ->cookie('baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true, 'Strict')
+            ->cookie('baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true, null)
+            ->shouldHaveBeenCalled();
+
+        // SameSite cookies
+        $this->swooleResponse
+            ->cookie('ss1', 'foo1', 0, '/', '', false, false, 'Strict')
+            ->shouldHaveBeenCalled();
+        $this->swooleResponse
+            ->cookie('ss2', 'foo2', 0, '/', '', false, false, 'Strict')
+            ->shouldHaveBeenCalled();
+        $this->swooleResponse
+            ->cookie('ss3', 'foo3', 0, '/', '', false, false, 'Lax')
+            ->shouldHaveBeenCalled();
+        $this->swooleResponse
+            ->cookie('ss4', 'foo4', 0, '/', '', false, false, 'Lax')
+            ->shouldHaveBeenCalled();
+        $this->swooleResponse
+            ->cookie('ss5', 'foo5', 0, '/', '', false, false, null)
             ->shouldHaveBeenCalled();
     }
 
