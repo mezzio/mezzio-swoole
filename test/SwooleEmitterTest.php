@@ -77,8 +77,7 @@ class SwooleEmitterTest extends TestCase
             ->withAddedHeader('Set-Cookie', 'ss1=foo1; SameSite=Strict')
             ->withAddedHeader('Set-Cookie', 'ss2=foo2; SameSite=strict')
             ->withAddedHeader('Set-Cookie', 'ss3=foo3; SameSite=Lax')
-            ->withAddedHeader('Set-Cookie', 'ss4=foo4; SameSite=lax')
-            ->withAddedHeader('Set-Cookie', 'ss5=foo5; SameSite=');
+            ->withAddedHeader('Set-Cookie', 'ss4=foo4; SameSite=lax');
 
         $this->assertTrue($this->emitter->emit($response));
 
@@ -110,9 +109,6 @@ class SwooleEmitterTest extends TestCase
             ->shouldHaveBeenCalled();
         $this->swooleResponse
             ->cookie('ss4', 'foo4', 0, '/', '', false, false, 'Lax')
-            ->shouldHaveBeenCalled();
-        $this->swooleResponse
-            ->cookie('ss5', 'foo5', 0, '/', '', false, false, null)
             ->shouldHaveBeenCalled();
     }
 
