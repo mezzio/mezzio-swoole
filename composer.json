@@ -30,9 +30,9 @@
         }
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "ext-swoole": "^4.4.6",
-        "dflydev/fig-cookies": "^1.0 || ^2.0",
+        "dflydev/fig-cookies": "^2.0",
         "laminas/laminas-diactoros": "^1.8 || ^2.0",
         "laminas/laminas-httphandlerrunner": "^1.0.1",
         "laminas/laminas-zendframework-bridge": "^1.0",
@@ -49,7 +49,7 @@
         "filp/whoops": "^2.1",
         "laminas/laminas-coding-standard": "~1.0.0",
         "laminas/laminas-servicemanager": "^3.3",
-        "phpunit/phpunit": "^7.5.17 || ^8.4.3"
+        "phpunit/phpunit": "^8.5.2"
     },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading."
