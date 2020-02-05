@@ -51,6 +51,9 @@
         "laminas/laminas-servicemanager": "^3.3",
         "phpunit/phpunit": "^8.5.2"
     },
+    "conflict": {
+        "phpspec/prophecy": "<1.10.2"
+    },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading."
     },
