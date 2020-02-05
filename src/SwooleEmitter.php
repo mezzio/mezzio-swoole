@@ -106,6 +106,8 @@ class SwooleEmitter implements EmitterInterface
     private function emitCookies(ResponseInterface $response): void
     {
         foreach (SetCookies::fromResponse($response)->getAll() as $cookie) {
+            $sameSite = $cookie->getSameSite() ? substr($cookie->getSameSite()->asString(), 9) : null;
+
             $this->swooleResponse->cookie(
                 $cookie->getName(),
                 $cookie->getValue(),
@@ -113,7 +115,8 @@ class SwooleEmitter implements EmitterInterface
                 $cookie->getPath() ?: '/',
                 $cookie->getDomain() ?: '',
                 $cookie->getSecure(),
-                $cookie->getHttpOnly()
+                $cookie->getHttpOnly(),
+                $sameSite
             );
         }
     }

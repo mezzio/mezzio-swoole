@@ -36,6 +36,10 @@ class StaticResourceHandlerTest extends TestCase
 
     public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse()
     {
+        $this->request->server = [
+            'request_uri' => '/image.png',
+        ];
+
         $middleware = new class implements MiddlewareInterface {
             public function __invoke(
                 SwooleHttpRequest $request,

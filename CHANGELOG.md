@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.6.0 - TBD
+
+### Added
+
+- [#4](https://github.com/mezzio/mezzio-swoole/pull/4) adds support for PHP 7.4.
+
+- [#4](https://github.com/mezzio/mezzio-swoole/pull/4) adds explicit ext-swoole requirement to version ^4.4.6 which supports SameSite cookie directive.
+
+- [#4](https://github.com/mezzio/mezzio-swoole/pull/4) adds support for SameSite cookie directive in SwooleEmitter.
+
+### Changed
+
+- [#4](https://github.com/mezzio/mezzio-swoole/pull/4) changes minimum required version of dflydev/fig-cookies to ^2.0.1 which supports SameSite cookie directive.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#4](https://github.com/mezzio/mezzio-swoole/pull/4) removes support for PHP 7.1.
+
+- [#4](https://github.com/mezzio/mezzio-swoole/pull/4) removes support for dflydev/fig-cookies v1 releases.
+
+### Fixed
+
+- Nothing.
+
 ## 2.5.1 - TBD
 
 ### Added
