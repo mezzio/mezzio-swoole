@@ -379,6 +379,10 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testHotCodeReloaderTriggeredOnWorkerStart()
     {
+        $this->httpServer->setting = [
+            'worker_num' => posix_getpid(),
+        ];
+
         $hotCodeReloader = $this->createMock(Reloader::class);
         $hotCodeReloader
             ->expects(static::once())
