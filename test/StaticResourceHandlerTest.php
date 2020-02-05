@@ -15,7 +15,6 @@ use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
@@ -40,7 +39,7 @@ class StaticResourceHandlerTest extends TestCase
             'request_uri' => '/image.png',
         ];
 
-        $middleware = new class implements MiddlewareInterface {
+        $middleware = new class() implements MiddlewareInterface {
             public function __invoke(
                 SwooleHttpRequest $request,
                 string $filename,
@@ -68,7 +67,7 @@ class StaticResourceHandlerTest extends TestCase
         $expectedResponse->isFailure()->willReturn(false);
         $expectedResponse->sendSwooleResponse($this->response, $filename)->shouldBeCalled();
 
-        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class($expectedResponse->reveal()) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)

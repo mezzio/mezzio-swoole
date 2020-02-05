@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use function dirname;
 use function explode;
 use function file_get_contents;
 use function file_put_contents;

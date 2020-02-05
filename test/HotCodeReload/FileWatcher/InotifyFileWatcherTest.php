@@ -13,6 +13,12 @@ namespace MezzioTest\Swoole\HotCodeReload\FileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use PHPUnit\Framework\TestCase;
 
+use function extension_loaded;
+use function fclose;
+use function fwrite;
+use function stream_get_meta_data;
+use function tmpfile;
+
 class InotifyFileWatcherTest extends TestCase
 {
     /** @var resource */

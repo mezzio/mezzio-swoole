@@ -73,9 +73,7 @@ class ReloaderFactoryTest extends TestCase
     public function provideServiceManagerServicesWithEmptyConfigurations() : iterable
     {
         yield 'empty container' => [
-            [
-
-            ],
+            [],
         ];
 
         yield 'empty config' => [
@@ -87,9 +85,7 @@ class ReloaderFactoryTest extends TestCase
         yield 'empty hot-code-reload' => [
             [
                 'config' => [
-                    'mezzio-swoole' => [
-
-                    ],
+                    'mezzio-swoole' => [],
                 ],
             ],
         ];

@@ -51,7 +51,7 @@ class StaticResourceResponse
     private $status;
 
     /**
-     * @param callable $responseContentCallback Callback to use when emitting
+     * @param null|callable $responseContentCallback Callback to use when emitting
      *     the response body content via Swoole. Must have the signature:
      *     function (SwooleHttpResponse $response, string $filename) : void
      */
@@ -59,7 +59,7 @@ class StaticResourceResponse
         int $status = 200,
         array $headers = [],
         bool $sendContent = true,
-        callable $responseContentCallback = null
+        ?callable $responseContentCallback = null
     ) {
         $this->status = $status;
         $this->headers = $headers;

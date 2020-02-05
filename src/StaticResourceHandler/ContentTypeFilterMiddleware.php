@@ -115,7 +115,7 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
      *     values. If `null` is provided, the default list in TYPE_MAP_DEFAULT will
      *     be used. Otherwise, the list provided is used verbatim.
      */
-    public function __construct(array $typeMap = null)
+    public function __construct(?array $typeMap = null)
     {
         $this->typeMap = null === $typeMap ? self::TYPE_MAP_DEFAULT : $typeMap;
     }
@@ -123,7 +123,7 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
     {
         if (! isset($this->cacheTypeFile[$filename])
             && ! $this->cacheFile($filename)

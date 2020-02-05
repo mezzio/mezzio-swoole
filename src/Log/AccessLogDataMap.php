@@ -28,6 +28,8 @@ use function preg_match;
 use function round;
 use function sprintf;
 use function strftime;
+use function strpos;
+use function strtolower;
 use function substr;
 
 use const FILTER_FLAG_IPV4;

@@ -16,6 +16,7 @@ use Swoole\Runtime as SwooleRuntime;
 
 use function defined;
 use function in_array;
+use function method_exists;
 
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
@@ -37,7 +38,7 @@ class HttpServerFactory
      */
     private const MODES = [
         SWOOLE_BASE,
-        SWOOLE_PROCESS
+        SWOOLE_PROCESS,
     ];
 
     /**
@@ -49,7 +50,7 @@ class HttpServerFactory
         SWOOLE_SOCK_UDP,
         SWOOLE_SOCK_UDP6,
         SWOOLE_UNIX_DGRAM,
-        SWOOLE_UNIX_STREAM
+        SWOOLE_UNIX_STREAM,
     ];
 
     /**

@@ -15,7 +15,6 @@ use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\PidManager;
-use Mezzio\Swoole\ServerFactory;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
@@ -23,10 +22,18 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use ReflectionClass;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
+
+use function file_exists;
+use function file_get_contents;
+use function getcwd;
+use function is_dir;
+use function posix_getpid;
+use function sprintf;
+
+use const PHP_OS;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
@@ -52,8 +59,8 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
         $this->config = [
             'options' => [
-                'document_root' => __DIR__ . '/TestAsset'
-            ]
+                'document_root' => __DIR__ . '/TestAsset',
+            ],
         ];
     }
 
@@ -138,7 +145,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testOnRequestDelegatesToApplicationWhenNoStaticResourceHandlerPresent()
     {
         $content = 'Content!';
-        $psr7Response = (new Response());
+        $psr7Response = new Response();
         $psr7Response->getBody()->write($content);
 
         $this->requestHandler
@@ -179,7 +186,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testOnRequestDelegatesToApplicationWhenStaticResourceHandlerDoesNotMatchPath()
     {
         $content = 'Content!';
-        $psr7Response = (new Response());
+        $psr7Response = new Response();
         $psr7Response->getBody()->write($content);
 
         $this->requestHandler
@@ -262,7 +269,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testProcessNameIsUsedToCreateMasterProcessNameOnStart()
     {
-        if (\PHP_OS === 'Darwin' || ! is_dir('/proc')) {
+        if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
             $this->markTestSkipped(
                 'Testing process names is only performed on *nix systems (with the exception of MacOS)'
             );
@@ -299,7 +306,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testProcessNameIsUsedToCreateWorkerProcessNameOnWorkerStart()
     {
-        if (\PHP_OS === 'Darwin' || ! is_dir('/proc')) {
+        if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
             $this->markTestSkipped(
                 'Testing process names is only performed on *nix systems (with the exception of MacOS)'
             );
@@ -339,7 +346,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testProcessNameIsUsedToCreateTaskWorkerProcessNameOnWorkerStart()
     {
-        if (\PHP_OS === 'Darwin' || ! is_dir('/proc')) {
+        if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
             $this->markTestSkipped(
                 'Testing process names is only performed on *nix systems (with the exception of MacOS)'
             );

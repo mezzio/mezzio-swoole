@@ -24,19 +24,27 @@ class SwooleLoggerFactoryTest extends TestCase
         $this->assertSame($this->logger, $logger);
     }
 
-    public function provideConfigsWithNoNamedLogger(): iterable
+    public function provideConfigsWithNoNamedLogger() : iterable
     {
         yield 'no config' => [null];
         yield 'empty config' => [[]];
         yield 'empty mezzio-swoole' => [['mezzio-swoole' => []]];
-        yield 'empty swoole-http-server' => [['mezzio-swoole' => [
-            'swoole-http-server' => [],
-        ]]];
-        yield 'empty logger' => [['mezzio-swoole' => [
-            'swoole-http-server' => [
-                'logger' => [],
+        yield 'empty swoole-http-server' => [
+            [
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [],
+                ],
             ],
-        ]]];
+        ];
+        yield 'empty logger' => [
+            [
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [
+                        'logger' => [],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

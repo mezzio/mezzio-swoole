@@ -63,7 +63,7 @@ class CacheControlMiddlewareTest extends TestCase
             '/\.txt$/' => [
                 'public',
                 'no-transform',
-            ]
+            ],
         ]);
 
         $request = $this->prophesize(Request::class)->reveal();
@@ -71,7 +71,7 @@ class CacheControlMiddlewareTest extends TestCase
             'request_uri' => '/some/path.html',
         ];
 
-        $next = function ($request, $filename) {
+        $next = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
 
@@ -88,7 +88,7 @@ class CacheControlMiddlewareTest extends TestCase
             '/\.txt$/' => [
                 'public',
                 'no-transform',
-            ]
+            ],
         ]);
 
         $request = $this->prophesize(Request::class)->reveal();
@@ -96,7 +96,7 @@ class CacheControlMiddlewareTest extends TestCase
             'request_uri' => '/some/path.txt',
         ];
 
-        $next = function ($request, $filename) {
+        $next = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
 

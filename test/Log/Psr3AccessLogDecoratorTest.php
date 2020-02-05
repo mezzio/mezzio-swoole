@@ -20,7 +20,6 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ReflectionClass;
-use ReflectionProperty;
 use Swoole\Http\Request;
 
 class Psr3AccessLogDecoratorTest extends TestCase
@@ -91,7 +90,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
 
         $this->formatter
             ->format(
-                Argument::that(function ($mapper) use ($request, $response) {
+                Argument::that(static function ($mapper) use ($request, $response) {
                     TestCase::assertInstanceOf(AccessLogDataMap::class, $mapper);
                     TestCase::assertAttributeSame($request, 'request', $mapper);
                     TestCase::assertAttributeSame($response->reveal(), 'staticResource', $mapper);
@@ -126,7 +125,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
 
         $this->formatter
             ->format(
-                Argument::that(function ($mapper) use ($request, $response) {
+                Argument::that(static function ($mapper) use ($request, $response) {
                     TestCase::assertInstanceOf(AccessLogDataMap::class, $mapper);
                     TestCase::assertAttributeSame($request, 'request', $mapper);
                     TestCase::assertAttributeSame($response->reveal(), 'psrResponse', $mapper);

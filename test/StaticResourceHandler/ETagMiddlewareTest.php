@@ -17,13 +17,20 @@ use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
+use function array_unshift;
+use function basename;
+use function filemtime;
+use function filesize;
+use function md5_file;
+use function sprintf;
+
 class ETagMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
     protected function setUp() : void
     {
-        $this->next = function ($request, $filename) {
+        $this->next = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
         $this->request = $this->prophesize(Request::class)->reveal();

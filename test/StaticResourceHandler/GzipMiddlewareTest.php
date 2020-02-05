@@ -6,6 +6,8 @@
  * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
+declare(strict_types=1);
+
 namespace MezzioTest\Swoole\StaticResourceHandler;
 
 use Closure;
@@ -18,6 +20,12 @@ use Prophecy\Argument;
 use ReflectionProperty;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
+
+use function array_flip;
+use function array_values;
+use function file_get_contents;
+use function gzcompress;
+use function mb_strlen;
 
 class GzipMiddlewareTest extends TestCase
 {
@@ -115,7 +123,7 @@ class GzipMiddlewareTest extends TestCase
         $middleware = new GzipMiddleware(9);
 
         $staticResponse = new StaticResourceResponse();
-        $next = function ($request, $filename) use ($staticResponse) {
+        $next = static function ($request, $filename) use ($staticResponse) {
             return $staticResponse;
         };
 
