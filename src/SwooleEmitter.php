@@ -16,6 +16,12 @@ use Laminas\HttpHandlerRunner\Emitter\SapiEmitterTrait;
 use Psr\Http\Message\ResponseInterface;
 use Swoole\Http\Response as SwooleHttpResponse;
 
+use function extension_loaded;
+use function implode;
+use function substr;
+
+use const PHP_SAPI;
+
 class SwooleEmitter implements EmitterInterface
 {
     use SapiEmitterTrait;
@@ -37,8 +43,6 @@ class SwooleEmitter implements EmitterInterface
 
     /**
      * Emits a response for the Swoole environment.
-     *
-     * @return void
      */
     public function emit(ResponseInterface $response) : bool
     {
@@ -54,20 +58,16 @@ class SwooleEmitter implements EmitterInterface
 
     /**
      * Emit the status code
-     *
-     * @return void
      */
-    private function emitStatusCode(ResponseInterface $response)
+    private function emitStatusCode(ResponseInterface $response) : void
     {
         $this->swooleResponse->status($response->getStatusCode());
     }
 
     /**
      * Emit the headers
-     *
-     * @return void
      */
-    private function emitHeaders(ResponseInterface $response)
+    private function emitHeaders(ResponseInterface $response) : void
     {
         foreach ($response->withoutHeader(SetCookies::SET_COOKIE_HEADER)->getHeaders() as $name => $values) {
             $name = $this->filterHeader($name);
@@ -77,10 +77,8 @@ class SwooleEmitter implements EmitterInterface
 
     /**
      * Emit the message body.
-     *
-     * @return void
      */
-    private function emitBody(ResponseInterface $response)
+    private function emitBody(ResponseInterface $response) : void
     {
         $body = $response->getBody();
         $body->rewind();
@@ -98,12 +96,8 @@ class SwooleEmitter implements EmitterInterface
 
     /**
      * Emit the cookies
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return void
      */
-    private function emitCookies(ResponseInterface $response): void
+    private function emitCookies(ResponseInterface $response) : void
     {
         foreach (SetCookies::fromResponse($response)->getAll() as $cookie) {
             $sameSite = $cookie->getSameSite() ? substr($cookie->getSameSite()->asString(), 9) : null;

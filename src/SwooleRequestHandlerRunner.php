@@ -12,7 +12,6 @@ namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Mezzio\Swoole\Exception;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -121,20 +120,20 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         callable $serverRequestErrorResponseGenerator,
         PidManager $pidManager,
         SwooleHttpServer $httpServer,
-        StaticResourceHandlerInterface $staticResourceHandler = null,
-        Log\AccessLogInterface $logger = null,
+        ?StaticResourceHandlerInterface $staticResourceHandler = null,
+        ?Log\AccessLogInterface $logger = null,
         string $processName = self::DEFAULT_PROCESS_NAME,
-        Reloader $hotCodeReloader = null
+        ?Reloader $hotCodeReloader = null
     ) {
         $this->handler = $handler;
 
         // Factories are cast as Closures to ensure return type safety.
-        $this->serverRequestFactory = function ($request) use ($serverRequestFactory) : ServerRequestInterface {
+        $this->serverRequestFactory = static function ($request) use ($serverRequestFactory) : ServerRequestInterface {
             return $serverRequestFactory($request);
         };
 
-        $this->serverRequestErrorResponseGenerator =
-            function (Throwable $exception) use ($serverRequestErrorResponseGenerator) : ResponseInterface {
+        $this->serverRequestErrorResponseGenerator
+            = static function (Throwable $exception) use ($serverRequestErrorResponseGenerator) : ResponseInterface {
                 return $serverRequestErrorResponseGenerator($exception);
             };
 
@@ -271,8 +270,6 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
 
     /**
      * Set the process name, only if the current OS supports the operation
-     *
-     * @param string $name
      */
     private function setProcessName(string $name) : void
     {

@@ -2,6 +2,11 @@
 <ruleset name="Laminas coding standard">
     <rule ref="./vendor/laminas/laminas-coding-standard/ruleset.xml"/>
 
+    <!-- Excluded temporarily as PHP_CodeSniffer 2.x reports issues for static function -->
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact"/>
+    </rule>
+
     <!-- Paths to check -->
     <file>src</file>
     <file>test</file>

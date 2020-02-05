@@ -24,7 +24,7 @@ class StopCommand extends Command
 {
     use IsRunningTrait;
 
-    public const HELP = <<< 'EOH'
+    public const HELP = <<<'EOH'
 Stop the web server. Kills all worker processes and stops the web server.
 
 This command is only relevant when the server was started using the
@@ -54,7 +54,7 @@ EOH;
     public function __construct(PidManager $pidManager, string $name = 'stop')
     {
         $this->killProcess = Closure::fromCallable([SwooleProcess::class, 'kill']);
-        $this->pidManager = $pidManager;
+        $this->pidManager  = $pidManager;
         parent::__construct($name);
     }
 
@@ -84,9 +84,9 @@ EOH;
 
     private function stopServer() : bool
     {
-        [$masterPid, ] = $this->pidManager->read();
-        $startTime     = time();
-        $result        = ($this->killProcess)((int) $masterPid);
+        [$masterPid] = $this->pidManager->read();
+        $startTime   = time();
+        $result      = ($this->killProcess)((int) $masterPid);
 
         while (! $result) {
             if (! ($this->killProcess)((int) $masterPid, 0)) {

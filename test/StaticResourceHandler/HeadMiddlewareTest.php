@@ -22,7 +22,7 @@ class HeadMiddlewareTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->next = function ($request, $filename) {
+        $this->next = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
         $this->request = $this->prophesize(Request::class)->reveal();

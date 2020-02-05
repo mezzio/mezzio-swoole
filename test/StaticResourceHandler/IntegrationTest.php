@@ -17,6 +17,13 @@ use Prophecy\Argument;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
+use function filemtime;
+use function filesize;
+use function gmstrftime;
+use function md5_file;
+use function sprintf;
+use function trim;
+
 class IntegrationTest extends TestCase
 {
     protected function setUp() : void

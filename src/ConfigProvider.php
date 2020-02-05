@@ -20,6 +20,8 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 use function extension_loaded;
 
+use const PHP_SAPI;
+
 class ConfigProvider
 {
     public function __invoke() : array

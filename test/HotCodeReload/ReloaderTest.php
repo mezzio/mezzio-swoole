@@ -20,7 +20,7 @@ use Swoole\Server as SwooleServer;
 
 class ReloaderTest extends TestCase
 {
-    /** @var MockObject|FileWatcherInterface */
+    /** @var FileWatcherInterface|MockObject */
     private $fileWatcher;
 
     /** @var int */
@@ -43,8 +43,7 @@ class ReloaderTest extends TestCase
      */
     private static function isUniqueScalar() : Constraint
     {
-        return new class extends Constraint
-        {
+        return new class() extends Constraint {
             private $values = [];
 
             protected function matches($other) : bool
@@ -71,7 +70,7 @@ class ReloaderTest extends TestCase
             ->method('tick')
             ->with(
                 $this->interval,
-                static::callback(function (callable $callback) use ($server0) {
+                static::callback(static function (callable $callback) use ($server0) {
                     $callback($server0);
 
                     return true;

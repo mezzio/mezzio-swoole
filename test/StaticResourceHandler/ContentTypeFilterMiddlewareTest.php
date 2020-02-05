@@ -46,7 +46,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 
     public function testMiddlewareReturnsFailureResponseIfFileNotFound()
     {
-        $next = function ($request, $filename) {
+        $next = static function ($request, $filename) {
             TestCase::fail('Should not have invoked next middleware');
         };
         $middleware = new ContentTypeFilterMiddleware();
@@ -59,7 +59,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 
     public function testMiddlewareReturnsFailureResponseIfFileNotAllowedByTypeMap()
     {
-        $next = function ($request, $filename) {
+        $next = static function ($request, $filename) {
             TestCase::fail('Should not have invoked next middleware');
         };
         $middleware = new ContentTypeFilterMiddleware([
@@ -75,7 +75,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
     public function testMiddlewareAddsContentTypeToResponseWhenResourceLocatedAndAllowed()
     {
         $expected = new StaticResourceResponse();
-        $next = function ($request, $filename) use ($expected) {
+        $next = static function ($request, $filename) use ($expected) {
             return $expected;
         };
         $middleware = new ContentTypeFilterMiddleware();

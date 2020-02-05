@@ -17,6 +17,7 @@ use Swoole\Http\Response;
 use function explode;
 use function fclose;
 use function feof;
+use function fgets;
 use function fopen;
 use function function_exists;
 use function sprintf;
@@ -63,7 +64,7 @@ class GzipMiddleware implements MiddlewareInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
     {
         $response = $next($request, $filename);
 
@@ -89,7 +90,7 @@ class GzipMiddleware implements MiddlewareInterface
                 $params = [
                     'level' => $this->compressionLevel,
                     'window' => $compressionEncoding,
-                    'memory' => 9
+                    'memory' => 9,
                 ];
                 stream_filter_append($handle, 'zlib.deflate', STREAM_FILTER_READ, $params);
 
@@ -113,7 +114,7 @@ class GzipMiddleware implements MiddlewareInterface
     /**
      * Is gzip available for current request
      */
-    private function shouldCompress(Request $request): bool
+    private function shouldCompress(Request $request) : bool
     {
         return $this->compressionLevel > 0
             && isset($request->header['accept-encoding']);

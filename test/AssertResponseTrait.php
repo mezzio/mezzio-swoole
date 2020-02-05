@@ -14,6 +14,10 @@ use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\Assert;
 use ReflectionProperty;
 
+use function array_keys;
+use function implode;
+use function sprintf;
+
 trait AssertResponseTrait
 {
     public function assertStatus(int $expected, StaticResourceResponse $response, string $message = '') : void

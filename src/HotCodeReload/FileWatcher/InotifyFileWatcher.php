@@ -14,9 +14,12 @@ use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
 use Mezzio\Swoole\Exception\RuntimeException;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 
+use function array_values;
+use function extension_loaded;
 use function inotify_add_watch;
 use function inotify_init;
 use function inotify_read;
+use function is_array;
 use function stream_set_blocking;
 
 class InotifyFileWatcher implements FileWatcherInterface
@@ -45,8 +48,6 @@ class InotifyFileWatcher implements FileWatcherInterface
 
     /**
      * Add a file path to be monitored for changes by this watcher.
-     *
-     * @param string $path
      */
     public function addFilePath(string $path) : void
     {

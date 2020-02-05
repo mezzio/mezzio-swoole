@@ -53,7 +53,7 @@ class MethodNotAllowedMiddlewareTest extends TestCase
             'request_method' => $method,
         ];
         $response = new StaticResourceResponse();
-        $next = function ($request, $filename) use ($response) {
+        $next = static function ($request, $filename) use ($response) {
             return $response;
         };
         $middleware = new MethodNotAllowedMiddleware();

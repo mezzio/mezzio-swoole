@@ -14,8 +14,6 @@ interface FileWatcherInterface
 {
     /**
      * Add a file path to be monitored for changes by this watcher.
-     *
-     * @param string $path
      */
     public function addFilePath(string $path) : void;
 

@@ -115,7 +115,7 @@ class ReloadCommandTest extends TestCase
         $stopCommand = $this->prophesize(Command::class);
         $stopCommand
             ->run(
-                Argument::that(function ($arg) {
+                Argument::that(static function ($arg) {
                     TestCase::assertInstanceOf(ArrayInput::class, $arg);
                     TestCase::assertSame('stop', (string) $arg);
                     return $arg;
@@ -154,7 +154,7 @@ class ReloadCommandTest extends TestCase
         $stopCommand = $this->prophesize(Command::class);
         $stopCommand
             ->run(
-                Argument::that(function ($arg) {
+                Argument::that(static function ($arg) {
                     TestCase::assertInstanceOf(ArrayInput::class, $arg);
                     TestCase::assertSame('stop', (string) $arg);
                     return $arg;
@@ -166,7 +166,7 @@ class ReloadCommandTest extends TestCase
         $startCommand = $this->prophesize(Command::class);
         $startCommand
             ->run(
-                Argument::that(function ($arg) {
+                Argument::that(static function ($arg) {
                     TestCase::assertInstanceOf(ArrayInput::class, $arg);
                     TestCase::assertSame('start --daemonize=1 --num-workers=5', (string) $arg);
                     return $arg;
@@ -222,7 +222,7 @@ class ReloadCommandTest extends TestCase
         $stopCommand = $this->prophesize(Command::class);
         $stopCommand
             ->run(
-                Argument::that(function ($arg) {
+                Argument::that(static function ($arg) {
                     TestCase::assertInstanceOf(ArrayInput::class, $arg);
                     TestCase::assertSame('stop', (string) $arg);
                     return $arg;
@@ -234,7 +234,7 @@ class ReloadCommandTest extends TestCase
         $startCommand = $this->prophesize(Command::class);
         $startCommand
             ->run(
-                Argument::that(function ($arg) {
+                Argument::that(static function ($arg) {
                     TestCase::assertInstanceOf(ArrayInput::class, $arg);
                     TestCase::assertSame('start --daemonize=1 --num-workers=5', (string) $arg);
                     return $arg;

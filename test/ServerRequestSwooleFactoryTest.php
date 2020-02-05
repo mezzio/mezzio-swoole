@@ -19,6 +19,14 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 
+use function array_shift;
+use function file_get_contents;
+use function filesize;
+use function is_callable;
+use function time;
+
+use const UPLOAD_ERR_OK;
+
 class ServerRequestSwooleFactoryTest extends TestCase
 {
     protected function setUp() : void

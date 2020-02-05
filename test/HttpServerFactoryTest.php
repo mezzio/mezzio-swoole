@@ -12,6 +12,7 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\HttpServerFactory;
+use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
@@ -23,8 +24,11 @@ use Throwable;
 
 use function array_merge;
 use function defined;
+use function extension_loaded;
 use function json_decode;
 use function json_encode;
+use function method_exists;
+use function usleep;
 
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
@@ -38,7 +42,6 @@ use const SWOOLE_UNIX_STREAM;
 
 class HttpServerFactoryTest extends TestCase
 {
-
     /** @var ContainerInterface|ObjectProphecy */
     private $container;
 
@@ -118,7 +121,6 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider getInvalidPortNumbers
-     * @param int $port
      */
     public function testExceptionThrownForOutOfRangePortNumber(int $port) : void
     {
@@ -150,6 +152,7 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidServerModes
+     *
      * @param mixed $mode
      */
     public function testExceptionThrownForInvalidServerMode($mode) : void
@@ -182,6 +185,7 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidSocketTypes
+     *
      * @param mixed $type
      */
     public function testExceptionThrownForInvalidSocketType($type) : void
@@ -251,8 +255,8 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider validSocketTypes
+     *
      * @param int $socketType
-     * @param array $additionalOptions
      */
     public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions) : void
     {
@@ -273,17 +277,17 @@ class HttpServerFactoryTest extends TestCase
             try {
                 $factory = new HttpServerFactory();
                 $swooleServer = $factory($this->container->reveal());
-                $swooleServer->on('Start', function (SwooleServer $server) use ($worker) {
+                $swooleServer->on('Start', static function (SwooleServer $server) use ($worker) {
                     // Give the server a chance to start up and avoid zombies
                     usleep(10000);
                     $worker->write('Server Started');
                     $server->stop();
                     $server->shutdown();
                 });
-                $swooleServer->on('Request', function ($req, $rep) {
+                $swooleServer->on('Request', static function ($req, $rep) {
                     // noop
                 });
-                $swooleServer->on('Packet', function ($server, $data, $clientInfo) {
+                $swooleServer->on('Packet', static function ($server, $data, $clientInfo) {
                     // noop
                 });
                 $swooleServer->start();
@@ -315,13 +319,13 @@ class HttpServerFactoryTest extends TestCase
 
         // Xdebug is not ready yet in swoole.
         if (extension_loaded('xdebug')) {
-            $this->expectException(\PHPUnit\Framework\Error\Warning::class);
+            $this->expectException(Warning::class);
 
-            go(function () {
+            go(static function () {
             });
         } else {
             $i = 0;
-            go(function () use (&$i) {
+            go(static function () use (&$i) {
                 usleep(1000);
                 $i++;
                 SwooleEvent::exit();
