@@ -17,13 +17,17 @@ use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
+use function gmstrftime;
+use function time;
+use function trim;
+
 class LastModifiedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
     protected function setUp() : void
     {
-        $this->next = function ($request, $filename) {
+        $this->next = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
         $this->request = $this->prophesize(Request::class)->reveal();

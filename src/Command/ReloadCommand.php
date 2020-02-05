@@ -22,7 +22,7 @@ use const SWOOLE_PROCESS;
 
 class ReloadCommand extends Command
 {
-    public const HELP = <<< 'EOH'
+    public const HELP = <<<'EOH'
 Reload the web server. Sends a SIGUSR1 signal to master process and reload
 all worker processes.
 

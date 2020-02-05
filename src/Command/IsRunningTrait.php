@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Command;
 
-use Mezzio\Swoole\PidManager;
 use Swoole\Process as SwooleProcess;
 
 trait IsRunningTrait

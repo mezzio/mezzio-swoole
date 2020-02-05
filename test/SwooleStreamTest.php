@@ -16,6 +16,13 @@ use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use Swoole\Http\Request as SwooleHttpRequest;
 
+use function extension_loaded;
+use function strlen;
+use function substr;
+
+use const SEEK_CUR;
+use const SEEK_END;
+
 class SwooleStreamTest extends TestCase
 {
     const DEFAULT_CONTENT = 'This is a test!';

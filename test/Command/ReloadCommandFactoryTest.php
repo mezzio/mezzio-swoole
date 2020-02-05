@@ -37,16 +37,18 @@ class ReloadCommandFactoryTest extends TestCase
     {
         yield 'empty' => [
             [],
-            SWOOLE_BASE
+            SWOOLE_BASE,
         ];
 
         yield 'populated' => [
-            ['mezzio-swoole' => [
-                'swoole-http-server' => [
-                    'mode' => SWOOLE_PROCESS,
+            [
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [
+                        'mode' => SWOOLE_PROCESS,
+                    ],
                 ],
-            ]],
-            SWOOLE_PROCESS
+            ],
+            SWOOLE_PROCESS,
         ];
     }
 

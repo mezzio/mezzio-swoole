@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.6.0 - TBD
+## 2.6.0 - 2020-02-05
 
 ### Added
 
@@ -25,28 +25,6 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#4](https://github.com/mezzio/mezzio-swoole/pull/4) removes support for PHP 7.1.
 
 - [#4](https://github.com/mezzio/mezzio-swoole/pull/4) removes support for dflydev/fig-cookies v1 releases.
-
-### Fixed
-
-- Nothing.
-
-## 2.5.1 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
 
 ### Fixed
 

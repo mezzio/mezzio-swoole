@@ -217,7 +217,7 @@ class StartCommandTest extends TestCase
         ));
 
         $httpServer
-            ->set(Argument::that(function ($options) {
+            ->set(Argument::that(static function ($options) {
                 TestCase::assertArrayHasKey('daemonize', $options);
                 TestCase::assertArrayHasKey('worker_num', $options);
                 TestCase::assertTrue($options['daemonize']);

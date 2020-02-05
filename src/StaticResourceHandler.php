@@ -15,6 +15,7 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 use function is_callable;
 use function is_dir;
+use function sprintf;
 
 class StaticResourceHandler implements StaticResourceHandlerInterface
 {

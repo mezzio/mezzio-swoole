@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 
+use function sprintf;
+
 class StaticResourceHandlerFactoryTest extends TestCase
 {
     protected function setUp() : void

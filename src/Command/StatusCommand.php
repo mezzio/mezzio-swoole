@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Command;
 
 use Mezzio\Swoole\PidManager;
-use Swoole\Process as SwooleProcess;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +19,7 @@ class StatusCommand extends Command
 {
     use IsRunningTrait;
 
-    public const HELP = <<< 'EOH'
+    public const HELP = <<<'EOH'
 Find out if the server is running.
 
 This command is only relevant when the server was started using the

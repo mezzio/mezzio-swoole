@@ -28,7 +28,7 @@ class StartCommand extends Command
 
     public const DEFAULT_NUM_WORKERS = 4;
 
-    public const HELP = <<< 'EOH'
+    public const HELP = <<<'EOH'
 Start the web server. If --daemonize is provided, starts the server as a
 background process and returns handling to the shell; otherwise, the
 server runs in the current process.
@@ -94,10 +94,10 @@ EOH;
             $server->set($serverOptions);
         }
 
-        /** @var \Mezzio\Application $app */
+        /** @var Application $app */
         $app = $this->container->get(Application::class);
 
-        /** @var \Mezzio\MiddlewareFactory $factory */
+        /** @var MiddlewareFactory $factory */
         $factory = $this->container->get(MiddlewareFactory::class);
 
         // Execute programmatic/declarative middleware pipeline and routing

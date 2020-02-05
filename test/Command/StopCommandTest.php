@@ -14,7 +14,6 @@ use Mezzio\Swoole\Command\StopCommand;
 use Mezzio\Swoole\PidManager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Swoole\Process as SwooleProcess;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -100,7 +99,7 @@ class StopCommandTest extends TestCase
 
         $masterPid   = $pids[0];
         $spy         = (object) ['called' => false];
-        $killProcess = function (int $pid, int $signal = null) use ($masterPid, $spy) {
+        $killProcess = static function (int $pid, ?int $signal = null) use ($masterPid, $spy) {
             TestCase::assertSame($masterPid, $pid);
             $spy->called = true;
             return $signal === 0;
@@ -145,7 +144,7 @@ class StopCommandTest extends TestCase
 
         $masterPid   = $pids[0];
         $spy         = (object) ['called' => false];
-        $killProcess = function (int $pid) use ($masterPid, $spy) {
+        $killProcess = static function (int $pid) use ($masterPid, $spy) {
             TestCase::assertSame($masterPid, $pid);
             $spy->called = true;
             return true;

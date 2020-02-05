@@ -16,6 +16,10 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Swoole\Http\Response as SwooleHttpResponse;
 
+use function base64_encode;
+use function random_bytes;
+use function substr;
+
 class SwooleEmitterTest extends TestCase
 {
     protected function setUp() : void

@@ -41,7 +41,7 @@ class ClearStatCacheMiddleware implements MiddlewareInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
     {
         $now = time();
         if (1 > $this->interval

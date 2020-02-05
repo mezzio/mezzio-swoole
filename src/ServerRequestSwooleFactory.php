@@ -14,6 +14,7 @@ use Laminas\Diactoros\ServerRequest;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 
+use function array_change_key_case;
 use function Laminas\Diactoros\marshalMethodFromSapi;
 use function Laminas\Diactoros\marshalProtocolVersionFromSapi;
 use function Laminas\Diactoros\marshalUriFromSapi;
@@ -28,7 +29,7 @@ class ServerRequestSwooleFactory
 {
     public function __invoke(ContainerInterface $container) : callable
     {
-        return function (SwooleHttpRequest $request) {
+        return static function (SwooleHttpRequest $request) {
             // Aggregate values from Swoole request object
             $get     = $request->get ?? [];
             $post    = $request->post ?? [];

@@ -13,6 +13,7 @@ namespace Mezzio\Swoole\HotCodeReload;
 use Psr\Log\LoggerInterface;
 use Swoole\Server as SwooleServer;
 
+use function array_diff;
 use function get_included_files;
 
 class Reloader
@@ -63,7 +64,7 @@ class Reloader
         $changedFilePaths = $this->fileWatcher->readChangedFilePaths();
         if ($changedFilePaths) {
             foreach ($changedFilePaths as $path) {
-                $this->logger->notice("Reloading due to file change: {path}", ['path' => $path]);
+                $this->logger->notice('Reloading due to file change: {path}', ['path' => $path]);
             }
             $server->reload();
         }
@@ -79,7 +80,7 @@ class Reloader
     {
         $reloader = $this;
 
-        return function () use ($reloader, $server) {
+        return static function () use ($reloader, $server) {
             $reloader->onTick($server);
         };
     }

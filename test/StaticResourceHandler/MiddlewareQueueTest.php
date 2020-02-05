@@ -61,7 +61,7 @@ class MiddlewareQueueTest extends TestCase
 
         $first = $this->prophesize(MiddlewareInterface::class);
         $first
-            ->__invoke($this->request, 'some/filename.txt', Argument::that(function ($queue) {
+            ->__invoke($this->request, 'some/filename.txt', Argument::that(static function ($queue) {
                 TestCase::assertInstanceOf(MiddlewareQueue::class, $queue);
                 return true;
             }))

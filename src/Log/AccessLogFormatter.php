@@ -67,7 +67,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     ) : string {
         return preg_replace_callback(
             '/%(?:[<>])?([%aABbDfhHklLmpPqrRstTuUvVXIOS])/',
-            function (array $matches) use ($map) {
+            static function (array $matches) use ($map) {
                 switch ($matches[1]) {
                     case '%':
                         return '%';
@@ -133,10 +133,10 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     private function replaceVariableDirectives(
         string $format,
         AccessLogDataMap $map
-    ): string {
+    ) : string {
         return preg_replace_callback(
             '/%(?:[<>])?{([^}]+)}([aCeinopPtT])/',
-            function (array $matches) use ($map) {
+            static function (array $matches) use ($map) {
                 switch ($matches[2]) {
                     case 'a':
                         return $map->getClientIp();
