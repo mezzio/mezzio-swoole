@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/mezzio/mezzio-swoole/badge.svg?branch=master)](https://coveralls.io/github/mezzio/mezzio-swoole?branch=master)
 
 This library provides the support of [Swoole](https://www.swoole.co.uk/) into
-an [Mezzio](https://getmezzio.org/) application. This means you can
+an [Mezzio](https://docs.mezzio.dev/) application. This means you can
 execute your Mezzio application using Swoole directly from the command line.
 
 
