@@ -81,6 +81,6 @@
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },
     "replace": {
-        "zendframework/zend-expressive-swoole": "self.version"
+        "zendframework/zend-expressive-swoole": "^2.5.0"
     }
 }
