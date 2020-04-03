@@ -394,8 +394,7 @@ serve it.</p>
 <p>If you have a custom factory for the <code>SwooleRequestHandlerRunner</code>, or are
 instantiating it manually, pass a null value for the sixth argument of its
 constructor. As an example, within a factory:</p>
-<pre class="codehilite"><code class="language-php">
-use Psr\Container\ContainerInterface;
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 use Mezzio\ApplicationPipeline;
@@ -414,14 +413,13 @@ function (ContainerInterface $container) : Swoole\SwooleRequestHandlerRunner
             ? $container-&gt;get(Swool\Log\AccessLogInterface::class
             : null
     );
-}
-</code></pre>
+}</code></pre>
+
 <p>If you are using the default factory provided (<code>Mezzio\Swoole\SwooleRequestHandlerRunnerFactory</code>),
 you can also disable the functionality via configuration. To do this, set the
 <code>mezzio-swoole.swoole-http-server.static-files.enable</code> flag to
 boolean <code>false</code>:</p>
-<pre class="codehilite"><code class="language-php">
-return [
+<pre class="highlight"><code class="language-php">return [
     'mezzio-swoole' =&gt; [
         'swoole-http-server' =&gt; [
             'static-files' =&gt; [
@@ -429,8 +427,8 @@ return [
             ],
         ],
     ],
-];
-</code></pre>
+];</code></pre>
+
 </blockquote>
 <h2 id="middleware">Middleware</h2>
 <p>The <code>StaticResourceHandler</code> implementation performs its work by composing a
@@ -528,7 +526,7 @@ configuration-driven approach in order to:</p>
 <li>Configure and provide middleware.</li>
 </ul>
 <p>The following demonstrates all currently available configuration options:</p>
-<pre class=codehilite><code class=language-php>// config/autoload/swoole.local.php
+<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
 
 return [
     'mezzio-swoole' =&gt; [
@@ -538,7 +536,7 @@ return [
                 // files; all other configuration will then be ignored.
                 'enable' =&gt; true,
 
-                // Document root; defaults to &quot;getcwd() . '/public'&quot;
+                // Document root; defaults to "getcwd() . '/public'"
                 'document-root' =&gt; '/path/to/static/files/to/serve',
 
                 // Extension =&gt; content-type map.
@@ -554,8 +552,8 @@ return [
                 'clearstatcache-interval' =&gt; 3600,
 
                 // Which ETag algorithm to use.
-                // Must be one of &quot;weak&quot; or &quot;strong&quot;; the default, when none is
-                // provided, is &quot;weak&quot;.
+                // Must be one of "weak" or "strong"; the default, when none is
+                // provided, is "weak".
                 'etag-type' =&gt; 'weak|strong',
 
                 // gzip options
@@ -590,6 +588,7 @@ return [
         ],
     ],
 ];</code></pre>
+
 <blockquote>
 <h3>Security warning</h3>
 <p>Never add <code>php</code> as an allowed static file extension, as doing so could expose
@@ -614,7 +613,7 @@ which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HT
 <li>Sets Cache-Control, Last-Modified, and ETag directives for JS, CSS, and image files.</li>
 <li>Sets Cache-Control directives for plain text files.</li>
 </ul>
-<pre class=codehilite><code class=language-php>// config/autoload/swoole.local.php
+<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
 
 return [
     'mezzio-swoole' =&gt; [
@@ -663,11 +662,12 @@ return [
         ],
     ],
 ];</code></pre>
+
 <h2 id="writing-middleware">Writing Middleware</h2>
 <p>Static resource middleware must implement
 <code>Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface</code>, which
 defines the following:</p>
-<pre class=codehilite><code class=language-php>namespace Mezzio\Swoole\StaticResourceHandler;
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Swoole\Http\Request;
 
@@ -684,8 +684,9 @@ interface MiddlewareInterface
         callable $next
     ) : StaticResourceResponse;
 }</code></pre>
+
 <p>The <code>$next</code> argument has the following signature:</p>
-<pre class=codehilite><code class=language-php>namespace Mezzio\Swoole\StaticResourceHandler;
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Swoole\Http\Request;
 
@@ -693,17 +694,19 @@ public function __invoke(
     Request $request,
     string $filename
 ) : StaticResourceResponse;</code></pre>
+
 <p>Typically, middleware will look something like this:</p>
-<pre class=codehilite><code class=language-php>$response = $next($request, $filename);
+<pre class="highlight"><code class="language-php">$response = $next($request, $filename);
 
 // if some request condition does not match:
 // return $response;
 
 // Otherwise, manipulate the returned $response instance and then return it.</code></pre>
+
 <p>Middleware either produces or manipulates a
 <code>Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse</code> instance.
 That class looks like the following:</p>
-<pre class=codehilite><code class=language-php>class StaticResourceResponse
+<pre class="highlight"><code class="language-php">class StaticResourceResponse
 {
     /**
      * @param callable $responseContentCallback Callback to use when emitting
@@ -744,6 +747,7 @@ That class looks like the following:</p>
 
     public function setStatus(int $status) : void;
 }</code></pre>
+
 <p>Most middleware will conditionally set the status, one or more headers, and
 potentially disable returning the response body (via <code>disableContent()</code>).
 Middleware that restricts access or filters out specific files will also use
@@ -767,7 +771,7 @@ resource was matched by the request, and then to serve it.</p>
 <p>If you want to provide an alternative mechanism for doing so (e.g., to serve
 files out of a caching server), you will need to implement
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code>:</p>
-<pre class=codehilite><code class=language-php>declare(strict_types=1);
+<pre class="highlight"><code class="language-php">declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
@@ -789,6 +793,7 @@ interface StaticResourceHandlerInterface
         SwooleHttpResponse $response
     ) : ?StaticResourceHandler\StaticResourceResponse;
 }</code></pre>
+
 <p>Once implemented, map the service
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to a factory that
 returns your custom implementation within your <code>dependencies</code> configuration.</p>

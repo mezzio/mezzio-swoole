@@ -381,7 +381,7 @@ equal to 400).</p>
 <p>Technically, the <code>SwooleRequestHandlerRunner</code> doesn't use PSR-3 loggers
 directly, but, rather, instances of <code>Mezzio\Swoole\Log\AccessLogInterface</code>.
 This package-specific interface extends the PSR-3 interface to add two methods:</p>
-<pre class=codehilite><code class=language-php>use Psr\Http\Message\ResponseInterface;
+<pre class="highlight"><code class="language-php">use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Request;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
@@ -398,6 +398,7 @@ interface AccessLogInterface extends LoggerInterface
         ResponseInterface $response
     ) : void;
 }</code></pre>
+
 <p>To allow usage of a standard PSR-3 logger, we also provide a decorator,
 <code>Mezzio\Swoole\Log\Psr3AccessLogDecorator</code>, which decorates the PSR-3
 logger and provides a standard implementation for the two methods listed above.
@@ -412,10 +413,11 @@ implementation. However, we allow you to plug in your own system as needed.</p>
 in order to understand the available placeholders available for format strings.</p>
 <p>Formatting is provided to the <code>Psr3AccessLogDecorator</code> via instances of the
 interface <code>Mezzio\Swoole\Log\AccessLogFormatterInterface</code>:</p>
-<pre class=codehilite><code class=language-php>interface AccessLogFormatterInterface
+<pre class="highlight"><code class="language-php">interface AccessLogFormatterInterface
 {
     public function format(AccessLogDataMap $map) : string;
 }</code></pre>
+
 <p><code>AccessLogDataMap</code> is a class used internally by the <code>Psr3AccessLogDecorator</code> in
 order to map Apache log placeholders to request/response values.</p>
 <p>Our default <code>AccessLogFormatterInterface</code> implementation, <code>AccessLogFormatter</code>,
@@ -439,7 +441,7 @@ runner.</p>
 <h3>Manual usage</h3>
 <p>If you are manually instantiating a <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code>
 instance, you may provide it as the seventh argument to the constructor:</p>
-<pre class=codehilite><code class=language-php>use Mezzio\Swoole\SwooleRequestHandlerRunner;
+<pre class="highlight"><code class="language-php">use Mezzio\Swoole\SwooleRequestHandlerRunner;
 
 $runner = new SwooleRequestHandlerRunner(
     $application,
@@ -450,6 +452,7 @@ $runner = new SwooleRequestHandlerRunner(
     $staticResourceHandler,
     $logger // &lt;-- AccessLoggerInterface instance
 );</code></pre>
+
 <h3>Container usage</h3>
 <p>If you are using a <a href="https://www.php-fig.org/psr/psr-11/">PSR-11</a> container, the
 <code>SwooleRequestHandlerRunnerFactory</code> will retrieve a log instance using the
@@ -457,13 +460,14 @@ $runner = new SwooleRequestHandlerRunner(
 <p>You have two options for substituting your own logger from there.</p>
 <p>First, if you already have a service which resolves to a <code>Psr\Log\LoggerInterface</code> instance,
 you can configure it by providing its name:</p>
-<pre class=codehilite><code class=language-php>'mezzio-swoole' =&gt; [
+<pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
     'swoole-http-server' =&gt; [
         'logger' =&gt; [
             'logger-name' =&gt; 'my_logger', // define the logger service name here
         ],
     ],
 ],</code></pre>
+
 <p>If you don't want to manually provide the service name but you are okay with re-using your
 existing PSR-3 logger, the provided <code>Mezzio\Swoole\Log\AccessLogFactory</code> will use
 the <code>Psr\Log\LoggerInterface</code> service to create a <code>Psr3AccessLogDecorator</code> instance.</p>
@@ -476,7 +480,7 @@ instance if you want. It will look up a service by the fully-qualified interface
 name, and use it if present. Otherwise, it creates an <code>AccessLogFormatter</code>
 instance for you.</p>
 <p>In both cases the factory will also look at the following configuration values:</p>
-<pre class=codehilite><code class=language-php>'mezzio-swoole' =&gt; [
+<pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
     'swoole-http-server' =&gt; [
         'logger' =&gt; [
             'format' =&gt; string, // one of the AccessLogFormatter::FORMAT_*
@@ -485,6 +489,7 @@ instance for you.</p>
         ],
     ],
 ],</code></pre>
+
 <h3>Using Monolog as a PSR-3 logger</h3>
 <p>When using <a href="https://seldaek.github.io/monolog/">Monolog</a> with a <code>StreamHandler</code>,
 you must supply a file or a stream resource descriptor. We recommend using one
@@ -518,7 +523,7 @@ either <code>/dev/stderr</code> or, if on Docker, <code>/proc/1/fd/2</code>.</p>
 handler to ensure that any templated parameters are expanded by the logger.</p>
 <p>As an example, the following is a factory that wires a <code>StreamHandler</code> to a
 <code>Monolog\Logger</code> instance. </p>
-<pre class=codehilite><code class=language-php>use Psr\Container\ContainerInterface;
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -539,6 +544,7 @@ class LoggerFactory
         return $logger;
     }
 }</code></pre>
+
 <p>If you then wire this to the <code>Psr\Log\LoggerInterface</code> service, it will be used
 by Swoole for the purposes of access logs as well.</p>
 

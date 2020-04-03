@@ -441,7 +441,7 @@ Write services to be stateless, and/or mark state-changing methods as
 stateless. Well-written interfaces will be stateless by design, and not provide
 methods meant to internally change state. In these situations, you can create a
 proxy class that decorates the original service:</p>
-<pre class=codehilite><code class=language-php>class ProxyService implements OriginalInterface
+<pre class="highlight"><code class="language-php">class ProxyService implements OriginalInterface
 {
     /** @var OriginalInterface */
     private $proxy;
@@ -456,13 +456,14 @@ proxy class that decorates the original service:</p>
         return $this-&gt;proxy-&gt;someMethodDefinedInInterface($argument);
     }
 }</code></pre>
+
 <p>You would then:</p>
 <ul>
 <li>Map the factory for the original service to the implementation name.</li>
 <li>Create a factory that consumes the original service, and produces the proxy.</li>
 <li>Map the interface name to the factory that creates the proxy.</li>
 </ul>
-<pre class=codehilite><code class=language-php>// in config/autoload/dependencies.global.php:
+<pre class="highlight"><code class="language-php">// in config/autoload/dependencies.global.php:
 
 return [
     'dependencies' =&gt; [
@@ -472,6 +473,7 @@ return [
         ],
     ],
 ];</code></pre>
+
 <p>If you were writing to the interface, and not the implementation, you can now
 guarantee that any non-interface methods that changed state can now no longer be
 called.</p>
@@ -481,10 +483,11 @@ when those methods are invoked. (The latter approach ensures that you discover
 quickly when code is exercising those methods.) In each case, you would then use
 a <a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>,
 to decorate the original instance in the proxy class:</p>
-<pre class=codehilite><code class=language-php>function (ContainerInterface $container, string $name, callable $callback)
+<pre class="highlight"><code class="language-php">function (ContainerInterface $container, string $name, callable $callback)
 {
     return new ProxyService($callback());
 }</code></pre>
+
 <p>(You can also use the delegator factory approach with the previous proxy service
 example.)</p>
 <h3>Extension</h3>
@@ -496,7 +499,7 @@ ensures that you discover quickly when code is exercising those methods.)</p>
 <code>setTable()</code> in it, and that method would change the database table the mapper
 would query. This is a potentially bad situation!</p>
 <p>We could extend the class as follows:</p>
-<pre class=codehilite><code class=language-php>class StatelessDataMapper extends DataMapper
+<pre class="highlight"><code class="language-php">class StatelessDataMapper extends DataMapper
 {
     public function setTable(string $table) : void
     {
@@ -506,6 +509,7 @@ would query. This is a potentially bad situation!</p>
         ));
     }
 }</code></pre>
+
 <p>In your factory that creates an instance of <code>DataMapper</code>, have it instead return
 a <code>StatelessDataMapper</code> instance, and you're now safe.</p>
 <h3>Factories</h3>
@@ -515,7 +519,7 @@ approach ensures that the service is created only when needed, mitigating any
 state change issues.</p>
 <p>As an example, consider the following middleware that currently consumes a
 template renderer:</p>
-<pre class=codehilite><code class=language-php>use Psr\Http\Message\ResponseInterface;
+<pre class="highlight"><code class="language-php">use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -539,11 +543,12 @@ class SomeHandler implements RequestHandlerInterface
         ));
     }
 }</code></pre>
+
 <p>What we will do is modify it to accept a <em>callable</em> to the constructor. We will
 then call that factory <em>just before</em> we need the renderer; we <em>will not</em> store
 the result in the handler, as we want to ensure we have a new instance each
 time.</p>
-<pre class=codehilite><code class=language-php>use Psr\Http\Message\ResponseInterface;
+<pre class="highlight"><code class="language-php">use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -569,11 +574,13 @@ class SomeHandler implements RequestHandlerInterface
         ));
     }
 }</code></pre>
+
 <p>From here, we create a factory for our dependency injection container that will
 return the factory we use here. As an example, if we are using the <a href="https://docs.mezzio.dev/mezzio/v3/features/template/laminas-view/">laminas-view
 integration</a>,
 we might do the following:</p>
-<pre class=codehilite><code class=language-php>use Psr\Container\ContainerInterface;
+<pre class="highlight"><code class="language-php">
+use Psr\Container\ContainerInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Mezzio\LaminasView\LaminasViewRendererFactory;
 
@@ -587,9 +594,10 @@ class LaminasViewRendererFactoryFactory
         };
     }
 }</code></pre>
+
 <p>If we mapped this to the "service" <code>Mezzio\Template\TemplateRendererInterfaceFactory</code>,
 our factory for the <code>SomeHandler</code> class would then look like:</p>
-<pre class=codehilite><code class=language-php>use Mezzio\Template\TemplateRendererInterfaceFactory;
+<pre class="highlight"><code class="language-php">use Mezzio\Template\TemplateRendererInterfaceFactory;
 
 function (ContainerInterface $container) : SomeHandler
 {
@@ -597,6 +605,7 @@ function (ContainerInterface $container) : SomeHandler
         $container-&gt;get(TemplateRendererInterfaceFactory::class)
     );
 }</code></pre>
+
 <p>This approach ensures we get a new instance with known state at precisely the
 moment we wish to execute the functionality. By ensuring we <em>do not</em> store the
 instance in any way, we also ensure it is garbage collected when the instance
@@ -612,8 +621,7 @@ previously: <a href="https://docs.mezzio.dev/mezzio/v3/cookbook/passing-data-bet
 <p>In this particular case, the middleware documented in the original solution
 could be modified to provide data to a request attribute, instead of altering
 the state of the template renderer. It might then become:</p>
-<pre class="codehilite"><code class="language-php">
-namespace App\Middleware;
+<pre class="highlight"><code class="language-php">namespace App\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -644,8 +652,8 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
 
         return $handler-&gt;handle($request-&gt;withAttribute(__CLASS__, $defaults));
     }
-}
-</code></pre>
+}</code></pre>
+
 <p>Once that change is made, you would then change your handler to do the
 following:</p>
 <ul>
@@ -653,15 +661,14 @@ following:</p>
 <li>Merge the pulled value with any local values when rendering the template.</li>
 </ul>
 <p>For example:</p>
-<pre class="codehilite"><code class="language-php">
-$defaultParams = $request-&gt;getAttribute(TemplateDefaultsMiddleware::class, []);
+<pre class="highlight"><code class="language-php">$defaultParams = $request-&gt;getAttribute(TemplateDefaultsMiddleware::class, []);
 return new HtmlResponse($renderer-&gt;render(
     'some::template',
     array_merge($defaultParams, [
         // handler-specific parameters here
     ])
-));
-</code></pre>
+));</code></pre>
+
 <p>This approach, while it requires more work on the part of handler authors,
 ensures that the renderer state does not vary between requests, making it
 safer for usage with Swoole and other long-running processes.</p>

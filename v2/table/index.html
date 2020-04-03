@@ -384,7 +384,7 @@ will not work. We recommend doing this in your table class's constructor.</p>
 defines a table that can contain up to 1024 rows, each with three columns
 accepting <code>float</code> values to define a 3-dimensional vector, e.g.
 <code>src/App/Table/Vector3dTable.php</code>:</p>
-<pre class=codehilite><code class=language-php>namespace App\Table;
+<pre class="highlight"><code class="language-php">namespace App\Table;
 
 use Swoole\Table;
 
@@ -399,6 +399,7 @@ final class Vector3dTable extends Table
         $this-&gt;create();
     }
 }</code></pre>
+
 <h2 id="creating-your-table">Creating Your Table</h2>
 <p>Now that we have defined a table class, we need to wire the application to use
 it.</p>
@@ -407,7 +408,7 @@ worker process has access to them. Since we define the columns and table size in
 the constructor, we can accomplish this by mapping the service name to a
 concrete instance, using the <code>services</code> dependency configuration key in a 
 config provider class, e.g. <code>src/App/ConfigProvider.php</code>:</p>
-<pre class=codehilite><code class=language-php>private function getDependencies() : array
+<pre class="highlight"><code class="language-php">private function getDependencies() : array
 {
     return [
         'services'  =&gt; [
@@ -416,6 +417,7 @@ config provider class, e.g. <code>src/App/ConfigProvider.php</code>:</p>
         ],
     ];
 }</code></pre>
+
 <h2 id="using-the-table">Using the Table</h2>
 <p>Classes that will push values to or pull values from the table can compose an
 instance of your custom class just as they normally would. Factories will then

@@ -343,15 +343,15 @@ enables the execution of an Mezzio application inside the <code>on('request')</c
 event of <code>Swoole\Http\Server</code>. This runner is implemented in the
 <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> class.</p>
 <p>The basic implementation looks similar to the following:</p>
-<pre class=codehilite><code class=language-php>public function run() : void
+<pre class="highlight"><code class="language-php">public function run() : void
 {
     $this-&gt;swooleHttpServer-&gt;on('start', function ($server) {
-        printf(&quot;Swoole is running at %s:%s\n&quot;, $server-&gt;host, $server-&gt;port);
+        printf("Swoole is running at %s:%s\n", $server-&gt;host, $server-&gt;port);
     });
 
     $this-&gt;swooleHttpServer-&gt;on('request', function ($request, $response) {
         printf(
-            &quot;%s - %s - %s %s\n&quot;,
+            "%s - %s - %s %s\n",
             date('Y-m-d H:i:sO', time()),
             $request-&gt;server['remote_addr'],
             $request-&gt;server['request_method'],
@@ -370,6 +370,7 @@ event of <code>Swoole\Http\Server</code>. This runner is implemented in the
 
     $this-&gt;swooleHttpServer-&gt;start();
 }</code></pre>
+
 <p>This package provides a bridge between <code>Swoole\Http\Request</code> (<code>$request</code>) and
 <a href="https://www.php-fig.org/psr/psr-7/">PSR-7</a> requests (<code>$psr7Request</code>;
 specifically as implemented by <a href="https://docs.laminas.dev/laminas-diactoros">laminas-diactoros</a>)

@@ -385,7 +385,7 @@ you'll need to add <code>task_worker_num</code>. The number of workers you confi
 the number of concurrent tasks that can be executed at once. Tasks are queued in
 the order that they triggered, meaning that a <code>task_worker_num</code> of 1 will offer
 no concurrency and tasks will execute one after the other.</p>
-<pre class=codehilite><code class=language-php>'mezzio-swoole' =&gt; [
+<pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
     'swoole-http-server' =&gt; [
         'host' =&gt; '127.0.0.1',
         'port' =&gt; 8080,
@@ -395,6 +395,7 @@ no concurrency and tasks will execute one after the other.</p>
         ],
     ],
 ];</code></pre>
+
 <blockquote>
 <h3>No CLI option for task_worker_num</h3>
 <p>Unlike <code>worker_num</code>, there is no CLI option for <code>task_worker_num</code>. This is
@@ -414,13 +415,13 @@ refuse to start.</p>
 </ul>
 <h3>Registering the Handlers</h3>
 <p>The signature for the <code>task</code> event handler is:</p>
-<pre class=codehilite><code class=language-php>function (
+<p><pre class="highlight"><code class="language-php">function (
     \Swoole\Http\Server $server,
     int $taskId,
     int $sourceWorkerId,
     $dataForWorker
 ) : void</code></pre>
-<p>where:</p>
+where:</p>
 <ul>
 <li><code>$server</code> is the main HTTP server process</li>
 <li><code>$taskId</code> is a number that increments each time the server triggers a new task.</li>
@@ -432,20 +433,23 @@ refuse to start.</p>
 </ul>
 <p>To register the handler with the server, you must call it's <code>on()</code> method,
 <strong>before</strong> the server has been started:</p>
-<pre class=codehilite><code class=language-php>$server-&gt;on('task', $callable);</code></pre>
+<pre class="highlight"><code class="language-php">$server-&gt;on('task', $callable);</code></pre>
+
 <p>As previously mentioned, you must also register an event handler for the
 <code>finish</code> event. This callback for this event should have the following
 signature:</p>
-<pre class=codehilite><code class=language-php>function (
+<pre class="highlight"><code class="language-php">function (
     \Swoole\Http\Server $server,
     int $taskId,
     $userData
 ) : void</code></pre>
+
 <p>The first two parameters are identical to the <code>task</code> event handler. The
 <code>$userData</code> parameter will contain the return value of the <code>task</code> event
 handler. </p>
 <p>Registering your callable for the <code>finish</code> event is accomplished like this:</p>
-<pre class=codehilite><code class=language-php>$server-&gt;on('finish', $callable);</code></pre>
+<pre class="highlight"><code class="language-php">$server-&gt;on('finish', $callable);</code></pre>
+
 <blockquote>
 <h3>There can be only one</h3>
 <p>There can be <strong>only one</strong> event handler per event type. Subsequent calls to
@@ -454,16 +458,15 @@ handler. </p>
 <p>If you do not return anything from your <code>task</code> event handler, the
 <code>finish</code> handler <strong>will not be called</strong>. The Swoole documentation recommends
 that the task worker callback manually finish the task in these situations:</p>
-<pre class="codehilite"><code class="language-php">
-$server-&gt;finish('');
-</code></pre>
+<pre class="highlight"><code class="language-php">$server-&gt;finish('');</code></pre>
+
 <p>Even if you do not call the above method, the handler <strong>must</strong> be defined, or
 the server will refuse to start.</p>
 </blockquote>
 <h2 id="an-example-task-worker">An example task worker</h2>
 <p>The following example code illustrates a task worker with logging capabilities
 that uses a message notifier to process data:</p>
-<pre class=codehilite><code class=language-php>// In src/App/TaskWorker.php:
+<pre class="highlight"><code class="language-php">// In src/App/TaskWorker.php:
 
 namespace App;
 
@@ -510,11 +513,12 @@ class TaskWorker
         $server-&gt;finish('');
     }
 }</code></pre>
+
 <p>This invokable class needs to be attached to the <code>$server-&gt;on('task')</code> event
 before the server has started. The easiest place to accomplish this is in a
 <a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>
 targeting the Swoole HTTP server. First, we'll create the delegator factory:</p>
-<pre class=codehilite><code class=language-php>// In src/App/TaskWorkerDelegator.php:
+<pre class="highlight"><code class="language-php">// In src/App/TaskWorkerDelegator.php:
 
 namespace App;
 
@@ -537,8 +541,9 @@ class TaskWorkerDelegator
         return $server;
     }
 }</code></pre>
+
 <p>Next, we'll register it with our container:</p>
-<pre class=codehilite><code class=language-php>// In config/autoload/dependencies.php:
+<pre class="highlight"><code class="language-php">// In config/autoload/dependencies.php:
 
 return [
     'dependencies' =&gt; [
@@ -549,6 +554,7 @@ return [
         ],
     ],
 ];</code></pre>
+
 <p>With this in place, we can now trigger tasks within our application. In the
 scenario outlined above, the task worker expects <em>messages</em>; it then <em>notifies</em>
 listeners of that message so they may respond to it.</p>
@@ -563,7 +569,7 @@ argument.</p>
 from the above example. The request handler uses values from the request to
 create the <code>ContactMessage</code> instance, and then create a task from it. It then
 immediately returns a response.</p>
-<pre class=codehilite><code class=language-php>// in src/App/Handler/TaskTriggeringHandler.php:
+<pre class="highlight"><code class="language-php">// in src/App/Handler/TaskTriggeringHandler.php:
 
 namespace App\Handler;
 

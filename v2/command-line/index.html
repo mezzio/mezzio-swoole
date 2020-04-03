@@ -363,7 +363,8 @@ following commands:</p>
 <li><code>status</code> to determine the server status (running or not running)</li>
 </ul>
 <p>You may obtain help for each command using the <code>help</code> meta-command:</p>
-<pre class=codehilite><code class=language-bash>$ ./vendor/bin/mezzio-swoole help start</code></pre>
+<pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole help start</code></pre>
+
 <p>The <code>stop</code>, <code>status</code>, and <code>reload</code> commands are sufficiently generic to work
 regardless of runtime or application, as they work directly with the Swoole
 process manager. The <code>start</code> command, however, may need customizations if you
@@ -399,17 +400,19 @@ the <code>public/index.php</code>, or if you are using this package with a diffe
 middleware runtime), we recommend writing a custom <code>start</code> command.</p>
 <p>As an example, let's say you have altered your application such that you're
 defining your routes in multiple files, and instead of:</p>
-<pre class=codehilite><code class=language-php>(require 'config/routes.php')($app, $factory, $container);</code></pre>
+<pre class="highlight"><code class="language-php">(require 'config/routes.php')($app, $factory, $container);</code></pre>
+
 <p>you instead have something like:</p>
-<pre class=codehilite><code class=language-php>$handle = opendir('config/routes/');
+<pre class="highlight"><code class="language-php">$handle = opendir('config/routes/');
 while (false !== ($entry = readdir($handle))) {
     if (false === strrpos($entry, '.php')) {
         continue;
     }
     (require $entry)($app, $factory, $container);
 }</code></pre>
+
 <p>You could write a command such as the following:</p>
-<pre class=codehilite><code class=language-php>// In src/App/Command/StartCommand.php:
+<pre class="highlight"><code class="language-php">// In src/App/Command/StartCommand.php:
 
 namespace App\Command;
 
@@ -469,8 +472,9 @@ class StartCommand extends BaseStartCommand
         return 0;
     }
 }</code></pre>
+
 <p>You will also need to write a factory for the class:</p>
-<pre class=codehilite><code class=language-php>// In src/App/Command/StartCommandFactory.php:
+<pre class="highlight"><code class="language-php">// In src/App/Command/StartCommandFactory.php:
 
 namespace App\Command;
 
@@ -483,9 +487,10 @@ class StartCommandFactory
         return new StartCommand($container);
     }
 }</code></pre>
+
 <p>If this is all you're changing, you can map this new command to the existing
 <code>Mezzio\Swoole\Command\StartCommand</code> service within your configuration:</p>
-<pre class=codehilite><code class=language-php>// in config/autoload/dependencies.global.php:
+<pre class="highlight"><code class="language-php">// in config/autoload/dependencies.global.php:
 
 use App\Command\StartCommandFactory;
 use Mezzio\Swoole\Command\StartCommand;
@@ -497,6 +502,7 @@ return [
         ],
     ],
 ];</code></pre>
+
 <p>Since the <code>mezzio-swoole</code> binary uses your application configuration
 and container, this will substitute your command for the shipped command!</p>
 
