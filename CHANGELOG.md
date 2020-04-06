@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#7](https://github.com/mezzio/mezzio-swoole/pull/7) fixes default value for SameSite in Cookie of Swoole\Http\Response.
 
 ## 2.6.1 - 2020-03-28
 
