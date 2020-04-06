@@ -94,13 +94,13 @@ class SwooleEmitterTest extends TestCase
             ->header('Set-Cookie', Argument::any())
             ->shouldNotBeCalled();
         $this->swooleResponse
-            ->cookie('foo', 'bar', 0, '/', '', false, false, null)
+            ->cookie('foo', 'bar', 0, '/', '', false, false, '')
             ->shouldHaveBeenCalled();
         $this->swooleResponse
-            ->cookie('bar', 'baz', 0, '/', '', false, false, null)
+            ->cookie('bar', 'baz', 0, '/', '', false, false, '')
             ->shouldHaveBeenCalled();
         $this->swooleResponse
-            ->cookie('baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true, null)
+            ->cookie('baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true, '')
             ->shouldHaveBeenCalled();
 
         // SameSite cookies
