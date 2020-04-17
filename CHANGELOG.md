@@ -66,7 +66,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#8](https://github.com/mezzio/mezzio-swoole/pull/8) removes an undefined variable from a method call iwthin `AccessLogDataMap::getResponseMessageSize()`, fixing a notice.
+- [#8](https://github.com/mezzio/mezzio-swoole/pull/8) removes an undefined variable from a method call within `AccessLogDataMap::getResponseMessageSize()`, fixing a notice.
 
 ## 2.6.2 - 2020-04-06
 
