@@ -352,7 +352,7 @@ class AccessLogDataMap
         }
 
         $strlen = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
-        $firstLineSize = $strlen($this->getResponseLine($message));
+        $firstLineSize = $strlen($this->getResponseLine());
 
         $headerSize = $this->psrResponse
             ? $this->getPsrResponseHeaderSize()
