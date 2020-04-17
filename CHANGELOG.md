@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.6.3 - TBD
+## 2.6.3 - 2020-04-17
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#8](https://github.com/mezzio/mezzio-swoole/pull/8) removes an undefined variable from a method call iwthin `AccessLogDataMap::getResponseMessageSize()`, fixing a notice.
 
 ## 2.6.2 - 2020-04-06
 
