@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#10](https://github.com/mezzio/mezzio-swoole/pull/10) improves how client IP addresses are detected when printing access logs, by taking into consideration `x-real-ip`, `client-ip` and `x-forwarded-for` headers, in that order.
 
 ## 2.6.3 - 2020-04-17
 
