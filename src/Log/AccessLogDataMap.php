@@ -14,7 +14,6 @@ use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Swoole\Http\Request as SwooleHttpRequest;
 
-use function array_reduce;
 use function filter_var;
 use function function_exists;
 use function getcwd;
@@ -95,12 +94,15 @@ class AccessLogDataMap
      */
     public function getClientIp() : string
     {
-        $headers = ['x-forwarded-for', 'client-ip', 'x-real-ip'];
-        $headerValue = array_reduce($headers, function (?string $default, string $header) {
-            return $this->request->header[$header] ?? $default;
-        });
+        $headers = ['x-real-ip', 'client-ip', 'x-forwarded-for'];
 
-        return $headerValue ?? $this->getServerParamIp('REMOTE_ADDR');
+        foreach ($headers as $header) {
+            if (isset($this->request->header[$header])) {
+                return $this->request->header[$header];
+            }
+        }
+
+        return $this->getServerParamIp('REMOTE_ADDR');
     }
 
     /**
