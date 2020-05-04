@@ -26,17 +26,29 @@ class AccessLogDataMapTest extends TestCase
     public function provideServer() : iterable
     {
         yield 'no address' => [[], [], '-'];
-        yield 'x-real-ip' => [[
-            'x-real-ip' => '1.1.1.1',
-            'client-ip' => '2.2.2.2',
-            'x-forwarded-for' => '3.3.3.3',
-        ], ['remote_addr' => '4.4.4.4'], '1.1.1.1'];
-        yield 'client-ip' => [[
-            'client-ip' => '2.2.2.2',
-            'x-forwarded-for' => '3.3.3.3',
-        ], ['remote_addr' => '4.4.4.4'], '2.2.2.2'];
+        yield 'x-real-ip'  => [
+            [
+                'x-real-ip'       => '1.1.1.1',
+                'client-ip'       => '2.2.2.2',
+                'x-forwarded-for' => '3.3.3.3',
+            ], 
+            [
+                'remote_addr' => '4.4.4.4',
+            ],
+            '1.1.1.1'
+        ];
+        yield 'client-ip' => [
+            [
+                'client-ip' => '2.2.2.2',
+                'x-forwarded-for' => '3.3.3.3',
+            ],
+            [
+                'remote_addr' => '4.4.4.4',
+            ],
+            '2.2.2.2'
+        ];
         yield 'x-forwarded-for' => [['x-forwarded-for' => '3.3.3.3'], ['remote_addr' => '4.4.4.4'], '3.3.3.3'];
-        yield 'remote-addr' => [[], ['remote_addr' => '4.4.4.4'], '4.4.4.4'];
+        yield 'remote-addr'     => [[], ['remote_addr' => '4.4.4.4'], '4.4.4.4'];
     }
 
     /**
