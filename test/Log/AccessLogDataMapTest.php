@@ -31,7 +31,7 @@ class AccessLogDataMapTest extends TestCase
                 'x-real-ip'       => '1.1.1.1',
                 'client-ip'       => '2.2.2.2',
                 'x-forwarded-for' => '3.3.3.3',
-            ], 
+            ],
             [
                 'remote_addr' => '4.4.4.4',
             ],
