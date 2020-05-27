@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#13](https://github.com/mezzio/mezzio-swoole/pull/13) adds a missing dependency definition for the `InotifyFileWatcher`; this addition ensures that hot code reloading will work out-of-the-box when enabled.
 
 ## 2.6.4 - 2020-05-04
 
