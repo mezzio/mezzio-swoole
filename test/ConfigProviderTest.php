@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\ConfigProvider;
+use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use PHPUnit\Framework\TestCase;
 
 class ConfigProviderTest extends TestCase
@@ -34,5 +35,18 @@ class ConfigProviderTest extends TestCase
     {
         $this->assertArrayHasKey('dependencies', $config);
         $this->assertIsArray($config['dependencies']);
+        return $config['dependencies'];
+    }
+
+    /**
+     * @depends testReturnedArrayContainsDependencies
+     * @see https://github.com/mezzio/mezzio-swoole/issues/11
+     */
+    public function testEnsureInotifyFileWatcherIsRegistered(array $dependencies): void
+    {
+        $this->assertArrayHasKey('invokables', $dependencies);
+        $this->assertIsArray($dependencies['invokables']);
+        $this->assertArrayHasKey(InotifyFileWatcher::class, $dependencies['invokables']);
+        $this->assertSame(InotifyFileWatcher::class, $dependencies['invokables'][InotifyFileWatcher::class]);
     }
 }

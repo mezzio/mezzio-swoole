@@ -77,6 +77,9 @@ class ConfigProvider
                 SwooleHttpServer::class                => HttpServerFactory::class,
                 Reloader::class                        => ReloaderFactory::class,
             ],
+            'invokables' => [
+                InotifyFileWatcher::class => InotifyFileWatcher::class,
+            ],
             'aliases' => [
                 RequestHandlerRunner::class           => SwooleRequestHandlerRunner::class,
                 StaticResourceHandlerInterface::class => StaticResourceHandler::class,
