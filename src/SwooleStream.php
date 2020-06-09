@@ -76,7 +76,7 @@ final class SwooleStream implements StreamInterface
         $index = $this->index;
 
         // Set the internal index to the end of the string
-        $this->index = $size - 1;
+        $this->index = $size;
 
         if ($index) {
             // Per PSR-7 spec, if we have seeked or read to a given position in
@@ -123,7 +123,7 @@ final class SwooleStream implements StreamInterface
      */
     public function eof()
     {
-        return $this->index >= $this->getSize() - 1;
+        return $this->index >= $this->getSize();
     }
 
     /**
@@ -145,7 +145,7 @@ final class SwooleStream implements StreamInterface
         // Reset index based on legnth; should not be > EOF position.
         $size = $this->getSize();
         $this->index = $this->index + $length >= $size
-            ? $size - 1
+            ? $size
             : $this->index + $length;
 
         return $result;
@@ -188,7 +188,7 @@ final class SwooleStream implements StreamInterface
                         'Offset must be a negative number to be under the content size when using SEEK_END'
                     );
                 }
-                $this->index = ($size - 1) + $offset;
+                $this->index = $size + $offset;
                 break;
             default:
                 throw new InvalidArgumentException(

@@ -40,6 +40,17 @@ class SwooleStreamTest extends TestCase
         $this->stream = new SwooleStream($this->request->reveal());
     }
 
+    public function testEofWhenOneCharacterLeftCase(): void
+    {
+        $len = strlen(self::DEFAULT_CONTENT);
+
+        $this->assertEquals('This is a test', $this->stream->read($len - 1));
+        $this->assertFalse($this->stream->eof());
+
+        $this->assertEquals('!', $this->stream->read(1));
+        $this->assertTrue($this->stream->eof());
+    }
+
     public function testGetContentsWithNoRawContent()
     {
         $request = $this->prophesize(SwooleHttpRequest::class);
@@ -117,13 +128,6 @@ class SwooleStreamTest extends TestCase
         }
     }
 
-    public function testEofIsSizeMinusOne()
-    {
-        $this->assertFalse($this->stream->eof());
-        $this->stream->seek($this->stream->getSize() - 1);
-        $this->assertTrue($this->stream->eof());
-    }
-
     public function testIsReadableReturnsTrue()
     {
         $this->assertTrue($this->stream->isReadable());
@@ -156,7 +160,7 @@ class SwooleStreamTest extends TestCase
         $this->stream->seek(1, SEEK_CUR);
         $this->assertEquals(5, $this->stream->tell());
         $this->stream->seek(-1, SEEK_END);
-        $this->assertEquals(strlen(self::DEFAULT_CONTENT) - 2, $this->stream->tell());
+        $this->assertEquals(strlen(self::DEFAULT_CONTENT) - 1, $this->stream->tell());
     }
 
     public function testSeekSetRaisesExceptionIfPositionOverflows()
