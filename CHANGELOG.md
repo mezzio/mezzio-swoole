@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.6.6 - TBD
+## 2.6.6 - 2020-06-17
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#16](https://github.com/mezzio/mezzio-swoole/pull/16) fixes an issue whereby `Mezzio\Swoole\SwooleStream` was truncating the last byte of a stream.
 
 ## 2.6.5 - 2020-05-27
 
