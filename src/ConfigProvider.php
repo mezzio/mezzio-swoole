@@ -17,6 +17,9 @@ use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use StaticResourceHandler\{
+    FileLocationRepository, FileLocationRepositoryFactory, FileLocationRepositoryInterface
+};
 
 use function extension_loaded;
 
@@ -76,14 +79,16 @@ class ConfigProvider
                 StaticResourceHandler::class           => StaticResourceHandlerFactory::class,
                 SwooleHttpServer::class                => HttpServerFactory::class,
                 Reloader::class                        => ReloaderFactory::class,
+                FileLocationRepository::class          => FileLocationRepositoryFactory::class,
             ],
             'invokables' => [
                 InotifyFileWatcher::class => InotifyFileWatcher::class,
             ],
             'aliases' => [
-                RequestHandlerRunner::class           => SwooleRequestHandlerRunner::class,
-                StaticResourceHandlerInterface::class => StaticResourceHandler::class,
-                FileWatcherInterface::class           => InotifyFileWatcher::class,
+                RequestHandlerRunner::class            => SwooleRequestHandlerRunner::class,
+                StaticResourceHandlerInterface::class  => StaticResourceHandler::class,
+                FileWatcherInterface::class            => InotifyFileWatcher::class,
+                FileLocationRepositoryInterface::class => FileLocationRepository::class,
 
                 // Legacy Zend Framework aliases
                 \Zend\Expressive\Swoole\Command\ReloadCommand::class => Command\ReloadCommand::class,
