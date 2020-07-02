@@ -44,19 +44,6 @@ class ContentTypeFilterMiddlewareTest extends TestCase
         $this->assertAttributeSame($typeMap, 'typeMap', $middleware);
     }
 
-    public function testMiddlewareReturnsFailureResponseIfFileNotFound()
-    {
-        $next = static function ($request, $filename) {
-            TestCase::fail('Should not have invoked next middleware');
-        };
-        $middleware = new ContentTypeFilterMiddleware();
-
-        $response = $middleware($this->request, __DIR__ . '/not-a-valid-file.png', $next);
-
-        $this->assertInstanceOf(StaticResourceResponse::class, $response);
-        $this->assertTrue($response->isFailure());
-    }
-
     public function testMiddlewareReturnsFailureResponseIfFileNotAllowedByTypeMap()
     {
         $next = static function ($request, $filename) {

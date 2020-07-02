@@ -308,6 +308,65 @@ return [
 ];
 ```
 
+## Prefixed Mapped Document Roots
+
+The `Mezzio\Swoole\StaticResourceHandler\FileLocationRepository` implements the  `Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface` to maintain an association of URI prefixes with file directories.  One use case would be if you have a module that contains a template, and that template relies on assets like JavaScript files, CSS files, etc.  Instead of copying those assets to a public directory configured in `document-root`, you can leave the files in the module, and access them using a defined URI prefix.
+
+To accomplish this:
+
+1. Define what your URI prefix will be (ex. `/my-module`)
+2. Update your template/s attributes like `href` and `src` to use the prefix (ex. `<script src='/my-module/style.css'></script>`)
+3. In the factory of your handler, or whatever is rendering the template, set up the linkage between the prefix and the directory where your assets are located.
+
+### Prefixed Mapped Document Roots - Example
+
+Assume you have a module, AwesomeModule, which has a handler called "HomeHandler", which renders the 'home' template.  You designate the prefix, `/awesome-home` for rendering the assets.  The structure of your module looks like this:
+
+```
+AwesomeModule
+├── src
+|   ├── Handler
+|   |   ├── HomeHandler.php
+|   |   ├── HomeHandlerFactory.php
+|   ├── ConfigProvider.php
+├── templates
+│   ├── home
+|   |   ├── home.html
+|   |   ├── style.css
+│   ├── layouts
+```
+
+In your `home.html` template, you can refer to the `style.css` file as follows:
+
+```
+<link href="/awesome-home/style.css" rel="stylesheet" type="text/css">
+```
+
+Finally, in the factory for rendering the Home page, you create assignment for `/awesome-home` to your modules's `templates/home` directory:
+
+```php
+use Psr\Container\ContainerInterface;
+use Mezzio\Template\TemplateRendererInterface;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+
+class AwesomeHomeHandlerFactory
+{
+    public function __invoke(ContainerInterface $container) : DocumentationViewHandler
+    {
+        // Establish location for the home template assets
+        $repo = $container->get(FileLocationRepositoryInterface::class);
+        $repo->addMappedDocumentRoot('awesome-home', 
+            realpath(__DIR__ . '/../../templates/home'));
+
+        return new AwesomeHomeHandler(
+            $container->get(TemplateRendererInterface::class)
+        );
+    }
+}
+```
+
+When the template renders, the client will request `/awesome-home/style.css`, which the StaticResourceHandler will now retrieve from the `templates/home` folder of the module.
+
 ## Writing Middleware
 
 Static resource middleware must implement
