@@ -15,9 +15,9 @@ use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
-use Mezzio\Swoole\StaticResourceHandler\{
-    FileLocationRepository, FileLocationRepositoryFactory, FileLocationRepositoryInterface
-};
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 

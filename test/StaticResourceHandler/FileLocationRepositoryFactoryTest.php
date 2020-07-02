@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-require_once('_MockIsDir.php');
-
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use PHPUnit\Framework\TestCase;
@@ -20,40 +18,16 @@ class FileLocationRepositoryFactoryTest extends TestCase
 {
     protected function setUp() : void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->mockContainer = $this->prophesize(ContainerInterface::class);
         $this->fileLocRepoFactory = new FileLocationRepositoryFactory();
+        $this->assetDir = __DIR__ . '/../TestAsset';
     }
 
     public function testFactoryReturnsFileLocationRepository()
     {
-        $factory = $this->fileLocRepoFactory;
-        $fileLocRepo = $factory($this->container->reveal());
-        $this->assertInstanceOf(FileLocationRepository::class, $fileLocRepo);
-    }
-
-    public function testFactoryUsesConfiguredDocumentRoot()
-    {
-        $dir = getcwd() . '/public/';
-        $this->container->get('config')->willReturn([
+        $this->mockContainer->get('config')->willReturn([
             'mezzio-swoole' => [
-                'swoole-http-server' =>  [
-                    'static-files' => [
-                        'document-root' => [$dir]
-                    ]
-                ]
-            ]
-        ]);
-        $factory = $this->fileLocRepoFactory;
-        $fileLocRepo = $factory($this->container->reveal());
-        $this->assertEquals(['/' => [$dir]], $fileLocRepo->listMappedDocumentRoots());
-    }
-
-    public function testFactoryHasNoDefaultsIfEmptyDocumentRoot()
-    {
-        $dir = getcwd() . '/public/';
-        $this->container->get('config')->willReturn([
-            'mezzio-swoole' => [
-                'swoole-http-server' =>  [
+                'swoole-http-server' => [
                     'static-files' => [
                         'document-root' => []
                     ]
@@ -61,15 +35,87 @@ class FileLocationRepositoryFactoryTest extends TestCase
             ]
         ]);
         $factory = $this->fileLocRepoFactory;
-        $fileLocRepo = $factory($this->container->reveal());
+        $fileLocRepo = $factory($this->mockContainer->reveal());
+        $this->assertInstanceOf(FileLocationRepository::class, $fileLocRepo);
+    }
+
+    public function testFactoryUsesConfiguredDocumentRootArray()
+    {
+        $this->mockContainer->get('config')->willReturn([
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'document-root' => [$this->assetDir]
+                    ]
+                ]
+            ]
+        ]);
+        $factory = $this->fileLocRepoFactory;
+        $fileLocRepo = $factory($this->mockContainer->reveal());
+        $this->assertEquals(['/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
+    }
+
+    public function testFactoryUsesConfiguredDocumentRootString()
+    {
+        $this->mockContainer->get('config')->willReturn([
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'document-root' => $this->assetDir
+                    ]
+                ]
+            ]
+        ]);
+        $factory = $this->fileLocRepoFactory;
+        $fileLocRepo = $factory($this->mockContainer->reveal());
+        $this->assertEquals(['/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
+    }
+
+    public function testFactoryHasNoDefaultsIfEmptyDocumentRoot()
+    {
+        $this->mockContainer->get('config')->willReturn([
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'document-root' => []
+                    ]
+                ]
+            ]
+        ]);
+        $factory = $this->fileLocRepoFactory;
+        $fileLocRepo = $factory($this->mockContainer->reveal());
         $this->assertEquals([], $fileLocRepo->listMappedDocumentRoots());
-    }    
+    }
 
     public function testFactoryUsesDefaultDocumentRoot()
     {
-        $dir = getcwd() . '/public/';
-        $factory = $this->fileLocRepoFactory;
-        $fileLocRepo = $factory($this->container->reveal());
-        $this->assertEquals(['/' => [$dir]], $fileLocRepo->listMappedDocumentRoots());
+        // Note - we are creating a temporary location to create a public folder,
+        // since mocking is_dir and making phpcs happy at the same time
+        // is problematic
+        $cwd = \getcwd();
+        $seed = time();
+        $tmpDir = \sys_get_temp_dir();
+        $tmpDir1 = $tmpDir . '/' . $seed;
+        $tmpDir2 = $tmpDir1 . '/' . 'public';
+        try {
+            mkdir($tmpDir1);
+            mkdir($tmpDir2);
+            \chdir($tmpDir1);
+            $this->mockContainer->get('config')->willReturn([
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [
+                        'static-files' => [
+                        ]
+                    ]
+                ]
+            ]);
+            $factory = $this->fileLocRepoFactory;
+            $fileLocRepo = $factory($this->mockContainer->reveal());
+            $this->assertEquals(['/' => [$tmpDir2 . '/']], $fileLocRepo->listMappedDocumentRoots());
+        } finally {
+            \rmdir($tmpDir2);
+            \rmdir($tmpDir1);
+            \chdir($cwd);
+        }
     }
 }

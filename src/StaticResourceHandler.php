@@ -38,8 +38,8 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
      *     non-callable middleware encountered.
      */
     public function __construct(
-        array $middleware = [], 
-        FileLocationRepositoryInterface $fileLocationRepo
+        FileLocationRepositoryInterface $fileLocationRepo,
+        array $middleware = []
     ) {
         $this->validateMiddleware($middleware);
         $this->middleware = $middleware;
@@ -51,7 +51,7 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
         SwooleHttpResponse $response
     ) : ?StaticResourceHandler\StaticResourceResponse {
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
-        if(! $filename) {
+        if (! $filename) {
             return null;
         }
 

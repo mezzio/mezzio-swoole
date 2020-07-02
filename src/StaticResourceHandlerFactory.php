@@ -71,8 +71,8 @@ class StaticResourceHandlerFactory
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
         return new StaticResourceHandler(
-            $this->configureMiddleware($config),
-            $container->get(StaticResourceHandler\FileLocationRepositoryInterface::class)
+            $container->get(StaticResourceHandler\FileLocationRepositoryInterface::class),
+            $this->configureMiddleware($config)
         );
     }
 

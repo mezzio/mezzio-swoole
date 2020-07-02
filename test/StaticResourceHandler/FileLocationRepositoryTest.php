@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-require_once('_MockIsDir.php');
-
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use PHPUnit\Framework\TestCase;
@@ -23,14 +21,17 @@ class FileLocationRepositoryTest extends TestCase
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->testDir = __DIR__;
         $this->testValDir = __DIR__ . '/';
-        $this->fileLocRepo = new FileLocationRepository(['' => [$this->testValDir]]);
+        $this->fileLocRepo = new FileLocationRepository([$this->testValDir]);
     }
 
     public function testCanAddNewWithAddMappedRoot()
     {
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir]], 
-            $this->fileLocRepo->listMappedDocumentRoots());
+        $this->assertEquals(
+            ['/' => [$this->testValDir],
+            '/foo/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
     }
 
     public function testCanAppendWithAddMappedRoot()
@@ -38,8 +39,11 @@ class FileLocationRepositoryTest extends TestCase
         $dir2 = __DIR__ . '/../';
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $dir2);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir, $dir2]], 
-            $this->fileLocRepo->listMappedDocumentRoots());
+        $this->assertEquals(
+            ['/' => [$this->testValDir],
+            '/foo/' => [$this->testValDir, $dir2]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
     }
 
 
@@ -47,16 +51,37 @@ class FileLocationRepositoryTest extends TestCase
     {
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir]], 
-            $this->fileLocRepo->listMappedDocumentRoots());
-    }    
+        $this->assertEquals(
+            ['/' => [$this->testValDir],
+            '/foo/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
+    }
 
     public function testValidatePrefixReturnsSlashOnEmpty()
     {
-        // validatePrefix called from addMappDocumentRoot
-        $this->fileLocRepo->addMappedDocumentRoot('', '/public');
-        $this->assertEquals(['/' => [$this->testValDir, '/public/']],
-            $this->fileLocRepo->listMappedDocumentRoots());
+        // Note - we are creating a temporary location to create a public folder,
+        // since mocking is_dir and making phpcs happy at the same time
+        // is problematic
+        $cwd = \getcwd();
+        $seed = time();
+        $tmpDir = \sys_get_temp_dir();
+        $tmpDir1 = $tmpDir . '/' . $seed;
+        $tmpDir2 = $tmpDir1 . '/' . 'public';
+        try {
+            mkdir($tmpDir1);
+            mkdir($tmpDir2);
+            // validatePrefix called from addMappDocumentRoot
+            $this->fileLocRepo->addMappedDocumentRoot('', $tmpDir2);
+            $this->assertEquals(
+                ['/' => [$this->testValDir, $tmpDir2 . '/']],
+                $this->fileLocRepo->listMappedDocumentRoots()
+            );
+        } finally {
+            \rmdir($tmpDir2);
+            \rmdir($tmpDir1);
+            \chdir($cwd);
+        }
     }
 
     public function testValidatePrefixPrependsSlash()
@@ -64,8 +89,11 @@ class FileLocationRepositoryTest extends TestCase
         // validatePrefix called from addMappDocumentRoot
         $dir = getcwd() . '/';
         $this->fileLocRepo->addMappedDocumentRoot('foo/', $this->testDir);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir]],
-            $this->fileLocRepo->listMappedDocumentRoots());
+        $this->assertEquals(
+            ['/' => [$this->testValDir],
+            '/foo/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
     }
 
     public function testValidatePrefixAppendsSlash()
@@ -73,24 +101,31 @@ class FileLocationRepositoryTest extends TestCase
         // validatePrefix called from addMappDocumentRoot
         $dir = getcwd() . '/';
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir]],
-            $this->fileLocRepo->listMappedDocumentRoots());
-    }    
+        $this->assertEquals(
+            ['/' => [$this->testValDir],
+            '/foo/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
+    }
 
     public function testValidateDirectoryReturnsIfDirectoryExists()
     {
         // validateDirectory called from addMappDocumentRoot
         $dir = getcwd();
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir]],
-            $this->fileLocRepo->listMappedDocumentRoots());
-    }        
+        $this->assertEquals(
+            ['/' => [$this->testValDir],
+            '/foo/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
+    }
 
     public function testValidateDirectoryFaultsIfDirectoryExists()
     {
         // validateDirectory called from addMappDocumentRoot
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The document root for "/foo/", "BOGUS", does not exist; please check your configuration.');
+        $msg = 'The document root for "/foo/", "BOGUS", does not exist; please check your configuration.';
+        $this->expectExceptionMessage($msg);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', 'BOGUS');
     }
 
@@ -99,17 +134,21 @@ class FileLocationRepositoryTest extends TestCase
         // validatePrefix called from addMappDocumentRoot
         $dir = getcwd();
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
-        $this->assertEquals(['/' => [$this->testValDir], '/foo/' => [$this->testValDir]],
-            $this->fileLocRepo->listMappedDocumentRoots());
-    }    
+        $this->assertEquals(
+            ['/' => [$this->testValDir], '/foo/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
+    }
 
     public function testListMappedDocumentRoots()
     {
-        $this->assertEquals(['/' => [$this->testValDir]],
-            $this->fileLocRepo->listMappedDocumentRoots());
+        $this->assertEquals(
+            ['/' => [$this->testValDir]],
+            $this->fileLocRepo->listMappedDocumentRoots()
+        );
     }
 
-    public function testFindFileExists() 
+    public function testFindFileExists()
     {
         $dir = realpath(__DIR__ . '/../TestAsset');
         $full = realpath($dir . '/content.txt');
@@ -119,8 +158,8 @@ class FileLocationRepositoryTest extends TestCase
         $this->assertEquals($full, $this->fileLocRepo->findFile('/test/content.txt'));
     }
 
-    public function testFindFileDoesNotExist() 
+    public function testFindFileDoesNotExist()
     {
         $this->assertEquals(null, $this->fileLocRepo->findFile('/foo'));
-    }    
+    }
 }

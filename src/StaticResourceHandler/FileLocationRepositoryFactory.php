@@ -14,19 +14,19 @@ use Psr\Container\ContainerInterface;
 use InvalidArgumentException;
 use function getcwd;
 
-class FileLocationRepositoryFactory 
+class FileLocationRepositoryFactory
 {
-    /** 
-     * Create a file location repository, initializing with the static files setting configured by mezzio-swoole 
+    /**
+     * Create a file location repository, initializing with the static files setting configured by mezzio-swoole
      */
     public function __invoke(ContainerInterface $container) : FileLocationRepository
     {
-        $docRoots = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files']['document-root'] 
+        $docRoots = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files']['document-root']
             ?? [getcwd() . '/public'];
-        if(! is_array($docRoots)) {
+        if (! is_array($docRoots)) {
             // Accomodate if the user defines document-root as a string or array
             $docRoots = [$docRoots];
         }
-        return new FileLocationRepository(count($docRoots) > 0 ? ['' => $docRoots] : []);
-    }    
+        return new FileLocationRepository($docRoots);
+    }
 }

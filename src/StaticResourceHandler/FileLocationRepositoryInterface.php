@@ -14,9 +14,9 @@ namespace Mezzio\Swoole\StaticResourceHandler;
  * Interface to implement a repository for storing the association
  * between the start of a URI (prefix) and directory
  */
-interface FileLocationRepositoryInterface 
+interface FileLocationRepositoryInterface
 {
-    function addMappedDocumentRoot(string $prefix, string $directory): void;
-    function listMappedDocumentRoots(): array;
-    function findFile(string $filename): ?string;
+    public function addMappedDocumentRoot(string $prefix, string $directory): void;
+    public function listMappedDocumentRoots(): array;
+    public function findFile(string $filename): ?string;
 }
