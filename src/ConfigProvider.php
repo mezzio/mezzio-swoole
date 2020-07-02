@@ -15,11 +15,11 @@ use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
-use Psr\Http\Message\ServerRequestInterface;
-use Swoole\Http\Server as SwooleHttpServer;
-use StaticResourceHandler\{
+use Mezzio\Swoole\StaticResourceHandler\{
     FileLocationRepository, FileLocationRepositoryFactory, FileLocationRepositoryInterface
 };
+use Psr\Http\Message\ServerRequestInterface;
+use Swoole\Http\Server as SwooleHttpServer;
 
 use function extension_loaded;
 
