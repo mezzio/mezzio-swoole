@@ -308,17 +308,19 @@ return [
 ];
 ```
 
-## Prefixed Mapped Document Roots
+## Mapped Document Roots
 
-The `Mezzio\Swoole\StaticResourceHandler\FileLocationRepository` implements the  `Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface` to maintain an association of URI prefixes with file directories.  One use case would be if you have a module that contains a template, and that template relies on assets like JavaScript files, CSS files, etc.  Instead of copying those assets to a public directory configured in `document-root`, you can leave the files in the module, and access them using a defined URI prefix.
+The `Mezzio\Swoole\StaticResourceHandler\FileLocationRepository` implements the  `Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface` to maintain an association of URI prefixes with file directories.  A module can designate the URL prefix `/my-module` to refer to files located in its `templates` directory. 
+
+An example use case would be if you have a module that contains a template, and that template relies on assets like JavaScript files, CSS files, etc.  Instead of copying those assets to a public directory configured in `document-root`, you can leave the files in the module, and access them using a defined URI prefix.
 
 To accomplish this:
 
-1. Define what your URI prefix will be (ex. `/my-module`)
+1. Define what your URI prefix will be (ex. /my-module)
 2. Update your template/s attributes like `href` and `src` to use the prefix (ex. `<script src='/my-module/style.css'></script>`)
 3. In the factory of your handler, or whatever is rendering the template, set up the linkage between the prefix and the directory where your assets are located.
 
-### Prefixed Mapped Document Roots - Example
+### Mapped Document Roots - Example
 
 Assume you have a module, AwesomeModule, which has a handler called "HomeHandler", which renders the 'home' template.  You designate the prefix, `/awesome-home` for rendering the assets.  The structure of your module looks like this:
 
@@ -342,7 +344,28 @@ In your `home.html` template, you can refer to the `style.css` file as follows:
 <link href="/awesome-home/style.css" rel="stylesheet" type="text/css">
 ```
 
-Finally, in the factory for rendering the Home page, you create assignment for `/awesome-home` to your modules's `templates/home` directory:
+In your module's ConfigProvider, you can add a configuration setting as follows:
+```php
+    public function __invoke() : array
+    {
+        return [
+            'config' => [
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [
+                        'static-files' => [
+                            'mapped-document-roots' => [
+                                'awseome-home' => __DIR__ . '/../../templates/home'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+```
+
+Alterantively, in the factory of the module, or the handler you create assignment for `/awesome-home` to your modules's `templates/home` directory.  
+This approach could be useful if the directory of the assets isn't know until runtime.
 
 ```php
 use Psr\Container\ContainerInterface;

@@ -21,12 +21,26 @@ class FileLocationRepositoryFactory
      */
     public function __invoke(ContainerInterface $container) : FileLocationRepository
     {
-        $docRoots = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files']['document-root']
-            ?? [getcwd() . '/public'];
-        if (! is_array($docRoots)) {
-            // Accomodate if the user defines document-root as a string or array
-            $docRoots = [$docRoots];
+        // Build list of document roots mapped to the default document root directory
+        $configDocRoots = $container->get('config')
+            ['mezzio-swoole']['swoole-http-server']['static-files']['document-root']
+            ?? getcwd() . '/public';
+        $isArray = \is_array($configDocRoots);
+
+        $mappedDocRoots = ($isArray && (count($configDocRoots) > 0))
+            || ((! $isArray) && strlen(strval($configDocRoots)) > 0)
+            ? ['/' => $configDocRoots]
+            : [];
+
+        // Add any configured mapped document roots
+        $configMappedDocRoots = $container->get('config')
+            ['mezzio-swoole']['swoole-http-server']['static-files']['mapped-document-roots']
+            ?? [];
+
+        if (count($configMappedDocRoots) > 0) {
+            $mappedDocRoots = array_merge($mappedDocRoots, $configMappedDocRoots);
         }
-        return new FileLocationRepository($docRoots);
+
+        return new FileLocationRepository($mappedDocRoots);
     }
 }

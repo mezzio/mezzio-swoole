@@ -23,10 +23,17 @@ class FileLocationRepository implements FileLocationRepositoryInterface
     /**
      * Initialize repository with default mapped document roots
      */
-    public function __construct(array $defaultMappedDocRoots)
+    public function __construct(array $mappedDocRoots)
     {
-        foreach ($defaultMappedDocRoots as $directory) {
-            $this->addMappedDocumentRoot('', $directory);
+        // Set up any mapped document roots, validating prefixes and directories
+        foreach ($mappedDocRoots as $prefix => $directory) {
+            if (is_array($directory)) {
+                foreach ($directory as $d) {
+                    $this->addMappedDocumentRoot($prefix, $d);
+                }
+            } else {
+                $this->addMappedDocumentRoot($prefix, $directory);
+            }
         }
     }
 

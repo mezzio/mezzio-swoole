@@ -21,7 +21,7 @@ class FileLocationRepositoryTest extends TestCase
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->testDir = __DIR__;
         $this->testValDir = __DIR__ . '/';
-        $this->fileLocRepo = new FileLocationRepository([$this->testValDir]);
+        $this->fileLocRepo = new FileLocationRepository(['/' => $this->testValDir]);
     }
 
     public function testCanAddNewWithAddMappedRoot()

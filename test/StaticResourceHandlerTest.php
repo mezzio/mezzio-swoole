@@ -14,7 +14,7 @@ use Mezzio\Swoole\Exception;
 use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
-use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
@@ -25,7 +25,7 @@ class StaticResourceHandlerTest extends TestCase
     {
         $this->uri = '/image.png';
         $this->fullPath = __DIR__ . '/TestAsset' . $this->uri;
-        $this->fileLocRepo = new FileLocationRepository([__DIR__ . '/TestAsset']);
+        $this->fileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
         $this->request = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $this->response = $this->prophesize(SwooleHttpResponse::class)->reveal();
     }
@@ -33,7 +33,7 @@ class StaticResourceHandlerTest extends TestCase
     public function testConstructorRaisesExceptionForInvalidMiddlewareValue()
     {
         $this->expectException(Exception\InvalidStaticResourceMiddlewareException::class);
-        new StaticResourceHandler($this->fileLocRepo, [$this]);
+        new StaticResourceHandler($this->fileLocRepo->reveal(), [$this]);
     }
 
     public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse()
@@ -54,7 +54,7 @@ class StaticResourceHandlerTest extends TestCase
             }
         };
 
-        $handler = new StaticResourceHandler($this->fileLocRepo, [$middleware]);
+        $handler = new StaticResourceHandler($this->fileLocRepo->reveal(), [$middleware]);
         $this->assertNull($handler->processStaticResource($this->request, $this->response));
     }
 
@@ -85,10 +85,45 @@ class StaticResourceHandlerTest extends TestCase
             }
         };
 
-        $handler = new StaticResourceHandler($this->fileLocRepo, [$middleware]);
+        $this->fileLocRepo->findFile($this->uri)->willReturn($this->fullPath);
+        $handler = new StaticResourceHandler($this->fileLocRepo->reveal(), [$middleware]);
 
         $this->assertSame(
             $expectedResponse->reveal(),
+            $handler->processStaticResource($this->request, $this->response)
+        );
+    }
+
+    public function testProcessStaticResourceReturnsNullWhenMiddlewareFails()
+    {
+        $this->request->server = [
+            'request_uri' => $this->uri,
+        ];
+
+        $expectedResponse = $this->prophesize(StaticResourceResponse::class);
+        $expectedResponse->isFailure()->willReturn(true);
+
+        $middleware = new class($expectedResponse->reveal()) implements MiddlewareInterface {
+            private $response;
+
+            public function __construct(StaticResourceResponse $response)
+            {
+                $this->response = $response;
+            }
+
+            public function __invoke(
+                SwooleHttpRequest $request,
+                string $filename,
+                callable $next
+            ) : StaticResourceResponse {
+                return $this->response;
+            }
+        };
+
+        $this->fileLocRepo->findFile($this->uri)->willReturn($this->fullPath);
+        $handler = new StaticResourceHandler($this->fileLocRepo->reveal(), [$middleware]);
+        $this->assertSame(
+            null,
             $handler->processStaticResource($this->request, $this->response)
         );
     }
@@ -99,7 +134,7 @@ class StaticResourceHandlerTest extends TestCase
             'request_uri' => '/BOGUS',
         ];
 
-        $handler = new StaticResourceHandler($this->fileLocRepo, []);
+        $handler = new StaticResourceHandler($this->fileLocRepo->reveal(), []);
 
         $this->assertSame(
             null,

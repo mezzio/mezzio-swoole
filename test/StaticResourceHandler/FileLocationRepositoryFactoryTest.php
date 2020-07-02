@@ -55,6 +55,69 @@ class FileLocationRepositoryFactoryTest extends TestCase
         $this->assertEquals(['/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
     }
 
+    public function testFactoryUsesConfiguredMappedDocumentRootsArray()
+    {
+        $this->mockContainer->get('config')->willReturn([
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'document-root' => [],
+                        'mapped-document-roots' => [
+                            'foo' => [$this->assetDir]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $factory = $this->fileLocRepoFactory;
+        $fileLocRepo = $factory($this->mockContainer->reveal());
+        $this->assertEquals(['/foo/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
+    }
+
+
+    public function testFactoryUsesConfiguredMappedDocumentRootString()
+    {
+        $this->mockContainer->get('config')->willReturn([
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'document-root' => [],
+                        'mapped-document-roots' => [
+                            'foo' => [$this->assetDir]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $factory = $this->fileLocRepoFactory;
+        $fileLocRepo = $factory($this->mockContainer->reveal());
+
+        $this->assertEquals(['/foo/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
+    }
+
+    public function testFactoryUsesBothConfiguredRootAndMappedDocumentRootString()
+    {
+        $this->mockContainer->get('config')->willReturn([
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'document-root' => __DIR__,
+                        'mapped-document-roots' => [
+                            'foo' => [$this->assetDir]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $factory = $this->fileLocRepoFactory;
+        $fileLocRepo = $factory($this->mockContainer->reveal());
+
+        $this->assertEquals(
+            ['/' => [__DIR__ . '/'], '/foo/' => [$this->assetDir . '/']],
+            $fileLocRepo->listMappedDocumentRoots()
+        );
+    }
+
     public function testFactoryUsesConfiguredDocumentRootString()
     {
         $this->mockContainer->get('config')->willReturn([
@@ -68,6 +131,7 @@ class FileLocationRepositoryFactoryTest extends TestCase
         ]);
         $factory = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
+
         $this->assertEquals(['/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
     }
 
