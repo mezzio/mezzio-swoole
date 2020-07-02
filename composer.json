@@ -1,5 +1,5 @@
 {
-    "name": "mezzio/mezzio-swoole",
+    "name": "jasonterando/mezzio-swoole",
     "description": "Swoole support for Mezzio",
     "license": "BSD-3-Clause",
     "keywords": [
