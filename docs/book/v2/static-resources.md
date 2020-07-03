@@ -349,13 +349,11 @@ In your module's ConfigProvider, you can add a configuration setting as follows:
     public function __invoke() : array
     {
         return [
-            'config' => [
-                'mezzio-swoole' => [
-                    'swoole-http-server' => [
-                        'static-files' => [
-                            'mapped-document-roots' => [
-                                'awseome-home' => __DIR__ . '/../../templates/home'
-                            ]
+            'mezzio-swoole' => [
+                'swoole-http-server' => [
+                    'static-files' => [
+                        'mapped-document-roots' => [
+                            'awseome-home' => __DIR__ . '/../../templates/home'
                         ]
                     ]
                 ]
@@ -364,7 +362,7 @@ In your module's ConfigProvider, you can add a configuration setting as follows:
     }
 ```
 
-Alterantively, in the factory of the module, or the handler you create assignment for `/awesome-home` to your modules's `templates/home` directory.  
+Alterantively, in the factory of the handler, you can create an assignment for `/awesome-home` to your modules's `templates/home` directory.  
 This approach could be useful if the directory of the assets isn't know until runtime.
 
 ```php
