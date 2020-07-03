@@ -70,9 +70,8 @@ class StaticResourceHandlerFactory
     public function __invoke(ContainerInterface $container) : StaticResourceHandler
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
-
         return new StaticResourceHandler(
-            $config['document-root'] ?? getcwd() . '/public',
+            $container->get(StaticResourceHandler\FileLocationRepositoryInterface::class),
             $this->configureMiddleware($config)
         );
     }

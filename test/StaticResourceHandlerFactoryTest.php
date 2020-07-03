@@ -12,6 +12,7 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandlerFactory;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
@@ -23,6 +24,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
     protected function setUp() : void
     {
         $this->container = $this->prophesize(ContainerInterface::class);
+        $this->mockFileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
     }
 
     public function assertHasMiddlewareOfType(string $type, array $middlewareList)
@@ -73,20 +75,25 @@ class StaticResourceHandlerFactoryTest extends TestCase
                                 'etag' => true,
                             ],
                         ],
+                        'gzip' => [
+                            'level' => 1
+                        ]
                     ],
                 ],
             ],
         ];
 
+        $fileLocRepo = $this->mockFileLocRepo->reveal();
         $this->container->get('config')->willReturn($config);
+        $this->container->get(FileLocationRepositoryInterface::class)->willReturn($fileLocRepo);
 
         $factory = new StaticResourceHandlerFactory();
 
         $handler = $factory($this->container->reveal());
 
         $this->assertAttributeSame(
-            $config['mezzio-swoole']['swoole-http-server']['static-files']['document-root'],
-            'docRoot',
+            $fileLocRepo,
+            'fileLocationRepo',
             $handler
         );
 
@@ -99,6 +106,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
         $this->assertHasMiddlewareOfType(StaticResourceHandler\OptionsMiddleware::class, $middleware);
         $this->assertHasMiddlewareOfType(StaticResourceHandler\HeadMiddleware::class, $middleware);
         $this->assertHasMiddlewareOfType(StaticResourceHandler\ClearStatCacheMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(StaticResourceHandler\GzipMiddleware::class, $middleware);
 
         $contentTypeFilter = $this->getMiddlewareByType(
             StaticResourceHandler\ContentTypeFilterMiddleware::class,
