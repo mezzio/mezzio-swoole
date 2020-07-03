@@ -50,7 +50,9 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
     ) : ?StaticResourceHandler\StaticResourceResponse {
-        $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
+        $filename = $this->fileLocationRepo->findFile(
+            $request->server['request_uri']
+        );
         if (! $filename) {
             return null;
         }
