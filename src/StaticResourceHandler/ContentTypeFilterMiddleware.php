@@ -12,7 +12,6 @@ namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Swoole\Http\Request;
 
-use function file_exists;
 use function pathinfo;
 
 use const PATHINFO_EXTENSION;
@@ -145,10 +144,6 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
     {
         $type = pathinfo($fileName, PATHINFO_EXTENSION);
         if (! isset($this->typeMap[$type])) {
-            return false;
-        }
-
-        if (! file_exists($fileName)) {
             return false;
         }
 
