@@ -77,6 +77,7 @@ class ConfigProvider
                 SwooleRequestHandlerRunner::class      => SwooleRequestHandlerRunnerFactory::class,
                 ServerRequestInterface::class          => ServerRequestSwooleFactory::class,
                 StaticResourceHandler::class           => StaticResourceHandlerFactory::class,
+                StaticMappedResourceHandler::class     => StaticMappedResourceHandlerFactory::class,
                 SwooleHttpServer::class                => HttpServerFactory::class,
                 Reloader::class                        => ReloaderFactory::class,
                 FileLocationRepository::class          => FileLocationRepositoryFactory::class,
