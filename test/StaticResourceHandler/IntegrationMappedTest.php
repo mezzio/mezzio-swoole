@@ -10,9 +10,18 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\StaticResourceHandler;
 
-use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticMappedResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -25,11 +34,15 @@ use function md5_file;
 use function sprintf;
 use function trim;
 
-class IntegrationTest extends TestCase
+/**
+ * Integraiton tests for StaticMappedResourceHandler
+ */
+class IntegrationMappedTest extends TestCase
 {
     protected function setUp() : void
     {
-        $this->docRoot = __DIR__ . '/../TestAsset';
+        $this->assetPath = __DIR__ . '/../TestAsset';
+        $this->mockFileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
     }
 
     public function unsupportedHttpMethods()
@@ -48,6 +61,7 @@ class IntegrationTest extends TestCase
      */
     public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method)
     {
+        $this->mockFileLocRepo->findFile('/image.png')->willReturn($this->assetPath . '/image.png');
         $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_method' => $method,
@@ -62,12 +76,15 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile()->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -75,6 +92,7 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest()
     {
+        $this->mockFileLocRepo->findFile('/image.png')->willReturn($this->assetPath . '/image.png');
         $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_method' => 'OPTIONS',
@@ -89,12 +107,15 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile()->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -102,7 +123,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -125,19 +148,22 @@ class IntegrationTest extends TestCase
         $response->end()->shouldNotBeCalled();
         $response->sendfile($file)->shouldBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
-                '/\.txt$/' => ['public', 'no-transform'],
-            ]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware(['/\.txt$/']),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([
+                    '/\.txt$/' => ['public', 'no-transform'],
+                ]),
+                new LastModifiedMiddleware(['/\.txt$/']),
+                new ETagMiddleware(['/\.txt$/']),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -145,7 +171,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -168,22 +196,25 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile($file)->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
-                '/\.txt$/' => ['public', 'no-transform'],
-            ]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware(
-                ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
-            ),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([
+                    '/\.txt$/' => ['public', 'no-transform'],
+                ]),
+                new LastModifiedMiddleware(['/\.txt$/']),
+                new ETagMiddleware(
+                    ['/\.txt$/'],
+                    ETagMiddleware::ETAG_VALIDATION_WEAK
+                ),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -191,7 +222,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -215,22 +248,25 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile($file)->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
-                '/\.txt$/' => ['public', 'no-transform'],
-            ]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware(
-                ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
-            ),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([
+                    '/\.txt$/' => ['public', 'no-transform'],
+                ]),
+                new LastModifiedMiddleware(['/\.txt$/']),
+                new ETagMiddleware(
+                    ['/\.txt$/'],
+                    ETagMiddleware::ETAG_VALIDATION_WEAK
+                ),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -238,7 +274,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -265,19 +303,22 @@ class IntegrationTest extends TestCase
         $response->end()->shouldNotBeCalled();
         $response->sendfile($file)->shouldBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
-                '/\.txt$/' => ['public', 'no-transform'],
-            ]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware([]),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([
+                    '/\.txt$/' => ['public', 'no-transform'],
+                ]),
+                new LastModifiedMiddleware([]),
+                new ETagMiddleware([]),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -285,7 +326,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -312,19 +355,22 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile($file)->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
-                '/\.txt$/' => ['public', 'no-transform'],
-            ]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware([]),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([
+                    '/\.txt$/' => ['public', 'no-transform'],
+                ]),
+                new LastModifiedMiddleware([]),
+                new ETagMiddleware([]),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -332,7 +378,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -358,20 +406,23 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile($file)->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware(
-                ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
-            ),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([]),
+                new LastModifiedMiddleware([]),
+                new ETagMiddleware(
+                    ['/\.txt$/'],
+                    ETagMiddleware::ETAG_VALIDATION_WEAK
+                )
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -379,7 +430,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -405,20 +458,23 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile($file)->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware(
-                ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
-            ),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([]),
+                new LastModifiedMiddleware([]),
+                new ETagMiddleware(
+                    ['/\.txt$/'],
+                    ETagMiddleware::ETAG_VALIDATION_WEAK
+                ),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -426,7 +482,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceCanGenerateStrongETagValue()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $etag = md5_file($file);
 
@@ -448,20 +506,23 @@ class IntegrationTest extends TestCase
         $response->end()->shouldNotBeCalled();
         $response->sendfile($file)->shouldBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware(
-                ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_STRONG
-            ),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([]),
+                new LastModifiedMiddleware([]),
+                new ETagMiddleware(
+                    ['/\.txt$/'],
+                    ETagMiddleware::ETAG_VALIDATION_STRONG
+                ),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -469,7 +530,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -494,17 +557,20 @@ class IntegrationTest extends TestCase
         $response->end()->shouldBeCalled();
         $response->sendfile($file)->shouldNotBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware([]),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([]),
+                new LastModifiedMiddleware(['/\.txt$/']),
+                new ETagMiddleware([]),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
@@ -512,7 +578,9 @@ class IntegrationTest extends TestCase
 
     public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince()
     {
-        $file = $this->docRoot . '/content.txt';
+        $file = $this->assetPath . '/content.txt';
+        $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
+
         $contentType = 'text/plain';
         $lastModified = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
@@ -539,17 +607,20 @@ class IntegrationTest extends TestCase
         $response->end()->shouldNotBeCalled();
         $response->sendfile($file)->shouldBeCalled();
 
-        $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware([]),
-        ]);
+        $handler = new StaticMappedResourceHandler(
+            $this->mockFileLocRepo->reveal(),
+            [
+                new ContentTypeFilterMiddleware(),
+                new MethodNotAllowedMiddleware(),
+                new OptionsMiddleware(),
+                new HeadMiddleware(),
+                new GzipMiddleware(0),
+                new ClearStatCacheMiddleware(3600),
+                new CacheControlMiddleware([]),
+                new LastModifiedMiddleware(['/\.txt$/']),
+                new ETagMiddleware([]),
+            ]
+        );
 
         $result = $handler->processStaticResource($request, $response->reveal());
         $this->assertInstanceOf(StaticResourceResponse::class, $result);

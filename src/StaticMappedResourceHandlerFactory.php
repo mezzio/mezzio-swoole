@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 use function getcwd;
 
 /**
- * Create and return a StaticResourceHandler
+ * Create and return a StaticMappedResourceHandler
  *
  * Uses the following configuration in order to configure and serve static
  * resources from the filesystem:
@@ -25,6 +25,9 @@ use function getcwd;
  *     'swoole-http-server' => [
  *         'static-files' => [
  *             'document-root' => '/path/to/static/files/to/serve', // usu getcwd() . /public/
+ *             'mapped-document-roots' => [
+ *                 'foo' => '/var/lib/where-foo-files-are'
+ *             ]
  *             'type-map' => [
  *                 // extension => mimetype pairs of types to cache.
  *                 // A default list exists if none is provided.
@@ -65,14 +68,13 @@ use function getcwd;
  * ],
  * </code>
  */
-class StaticResourceHandlerFactory
+class StaticMappedResourceHandlerFactory
 {
-    public function __invoke(ContainerInterface $container) : StaticResourceHandler
+    public function __invoke(ContainerInterface $container) : StaticMappedResourceHandler
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
-
-        return new StaticResourceHandler(
-            $config['document-root'] ?? getcwd() . '/public',
+        return new StaticMappedResourceHandler(
+            $container->get(StaticResourceHandler\FileLocationRepositoryInterface::class),
             $this->configureMiddleware($config)
         );
     }

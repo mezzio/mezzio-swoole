@@ -12,18 +12,13 @@ namespace Mezzio\Swoole;
 
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 
 use function is_callable;
-use function is_dir;
 use function sprintf;
 
-class StaticResourceHandler implements StaticResourceHandlerInterface
+class StaticMappedResourceHandler implements StaticResourceHandlerInterface
 {
-    /**
-     * @var string
-     */
-    private $docRoot;
-
     /**
      * Middleware to execute when serving a static resource.
      *
@@ -32,30 +27,33 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
     private $middleware;
 
     /**
+     * Middleware to execute when serving a static resource.
+     *
+     * @var StaticResourceHandler\FileLocationRepositoryInterface[]
+     */
+    private $fileLocationRepo;
+
+    /**
      * @throws Exception\InvalidStaticResourceMiddlewareException for any
      *     non-callable middleware encountered.
      */
     public function __construct(
-        string $docRoot,
+        FileLocationRepositoryInterface $fileLocationRepo,
         array $middleware = []
     ) {
-        if (! is_dir($docRoot)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'The document root "%s" does not exist; please check your configuration.',
-                $docRoot
-            ));
-        }
         $this->validateMiddleware($middleware);
-
-        $this->docRoot = $docRoot;
         $this->middleware = $middleware;
+        $this->fileLocationRepo = $fileLocationRepo;
     }
 
     public function processStaticResource(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
     ) : ?StaticResourceHandler\StaticResourceResponse {
-        $filename = $this->docRoot . $request->server['request_uri'];
+        $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
+        if (! $filename) {
+            return null;
+        }
 
         $middleware = new StaticResourceHandler\MiddlewareQueue($this->middleware);
         $staticResourceResponse = $middleware($request, $filename);
