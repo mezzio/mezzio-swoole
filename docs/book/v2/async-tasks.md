@@ -26,12 +26,14 @@ no concurrency and tasks will execute one after the other.
 
 ```php
 'mezzio-swoole' => [
+    'enable_coroutine' => true, //optional to enable coroutines and useful for tasks coroutines
     'swoole-http-server' => [
         'host' => '127.0.0.1',
         'port' => 8080,
         'options' => [
             'worker_num'      => 4, // The number of HTTP Server Workers
             'task_worker_num' => 4, // The number of Task Workers
+            'task_enable_coroutine' => true, // optional to turn on task coroutine support 
         ],
     ],
 ];
@@ -77,6 +79,25 @@ where:
 - `$dataForWorker` contains the value passed to the `$server->task()` method
   when initially triggering the task. This value can be any PHP value, with the
   exception of a `resource`.
+
+  If coroutine support is enabled for tasks, the signature for the `task` event handler is:
+
+```php
+function (
+    \Swoole\Http\Server $server,
+    \Swoole\Server\Task $task
+) : void
+```
+where:
+
+- `$server` is the main HTTP server process
+- `$task->id` is a number that increments each time the server triggers a new task.
+- `$task->worker_id` is an integer that defines the worker process that is
+  executing the workload.
+- `$task->data` contains the value passed to the `$server->task()` method
+  when initially triggering the task. This value can be any PHP value, with the
+  exception of a `resource`.
+- `$task->flag` is the type of task
 
 To register the handler with the server, you must call it's `on()` method,
 **before** the server has been started:
