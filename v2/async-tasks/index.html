@@ -386,12 +386,14 @@ the number of concurrent tasks that can be executed at once. Tasks are queued in
 the order that they triggered, meaning that a <code>task_worker_num</code> of 1 will offer
 no concurrency and tasks will execute one after the other.</p>
 <pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
+    'enable_coroutine' =&gt; true, //optional to enable coroutines and useful for tasks coroutines
     'swoole-http-server' =&gt; [
         'host' =&gt; '127.0.0.1',
         'port' =&gt; 8080,
         'options' =&gt; [
             'worker_num'      =&gt; 4, // The number of HTTP Server Workers
             'task_worker_num' =&gt; 4, // The number of Task Workers
+            'task_enable_coroutine' =&gt; true, // optional to turn on task coroutine support 
         ],
     ],
 ];</code></pre>
@@ -430,6 +432,22 @@ where:</p>
 <li><code>$dataForWorker</code> contains the value passed to the <code>$server-&gt;task()</code> method
   when initially triggering the task. This value can be any PHP value, with the
   exception of a <code>resource</code>.</li>
+</ul>
+<p>If coroutine support is enabled for tasks, the signature for the <code>task</code> event handler is:</p>
+<p><pre class="highlight"><code class="language-php">function (
+    \Swoole\Http\Server $server,
+    \Swoole\Server\Task $task
+) : void</code></pre>
+where:</p>
+<ul>
+<li><code>$server</code> is the main HTTP server process</li>
+<li><code>$task-&gt;id</code> is a number that increments each time the server triggers a new task.</li>
+<li><code>$task-&gt;worker_id</code> is an integer that defines the worker process that is
+  executing the workload.</li>
+<li><code>$task-&gt;data</code> contains the value passed to the <code>$server-&gt;task()</code> method
+  when initially triggering the task. This value can be any PHP value, with the
+  exception of a <code>resource</code>.</li>
+<li><code>$task-&gt;flag</code> is the type of task</li>
 </ul>
 <p>To register the handler with the server, you must call it's <code>on()</code> method,
 <strong>before</strong> the server has been started:</p>
