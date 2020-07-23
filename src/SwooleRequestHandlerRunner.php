@@ -12,7 +12,10 @@ namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Event\OnWorkerStartEvent;
+use Mezzio\Swoole\Event\OnWorkerErrorOrStopEvent;
 use Mezzio\Swoole\HotCodeReload\Reloader;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -106,6 +109,11 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /** @var null|Reloader */
     private $hotCodeReloader;
 
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
     public function __construct(
         RequestHandlerInterface $handler,
         callable $serverRequestFactory,
@@ -115,7 +123,8 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         ?StaticResourceHandlerInterface $staticResourceHandler = null,
         ?Log\AccessLogInterface $logger = null,
         string $processName = self::DEFAULT_PROCESS_NAME,
-        ?Reloader $hotCodeReloader = null
+        ?Reloader $hotCodeReloader = null,
+        ?EventDispatcherInterface $dispatcher
     ) {
         $this->handler = $handler;
 
@@ -143,6 +152,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         $this->processName           = $processName;
         $this->hotCodeReloader       = $hotCodeReloader;
         $this->cwd                   = getcwd();
+        $this->dispatcher            = $dispatcher;
     }
 
     /**
@@ -156,6 +166,8 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     {
         $this->httpServer->on('start', [$this, 'onStart']);
         $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
+        $this->httpServer->on('workerstop', [$this, 'onWorkerStopOrError']);
+        $this->httpServer->on('workererror', [$this, 'onWorkerStopOrError']);
         $this->httpServer->on('request', [$this, 'onRequest']);
         $this->httpServer->on('shutdown', [$this, 'onShutdown']);
         $this->httpServer->start();
@@ -205,6 +217,21 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
             'cwd' => getcwd(),
             'pid' => $workerId,
         ]);
+
+        if ($this->dispatcher) {
+            $this->dispatcher->dispatch(new OnWorkerStartEvent($server, $workerId));
+        }
+    }
+
+    /**
+     * @param SwooleHttpServer $server
+     * @param $workerId
+     *
+     * Handle a workerstop and workererror event for swoole HTTP server worker process
+     */
+    public function onWorkerStopOrError(SwooleHttpServer $server, $workerId): void
+    {
+        $this->dispatcher->dispatch(new OnWorkerErrorOrStopEvent($server, $workerId));
     }
 
     /**

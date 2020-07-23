@@ -8,6 +8,7 @@
         "components",
         "swoole",
         "psr-7",
+        "psr-14",
         "psr-15",
         "psr-17"
     ],
@@ -38,6 +39,7 @@
         "psr/http-message-implementation": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/log": "^1.0",
+        "psr/event-dispatcher": "^1.0",
         "symfony/console": "^4.1 || ^5.0"
     },
     "require-dev": {
