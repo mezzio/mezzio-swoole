@@ -14,6 +14,7 @@ use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
 use Mezzio\Swoole\Event\SwooleWorkerDispatcherInterface;
 use Mezzio\Swoole\Event\WorkerListenerProvider;
+use Mezzio\Swoole\Event\WorkerListenerProviderFactory;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
@@ -85,6 +86,7 @@ class ConfigProvider
                 SwooleHttpServer::class                => HttpServerFactory::class,
                 Reloader::class                        => ReloaderFactory::class,
                 FileLocationRepository::class          => FileLocationRepositoryFactory::class,
+                WorkerListenerProvider::class          => WorkerListenerProviderFactory::class,
             ],
             'invokables' => [
                 InotifyFileWatcher::class => InotifyFileWatcher::class,
