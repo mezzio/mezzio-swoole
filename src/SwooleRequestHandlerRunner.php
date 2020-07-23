@@ -14,6 +14,8 @@ use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Swoole\Event\OnWorkerStartEvent;
 use Mezzio\Swoole\Event\OnWorkerErrorOrStopEvent;
+use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
+use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -124,7 +126,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         ?Log\AccessLogInterface $logger = null,
         string $processName = self::DEFAULT_PROCESS_NAME,
         ?Reloader $hotCodeReloader = null,
-        ?EventDispatcherInterface $dispatcher
+        ?WorkerListenerProviderInterface $workerListenerProvider
     ) {
         $this->handler = $handler;
 
@@ -152,7 +154,10 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         $this->processName           = $processName;
         $this->hotCodeReloader       = $hotCodeReloader;
         $this->cwd                   = getcwd();
-        $this->dispatcher            = $dispatcher;
+
+        if ($workerListenerProvider) {
+            $this->dispatcher = new SwooleWorkerDispatcher($workerListenerProvider);
+        }
     }
 
     /**

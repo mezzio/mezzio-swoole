@@ -6,7 +6,7 @@ namespace Mezzio\Swoole\Event;
 
 use Psr\EventDispatcher\ListenerProviderInterface;
 
-class SwooleWorkerListenerProvider implements ListenerProviderInterface
+class WorkerListenerProvider implements WorkerListenerProviderInterface
 {
     private $listeners = [];
 

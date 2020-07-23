@@ -13,6 +13,7 @@ namespace Mezzio\Swoole;
 use Mezzio\ApplicationPipeline;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
 use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
+use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -42,7 +43,7 @@ class SwooleRequestHandlerRunnerFactory
             $logger,
             $swooleHttpServerConfig['process-name'] ?? SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME,
             $this->retrieveHotCodeReloader($container, $mezzioSwooleConfig),
-            $container->get(SwooleWorkerDispatcher::class)
+            $container->get(WorkerListenerProviderInterface::class)
         );
     }
 
