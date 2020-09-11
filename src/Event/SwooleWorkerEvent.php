@@ -1,23 +1,22 @@
 <?php
 
-
 namespace Mezzio\Swoole\Event;
 
 use Swoole\Http\Server as SwooleHttpServer;
 
-class OnWorkerErrorOrStopEvent
+abstract class SwooleWorkerEvent
 {
     /**
      * Swoole HTTP Server Instance
      *
      * @var SwooleHttpServer
      */
-    private $httpServer;
+    protected $httpServer;
 
     /**
      * @var integer
      */
-    private $workerId;
+    protected $workerId;
 
     /**
      * OnWorkerStartEvent constructor.
@@ -45,5 +44,4 @@ class OnWorkerErrorOrStopEvent
     {
         return $this->workerId;
     }
-
 }
