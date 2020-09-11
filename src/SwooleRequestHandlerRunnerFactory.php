@@ -12,7 +12,6 @@ namespace Mezzio\Swoole;
 
 use Mezzio\ApplicationPipeline;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
-use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Container\ContainerInterface;

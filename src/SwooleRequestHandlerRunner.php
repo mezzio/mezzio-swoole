@@ -127,7 +127,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         ?Log\AccessLogInterface $logger = null,
         string $processName = self::DEFAULT_PROCESS_NAME,
         ?Reloader $hotCodeReloader = null,
-        ?WorkerListenerProviderInterface $workerListenerProvider
+        ?WorkerListenerProviderInterface $workerListenerProvider = null
     ) {
         $this->handler = $handler;
 
@@ -237,7 +237,9 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     public function onWorkerStop(SwooleHttpServer $server, $workerId): void
     {
-        $this->dispatcher->dispatch(new OnWorkerStopEvent($server, $workerId));
+        if ($this->dispatcher) {
+            $this->dispatcher->dispatch(new OnWorkerStopEvent($server, $workerId));
+        }
     }
 
     /**
@@ -248,7 +250,9 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     public function onWorkerError(SwooleHttpServer $server, $workerId): void
     {
-        $this->dispatcher->dispatch(new OnWorkerErrorEvent($server, $workerId));
+        if ($this->dispatcher) {
+            $this->dispatcher->dispatch(new OnWorkerErrorEvent($server, $workerId));
+        }
     }
 
     /**
