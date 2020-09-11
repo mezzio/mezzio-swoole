@@ -114,10 +114,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         // Listeners are attached to each of:
         // - start
         // - workerstart
+        // - workerstop
+        // - workererror
         // - request
         // - shutdown
         $this->httpServer
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(6))
             ->method('on');
 
         $requestHandler->run();
