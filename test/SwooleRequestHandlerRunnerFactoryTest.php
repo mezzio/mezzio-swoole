@@ -12,6 +12,8 @@ namespace MezzioTest\Swoole;
 
 use Laminas\Stdlib\ArrayUtils;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
+use Mezzio\Swoole\Event\WorkerListenerProvider;
+use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
@@ -80,6 +82,12 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
      */
     private $hotCodeReloader;
 
+    /**
+     * @var WorkerListenerProviderInterface|MockObject
+     * @psalm-var MockObject&WorkerListenerProviderInterface
+     */
+    private $workerListenerProvider;
+
     protected function setUp(): void
     {
         $this->applicationPipeline = $this->createMock(RequestHandlerInterface::class);
@@ -89,9 +97,10 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->serverRequestError = $this->createMock(ServerRequestErrorResponseGenerator::class);
         $this->pidManager         = $this->createMock(PidManager::class);
 
-        $this->staticResourceHandler = $this->createMock(StaticResourceHandlerInterface::class);
-        $this->logger                = $this->createMock(AccessLogInterface::class);
-        $this->hotCodeReloader       = $this->createMock(Reloader::class);
+        $this->staticResourceHandler  = $this->createMock(StaticResourceHandlerInterface::class);
+        $this->logger                 = $this->createMock(AccessLogInterface::class);
+        $this->hotCodeReloader        = $this->createMock(Reloader::class);
+        $this->workerListenerProvider = $this->createMock(WorkerListenerProviderInterface::class);
 
         $this->containerMap = [
             'has' => [],
@@ -102,9 +111,10 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
                 ServerRequestInterface::class              => function (): ServerRequestInterface {
                     return $this->serverRequest;
                 },
-                ServerRequestErrorResponseGenerator::class => function (): void {
-                    $this->serverRequestError;
+                ServerRequestErrorResponseGenerator::class => function (): ServerRequestErrorResponseGenerator {
+                    return $this->serverRequestError;
                 },
+                WorkerListenerProviderInterface::class     => $this->workerListenerProvider,
             ],
         ];
     }
@@ -190,12 +200,25 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         ]);
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-param array<array-key, array<array-key, mixed>> $baseConfig
+     * @psalm-return array<array-key, array<array-key, mixed>>
+     */
+    public function configureAbsentWorkerListenerProvider(array $baseConfig = []): array
+    {
+        return ArrayUtils::merge($baseConfig, [
+            'has' => [WorkerListenerProviderInterface::class => false],
+        ]);
+    }
+
     public function testInvocationWithoutOptionalServicesConfiguresInstanceWithDefaults(): void
     {
         $containerMap = $this->configureAbsentStaticResourceHandler($this->containerMap);
         $containerMap = $this->configureAbsentLoggerService($containerMap);
         $containerMap = $this->configureAbsentConfiguration($containerMap);
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
+        $containerMap = $this->configureAbsentWorkerListenerProvider($containerMap);
         $factory      = new SwooleRequestHandlerRunnerFactory();
         $runner       = $factory($this->mockContainer($containerMap));
         $this->assertAttributeEmpty('staticResourceHandler', $runner);
@@ -208,6 +231,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $containerMap = $this->configureAbsentStaticResourceHandler($containerMap);
         $containerMap = $this->configureAbsentConfiguration($containerMap);
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
+        $containerMap = $this->configureAbsentWorkerListenerProvider($containerMap);
 
         $containerMap['has'][AccessLogInterface::class] = true;
         $containerMap['get'][AccessLogInterface::class] = $this->logger;
@@ -221,6 +245,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
     {
         $containerMap                                               = $this->configureAbsentLoggerService($this->containerMap);
         $containerMap                                               = $this->configureAbsentHotCodeReloader($containerMap);
+        $containerMap                                               = $this->configureAbsentWorkerListenerProvider($containerMap);
         $containerMap['has'][StaticResourceHandlerInterface::class] = true;
         $containerMap['get'][StaticResourceHandlerInterface::class] = $this->staticResourceHandler;
         $containerMap['has']['config']                              = true;
@@ -245,6 +270,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
     {
         $containerMap = $this->configureAbsentLoggerService($this->containerMap);
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
+        $containerMap = $this->configureAbsentWorkerListenerProvider($containerMap);
 
         $containerMap['has'][StaticResourceHandlerInterface::class] = true;
         $containerMap['has']['config']                              = true;
@@ -276,6 +302,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
     {
         $containerMap = $this->configureAbsentLoggerService($this->containerMap);
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
+        $containerMap = $this->configureAbsentWorkerListenerProvider($containerMap);
 
         $containerMap['has'][StaticResourceHandlerInterface::class] = false;
         $containerMap['has']['config']                              = true;
@@ -296,6 +323,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
     public function testFactoryWillUseConfiguredHotCodeReloaderWhenPresent(): void
     {
         $containerMap                         = $this->configureAbsentLoggerService($this->containerMap);
+        $containerMap                         = $this->configureAbsentWorkerListenerProvider($containerMap);
         $containerMap['has'][Reloader::class] = true;
         $containerMap['has']['config']        = true;
         $containerMap['get'][Reloader::class] = $this->hotCodeReloader;
