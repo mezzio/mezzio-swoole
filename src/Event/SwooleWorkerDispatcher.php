@@ -3,7 +3,6 @@
 
 namespace Mezzio\Swoole\Event;
 
-
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;

@@ -74,7 +74,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 
         $this->container
             ->get(WorkerListenerProviderInterface::class)
-            ->willReturn(function() {
+            ->willReturn(function () {
                 return $this->workerListenerProvider->reveal();
             });
     }

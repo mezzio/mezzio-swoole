@@ -3,7 +3,6 @@
 
 namespace Mezzio\Swoole\Event;
 
-
 use Psr\EventDispatcher\ListenerProviderInterface;
 
 class WorkerListenerProvider implements WorkerListenerProviderInterface
