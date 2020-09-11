@@ -12,8 +12,9 @@ namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Event\OnWorkerErrorEvent;
 use Mezzio\Swoole\Event\OnWorkerStartEvent;
-use Mezzio\Swoole\Event\OnWorkerErrorOrStopEvent;
+use Mezzio\Swoole\Event\OnWorkerStopEvent;
 use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
@@ -171,8 +172,8 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     {
         $this->httpServer->on('start', [$this, 'onStart']);
         $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
-        $this->httpServer->on('workerstop', [$this, 'onWorkerStopOrError']);
-        $this->httpServer->on('workererror', [$this, 'onWorkerStopOrError']);
+        $this->httpServer->on('workerstop', [$this, 'onWorkerStop']);
+        $this->httpServer->on('workererror', [$this, 'onWorkerError']);
         $this->httpServer->on('request', [$this, 'onRequest']);
         $this->httpServer->on('shutdown', [$this, 'onShutdown']);
         $this->httpServer->start();
@@ -232,11 +233,22 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      * @param SwooleHttpServer $server
      * @param $workerId
      *
-     * Handle a workerstop and workererror event for swoole HTTP server worker process
+     * Handle a workerstop event for swoole HTTP server worker process
      */
-    public function onWorkerStopOrError(SwooleHttpServer $server, $workerId): void
+    public function onWorkerStop(SwooleHttpServer $server, $workerId): void
     {
-        $this->dispatcher->dispatch(new OnWorkerErrorOrStopEvent($server, $workerId));
+        $this->dispatcher->dispatch(new OnWorkerStopEvent($server, $workerId));
+    }
+
+    /**
+     * @param SwooleHttpServer $server
+     * @param $workerId
+     *
+     * Handle a workererror event for swoole HTTP server worker process
+     */
+    public function onWorkerError(SwooleHttpServer $server, $workerId): void
+    {
+        $this->dispatcher->dispatch(new OnWorkerErrorEvent($server, $workerId));
     }
 
     /**
