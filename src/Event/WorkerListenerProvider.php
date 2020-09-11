@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Mezzio\Swoole\Event;
 
-
-use Psr\EventDispatcher\ListenerProviderInterface;
+use function in_array;
 
 class WorkerListenerProvider implements WorkerListenerProviderInterface
 {
@@ -22,9 +20,10 @@ class WorkerListenerProvider implements WorkerListenerProviderInterface
         }
     }
 
-    public function addListener(string $eventType, callable $listener) : void
+    public function addListener(string $eventType, callable $listener): void
     {
-        if (isset($this->listeners[$eventType])
+        if (
+            isset($this->listeners[$eventType])
             && in_array($listener, $this->listeners[$eventType], true)
         ) {
             return;

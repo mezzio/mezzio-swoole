@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Mezzio\Swoole\Event;
-
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
@@ -18,7 +16,7 @@ class SwooleWorkerDispatcher implements EventDispatcherInterface
         $this->listenerProvider = $listenerProvider;
     }
 
-    public function dispatch(object $event)
+    public function dispatch(object $event): object
     {
         $stoppable = $event instanceof StoppableEventInterface;
 

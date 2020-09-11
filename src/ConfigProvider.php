@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
-use Mezzio\Swoole\Event\SwooleWorkerDispatcherInterface;
 use Mezzio\Swoole\Event\WorkerListenerProvider;
 use Mezzio\Swoole\Event\WorkerListenerProviderFactory;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
@@ -96,7 +94,7 @@ class ConfigProvider
                 StaticResourceHandlerInterface::class  => StaticResourceHandler::class,
                 FileWatcherInterface::class            => InotifyFileWatcher::class,
                 FileLocationRepositoryInterface::class => FileLocationRepository::class,
-                WorkerListenerProviderInterface::class  => WorkerListenerProvider::class,
+                WorkerListenerProviderInterface::class => WorkerListenerProvider::class,
             ],
             'delegators' => [
                 'Mezzio\WhoopsPageHandler' => [

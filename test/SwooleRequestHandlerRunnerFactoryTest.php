@@ -12,7 +12,6 @@ namespace MezzioTest\Swoole;
 
 use Laminas\Stdlib\ArrayUtils;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
-use Mezzio\Swoole\Event\WorkerListenerProvider;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\Log\AccessLogInterface;
