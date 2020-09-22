@@ -319,6 +319,10 @@
                         <a href="#alternative-static-resource-handlers" class="toc__link nav-link">Alternative static resource handlers</a>
                     </li>
                 
+                    <li class="toc__entry">
+                        <a href="#example-alternate-static-resource-handler-staticmappedresourcehandler" class="toc__link nav-link">Example alternate static resource handler: StaticMappedResourceHandler</a>
+                    </li>
+                
             </ul>
         </div>
     
@@ -376,7 +380,7 @@ that performs two duties:</p>
 <li>If a static resource is matched, it serves that.</li>
 <li>Otherwise, it passes off handling to the composed application pipeline.</li>
 </ul>
-<p>Internally, the <code>SwooleRequestHandlerRunner</code> composes another class, a 
+<p>Internally, the <code>SwooleRequestHandlerRunner</code> composes another class, a
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> instance. This instance
 is passed the Swoole request and response, and returns a value indicating
 whether or not it was able to identify and serve a matching static resource.</p>
@@ -797,6 +801,97 @@ interface StaticResourceHandlerInterface
 <p>Once implemented, map the service
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to a factory that
 returns your custom implementation within your <code>dependencies</code> configuration.</p>
+<h2 id="example-alternate-static-resource-handler-staticmappedresourcehandler">Example alternate static resource handler: StaticMappedResourceHandler</h2>
+<ul>
+<li>Since 2.7.0</li>
+</ul>
+<p>The default static resource handler, <code>Mezzio\Swoole\StaticResourceHandler</code>, requires all files to be in the specified document root directory (by default, "public") when instantiating the handler.
+If you are using modules generating templates with associated file assets (JavaScript, CSS, etc.), those files must be copied to the "public" directory if you wish to allow access to them.
+This can be done via scripting, but is one more step to consider when testing or deploying a site.
+Ideally, a module should be able to contain both its template and any dependencies that template relies upon.</p>
+<p>For example, assume you have a module, AwesomeModule, with a handler called "HomeHandler", which renders the 'home' template.
+You designate the prefix, <code>/awesome-home</code> for rendering the assets.
+The structure of your module files looks like this:</p>
+<pre class="highlight"><code class="language-text">AwesomeModule
+├── src
+|   ├── Handler
+|   |   ├── HomeHandler.php
+|   |   ├── HomeHandlerFactory.php
+|   ├── ConfigProvider.php
+├── templates
+│   ├── home
+|   |   ├── home.html
+|   |   ├── style.css
+│   ├── layouts</code></pre>
+
+<p>In your <code>home.html</code> template, you can refer to the <code>style.css</code> file, using <code>/awesome-home</code> as follows:</p>
+<pre class="highlight"><code class="language-html">&lt;link href="/awesome-home/style.css" rel="stylesheet" type="text/css"&gt;</code></pre>
+
+<p>Currently, however, this will cause errors, as the stylesheet will not be available under the <code>public/</code> tree of the application.
+You would need to copy or symlink the files to the appropriate location to make that work.</p>
+<p>The <code>StaticMappedResourceHandler</code> solves this problem.</p>
+<h3>Using StaticMappedResourceHandler</h3>
+<p>To use <code>Mezzio\Swoole\StaticMappedResourceHandler</code> from an application or module:</p>
+<ol>
+<li>Define what your URI prefix will be (e.g., <code>/awesome-home</code>).</li>
+<li>Update references to linkable resources in your templates to use the desired prefix (e.g., <code>&lt;script src='/awesome-home/style.css'&gt;&lt;/script&gt;</code>).</li>
+<li>In your application/module configuration (or <code>ConfigProvider</code>), add the relationship between your prefix (<code>awesome-home</code>) and any directories containing the assets.</li>
+<li>In the application's configuration, set the alias of <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to use <code>Mezzio\Swoole\StaticMappedResourceHandler</code>.</li>
+</ol>
+<p>For step #3, in your module's ConfigProvider, you can add a configuration setting as follows:</p>
+<pre class="highlight"><code class="language-php">    public function __invoke() : array
+    {
+        return [
+            'config' =&gt; [
+                'mezzio-swoole' =&gt; [
+                    'swoole-http-server' =&gt; [
+                        'static-files' =&gt; [
+                            'mapped-document-roots' =&gt; [
+                                'awesome-home' =&gt; __DIR__ . '/../../templates/home'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }</code></pre>
+
+<p>Note that prefixes are always the first part after the host, and specifying the initial slash is optional (i.e. <code>awsesome-home</code> and <code>/awesome-home</code> both work and represent the same thing).</p>
+<p>In step #4, in your application's configuration (<code>autoload/dependencies.global.php</code> is a good place), override the default implementation of <code>StaticResourceHandlerInterface</code>:</p>
+<pre class="highlight"><code class="language-php">return [
+    'dependencies' =&gt; [
+        'aliases' =&gt; [
+            Mezzio\Swoole\StaticResourceHandlerInterface::class =&gt; Mezzio\Swoole\StaticMappedResourceHandler::class
+            // Fully\Qualified\ClassOrInterfaceName::class =&gt; Fully\Qualified\ClassName::class,
+        ],
+        // etc.</code></pre>
+
+<p>For step #3, an alternative to storing a configuration is dynamically associating <code>/awesome-home</code> to a directory in code (probably within a factory).
+This approach could be useful if the directory of the assets isn't know until runtime.</p>
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
+use Mezzio\Template\TemplateRendererInterface;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+
+class AwesomeHomeHandlerFactory
+{
+    public function __invoke(ContainerInterface $container) : DocumentationViewHandler
+    {
+        // Establish location for the home template assets
+        $repo = $container-&gt;get(FileLocationRepositoryInterface::class);
+        $repo-&gt;addMappedDocumentRoot(
+            'awesome-home',
+            realpath(__DIR__ . '/../../templates/home')
+        );
+
+        return new AwesomeHomeHandler(
+            $container-&gt;get(TemplateRendererInterface::class)
+        );
+    }
+}</code></pre>
+
+<p>When the template renders, the client will request <code>/awesome-home/style.css</code>, which the <code>StaticMappedResourceHandler</code> will now retrieve from the <code>templates/home/</code> folder of the module.</p>
+<p><code>Mezzio\Swoole\StaticMappedResourceHandler</code> uses the <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepository</code> (which implements <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface</code>) to maintain an association of URI prefixes with file directories.
+If you require using a file location that requires authentication, decompression, etc. you can override the default functionality by creating your own implementation of <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface</code>.</p>
 
 
 
