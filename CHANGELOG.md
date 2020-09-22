@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#22](https://github.com/mezzio/mezzio-swoole/pull/22) adds a new `StaticMappedResourceHandler`, allowing developers to specify resources outside the `public/` tree that can be served as static assets; in particular, module authors could utilize this to deliver assets within their module directory tree. See the [StaticMappedResourceHandler documentation](https://docs.mezzio.dev/mezzio-swoole/v2/static-resources/#example-alternate-static-resource-handler-staticmappedresourcehandler) for more details.
 
 ### Changed
 
