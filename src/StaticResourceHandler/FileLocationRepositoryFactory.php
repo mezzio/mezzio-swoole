@@ -11,8 +11,13 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Psr\Container\ContainerInterface;
-use InvalidArgumentException;
+
+use function array_merge;
+use function count;
 use function getcwd;
+use function is_array;
+use function strlen;
+use function strval;
 
 class FileLocationRepositoryFactory
 {
@@ -21,21 +26,19 @@ class FileLocationRepositoryFactory
      */
     public function __invoke(ContainerInterface $container) : FileLocationRepository
     {
+        $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
+
         // Build list of document roots mapped to the default document root directory
-        $configDocRoots = $container->get('config')
-            ['mezzio-swoole']['swoole-http-server']['static-files']['document-root']
-            ?? getcwd() . '/public';
-        $isArray = \is_array($configDocRoots);
+        $configDocRoots = $config['document-root'] ?? getcwd() . '/public';
+        $isArray        = is_array($configDocRoots);
 
         $mappedDocRoots = ($isArray && (count($configDocRoots) > 0))
-            || ((! $isArray) && strlen(strval($configDocRoots)) > 0)
+            || (! $isArray && strlen(strval($configDocRoots)) > 0)
             ? ['/' => $configDocRoots]
             : [];
 
         // Add any configured mapped document roots
-        $configMappedDocRoots = $container->get('config')
-            ['mezzio-swoole']['swoole-http-server']['static-files']['mapped-document-roots']
-            ?? [];
+        $configMappedDocRoots = $config['mapped-document-roots'] ?? [];
 
         if (count($configMappedDocRoots) > 0) {
             $mappedDocRoots = array_merge($mappedDocRoots, $configMappedDocRoots);
