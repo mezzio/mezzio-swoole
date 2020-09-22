@@ -14,6 +14,7 @@ use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
 use Mezzio\Swoole\Command\StartCommand;
 use Mezzio\Swoole\PidManager;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ProphecyInterface;
@@ -34,6 +35,7 @@ use const PATH_SEPARATOR;
 
 class StartCommandTest extends TestCase
 {
+    use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
     protected function setUp(): void

@@ -14,11 +14,14 @@ use Laminas\ServiceManager\ServiceManager;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
 use Mezzio\Swoole\Log\StdoutLogger;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class ReloaderFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     /** @var ServiceManager */
     private $container;
 

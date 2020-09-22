@@ -29,6 +29,8 @@ use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     protected function setUp(): void
     {
         $this->applicationPipeline = $this->prophesize(ApplicationPipeline::class);

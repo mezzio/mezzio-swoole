@@ -15,12 +15,14 @@ use Mezzio\Swoole\Log\AccessLogFormatter;
 use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
 use Mezzio\Swoole\Log\StdoutLogger;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface as LegacyAccessLogFormatterInterface;
 
 class AccessLogFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
     use LoggerFactoryHelperTrait;
 
     public function testCreatesDecoratorWithStdoutLoggerAndAccessLogFormatterWhenNoConfigLoggerOrFormatterPresent()

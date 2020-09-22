@@ -14,6 +14,7 @@ use Mezzio\Swoole\Log\AccessLogDataMap;
 use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
@@ -24,6 +25,8 @@ use Swoole\Http\Request;
 
 class Psr3AccessLogDecoratorTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     protected function setUp(): void
     {
         $this->psr3Logger     = $this->prophesize(LoggerInterface::class);
@@ -92,9 +95,9 @@ class Psr3AccessLogDecoratorTest extends TestCase
             ->format(
                 Argument::that(static function ($mapper) use ($request, $response) {
                     TestCase::assertInstanceOf(AccessLogDataMap::class, $mapper);
-                    TestCase::assertAttributeSame($request, 'request', $mapper);
-                    TestCase::assertAttributeSame($response->reveal(), 'staticResource', $mapper);
-                    TestCase::assertAttributeSame(false, 'useHostnameLookups', $mapper);
+                    Psr3AccessLogDecoratorTest::assertAttributeSame($request, 'request', $mapper);
+                    Psr3AccessLogDecoratorTest::assertAttributeSame($response->reveal(), 'staticResource', $mapper);
+                    Psr3AccessLogDecoratorTest::assertAttributeSame(false, 'useHostnameLookups', $mapper);
                     return true;
                 })
             )
@@ -127,9 +130,9 @@ class Psr3AccessLogDecoratorTest extends TestCase
             ->format(
                 Argument::that(static function ($mapper) use ($request, $response) {
                     TestCase::assertInstanceOf(AccessLogDataMap::class, $mapper);
-                    TestCase::assertAttributeSame($request, 'request', $mapper);
-                    TestCase::assertAttributeSame($response->reveal(), 'psrResponse', $mapper);
-                    TestCase::assertAttributeSame(false, 'useHostnameLookups', $mapper);
+                    Psr3AccessLogDecoratorTest::assertAttributeSame($request, 'request', $mapper);
+                    Psr3AccessLogDecoratorTest::assertAttributeSame($response->reveal(), 'psrResponse', $mapper);
+                    Psr3AccessLogDecoratorTest::assertAttributeSame(false, 'useHostnameLookups', $mapper);
                     return true;
                 })
             )

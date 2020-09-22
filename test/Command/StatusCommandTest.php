@@ -12,6 +12,7 @@ namespace MezzioTest\Swoole\Command;
 
 use Mezzio\Swoole\Command\StatusCommand;
 use Mezzio\Swoole\PidManager;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
@@ -22,6 +23,7 @@ use function getmypid;
 
 class StatusCommandTest extends TestCase
 {
+    use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
     protected function setUp(): void

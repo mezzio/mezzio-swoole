@@ -30,6 +30,8 @@ use function sprintf;
 
 class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     protected function setUp(): void
     {
         $this->container       = $this->prophesize(ContainerInterface::class);

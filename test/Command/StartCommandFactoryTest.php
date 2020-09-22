@@ -12,11 +12,14 @@ namespace MezzioTest\Swoole\Command;
 
 use Mezzio\Swoole\Command\StartCommand;
 use Mezzio\Swoole\Command\StartCommandFactory;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 class StartCommandFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     public function testFactoryProducesCommand()
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();

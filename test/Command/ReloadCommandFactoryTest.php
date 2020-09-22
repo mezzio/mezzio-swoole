@@ -12,6 +12,7 @@ namespace MezzioTest\Swoole\Command;
 
 use Mezzio\Swoole\Command\ReloadCommand;
 use Mezzio\Swoole\Command\ReloadCommandFactory;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -20,6 +21,8 @@ use const SWOOLE_PROCESS;
 
 class ReloadCommandFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     public function testFactoryUsesDefaultsToCreateCommandWhenNoConfigPresent()
     {
         $container = $this->prophesize(ContainerInterface::class);

@@ -13,12 +13,14 @@ namespace MezzioTest\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
 class ContentTypeFilterMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use AttributeAssertionTrait;
 
     protected function setUp(): void
     {

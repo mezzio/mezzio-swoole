@@ -21,6 +21,8 @@ use function sprintf;
 
 class StaticResourceHandlerFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     protected function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);

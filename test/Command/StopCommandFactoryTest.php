@@ -13,11 +13,14 @@ namespace MezzioTest\Swoole\Command;
 use Mezzio\Swoole\Command\StopCommand;
 use Mezzio\Swoole\Command\StopCommandFactory;
 use Mezzio\Swoole\PidManager;
+use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 class StopCommandFactoryTest extends TestCase
 {
+    use AttributeAssertionTrait;
+
     public function testFactoryProducesCommand()
     {
         $pidManager = $this->prophesize(PidManager::class)->reveal();
