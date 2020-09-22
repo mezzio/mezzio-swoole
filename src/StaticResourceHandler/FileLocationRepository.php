@@ -12,6 +12,17 @@ namespace Mezzio\Swoole\StaticResourceHandler;
 
 use InvalidArgumentException;
 
+use function array_key_exists;
+use function file_exists;
+use function is_array;
+use function is_dir;
+use function rtrim;
+use function sprintf;
+use function stripos;
+use function strlen;
+use function substr;
+use function trim;
+
 class FileLocationRepository implements FileLocationRepositoryInterface
 {
     /**
@@ -27,12 +38,14 @@ class FileLocationRepository implements FileLocationRepositoryInterface
     {
         // Set up any mapped document roots, validating prefixes and directories
         foreach ($mappedDocRoots as $prefix => $directory) {
-            if (is_array($directory)) {
-                foreach ($directory as $d) {
-                    $this->addMappedDocumentRoot($prefix, $d);
-                }
-            } else {
+            if (! is_array($directory)) {
                 $this->addMappedDocumentRoot($prefix, $directory);
+
+                continue;
+            }
+
+            foreach ($directory as $d) {
+                $this->addMappedDocumentRoot($prefix, $d);
             }
         }
     }
@@ -42,42 +55,45 @@ class FileLocationRepository implements FileLocationRepositoryInterface
      */
     public function addMappedDocumentRoot(string $prefix, string $directory): void
     {
-        $valPrefix = $this->validatePrefix($prefix);
-        $valDirectory = $this->validateDirectory($directory, $valPrefix);
+        $prefix    = $this->normalizePrefix($prefix);
+        $directory = $this->normalizeDirectory($directory, $prefix);
 
-        if (array_key_exists($valPrefix, $this->mappedDocRoots)) {
-            $dirs = &$this->mappedDocRoots[$valPrefix];
-            if (! in_array($valDirectory, $dirs)) {
-                $dirs[] = $valDirectory;
-            }
-        } else {
-            $this->mappedDocRoots[$valPrefix] = [$valDirectory];
+        if (! array_key_exists($prefix, $this->mappedDocRoots)) {
+            $this->mappedDocRoots[$prefix] = [$directory];
+
+            return;
+        }
+
+        if (! in_array($directory, $this->mappedDocRoots[$prefix], true)) {
+            $this->mappedDocRoots[$prefix][] = $directory;
         }
     }
 
     /**
-     * Validate prefix, ensuring it is non-empty and starts and ends with a slash
+     * Normalize prefix, ensuring it is non-empty and starts and ends with a slash
      */
-    private function validatePrefix(string $prefix): string
+    private function normalizePrefix(string $prefix): string
     {
+        $prefix = trim($prefix, '/');
+
         if (empty($prefix)) {
             // For the default prefix, set it to a slash to get matching to work
-            $prefix = '/';
-        } else {
-            if ($prefix[0] != '/') {
-                $prefix = "/$prefix";
-            }
-            if ($prefix[-1] != '/') {
-                $prefix .= '/';
-            }
+            return '/';
         }
-        return $prefix;
+
+        return sprintf('/%s/', $prefix);
     }
 
     /**
-     * Validate directory, ensuring it exists and
+     * Normalize directory string
+     *
+     * Verifies the directory exists, raising an exception if it does not.
+     * Normalizes by trimming trailing directory separator characters and
+     * appending a standard value (/).
+     *
+     * @throws InvalidArgumentException When the directory does not exist.
      */
-    private function validateDirectory(string $directory, string $prefix): string
+    private function normalizeDirectory(string $directory, string $prefix): string
     {
         if (! is_dir($directory)) {
             throw new InvalidArgumentException(sprintf(
@@ -86,10 +102,12 @@ class FileLocationRepository implements FileLocationRepositoryInterface
                 $directory
             ));
         }
-        if ($directory[-1] != '/') {
-            $directory .= '/';
+
+        if ($directory === '/' || $directory === '\\' || $directory === '\\\\') {
+            return '/';
         }
-        return $directory;
+
+        return sprintf('%s/', rtrim($directory, '\\/'));
     }
 
     /**
