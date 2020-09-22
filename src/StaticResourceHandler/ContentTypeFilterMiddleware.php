@@ -147,6 +147,10 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
             return false;
         }
 
+        if (! file_exists($fileName)) {
+            return false;
+        }
+
         $this->cacheTypeFile[$fileName] = $this->typeMap[$type];
         return true;
     }
