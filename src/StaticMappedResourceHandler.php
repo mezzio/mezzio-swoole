@@ -14,11 +14,10 @@ use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 
-use function is_callable;
-use function sprintf;
-
 class StaticMappedResourceHandler implements StaticResourceHandlerInterface
 {
+    use StaticResourceHandler\ValidateMiddlewareTrait;
+
     /**
      * Middleware to execute when serving a static resource.
      *
@@ -63,23 +62,5 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
 
         $staticResourceResponse->sendSwooleResponse($response, $filename);
         return $staticResourceResponse;
-    }
-
-    /**
-     * Validate that each middleware provided is callable.
-     *
-     * @throws Exception\InvalidStaticResourceMiddlewareException for any
-     *     non-callable middleware encountered.
-     */
-    private function validateMiddleware(array $middlewareList) : void
-    {
-        foreach ($middlewareList as $position => $middleware) {
-            if (! is_callable($middleware)) {
-                throw Exception\InvalidStaticResourceMiddlewareException::forMiddlewareAtPosition(
-                    $middleware,
-                    $position
-                );
-            }
-        }
     }
 }

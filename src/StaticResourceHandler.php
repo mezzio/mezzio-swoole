@@ -13,12 +13,13 @@ namespace Mezzio\Swoole;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
-use function is_callable;
 use function is_dir;
 use function sprintf;
 
 class StaticResourceHandler implements StaticResourceHandlerInterface
 {
+    use StaticResourceHandler\ValidateMiddlewareTrait;
+
     /**
      * @var string
      */
@@ -65,23 +66,5 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
 
         $staticResourceResponse->sendSwooleResponse($response, $filename);
         return $staticResourceResponse;
-    }
-
-    /**
-     * Validate that each middleware provided is callable.
-     *
-     * @throws Exception\InvalidStaticResourceMiddlewareException for any
-     *     non-callable middleware encountered.
-     */
-    private function validateMiddleware(array $middlewareList) : void
-    {
-        foreach ($middlewareList as $position => $middleware) {
-            if (! is_callable($middleware)) {
-                throw Exception\InvalidStaticResourceMiddlewareException::forMiddlewareAtPosition(
-                    $middleware,
-                    $position
-                );
-            }
-        }
     }
 }
