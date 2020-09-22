@@ -11,7 +11,7 @@ that performs two duties:
 - If a static resource is matched, it serves that.
 - Otherwise, it passes off handling to the composed application pipeline.
 
-Internally, the `SwooleRequestHandlerRunner` composes another class, a 
+Internally, the `SwooleRequestHandlerRunner` composes another class, a
 `Mezzio\Swoole\StaticResourceHandlerInterface` instance. This instance
 is passed the Swoole request and response, and returns a value indicating
 whether or not it was able to identify and serve a matching static resource.
@@ -142,7 +142,7 @@ request should also expose `Cache-Control`, `Last-Modified`, and `ETag`
 headers).
 
 > ### Providing your own middleware
-> 
+>
 > If you want to disable middleware, or to provide an alternate list of middleware
 > (including your own!), you will need to provide an alternate
 > `StaticResourceHandler` factory. In most cases, you can extend
@@ -412,14 +412,14 @@ Middleware that restricts access or filters out specific files will also use
 `markAsFailure()`.
 
 > ### Providing an alternative mechanism for sending response content
-> 
+>
 > In some cases, you may want to alter how the `Swoole\Http\Response` receives the
 > body content. By default, we use `Swoole\Http\Response::sendfile()`. However,
 > this may not work well when performing tasks such as compression, appending a
 > watermark, etc. As an example, the `GzipMiddleware` adds a compression filter to
 > a filehandle representing the file to send, and then calls
 > `Swoole\Http\Response::write()` in a loop until all content is sent.
-> 
+>
 > To perform work like this, you can call the
 > `StaticResourceResponse::setResponseContentCallback()` method as detailed in the
 > section above within your middleware.
@@ -465,11 +465,18 @@ returns your custom implementation within your `dependencies` configuration.
 
 ## Example alternate static resource handler: StaticMappedResourceHandler
 
-The default static resource handler, `Mezzio\Swoole\StaticResourceHandler`, requires all files to be in specified document root (default "public") directory when instantiating the handler.  If you are using modules generating templates with associated file assets (JavaScript, CSS, etc.), those files have to be copied to the "public" directory to work.  This can be done via scripting, but is one more step to concern about when testing or deploying a site.  Ideally, a module should be able to contain both its template and any dependencies that template relies upon.  
+- Since 2.7.0
 
-For example, assume you have a module, AwesomeModule, with a handler called "HomeHandler", which renders the 'home' template.  You designate the prefix, `/awesome-home` for rendering the assets.  The structure of your module files looks like this:
+The default static resource handler, `Mezzio\Swoole\StaticResourceHandler`, requires all files to be in the specified document root directory (by default, "public") when instantiating the handler.
+If you are using modules generating templates with associated file assets (JavaScript, CSS, etc.), those files must be copied to the "public" directory if you wish to allow access to them.
+This can be done via scripting, but is one more step to consider when testing or deploying a site.
+Ideally, a module should be able to contain both its template and any dependencies that template relies upon.
 
-```
+For example, assume you have a module, AwesomeModule, with a handler called "HomeHandler", which renders the 'home' template.
+You designate the prefix, `/awesome-home` for rendering the assets.
+The structure of your module files looks like this:
+
+```text
 AwesomeModule
 ├── src
 |   ├── Handler
@@ -489,17 +496,22 @@ In your `home.html` template, you can refer to the `style.css` file, using `/awe
 <link href="/awesome-home/style.css" rel="stylesheet" type="text/css">
 ```
 
+Currently, however, this will cause errors, as the stylesheet will not be available under the `public/` tree of the application.
+You would need to copy or symlink the files to the appropriate location to make that work.
+
+The `StaticMappedResourceHandler` solves this problem.
+
 ### Using StaticMappedResourceHandler
 
-To use StaticMappedResourceHandler from an application or module:
+To use `Mezzio\Swoole\StaticMappedResourceHandler` from an application or module:
 
-
-1. Define what your URI prefix will be (ex. `/awesome-home`)
-2. Update your template/s attributes like `href` and `src` to use the prefix (ex. `<script src='/awesome-home/style.css'></script>`)
-3. In your application/module configuration (or ConfigProvider), add the relationship between your prefix (`awesome-home`) and the directory/ies containing the assets
-4. In the application's configuration, set the alias of `Mezzio\Swoole\StaticResourceHandlerInterface` to use `Mezzio\Swoole\StaticMappedResourceHandler`
+1. Define what your URI prefix will be (e.g., `/awesome-home`).
+2. Update references to linkable resources in your templates to use the desired prefix (e.g., `<script src='/awesome-home/style.css'></script>`).
+3. In your application/module configuration (or `ConfigProvider`), add the relationship between your prefix (`awesome-home`) and any directories containing the assets.
+4. In the application's configuration, set the alias of `Mezzio\Swoole\StaticResourceHandlerInterface` to use `Mezzio\Swoole\StaticMappedResourceHandler`.
 
 For step #3, in your module's ConfigProvider, you can add a configuration setting as follows:
+
 ```php
     public function __invoke() : array
     {
@@ -521,7 +533,7 @@ For step #3, in your module's ConfigProvider, you can add a configuration settin
 
 Note that prefixes are always the first part after the host, and specifying the initial slash is optional (i.e. `awsesome-home` and `/awesome-home` both work and represent the same thing).
 
-In step #4, in your application's configuration (`autoload/dependencies.global.php` is a good place), override the default implementation of StaticResourceHandlerInterface:
+In step #4, in your application's configuration (`autoload/dependencies.global.php` is a good place), override the default implementation of `StaticResourceHandlerInterface`:
 
 ```php
 return [
@@ -533,7 +545,7 @@ return [
         // etc.
 ```
 
-For step #3, an alternative to storing a configuration is dynamically associating `/awesome-home` to a directory in code (probably within a factory).  
+For step #3, an alternative to storing a configuration is dynamically associating `/awesome-home` to a directory in code (probably within a factory).
 This approach could be useful if the directory of the assets isn't know until runtime.
 
 ```php
@@ -547,8 +559,10 @@ class AwesomeHomeHandlerFactory
     {
         // Establish location for the home template assets
         $repo = $container->get(FileLocationRepositoryInterface::class);
-        $repo->addMappedDocumentRoot('awesome-home', 
-            realpath(__DIR__ . '/../../templates/home'));
+        $repo->addMappedDocumentRoot(
+            'awesome-home',
+            realpath(__DIR__ . '/../../templates/home')
+        );
 
         return new AwesomeHomeHandler(
             $container->get(TemplateRendererInterface::class)
@@ -557,9 +571,7 @@ class AwesomeHomeHandlerFactory
 }
 ```
 
-When the template renders, the client will request `/awesome-home/style.css`, which the StaticResourceHandler will now retrieve from the `templates/home` folder of the module.
+When the template renders, the client will request `/awesome-home/style.css`, which the `StaticMappedResourceHandler` will now retrieve from the `templates/home/` folder of the module.
 
-`Mezzio\Swoole\StaticMappedResourceHandler` uses the `Mezzio\Swoole\StaticResourceHandler\FileLocationRepository` (which implements `Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface`) to maintain an association of URI prefixes with file directories.  If you require using a 
-file location that requires authentication, decompression, etc. you can override the default functionality by creating your own implementation of 
-`Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface`. 
-
+`Mezzio\Swoole\StaticMappedResourceHandler` uses the `Mezzio\Swoole\StaticResourceHandler\FileLocationRepository` (which implements `Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface`) to maintain an association of URI prefixes with file directories.
+If you require using a file location that requires authentication, decompression, etc. you can override the default functionality by creating your own implementation of `Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface`.
