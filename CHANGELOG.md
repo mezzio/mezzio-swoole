@@ -2,27 +2,34 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.7.0 - TBD
+## 2.7.0 - 2020-09-22
 
 ### Added
 
 - [#22](https://github.com/mezzio/mezzio-swoole/pull/22) adds a new `StaticMappedResourceHandler`, allowing developers to specify resources outside the `public/` tree that can be served as static assets; in particular, module authors could utilize this to deliver assets within their module directory tree. See the [StaticMappedResourceHandler documentation](https://docs.mezzio.dev/mezzio-swoole/v2/static-resources/#example-alternate-static-resource-handler-staticmappedresourcehandler) for more details.
 
-### Changed
 
-- Nothing.
+-----
 
-### Deprecated
+### Release Notes for [2.7.0](https://github.com/mezzio/mezzio-swoole/milestone/4)
 
-- Nothing.
 
-### Removed
 
-- Nothing.
+### 2.7.0
 
-### Fixed
+- Total issues resolved: **1**
+- Total pull requests resolved: **4**
+- Total contributors: **3**
 
-- Nothing.
+#### Enhancement
+
+ - [27: Remove PHPUnit warnings](https://github.com/mezzio/mezzio-swoole/pull/27) thanks to @weierophinney
+ - [26: Bump laminas-coding-standard from 1.0 to 2.1](https://github.com/mezzio/mezzio-swoole/pull/26) thanks to @weierophinney
+ - [25: Switch to composer/package-versions-deprecated](https://github.com/mezzio/mezzio-swoole/pull/25) thanks to @weierophinney and @boesing
+
+#### Documentation,Enhancement
+
+ - [22: Add Mapped Document Roots functionality](https://github.com/mezzio/mezzio-swoole/pull/22) thanks to @jasonterando
 
 ## 2.6.7 - TBD
 
