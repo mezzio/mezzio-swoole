@@ -67,7 +67,7 @@ use function getcwd;
  */
 class StaticResourceHandlerFactory extends AbstractStaticResourceHandlerFactory
 {
-    public function __invoke(ContainerInterface $container) : StaticResourceHandler
+    public function __invoke(ContainerInterface $container): StaticResourceHandler
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
 

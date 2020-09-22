@@ -15,12 +15,12 @@ interface FileWatcherInterface
     /**
      * Add a file path to be monitored for changes by this watcher.
      */
-    public function addFilePath(string $path) : void;
+    public function addFilePath(string $path): void;
 
     /**
      * Returns file paths for files that changed since last read.
      *
      * @return string[]
      */
-    public function readChangedFilePaths() : array;
+    public function readChangedFilePaths(): array;
 }

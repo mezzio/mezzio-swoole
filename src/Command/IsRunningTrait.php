@@ -17,7 +17,7 @@ trait IsRunningTrait
     /**
      * Is the swoole HTTP server running?
      */
-    public function isRunning() : bool
+    public function isRunning(): bool
     {
         $pids = $this->pidManager->read();
 

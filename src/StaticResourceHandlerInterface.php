@@ -26,5 +26,5 @@ interface StaticResourceHandlerInterface
     public function processStaticResource(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
-    ) : ?StaticResourceHandler\StaticResourceResponse;
+    ): ?StaticResourceHandler\StaticResourceResponse;
 }

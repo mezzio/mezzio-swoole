@@ -29,10 +29,10 @@ class ReloaderTest extends TestCase
     /** @var Reloader */
     private $subject;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->fileWatcher = $this->createMock(FileWatcherInterface::class);
-        $this->subject = new Reloader($this->fileWatcher, new NullLogger(), $this->interval);
+        $this->subject     = new Reloader($this->fileWatcher, new NullLogger(), $this->interval);
 
         parent::setUp();
     }
@@ -41,12 +41,15 @@ class ReloaderTest extends TestCase
      * Creates a constraint that checks if every value is a unique scalar value.
      * Uniqueness is checked by adding values as an array key until a repeat occurs.
      */
-    private static function isUniqueScalar() : Constraint
+    private static function isUniqueScalar(): Constraint
     {
-        return new class() extends Constraint {
+        return new class () extends Constraint {
             private $values = [];
 
-            protected function matches($other) : bool
+            /**
+             * @param string|int $other
+             */
+            protected function matches($other): bool
             {
                 if (isset($this->values[$other])) {
                     return false;
@@ -55,14 +58,14 @@ class ReloaderTest extends TestCase
                 return $this->values[$other] = true;
             }
 
-            public function toString() : string
+            public function toString(): string
             {
                 return 'is only used once';
             }
         };
     }
 
-    public function testOnWorkerStartOnlyRegistersTickFunctionOnFirstServer() : void
+    public function testOnWorkerStartOnlyRegistersTickFunctionOnFirstServer(): void
     {
         $server0 = $this->createMock(SwooleServer::class);
         $server0
@@ -86,7 +89,7 @@ class ReloaderTest extends TestCase
         $this->subject->onWorkerStart($server1, 1);
     }
 
-    public function testIncludedFilesAreOnlyAddedToWatchOnce() : void
+    public function testIncludedFilesAreOnlyAddedToWatchOnce(): void
     {
         $this->fileWatcher
             ->expects(static::atLeastOnce())
@@ -99,7 +102,7 @@ class ReloaderTest extends TestCase
         $this->subject->onTick($server);
     }
 
-    public function testServerReloadedWhenFilesChange() : void
+    public function testServerReloadedWhenFilesChange(): void
     {
         $this->fileWatcher
             ->expects(static::once())

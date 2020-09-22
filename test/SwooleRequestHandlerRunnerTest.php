@@ -37,7 +37,7 @@ use const PHP_OS;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->requestHandler = $this->prophesize(RequestHandlerInterface::class);
 
@@ -144,7 +144,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testOnRequestDelegatesToApplicationWhenNoStaticResourceHandlerPresent()
     {
-        $content = 'Content!';
+        $content      = 'Content!';
         $psr7Response = new Response();
         $psr7Response->getBody()->write($content);
 
@@ -152,13 +152,13 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->handle(Argument::type(ServerRequestInterface::class))
             ->willReturn($psr7Response);
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_uri'    => '/',
             'remote_addr'    => '127.0.0.1',
-            'request_method' => 'GET'
+            'request_method' => 'GET',
         ];
-        $request->get = [];
+        $request->get    = [];
 
         $response = $this->prophesize(SwooleHttpResponse::class);
         $response
@@ -185,7 +185,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testOnRequestDelegatesToApplicationWhenStaticResourceHandlerDoesNotMatchPath()
     {
-        $content = 'Content!';
+        $content      = 'Content!';
         $psr7Response = new Response();
         $psr7Response->getBody()->write($content);
 
@@ -193,13 +193,13 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->handle(Argument::type(ServerRequestInterface::class))
             ->willReturn($psr7Response);
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_uri'    => '/',
             'remote_addr'    => '127.0.0.1',
-            'request_method' => 'GET'
+            'request_method' => 'GET',
         ];
-        $request->get = [];
+        $request->get    = [];
 
         $response = $this->prophesize(SwooleHttpResponse::class);
         $response
@@ -234,13 +234,13 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->handle(Argument::any())
             ->shouldNotBeCalled();
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_uri'    => '/',
             'remote_addr'    => '127.0.0.1',
-            'request_method' => 'GET'
+            'request_method' => 'GET',
         ];
-        $request->get = [];
+        $request->get    = [];
 
         $response = $this->prophesize(SwooleHttpResponse::class)->reveal();
 
@@ -286,9 +286,9 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             'test' // Process name
         );
 
-        $pid = posix_getpid();
-        $swooleServer = $this->createMock(SwooleHttpServer::class);
-        $swooleServer->master_pid = 55555;
+        $pid                       = posix_getpid();
+        $swooleServer              = $this->createMock(SwooleHttpServer::class);
+        $swooleServer->master_pid  = 55555;
         $swooleServer->manager_pid = $pid;
 
         $runner->onStart($swooleServer);
@@ -325,7 +325,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
         $pid = posix_getpid();
 
-        $swooleServer = $this->createMock(SwooleHttpServer::class);
+        $swooleServer          = $this->createMock(SwooleHttpServer::class);
         $swooleServer->setting = [
             'worker_num' => $pid + 1,
         ];
@@ -365,7 +365,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
         $pid = posix_getpid();
 
-        $swooleServer = $this->createMock(SwooleHttpServer::class);
+        $swooleServer          = $this->createMock(SwooleHttpServer::class);
         $swooleServer->setting = [
             'worker_num' => $pid - 2,
         ];

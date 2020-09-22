@@ -20,16 +20,16 @@ class OptionsMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->request = $this->prophesize(Request::class)->reveal();
     }
 
-    public function nonOptionsRequests() : array
+    public function nonOptionsRequests(): array
     {
         return [
-            'GET'     => ['GET'],
-            'HEAD'    => ['HEAD'],
+            'GET'  => ['GET'],
+            'HEAD' => ['HEAD'],
         ];
     }
 
@@ -39,7 +39,7 @@ class OptionsMiddlewareTest extends TestCase
     public function testMiddlewareDoesNothingForNonOptionsRequests(string $method)
     {
         $this->request->server = ['request_method' => $method];
-        $next = static function ($request, $filename) {
+        $next                  = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
 
@@ -55,7 +55,7 @@ class OptionsMiddlewareTest extends TestCase
     public function testMiddlewareSetsAllowHeaderAndDisablesContentForOptionsRequests()
     {
         $this->request->server = ['request_method' => 'OPTIONS'];
-        $next = static function ($request, $filename) {
+        $next                  = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
 

@@ -20,12 +20,12 @@ class MethodNotAllowedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->request = $this->prophesize(Request::class)->reveal();
     }
 
-    public function alwaysAllowedMethods() : array
+    public function alwaysAllowedMethods(): array
     {
         return [
             'GET'     => ['GET'],
@@ -34,7 +34,7 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         ];
     }
 
-    public function neverAllowedMethods() : array
+    public function neverAllowedMethods(): array
     {
         return [
             'POST'   => ['POST'],
@@ -52,11 +52,11 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         $this->request->server = [
             'request_method' => $method,
         ];
-        $response = new StaticResourceResponse();
-        $next = static function ($request, $filename) use ($response) {
+        $response              = new StaticResourceResponse();
+        $next                  = static function ($request, $filename) use ($response) {
             return $response;
         };
-        $middleware = new MethodNotAllowedMiddleware();
+        $middleware            = new MethodNotAllowedMiddleware();
 
         $test = $middleware($this->request, '/does/not/matter', $next);
 
@@ -71,10 +71,10 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         $this->request->server = [
             'request_method' => $method,
         ];
-        $next = function ($request, $filename) {
+        $next                  = function ($request, $filename) {
             $this->fail('Should not have reached next()');
         };
-        $middleware = new MethodNotAllowedMiddleware();
+        $middleware            = new MethodNotAllowedMiddleware();
 
         $response = $middleware($this->request, '/does/not/matter', $next);
 

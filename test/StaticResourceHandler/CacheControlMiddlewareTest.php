@@ -66,7 +66,7 @@ class CacheControlMiddlewareTest extends TestCase
             ],
         ]);
 
-        $request = $this->prophesize(Request::class)->reveal();
+        $request         = $this->prophesize(Request::class)->reveal();
         $request->server = [
             'request_uri' => '/some/path.html',
         ];
@@ -91,7 +91,7 @@ class CacheControlMiddlewareTest extends TestCase
             ],
         ]);
 
-        $request = $this->prophesize(Request::class)->reveal();
+        $request         = $this->prophesize(Request::class)->reveal();
         $request->server = [
             'request_uri' => '/some/path.txt',
         ];

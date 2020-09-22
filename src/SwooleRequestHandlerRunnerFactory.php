@@ -16,15 +16,18 @@ use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Zend\Expressive\Swoole\HotCodeReload\Reloader as LegacyReloader;
+use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
+use Zend\Expressive\Swoole\StaticResourceHandlerInterface as LegacyStaticResourceHandlerInterface;
 
 class SwooleRequestHandlerRunnerFactory
 {
-    public function __invoke(ContainerInterface $container) : SwooleRequestHandlerRunner
+    public function __invoke(ContainerInterface $container): SwooleRequestHandlerRunner
     {
         $logger = $container->has(Log\AccessLogInterface::class)
             ? $container->get(Log\AccessLogInterface::class)
-            : ($container->has(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
-                ? $container->get(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+            : ($container->has(LegacyAccessLogInterface::class)
+                ? $container->get(LegacyAccessLogInterface::class)
                 : null);
 
         $mezzioSwooleConfig = $container->has('config')
@@ -49,28 +52,28 @@ class SwooleRequestHandlerRunnerFactory
     private function retrieveStaticResourceHandler(
         ContainerInterface $container,
         array $config
-    ) : ?StaticResourceHandlerInterface {
-        $config = $config['static-files'] ?? [];
+    ): ?StaticResourceHandlerInterface {
+        $config  = $config['static-files'] ?? [];
         $enabled = isset($config['enable']) && true === $config['enable'];
 
         return $enabled && $container->has(StaticResourceHandlerInterface::class)
             ? $container->get(StaticResourceHandlerInterface::class)
-            : ($enabled && $container->has(\Zend\Expressive\Swoole\StaticResourceHandlerInterface::class)
-                ? $container->get(\Zend\Expressive\Swoole\StaticResourceHandlerInterface::class)
+            : ($enabled && $container->has(LegacyStaticResourceHandlerInterface::class)
+                ? $container->get(LegacyStaticResourceHandlerInterface::class)
                 : null);
     }
 
     private function retrieveHotCodeReloader(
         ContainerInterface $container,
         array $config
-    ) : ?Reloader {
-        $config = $config['hot-code-reload'] ?? [];
+    ): ?Reloader {
+        $config  = $config['hot-code-reload'] ?? [];
         $enabled = isset($config['enable']) && true === $config['enable'];
 
         return $enabled && $container->has(Reloader::class)
             ? $container->get(Reloader::class)
-            : ($enabled && $container->has(\Zend\Expressive\Swoole\HotCodeReload\Reloader::class)
-                ? $container->get(\Zend\Expressive\Swoole\HotCodeReload\Reloader::class)
+            : ($enabled && $container->has(LegacyReloader::class)
+                ? $container->get(LegacyReloader::class)
                 : null);
     }
 }

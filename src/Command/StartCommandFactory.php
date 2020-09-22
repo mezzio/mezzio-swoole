@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 
 class StartCommandFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): StartCommand
     {
         return new StartCommand($container);
     }

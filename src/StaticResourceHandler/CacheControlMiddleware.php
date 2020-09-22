@@ -37,12 +37,14 @@ class CacheControlMiddleware implements MiddlewareInterface
         'private',
     ];
 
+    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
     /**
-     * @var array[string, string[]] Key is a regexp; if a static resource path
+     * @var array<string, list<string>> Key is a regexp; if a static resource path
      *     matches the regexp, the array of values provided will be used as
      *     the Cache-Control header value.
      */
     private $cacheControlDirectives;
+    // phpcs:enable
 
     public function __construct(array $cacheControlDirectives = [])
     {
@@ -50,9 +52,9 @@ class CacheControlMiddleware implements MiddlewareInterface
         $this->cacheControlDirectives = $cacheControlDirectives;
     }
 
-    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
     {
-        $response = $next($request, $filename);
+        $response     = $next($request, $filename);
         $cacheControl = $this->getCacheControlForPath($request->server['request_uri']);
         if ($cacheControl) {
             $response->addHeader('Cache-Control', $cacheControl);
@@ -61,11 +63,11 @@ class CacheControlMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @throws Exception\InvalidArgumentException if any Cache-Control regex is invalid
-     * @throws Exception\InvalidArgumentException if any individual directive
+     * @throws Exception\InvalidArgumentException If any Cache-Control regex is invalid.
+     * @throws Exception\InvalidArgumentException If any individual directive
      *     associated with a regex is invalid.
      */
-    private function validateCacheControlDirectives(array $cacheControlDirectives) : void
+    private function validateCacheControlDirectives(array $cacheControlDirectives): void
     {
         foreach ($cacheControlDirectives as $regex => $directives) {
             if (! $this->isValidRegex($regex)) {
@@ -97,9 +99,9 @@ class CacheControlMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @throws Exception\InvalidArgumentException if any regexp is invalid
+     * @throws Exception\InvalidArgumentException If any regexp is invalid.
      */
-    private function validateCacheControlDirective(string $regex, string $directive) : void
+    private function validateCacheControlDirective(string $regex, string $directive): void
     {
         if (in_array($directive, self::CACHECONTROL_DIRECTIVES, true)) {
             return;
@@ -122,7 +124,7 @@ class CacheControlMiddleware implements MiddlewareInterface
      *     return a string representing the entire Cache-Control
      *     header value to emit.
      */
-    private function getCacheControlForPath(string $path) : ?string
+    private function getCacheControlForPath(string $path): ?string
     {
         foreach ($this->cacheControlDirectives as $regexp => $values) {
             if (preg_match($regexp, $path)) {

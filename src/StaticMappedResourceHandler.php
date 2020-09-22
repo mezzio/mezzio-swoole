@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
-use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 
 class StaticMappedResourceHandler implements StaticResourceHandlerInterface
 {
@@ -28,12 +28,12 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
     /**
      * Middleware to execute when serving a static resource.
      *
-     * @var StaticResourceHandler\FileLocationRepositoryInterface[]
+     * @var FileLocationRepositoryInterface[]
      */
     private $fileLocationRepo;
 
     /**
-     * @throws Exception\InvalidStaticResourceMiddlewareException for any
+     * @throws Exception\InvalidStaticResourceMiddlewareException For any
      *     non-callable middleware encountered.
      */
     public function __construct(
@@ -41,20 +41,20 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
         array $middleware = []
     ) {
         $this->validateMiddleware($middleware);
-        $this->middleware = $middleware;
+        $this->middleware       = $middleware;
         $this->fileLocationRepo = $fileLocationRepo;
     }
 
     public function processStaticResource(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
-    ) : ?StaticResourceHandler\StaticResourceResponse {
+    ): ?StaticResourceHandler\StaticResourceResponse {
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
         if (! $filename) {
             return null;
         }
 
-        $middleware = new StaticResourceHandler\MiddlewareQueue($this->middleware);
+        $middleware             = new StaticResourceHandler\MiddlewareQueue($this->middleware);
         $staticResourceResponse = $middleware($request, $filename);
         if ($staticResourceResponse->isFailure()) {
             return null;

@@ -17,15 +17,15 @@ use Psr\Container\ContainerInterface;
 
 class PidManagerFactoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container         = $this->prophesize(ContainerInterface::class);
         $this->pidManagerFactory = new PidManagerFactory();
     }
 
     public function testFactoryReturnsAPidManager()
     {
-        $factory = $this->pidManagerFactory;
+        $factory    = $this->pidManagerFactory;
         $pidManager = $factory($this->container->reveal());
         $this->assertInstanceOf(PidManager::class, $pidManager);
     }

@@ -44,7 +44,7 @@ abstract class AbstractStaticResourceHandlerFactory
      *
      * @return StaticResourceHandler\MiddlewareInterface[]
      */
-    protected function configureMiddleware(array $config) : array
+    protected function configureMiddleware(array $config): array
     {
         $middleware = [
             new StaticResourceHandler\ContentTypeFilterMiddleware(
@@ -65,10 +65,10 @@ abstract class AbstractStaticResourceHandlerFactory
             $middleware[] = new StaticResourceHandler\ClearStatCacheMiddleware((int) $clearStatCacheInterval);
         }
 
-        $directiveList = $config['directives'] ?? [];
+        $directiveList          = $config['directives'] ?? [];
         $cacheControlDirectives = [];
         $lastModifiedDirectives = [];
-        $etagDirectives = [];
+        $etagDirectives         = [];
 
         foreach ($directiveList as $regex => $directives) {
             if (isset($directives['cache-control'])) {

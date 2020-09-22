@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 
 class StatusCommandFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): StatusCommand
     {
         return new StatusCommand($container->get(PidManager::class));
     }

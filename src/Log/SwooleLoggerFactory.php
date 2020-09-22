@@ -17,9 +17,9 @@ class SwooleLoggerFactory
 {
     public const SWOOLE_LOGGER = 'Mezzio\Swoole\Log\SwooleLogger';
 
-    public function __invoke(ContainerInterface $container) : LoggerInterface
+    public function __invoke(ContainerInterface $container): LoggerInterface
     {
-        $config = $container->has('config') ? $container->get('config') : [];
+        $config       = $container->has('config') ? $container->get('config') : [];
         $loggerConfig = $config['mezzio-swoole']['swoole-http-server']['logger'] ?? [];
 
         if (isset($loggerConfig['logger-name'])) {

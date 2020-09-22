@@ -24,16 +24,16 @@ use Swoole\Http\Request;
 
 class Psr3AccessLogDecoratorTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->psr3Logger = $this->prophesize(LoggerInterface::class);
-        $this->formatter = $this->prophesize(AccessLogFormatterInterface::class);
-        $this->request = $this->prophesize(Request::class)->reveal();
-        $this->psr7Response = $this->prophesize(Psr7Response::class);
+        $this->psr3Logger     = $this->prophesize(LoggerInterface::class);
+        $this->formatter      = $this->prophesize(AccessLogFormatterInterface::class);
+        $this->request        = $this->prophesize(Request::class)->reveal();
+        $this->psr7Response   = $this->prophesize(Psr7Response::class);
         $this->staticResponse = $this->prophesize(StaticResourceResponse::class);
     }
 
-    public function psr3Methods() : iterable
+    public function psr3Methods(): iterable
     {
         $r = new ReflectionClass(LoggerInterface::class);
         foreach ($r->getMethods() as $method) {
@@ -64,7 +64,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
         }
     }
 
-    public function statusLogMethodValues()
+    public function statusLogMethodValues(): array
     {
         return [
             '100' => [100, 'info'],
@@ -83,7 +83,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
         string $logMethod
     ) {
         $expected = 'message';
-        $request = $this->request;
+        $request  = $this->request;
 
         $response = $this->staticResponse;
         $response->getStatus()->willReturn($status);
@@ -118,7 +118,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
         string $logMethod
     ) {
         $expected = 'message';
-        $request = $this->request;
+        $request  = $this->request;
 
         $response = $this->psr7Response;
         $response->getStatusCode()->willReturn($status);

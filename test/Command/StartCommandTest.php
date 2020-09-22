@@ -36,7 +36,7 @@ class StartCommandTest extends TestCase
 {
     use ReflectMethodTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->container  = $this->prophesize(ContainerInterface::class);
         $this->input      = $this->prophesize(InputInterface::class);
@@ -52,12 +52,13 @@ class StartCommandTest extends TestCase
         ));
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         set_include_path($this->originalIncludePath);
     }
 
-    public function pushServiceToContainer(string $name, $instance)
+    /** @param object $instance */
+    public function pushServiceToContainer(string $name, $instance): void
     {
         if ($instance instanceof ProphecyInterface) {
             $instance = $instance->reveal();
@@ -65,7 +66,7 @@ class StartCommandTest extends TestCase
         $this->container->get($name)->willReturn($instance);
     }
 
-    public function testConstructorAcceptsContainer()
+    public function testConstructorAcceptsContainer(): StartCommand
     {
         $command = new StartCommand($this->container->reveal());
         $this->assertAttributeSame($this->container->reveal(), 'container', $command);
@@ -91,7 +92,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testCommandDefinesNumWorkersOption(StartCommand $command)
+    public function testCommandDefinesNumWorkersOption(StartCommand $command): InputOption
     {
         $this->assertTrue($command->getDefinition()->hasOption('num-workers'));
         return $command->getDefinition()->getOption('num-workers');
@@ -116,7 +117,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testCommandDefinesDaemonizeOption(StartCommand $command)
+    public function testCommandDefinesDaemonizeOption(StartCommand $command): InputOption
     {
         $this->assertTrue($command->getDefinition()->hasOption('daemonize'));
         return $command->getDefinition()->getOption('daemonize');
@@ -178,7 +179,7 @@ class StartCommandTest extends TestCase
             ->shouldHaveBeenCalled();
     }
 
-    public function noRunningProcesses() : iterable
+    public function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];
@@ -279,7 +280,7 @@ class StartCommandTest extends TestCase
         ));
     }
 
-    private function prepareSuccessfulStartCommand(array $pids) : array
+    private function prepareSuccessfulStartCommand(array $pids): array
     {
         $this->pidManager->read()->willReturn($pids);
         $this->pushServiceToContainer(PidManager::class, $this->pidManager);

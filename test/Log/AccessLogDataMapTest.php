@@ -17,13 +17,13 @@ use Swoole\Http\Request as SwooleHttpRequest;
 
 class AccessLogDataMapTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $this->request  = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $this->response = $this->prophesize(ResponseInterface::class)->reveal();
     }
 
-    public function provideServer() : iterable
+    public function provideServer(): iterable
     {
         yield 'no address' => [[], [], '-'];
         yield 'x-real-ip'  => [
@@ -35,17 +35,17 @@ class AccessLogDataMapTest extends TestCase
             [
                 'remote_addr' => '4.4.4.4',
             ],
-            '1.1.1.1'
+            '1.1.1.1',
         ];
         yield 'client-ip' => [
             [
-                'client-ip' => '2.2.2.2',
+                'client-ip'       => '2.2.2.2',
                 'x-forwarded-for' => '3.3.3.3',
             ],
             [
                 'remote_addr' => '4.4.4.4',
             ],
-            '2.2.2.2'
+            '2.2.2.2',
         ];
         yield 'x-forwarded-for' => [['x-forwarded-for' => '3.3.3.3'], ['remote_addr' => '4.4.4.4'], '3.3.3.3'];
         yield 'remote-addr'     => [[], ['remote_addr' => '4.4.4.4'], '4.4.4.4'];
@@ -58,7 +58,7 @@ class AccessLogDataMapTest extends TestCase
     {
         $this->request->server = $server;
         $this->request->header = $headers;
-        $map = AccessLogDataMap::createWithPsrResponse($this->request, $this->response, false);
+        $map                   = AccessLogDataMap::createWithPsrResponse($this->request, $this->response, false);
 
         $this->assertEquals($expectedIp, $map->getClientIp());
     }

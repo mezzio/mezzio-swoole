@@ -12,22 +12,22 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\Exception;
 use Mezzio\Swoole\StaticMappedResourceHandler;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
-use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticMappedResourceHandlerTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->uri = '/image.png';
-        $this->fullPath = __DIR__ . '/TestAsset' . $this->uri;
+        $this->uri         = '/image.png';
+        $this->fullPath    = __DIR__ . '/TestAsset' . $this->uri;
         $this->fileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
-        $this->request = $this->prophesize(SwooleHttpRequest::class)->reveal();
-        $this->response = $this->prophesize(SwooleHttpResponse::class)->reveal();
+        $this->request     = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $this->response    = $this->prophesize(SwooleHttpResponse::class)->reveal();
     }
 
     public function testConstructorRaisesExceptionForInvalidMiddlewareValue()
@@ -42,12 +42,12 @@ class StaticMappedResourceHandlerTest extends TestCase
             'request_uri' => $this->uri,
         ];
 
-        $middleware = new class() implements MiddlewareInterface {
+        $middleware = new class () implements MiddlewareInterface {
             public function __invoke(
                 SwooleHttpRequest $request,
                 string $filename,
                 callable $next
-            ) : StaticResourceResponse {
+            ): StaticResourceResponse {
                 $response = new StaticResourceResponse();
                 $response->markAsFailure();
                 return $response;
@@ -68,7 +68,7 @@ class StaticMappedResourceHandlerTest extends TestCase
         $expectedResponse->isFailure()->willReturn(false);
         $expectedResponse->sendSwooleResponse($this->response, $this->fullPath)->shouldBeCalled();
 
-        $middleware = new class($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)
@@ -80,7 +80,7 @@ class StaticMappedResourceHandlerTest extends TestCase
                 SwooleHttpRequest $request,
                 string $filename,
                 callable $next
-            ) : StaticResourceResponse {
+            ): StaticResourceResponse {
                 return $this->response;
             }
         };
@@ -103,7 +103,7 @@ class StaticMappedResourceHandlerTest extends TestCase
         $expectedResponse = $this->prophesize(StaticResourceResponse::class);
         $expectedResponse->isFailure()->willReturn(true);
 
-        $middleware = new class($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)
@@ -115,7 +115,7 @@ class StaticMappedResourceHandlerTest extends TestCase
                 SwooleHttpRequest $request,
                 string $filename,
                 callable $next
-            ) : StaticResourceResponse {
+            ): StaticResourceResponse {
                 return $this->response;
             }
         };

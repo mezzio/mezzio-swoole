@@ -16,7 +16,7 @@ use function sys_get_temp_dir;
 
 class PidManagerFactory
 {
-    public function __invoke(ContainerInterface $container) : PidManager
+    public function __invoke(ContainerInterface $container): PidManager
     {
         $config = $container->get('config');
         return new PidManager(

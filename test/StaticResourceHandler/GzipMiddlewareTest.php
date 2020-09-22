@@ -31,10 +31,10 @@ class GzipMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->staticResponse = $this->prophesize(StaticResourceResponse::class);
-        $this->swooleRequest = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $this->swooleRequest  = $this->prophesize(SwooleHttpRequest::class)->reveal();
 
         $this->next = function ($request, $filename) {
             return $this->staticResponse->reveal();
@@ -53,7 +53,7 @@ class GzipMiddlewareTest extends TestCase
         $this->swooleRequest->header = [
             'accept-encoding' => 'gzip',
         ];
-        $middleware = new GzipMiddleware(0);
+        $middleware                  = new GzipMiddleware(0);
 
         $response = $middleware($this->swooleRequest, '/image.png', $this->next);
 
@@ -63,7 +63,7 @@ class GzipMiddlewareTest extends TestCase
     public function testMiddlewareDoesNothingIfNoAcceptEncodingRequestHeaderPresent()
     {
         $this->swooleRequest->header = [];
-        $middleware = new GzipMiddleware(9);
+        $middleware                  = new GzipMiddleware(9);
 
         $response = $middleware($this->swooleRequest, '/image.png', $this->next);
 
@@ -75,14 +75,14 @@ class GzipMiddlewareTest extends TestCase
         $this->swooleRequest->header = [
             'accept-encoding' => 'bz2',
         ];
-        $middleware = new GzipMiddleware(9);
+        $middleware                  = new GzipMiddleware(9);
 
         $response = $middleware($this->swooleRequest, '/image.png', $this->next);
 
         $this->staticResponse->setResponseContentCallback(Argument::any())->shouldNotHaveBeenCalled();
     }
 
-    public function acceptedEncodings() : iterable
+    public function acceptedEncodings(): iterable
     {
         foreach (array_values(GzipMiddleware::COMPRESSION_CONTENT_ENCODING_MAP) as $encoding) {
             yield $encoding => [$encoding];
@@ -98,7 +98,7 @@ class GzipMiddlewareTest extends TestCase
         $this->swooleRequest->header = [
             'accept-encoding' => $encoding,
         ];
-        $middleware = new GzipMiddleware(9);
+        $middleware                  = new GzipMiddleware(9);
 
         $response = $middleware($this->swooleRequest, '/image.png', $this->next);
 
@@ -113,17 +113,17 @@ class GzipMiddlewareTest extends TestCase
     public function testResponseContentCallbackEmitsExpectedHeadersAndCompressesContent(string $encoding)
     {
         $compressionMap = array_flip(GzipMiddleware::COMPRESSION_CONTENT_ENCODING_MAP);
-        $filename = __DIR__ . '/../TestAsset/content.txt';
-        $expected = file_get_contents($filename);
-        $expected = gzcompress($expected, 9, $compressionMap[$encoding]);
+        $filename       = __DIR__ . '/../TestAsset/content.txt';
+        $expected       = file_get_contents($filename);
+        $expected       = gzcompress($expected, 9, $compressionMap[$encoding]);
 
         $this->swooleRequest->header = [
             'accept-encoding' => $encoding,
         ];
-        $middleware = new GzipMiddleware(9);
+        $middleware                  = new GzipMiddleware(9);
 
         $staticResponse = new StaticResourceResponse();
-        $next = static function ($request, $filename) use ($staticResponse) {
+        $next           = static function ($request, $filename) use ($staticResponse) {
             return $staticResponse;
         };
 

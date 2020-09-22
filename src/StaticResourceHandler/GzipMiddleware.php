@@ -30,23 +30,23 @@ use const ZLIB_ENCODING_GZIP;
 
 class GzipMiddleware implements MiddlewareInterface
 {
+    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
     /**
-     * @var array[int, string]
+     * @var array<int, string>
      */
     public const COMPRESSION_CONTENT_ENCODING_MAP = [
         ZLIB_ENCODING_DEFLATE => 'deflate',
-        ZLIB_ENCODING_GZIP => 'gzip',
+        ZLIB_ENCODING_GZIP    => 'gzip',
     ];
+    // phpcs:enable
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $compressionLevel;
 
     /**
      * @param int $compressionLevel Compression level to use. Values less than
      *     1 indicate no compression should occur.
-     * @throws Exception\InvalidArgumentException for $compressionLevel values
+     * @throws Exception\InvalidArgumentException For $compressionLevel values
      *     greater than 9.
      */
     public function __construct(int $compressionLevel = 0)
@@ -54,7 +54,7 @@ class GzipMiddleware implements MiddlewareInterface
         if ($compressionLevel > 9) {
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s only allows compression levels up to 9; received %d',
-                __CLASS__,
+                self::class,
                 $compressionLevel
             ));
         }
@@ -64,7 +64,7 @@ class GzipMiddleware implements MiddlewareInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
     {
         $response = $next($request, $filename);
 
@@ -78,7 +78,7 @@ class GzipMiddleware implements MiddlewareInterface
         }
 
         $response->setResponseContentCallback(
-            function (Response $swooleResponse, string $filename) use ($compressionEncoding, $response) : void {
+            function (Response $swooleResponse, string $filename) use ($compressionEncoding, $response): void {
                 $swooleResponse->header(
                     'Content-Encoding',
                     GzipMiddleware::COMPRESSION_CONTENT_ENCODING_MAP[$compressionEncoding],
@@ -88,16 +88,16 @@ class GzipMiddleware implements MiddlewareInterface
 
                 $handle = fopen($filename, 'rb');
                 $params = [
-                    'level' => $this->compressionLevel,
+                    'level'  => $this->compressionLevel,
                     'window' => $compressionEncoding,
                     'memory' => 9,
                 ];
                 stream_filter_append($handle, 'zlib.deflate', STREAM_FILTER_READ, $params);
 
                 $countBytes = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
-                $length = 0;
+                $length     = 0;
                 while (feof($handle) !== true) {
-                    $line = fgets($handle, 4096);
+                    $line    = fgets($handle, 4096);
                     $length += $countBytes($line);
                     $swooleResponse->write($line);
                 }
@@ -114,7 +114,7 @@ class GzipMiddleware implements MiddlewareInterface
     /**
      * Is gzip available for current request
      */
-    private function shouldCompress(Request $request) : bool
+    private function shouldCompress(Request $request): bool
     {
         return $this->compressionLevel > 0
             && isset($request->header['accept-encoding']);
@@ -123,7 +123,7 @@ class GzipMiddleware implements MiddlewareInterface
     /**
      * Get gzcompress compression encoding.
      */
-    private function getCompressionEncoding(Request $request) : ?int
+    private function getCompressionEncoding(Request $request): ?int
     {
         foreach (explode(',', $request->header['accept-encoding']) as $acceptEncoding) {
             $acceptEncoding = trim($acceptEncoding);

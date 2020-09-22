@@ -22,10 +22,10 @@ use function substr;
 
 class SwooleEmitterTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->swooleResponse = $this->prophesize(SwooleHttpResponse::class);
-        $this->emitter = new SwooleEmitter($this->swooleResponse->reveal());
+        $this->emitter        = new SwooleEmitter($this->swooleResponse->reveal());
     }
 
     public function testEmit()
@@ -126,7 +126,7 @@ class SwooleEmitterTest extends TestCase
 
     public function testEmitWithBigContentBody()
     {
-        $content = base64_encode(random_bytes(SwooleEmitter::CHUNK_SIZE)); // CHUNK_SIZE * 1.33333
+        $content  = base64_encode(random_bytes(SwooleEmitter::CHUNK_SIZE)); // CHUNK_SIZE * 1.33333
         $response = (new Response())
             ->withStatus(200)
             ->withAddedHeader('Content-Type', 'text/plain');

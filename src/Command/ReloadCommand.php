@@ -31,9 +31,7 @@ This command is only relevant when the server was started using the
 configuration value is set to SWOOLE_PROCESS.
 EOH;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $serverMode;
 
     public function __construct(int $serverMode, string $name = 'reload')
@@ -42,7 +40,7 @@ EOH;
         parent::__construct($name);
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setDescription('Reload the web server.');
         $this->setHelp(self::HELP);
@@ -54,7 +52,7 @@ EOH;
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->serverMode !== SWOOLE_PROCESS) {
             $output->writeln(

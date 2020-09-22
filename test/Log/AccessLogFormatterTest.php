@@ -54,7 +54,7 @@ class AccessLogFormatterTest extends TestCase
         $dataMap->getRequestTime('end:sec')->willReturn('[1234567890]'); // %{end:sec}t
         $dataMap->getRequestDuration('us')->willReturn('22'); // %{us}T
 
-        $format = '%a %A %B %b %D %f %h %H %m %p %q %r %s %t %T %u %U %v %V %I %O %S'
+        $format   = '%a %A %B %b %D %f %h %H %m %p %q %r %s %t %T %u %U %v %V %I %O %S'
             . ' %{cookie_name}C %{env_name}e %{X-Request-Header}i %{X-Response-Header}o'
             . ' %{local}p %{end:sec}t %{us}T';
         $expected = [

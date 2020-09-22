@@ -56,19 +56,20 @@ class HttpServerFactory
     /**
      * @see https://www.swoole.co.uk/docs/modules/swoole-server-methods#swoole_server-__construct
      * @see https://www.swoole.co.uk/docs/modules/swoole-server/predefined-constants for $mode and $protocol constant
-     * @throws Exception\InvalidArgumentException for invalid $port values
-     * @throws Exception\InvalidArgumentException for invalid $mode values
-     * @throws Exception\InvalidArgumentException for invalid $protocol values
+     *
+     * @throws Exception\InvalidArgumentException For invalid $port values.
+     * @throws Exception\InvalidArgumentException For invalid $mode values.
+     * @throws Exception\InvalidArgumentException For invalid $protocol values.
      */
-    public function __invoke(ContainerInterface $container) : SwooleHttpServer
+    public function __invoke(ContainerInterface $container): SwooleHttpServer
     {
-        $config = $container->get('config');
+        $config       = $container->get('config');
         $swooleConfig = $config['mezzio-swoole'] ?? [];
         $serverConfig = $swooleConfig['swoole-http-server'] ?? [];
 
-        $host = $serverConfig['host'] ?? static::DEFAULT_HOST;
-        $port = $serverConfig['port'] ?? static::DEFAULT_PORT;
-        $mode = $serverConfig['mode'] ?? SWOOLE_BASE;
+        $host     = $serverConfig['host'] ?? static::DEFAULT_HOST;
+        $port     = $serverConfig['port'] ?? static::DEFAULT_PORT;
+        $mode     = $serverConfig['mode'] ?? SWOOLE_BASE;
         $protocol = $serverConfig['protocol'] ?? SWOOLE_SOCK_TCP;
 
         if ($port < 1 || $port > 65535) {
@@ -94,7 +95,7 @@ class HttpServerFactory
             SwooleRuntime::enableCoroutine(true);
         }
 
-        $httpServer = new SwooleHttpServer($host, $port, $mode, $protocol);
+        $httpServer    = new SwooleHttpServer($host, $port, $mode, $protocol);
         $serverOptions = $serverConfig['options'] ?? [];
         $httpServer->set($serverOptions);
 

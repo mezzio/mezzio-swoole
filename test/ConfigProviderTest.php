@@ -16,12 +16,12 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigProviderTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->provider = new ConfigProvider();
     }
 
-    public function testInvocationReturnsArray()
+    public function testInvocationReturnsArray(): array
     {
         $config = ($this->provider)();
         $this->assertIsArray($config);
@@ -31,7 +31,7 @@ class ConfigProviderTest extends TestCase
     /**
      * @depends testInvocationReturnsArray
      */
-    public function testReturnedArrayContainsDependencies(array $config)
+    public function testReturnedArrayContainsDependencies(array $config): array
     {
         $this->assertArrayHasKey('dependencies', $config);
         $this->assertIsArray($config['dependencies']);
@@ -39,8 +39,9 @@ class ConfigProviderTest extends TestCase
     }
 
     /**
-     * @depends testReturnedArrayContainsDependencies
      * @see https://github.com/mezzio/mezzio-swoole/issues/11
+     *
+     * @depends testReturnedArrayContainsDependencies
      */
     public function testEnsureInotifyFileWatcherIsRegistered(array $dependencies): void
     {

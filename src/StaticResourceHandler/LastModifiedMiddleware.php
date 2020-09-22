@@ -22,9 +22,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
 {
     use ValidateRegexTrait;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $lastModifiedDirectives = [];
 
     /**
@@ -37,7 +35,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
         $this->lastModifiedDirectives = $lastModifiedDirectives;
     }
 
-    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
     {
         $response = $next($request, $filename);
 
@@ -45,7 +43,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        $lastModified = filemtime($filename) ?? 0;
+        $lastModified          = filemtime($filename) ?? 0;
         $formattedLastModified = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
 
         $response->addHeader('Last-Modified', $formattedLastModified);
@@ -58,7 +56,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
         return $response;
     }
 
-    private function getLastModifiedFlagForPath(string $path) : bool
+    private function getLastModifiedFlagForPath(string $path): bool
     {
         foreach ($this->lastModifiedDirectives as $regexp) {
             if (preg_match($regexp, $path)) {
@@ -72,7 +70,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
      * @return bool Returns true if the If-Modified-Since request header matches
      *     the $lastModifiedTime value; in such cases, no content is returned.
      */
-    private function isUnmodified(Request $request, string $lastModified) : bool
+    private function isUnmodified(Request $request, string $lastModified): bool
     {
         $ifModifiedSince = $request->header['if-modified-since'] ?? '';
         if ('' === $ifModifiedSince) {

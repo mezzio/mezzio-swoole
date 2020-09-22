@@ -25,6 +25,7 @@ use Throwable;
 use function array_merge;
 use function defined;
 use function extension_loaded;
+use function go;
 use function json_decode;
 use function json_encode;
 use function method_exists;
@@ -45,21 +46,22 @@ class HttpServerFactoryTest extends TestCase
     /** @var ContainerInterface|ObjectProphecy */
     private $container;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->container = $this->prophesize(ContainerInterface::class);
     }
 
-    public function testFactoryCanCreateServerWithDefaultConfiguration() : void
+    public function testFactoryCanCreateServerWithDefaultConfiguration(): void
     {
         /**
          * Initialise servers inside a process or subsequent tests will fail
+         *
          * @see https://github.com/swoole/swoole-src/issues/1754
          */
         $process = new Process(function (Process $worker) {
             $this->container->get('config')->willReturn([]);
-            $factory = new HttpServerFactory();
+            $factory      = new HttpServerFactory();
             $swooleServer = $factory($this->container->reveal());
             $this->assertSame(HttpServerFactory::DEFAULT_HOST, $swooleServer->host);
             $this->assertSame(HttpServerFactory::DEFAULT_PORT, $swooleServer->port);
@@ -73,20 +75,20 @@ class HttpServerFactoryTest extends TestCase
         Process::wait(true);
     }
 
-    public function testFactorySetsPortAndHostAsConfigured() : void
+    public function testFactorySetsPortAndHostAsConfigured(): void
     {
         $process = new Process(function (Process $worker) {
             $this->container->get('config')->willReturn([
                 'mezzio-swoole' => [
                     'swoole-http-server' => [
-                        'host' => '0.0.0.0',
-                        'port' => 8081,
-                        'mode' => SWOOLE_BASE,
+                        'host'     => '0.0.0.0',
+                        'port'     => 8081,
+                        'mode'     => SWOOLE_BASE,
                         'protocol' => SWOOLE_SOCK_TCP6,
                     ],
                 ],
             ]);
-            $factory = new HttpServerFactory();
+            $factory      = new HttpServerFactory();
             $swooleServer = $factory($this->container->reveal());
             $worker->write(json_encode([
                 'host' => $swooleServer->host,
@@ -109,7 +111,7 @@ class HttpServerFactoryTest extends TestCase
         ], $result);
     }
 
-    public function getInvalidPortNumbers() : array
+    public function getInvalidPortNumbers(): array
     {
         return [
             [-1],
@@ -122,7 +124,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @dataProvider getInvalidPortNumbers
      */
-    public function testExceptionThrownForOutOfRangePortNumber(int $port) : void
+    public function testExceptionThrownForOutOfRangePortNumber(int $port): void
     {
         $this->container->get('config')->willReturn([
             'mezzio-swoole' => [
@@ -140,7 +142,7 @@ class HttpServerFactoryTest extends TestCase
         }
     }
 
-    public function invalidServerModes() : array
+    public function invalidServerModes(): array
     {
         return [
             [0],
@@ -152,10 +154,9 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidServerModes
-     *
      * @param mixed $mode
      */
-    public function testExceptionThrownForInvalidServerMode($mode) : void
+    public function testExceptionThrownForInvalidServerMode($mode): void
     {
         $this->container->get('config')->willReturn([
             'mezzio-swoole' => [
@@ -173,7 +174,7 @@ class HttpServerFactoryTest extends TestCase
         }
     }
 
-    public function invalidSocketTypes() : array
+    public function invalidSocketTypes(): array
     {
         return [
             [0],
@@ -185,10 +186,9 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidSocketTypes
-     *
      * @param mixed $type
      */
-    public function testExceptionThrownForInvalidSocketType($type) : void
+    public function testExceptionThrownForInvalidSocketType($type): void
     {
         $this->container->get('config')->willReturn([
             'mezzio-swoole' => [
@@ -219,7 +219,7 @@ class HttpServerFactoryTest extends TestCase
             ],
         ]);
         $process = new Process(function (Process $worker) {
-            $factory = new HttpServerFactory();
+            $factory      = new HttpServerFactory();
             $swooleServer = $factory($this->container->reveal());
             $worker->write(json_encode($swooleServer->setting));
             $worker->exit();
@@ -230,7 +230,7 @@ class HttpServerFactoryTest extends TestCase
         $this->assertSame($serverOptions, $setOptions);
     }
 
-    public function validSocketTypes() : array
+    public function validSocketTypes(): array
     {
         $validTypes = [
             [SWOOLE_SOCK_TCP, []],
@@ -244,7 +244,7 @@ class HttpServerFactoryTest extends TestCase
         if (defined('SWOOLE_SSL')) {
             $extraOptions = [
                 'ssl_cert_file' => __DIR__ . '/TestAsset/ssl/server.crt',
-                'ssl_key_file' => __DIR__ . '/TestAsset/ssl/server.key',
+                'ssl_key_file'  => __DIR__ . '/TestAsset/ssl/server.key',
             ];
             $validTypes[] = [SWOOLE_SOCK_TCP | SWOOLE_SSL, $extraOptions];
             $validTypes[] = [SWOOLE_SOCK_TCP6 | SWOOLE_SSL, $extraOptions];
@@ -255,19 +255,18 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider validSocketTypes
-     *
      * @param int $socketType
      */
-    public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions) : void
+    public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions): void
     {
         $this->container->get('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
-                    'host' => '127.0.0.1',
-                    'port' => 8080,
+                    'host'     => '127.0.0.1',
+                    'port'     => 8080,
                     'protocol' => $socketType,
-                    'mode' => SWOOLE_PROCESS,
-                    'options' => array_merge([
+                    'mode'     => SWOOLE_PROCESS,
+                    'options'  => array_merge([
                         'worker_num' => 1,
                     ], $additionalOptions),
                 ],
@@ -275,7 +274,7 @@ class HttpServerFactoryTest extends TestCase
         ]);
         $process = new Process(function (Process $worker) {
             try {
-                $factory = new HttpServerFactory();
+                $factory      = new HttpServerFactory();
                 $swooleServer = $factory($this->container->reveal());
                 $swooleServer->on('Start', static function (SwooleServer $server) use ($worker) {
                     // Give the server a chance to start up and avoid zombies

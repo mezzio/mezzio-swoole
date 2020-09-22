@@ -22,6 +22,8 @@ use function inotify_read;
 use function is_array;
 use function stream_set_blocking;
 
+use const IN_MODIFY;
+
 class InotifyFileWatcher implements FileWatcherInterface
 {
     /** @var resource */
@@ -49,16 +51,16 @@ class InotifyFileWatcher implements FileWatcherInterface
     /**
      * Add a file path to be monitored for changes by this watcher.
      */
-    public function addFilePath(string $path) : void
+    public function addFilePath(string $path): void
     {
-        $wd = inotify_add_watch($this->inotify, $path, IN_MODIFY);
+        $wd                      = inotify_add_watch($this->inotify, $path, IN_MODIFY);
         $this->filePathByWd[$wd] = $path;
     }
 
-    public function readChangedFilePaths() : array
+    public function readChangedFilePaths(): array
     {
         $events = inotify_read($this->inotify);
-        $paths = [];
+        $paths  = [];
         if (is_array($events)) {
             foreach ($events as $event) {
                 $wd = $event['wd'] ?? null;

@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 
 trait ReflectMethodTrait
 {
-    public function reflectMethod(Command $command, string $method) : ReflectionMethod
+    public function reflectMethod(Command $command, string $method): ReflectionMethod
     {
         $r = new ReflectionMethod($command, $method);
         $r->setAccessible(true);

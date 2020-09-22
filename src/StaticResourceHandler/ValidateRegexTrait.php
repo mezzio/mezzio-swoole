@@ -21,7 +21,7 @@ use const E_WARNING;
 
 trait ValidateRegexTrait
 {
-    private function isValidRegex(string $regex) : bool
+    private function isValidRegex(string $regex): bool
     {
         set_error_handler(static function ($errno) {
             return $errno === E_WARNING;
@@ -32,9 +32,9 @@ trait ValidateRegexTrait
     }
 
     /**
-     * @throws Exception\InvalidArgumentException if any regexp is invalid
+     * @throws Exception\InvalidArgumentException If any regexp is invalid.
      */
-    private function validateRegexList(array $regexList, string $type) : void
+    private function validateRegexList(array $regexList, string $type): void
     {
         foreach ($regexList as $regex) {
             if (! $this->isValidRegex($regex)) {

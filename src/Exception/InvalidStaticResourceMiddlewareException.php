@@ -17,7 +17,11 @@ use function sprintf;
 
 class InvalidStaticResourceMiddlewareException extends InvalidArgumentException
 {
-    public static function forMiddlewareAtPosition($middleware, $position) : self
+    /**
+     * @param mixed      $middleware
+     * @param int|string $position
+     */
+    public static function forMiddlewareAtPosition($middleware, $position): self
     {
         return new self(sprintf(
             'Static resource middleware must be callable; received middleware of type "%s" in position %s',

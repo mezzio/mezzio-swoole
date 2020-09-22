@@ -11,17 +11,17 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\StaticMappedResourceHandler;
-use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
-use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -39,13 +39,13 @@ use function trim;
  */
 class IntegrationMappedTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->assetPath = __DIR__ . '/../TestAsset';
+        $this->assetPath       = __DIR__ . '/../TestAsset';
         $this->mockFileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
     }
 
-    public function unsupportedHttpMethods()
+    public function unsupportedHttpMethods(): array
     {
         return [
             'POST'   => ['POST'],
@@ -62,7 +62,7 @@ class IntegrationMappedTest extends TestCase
     public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method)
     {
         $this->mockFileLocRepo->findFile('/image.png')->willReturn($this->assetPath . '/image.png');
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_method' => $method,
             'request_uri'    => '/image.png',
@@ -93,7 +93,7 @@ class IntegrationMappedTest extends TestCase
     public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest()
     {
         $this->mockFileLocRepo->findFile('/image.png')->willReturn($this->assetPath . '/image.png');
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->server = [
             'request_method' => 'OPTIONS',
             'request_uri'    => '/image.png',
@@ -126,12 +126,12 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [];
         $request->server = [
             'request_method' => 'GET',
@@ -174,12 +174,12 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [];
         $request->server = [
             'request_method' => 'HEAD',
@@ -225,12 +225,12 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [];
         $request->server = [
             'request_method' => 'OPTIONS',
@@ -277,15 +277,15 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [
             'if-modified-since' => $lastModifiedFormatted,
-            'if-match' => $etag,
+            'if-match'          => $etag,
         ];
         $request->server = [
             'request_method' => 'GET',
@@ -329,15 +329,15 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [
             'if-modified-since' => $lastModifiedFormatted,
-            'if-match' => $etag,
+            'if-match'          => $etag,
         ];
         $request->server = [
             'request_method' => 'HEAD',
@@ -381,12 +381,12 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [
             'if-match' => $etag,
         ];
@@ -420,7 +420,7 @@ class IntegrationMappedTest extends TestCase
                 new ETagMiddleware(
                     ['/\.txt$/'],
                     ETagMiddleware::ETAG_VALIDATION_WEAK
-                )
+                ),
             ]
         );
 
@@ -433,12 +433,12 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [
             'if-none-match' => $etag,
         ];
@@ -486,9 +486,9 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
         $contentType = 'text/plain';
-        $etag = md5_file($file);
+        $etag        = md5_file($file);
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [];
         $request->server = [
             'request_method' => 'GET',
@@ -533,11 +533,11 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
+        $contentType           = 'text/plain';
+        $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [
             'if-modified-since' => $lastModifiedFormatted,
         ];
@@ -581,13 +581,13 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->findFile('/content.txt')->willReturn($file);
 
-        $contentType = 'text/plain';
-        $lastModified = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $ifModifiedSince = $lastModified - 3600;
+        $contentType              = 'text/plain';
+        $lastModified             = filemtime($file);
+        $lastModifiedFormatted    = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $ifModifiedSince          = $lastModified - 3600;
         $ifModifiedSinceFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $ifModifiedSince));
 
-        $request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $request->header = [
             'if-modified-since' => $ifModifiedSinceFormatted,
         ];

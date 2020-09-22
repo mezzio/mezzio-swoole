@@ -33,6 +33,7 @@ EOH;
 
     /**
      * @internal
+     *
      * @var Closure Callable to execute when attempting to kill the server
      *     process. Generally speaking, this is SwooleProcess::kill; only
      *     change the value when testing.
@@ -41,14 +42,13 @@ EOH;
 
     /**
      * @internal
+     *
      * @var int How long to wait for the server process to end. Only change
      *     the value when testing.
      */
     public $waitThreshold = 60;
 
-    /**
-     * @var PidManager
-     */
+    /** @var PidManager */
     private $pidManager;
 
     public function __construct(PidManager $pidManager, string $name = 'stop')
@@ -58,13 +58,13 @@ EOH;
         parent::__construct($name);
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setDescription('Stop the web server.');
         $this->setHelp(self::HELP);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (! $this->isRunning()) {
             $output->writeln('<info>Server is not running</info>');
@@ -82,7 +82,7 @@ EOH;
         return 0;
     }
 
-    private function stopServer() : bool
+    private function stopServer(): bool
     {
         [$masterPid] = $this->pidManager->read();
         $startTime   = time();

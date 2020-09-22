@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
@@ -28,9 +28,9 @@ class ETagMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->next = static function ($request, $filename) {
+        $this->next    = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
         $this->request = $this->prophesize(Request::class)->reveal();
@@ -65,11 +65,11 @@ class ETagMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
-    public function expectedEtagProvider() : array
+    public function expectedEtagProvider(): array
     {
-        $filename = __DIR__ . '/../TestAsset/image.png';
+        $filename     = __DIR__ . '/../TestAsset/image.png';
         $lastModified = filemtime($filename);
-        $filesize = filesize($filename);
+        $filesize     = filesize($filename);
 
         $weakETag   = sprintf('W/"%x-%x"', $lastModified, $filesize);
         $strongETag = md5_file($filename);
@@ -103,7 +103,7 @@ class ETagMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
-    public function clientMatchHeaders() : iterable
+    public function clientMatchHeaders(): iterable
     {
         $clientHeaders = ['if-match', 'if-none-match'];
 

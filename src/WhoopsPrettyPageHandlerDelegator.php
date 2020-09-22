@@ -23,7 +23,7 @@ use Whoops\Handler\PrettyPageHandler;
  */
 class WhoopsPrettyPageHandlerDelegator
 {
-    public function __invoke(ContainerInterface $container, $serviceName, callable $callback) : PrettyPageHandler
+    public function __invoke(ContainerInterface $container, string $serviceName, callable $callback): PrettyPageHandler
     {
         /** @var PrettyPageHandler $pageHandler */
         $pageHandler = $callback();

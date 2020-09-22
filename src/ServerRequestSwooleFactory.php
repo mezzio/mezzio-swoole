@@ -27,7 +27,7 @@ use const CASE_UPPER;
  */
 class ServerRequestSwooleFactory
 {
-    public function __invoke(ContainerInterface $container) : callable
+    public function __invoke(ContainerInterface $container): callable
     {
         return static function (SwooleHttpRequest $request) {
             // Aggregate values from Swoole request object

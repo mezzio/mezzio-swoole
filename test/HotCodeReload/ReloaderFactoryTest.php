@@ -25,10 +25,10 @@ class ReloaderFactoryTest extends TestCase
     /** @var FileWatcherInterface */
     private $fileWatcher;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->fileWatcher = $this->createMock(FileWatcherInterface::class);
-        $this->container = new ServiceManager();
+        $this->container   = new ServiceManager();
         $this->container->setAllowOverride(true);
         $this->container->setService(FileWatcherInterface::class, $this->fileWatcher);
 
@@ -38,7 +38,7 @@ class ReloaderFactoryTest extends TestCase
     /**
      * @dataProvider provideServiceManagerServicesWithEmptyConfigurations
      */
-    public function testCreateUnconfigured(array $services) : void
+    public function testCreateUnconfigured(array $services): void
     {
         $this->container->configure(['services' => $services]);
         $reloader = (new ReloaderFactory())->__invoke($this->container);
@@ -48,12 +48,12 @@ class ReloaderFactoryTest extends TestCase
         static::assertAttributeSame(500, 'interval', $reloader);
     }
 
-    public function testCreateConfigured() : void
+    public function testCreateConfigured(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $this->container->configure([
             'services' => [
-                'config' => [
+                'config'               => [
                     'mezzio-swoole' => [
                         'hot-code-reload' => [
                             'interval' => 999,
@@ -70,7 +70,7 @@ class ReloaderFactoryTest extends TestCase
         static::assertAttributeSame($logger, 'logger', $reloader);
     }
 
-    public function provideServiceManagerServicesWithEmptyConfigurations() : iterable
+    public function provideServiceManagerServicesWithEmptyConfigurations(): iterable
     {
         yield 'empty container' => [
             [],

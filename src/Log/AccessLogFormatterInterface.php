@@ -12,5 +12,5 @@ namespace Mezzio\Swoole\Log;
 
 interface AccessLogFormatterInterface
 {
-    public function format(AccessLogDataMap $map) : string;
+    public function format(AccessLogDataMap $map): string;
 }

@@ -20,9 +20,7 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
 {
     use StaticResourceHandler\ValidateMiddlewareTrait;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $docRoot;
 
     /**
@@ -33,7 +31,7 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
     private $middleware;
 
     /**
-     * @throws Exception\InvalidStaticResourceMiddlewareException for any
+     * @throws Exception\InvalidStaticResourceMiddlewareException For any
      *     non-callable middleware encountered.
      */
     public function __construct(
@@ -48,17 +46,17 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
         }
         $this->validateMiddleware($middleware);
 
-        $this->docRoot = $docRoot;
+        $this->docRoot    = $docRoot;
         $this->middleware = $middleware;
     }
 
     public function processStaticResource(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
-    ) : ?StaticResourceHandler\StaticResourceResponse {
+    ): ?StaticResourceHandler\StaticResourceResponse {
         $filename = $this->docRoot . $request->server['request_uri'];
 
-        $middleware = new StaticResourceHandler\MiddlewareQueue($this->middleware);
+        $middleware             = new StaticResourceHandler\MiddlewareQueue($this->middleware);
         $staticResourceResponse = $middleware($request, $filename);
         if ($staticResourceResponse->isFailure()) {
             return null;

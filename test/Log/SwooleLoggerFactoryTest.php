@@ -24,7 +24,7 @@ class SwooleLoggerFactoryTest extends TestCase
         $this->assertSame($this->logger, $logger);
     }
 
-    public function provideConfigsWithNoNamedLogger() : iterable
+    public function provideConfigsWithNoNamedLogger(): iterable
     {
         yield 'no config' => [null];
         yield 'empty config' => [[]];

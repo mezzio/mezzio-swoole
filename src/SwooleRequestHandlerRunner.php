@@ -60,9 +60,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     private $handler;
 
-    /**
-     * @var Log\AccessLogInterface
-     */
+    /** @var Log\AccessLogInterface */
     private $logger;
 
     /**
@@ -99,19 +97,13 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     private $serverRequestFactory;
 
-    /**
-     * @var ?StaticResourceHandlerInterface
-     */
+    /** @var null|StaticResourceHandlerInterface */
     private $staticResourceHandler;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $processName;
 
-    /**
-     * @var null|Reloader
-     */
+    /** @var null|Reloader */
     private $hotCodeReloader;
 
     public function __construct(
@@ -128,12 +120,12 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         $this->handler = $handler;
 
         // Factories are cast as Closures to ensure return type safety.
-        $this->serverRequestFactory = static function ($request) use ($serverRequestFactory) : ServerRequestInterface {
+        $this->serverRequestFactory = static function ($request) use ($serverRequestFactory): ServerRequestInterface {
             return $serverRequestFactory($request);
         };
 
         $this->serverRequestErrorResponseGenerator
-            = static function (Throwable $exception) use ($serverRequestErrorResponseGenerator) : ResponseInterface {
+            = static function (Throwable $exception) use ($serverRequestErrorResponseGenerator): ResponseInterface {
                 return $serverRequestErrorResponseGenerator($exception);
             };
 
@@ -141,16 +133,16 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         if ($httpServer->master_pid > 0 || $httpServer->manager_pid > 0) {
             throw new Exception\InvalidArgumentException('The Swoole server has already been started');
         }
-        $this->httpServer = $httpServer;
-        $this->pidManager = $pidManager;
+        $this->httpServer            = $httpServer;
+        $this->pidManager            = $pidManager;
         $this->staticResourceHandler = $staticResourceHandler;
-        $this->logger = $logger ?: new Log\Psr3AccessLogDecorator(
+        $this->logger                = $logger ?: new Log\Psr3AccessLogDecorator(
             new Log\StdoutLogger(),
             new Log\AccessLogFormatter()
         );
-        $this->processName = $processName;
-        $this->hotCodeReloader = $hotCodeReloader;
-        $this->cwd = getcwd();
+        $this->processName           = $processName;
+        $this->hotCodeReloader       = $hotCodeReloader;
+        $this->cwd                   = getcwd();
     }
 
     /**
@@ -160,7 +152,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      * executes the task associated with it. If no action was provided, it
      * assumes "start".
      */
-    public function run() : void
+    public function run(): void
     {
         $this->httpServer->on('start', [$this, 'onStart']);
         $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
@@ -175,7 +167,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      * Writes the master and manager PID values to the PidManager, and ensures
      * the manager and/or workers use the same PWD as the master process.
      */
-    public function onStart(SwooleHttpServer $server) : void
+    public function onStart(SwooleHttpServer $server): void
     {
         $this->pidManager->write($server->master_pid, $server->manager_pid);
 
@@ -195,7 +187,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      *
      * Ensures workers all use the same PWD as the master process.
      */
-    public function onWorkerStart(SwooleHttpServer $server, int $workerId) : void
+    public function onWorkerStart(SwooleHttpServer $server, int $workerId): void
     {
         // Reset CWD
         chdir($this->cwd);
@@ -221,7 +213,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     public function onRequest(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
-    ) : void {
+    ): void {
         $staticResourceResponse = $this->staticResourceHandler
             ? $this->staticResourceHandler->processStaticResource($request, $response)
             : null;
@@ -249,7 +241,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /**
      * Handle the shutting down of the server
      */
-    public function onShutdown(SwooleHttpServer $server) : void
+    public function onShutdown(SwooleHttpServer $server): void
     {
         $this->pidManager->delete();
         $this->logger->notice('Swoole HTTP has been terminated.');
@@ -262,7 +254,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         EmitterInterface $emitter,
         Throwable $exception,
         SwooleHttpRequest $request
-    ) : void {
+    ): void {
         $psr7Response = ($this->serverRequestErrorResponseGenerator)($exception);
         $emitter->emit($psr7Response);
         $this->logger->logAccessForPsr7Resource($request, $psr7Response);
@@ -271,7 +263,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /**
      * Set the process name, only if the current OS supports the operation
      */
-    private function setProcessName(string $name) : void
+    private function setProcessName(string $name): void
     {
         if (PHP_OS === 'Darwin') {
             return;

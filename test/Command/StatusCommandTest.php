@@ -24,14 +24,14 @@ class StatusCommandTest extends TestCase
 {
     use ReflectMethodTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->input      = $this->prophesize(InputInterface::class);
         $this->output     = $this->prophesize(OutputInterface::class);
         $this->pidManager = $this->prophesize(PidManager::class);
     }
 
-    public function testConstructorAcceptsPidManager()
+    public function testConstructorAcceptsPidManager(): StatusCommand
     {
         $command = new StatusCommand($this->pidManager->reveal());
         $this->assertAttributeSame($this->pidManager->reveal(), 'pidManager', $command);
@@ -54,7 +54,7 @@ class StatusCommandTest extends TestCase
         $this->assertInstanceOf(Command::class, $command);
     }
 
-    public function runningProcesses() : iterable
+    public function runningProcesses(): iterable
     {
         yield 'base-mode'    => [[getmypid(), null]];
         yield 'process-mode' => [[1000000, getmypid()]];
@@ -82,7 +82,7 @@ class StatusCommandTest extends TestCase
             ->shouldHaveBeenCalled();
     }
 
-    public function noRunningProcesses() : iterable
+    public function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];

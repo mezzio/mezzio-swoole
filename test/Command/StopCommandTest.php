@@ -24,14 +24,14 @@ class StopCommandTest extends TestCase
 {
     use ReflectMethodTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->input      = $this->prophesize(InputInterface::class);
         $this->output     = $this->prophesize(OutputInterface::class);
         $this->pidManager = $this->prophesize(PidManager::class);
     }
 
-    public function testConstructorAcceptsPidManager()
+    public function testConstructorAcceptsPidManager(): StopCommand
     {
         $command = new StopCommand($this->pidManager->reveal());
         $this->assertAttributeSame($this->pidManager->reveal(), 'pidManager', $command);
@@ -54,7 +54,7 @@ class StopCommandTest extends TestCase
         $this->assertInstanceOf(Command::class, $command);
     }
 
-    public function noRunningProcesses() : iterable
+    public function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];
@@ -84,7 +84,7 @@ class StopCommandTest extends TestCase
             ->shouldHaveBeenCalled();
     }
 
-    public function runningProcesses() : iterable
+    public function runningProcesses(): iterable
     {
         yield 'base-mode'    => [[getmypid(), null]];
         yield 'process-mode' => [[1000000, getmypid()]];
@@ -105,8 +105,8 @@ class StopCommandTest extends TestCase
             return $signal === 0;
         };
 
-        $command = new StopCommand($this->pidManager->reveal());
-        $command->killProcess = $killProcess;
+        $command                = new StopCommand($this->pidManager->reveal());
+        $command->killProcess   = $killProcess;
         $command->waitThreshold = 1;
 
         $execute = $this->reflectMethod($command, 'execute');
@@ -150,7 +150,7 @@ class StopCommandTest extends TestCase
             return true;
         };
 
-        $command = new StopCommand($this->pidManager->reveal());
+        $command              = new StopCommand($this->pidManager->reveal());
         $command->killProcess = $killProcess;
 
         $execute = $this->reflectMethod($command, 'execute');

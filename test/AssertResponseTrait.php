@@ -20,7 +20,7 @@ use function sprintf;
 
 trait AssertResponseTrait
 {
-    public function assertStatus(int $expected, StaticResourceResponse $response, string $message = '') : void
+    public function assertStatus(int $expected, StaticResourceResponse $response, string $message = ''): void
     {
         $r = new ReflectionProperty($response, 'status');
         $r->setAccessible(true);
@@ -35,7 +35,7 @@ trait AssertResponseTrait
         Assert::assertSame($expected, $actual, $message);
     }
 
-    public function assertHeadersEmpty(StaticResourceResponse $response, string $message = '') : void
+    public function assertHeadersEmpty(StaticResourceResponse $response, string $message = ''): void
     {
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
@@ -49,7 +49,7 @@ trait AssertResponseTrait
         Assert::assertEmpty($headers, $message);
     }
 
-    public function assertHeaderExists(string $name, StaticResourceResponse $response, string $message = '') : void
+    public function assertHeaderExists(string $name, StaticResourceResponse $response, string $message = ''): void
     {
         $message = $message ?: sprintf(
             'Failed asserting that static resource response contains header by name "%s"',
@@ -63,7 +63,7 @@ trait AssertResponseTrait
         Assert::assertArrayHasKey($name, $headers, $message);
     }
 
-    public function assertHeaderNotExists(string $name, StaticResourceResponse $response, string $message = '') : void
+    public function assertHeaderNotExists(string $name, StaticResourceResponse $response, string $message = ''): void
     {
         $message = $message ?: sprintf(
             'Failed asserting that static resource response does not contain header by name "%s"',
@@ -82,13 +82,13 @@ trait AssertResponseTrait
         string $header,
         StaticResourceResponse $response,
         string $message = ''
-    ) : void {
+    ): void {
         $this->assertHeaderExists($header, $response);
 
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
         $headers = $r->getValue($response);
-        $value = $headers[$header];
+        $value   = $headers[$header];
 
         $message = $message ?: sprintf(
             'Failed asserting that static resource response header "%s" (value "%s") is "%s"',
@@ -105,13 +105,13 @@ trait AssertResponseTrait
         string $header,
         StaticResourceResponse $response,
         string $message = ''
-    ) : void {
+    ): void {
         $this->assertHeaderExists($header, $response);
 
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
         $headers = $r->getValue($response);
-        $value = $headers[$header];
+        $value   = $headers[$header];
 
         $message = $message ?: sprintf(
             'Failed asserting that static resource response header "%s" (value "%s") matches "%s"',
@@ -123,7 +123,7 @@ trait AssertResponseTrait
         Assert::assertRegexp($regexp, $value, $message);
     }
 
-    public function assertShouldSendContent(StaticResourceResponse $response, string $message = '') : void
+    public function assertShouldSendContent(StaticResourceResponse $response, string $message = ''): void
     {
         $message = $message ?: 'Failed asserting that the static resource response should send content';
 
@@ -133,7 +133,7 @@ trait AssertResponseTrait
         Assert::assertTrue($value, $message);
     }
 
-    public function assertShouldNotSendContent(StaticResourceResponse $response, string $message = '') : void
+    public function assertShouldNotSendContent(StaticResourceResponse $response, string $message = ''): void
     {
         $message = $message ?: 'Failed asserting that the static resource response should not send content';
 

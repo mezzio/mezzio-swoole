@@ -33,7 +33,7 @@ class ReloadCommandFactoryTest extends TestCase
         $this->assertInstanceOf(ReloadCommand::class, $command);
     }
 
-    public function configProvider() : iterable
+    public function configProvider(): iterable
     {
         yield 'empty' => [
             [],

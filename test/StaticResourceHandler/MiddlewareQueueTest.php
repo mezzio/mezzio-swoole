@@ -22,7 +22,7 @@ class MiddlewareQueueTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->request = $this->prophesize(Request::class)->reveal();
     }
@@ -69,7 +69,7 @@ class MiddlewareQueueTest extends TestCase
                 $second
                     ->__invoke($args[0], $args[1], $args[2])
                     ->will(function ($args) {
-                        $next = $args[2];
+                        $next     = $args[2];
                         $response = $next($args[0], $args[1]);
                         $response->setStatus(304);
                         $response->addHeader('X-Hit', 'second');

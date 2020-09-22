@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
  * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
@@ -14,13 +15,20 @@ use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
+use function chdir;
+use function getcwd;
+use function mkdir;
+use function rmdir;
+use function sys_get_temp_dir;
+use function time;
+
 class FileLocationRepositoryFactoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->mockContainer = $this->prophesize(ContainerInterface::class);
+        $this->mockContainer      = $this->prophesize(ContainerInterface::class);
         $this->fileLocRepoFactory = new FileLocationRepositoryFactory();
-        $this->assetDir = __DIR__ . '/../TestAsset';
+        $this->assetDir           = __DIR__ . '/../TestAsset';
     }
 
     public function testFactoryReturnsFileLocationRepository()
@@ -29,12 +37,12 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => []
-                    ]
-                ]
-            ]
+                        'document-root' => [],
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
         $this->assertInstanceOf(FileLocationRepository::class, $fileLocRepo);
     }
@@ -45,12 +53,12 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => [$this->assetDir]
-                    ]
-                ]
-            ]
+                        'document-root' => [$this->assetDir],
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
         $this->assertEquals(['/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
     }
@@ -61,19 +69,18 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => [],
+                        'document-root'         => [],
                         'mapped-document-roots' => [
-                            'foo' => [$this->assetDir]
-                        ]
-                    ]
-                ]
-            ]
+                            'foo' => [$this->assetDir],
+                        ],
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
         $this->assertEquals(['/foo/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
     }
-
 
     public function testFactoryUsesConfiguredMappedDocumentRootString()
     {
@@ -81,15 +88,15 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => [],
+                        'document-root'         => [],
                         'mapped-document-roots' => [
-                            'foo' => [$this->assetDir]
-                        ]
-                    ]
-                ]
-            ]
+                            'foo' => [$this->assetDir],
+                        ],
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
 
         $this->assertEquals(['/foo/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
@@ -101,15 +108,15 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => __DIR__,
+                        'document-root'         => __DIR__,
                         'mapped-document-roots' => [
-                            'foo' => [$this->assetDir]
-                        ]
-                    ]
-                ]
-            ]
+                            'foo' => [$this->assetDir],
+                        ],
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
 
         $this->assertEquals(
@@ -124,12 +131,12 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => $this->assetDir
-                    ]
-                ]
-            ]
+                        'document-root' => $this->assetDir,
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
 
         $this->assertEquals(['/' => [$this->assetDir . '/']], $fileLocRepo->listMappedDocumentRoots());
@@ -141,12 +148,12 @@ class FileLocationRepositoryFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => []
-                    ]
-                ]
-            ]
+                        'document-root' => [],
+                    ],
+                ],
+            ],
         ]);
-        $factory = $this->fileLocRepoFactory;
+        $factory     = $this->fileLocRepoFactory;
         $fileLocRepo = $factory($this->mockContainer->reveal());
         $this->assertEquals([], $fileLocRepo->listMappedDocumentRoots());
     }
@@ -156,30 +163,29 @@ class FileLocationRepositoryFactoryTest extends TestCase
         // Note - we are creating a temporary location to create a public folder,
         // since mocking is_dir and making phpcs happy at the same time
         // is problematic
-        $cwd = \getcwd();
-        $seed = time();
-        $tmpDir = \sys_get_temp_dir();
+        $cwd     = getcwd();
+        $seed    = time();
+        $tmpDir  = sys_get_temp_dir();
         $tmpDir1 = $tmpDir . '/' . $seed;
-        $tmpDir2 = $tmpDir1 . '/' . 'public';
+        $tmpDir2 = $tmpDir1 . '/public';
         try {
             mkdir($tmpDir1);
             mkdir($tmpDir2);
-            \chdir($tmpDir1);
+            chdir($tmpDir1);
             $this->mockContainer->get('config')->willReturn([
                 'mezzio-swoole' => [
                     'swoole-http-server' => [
-                        'static-files' => [
-                        ]
-                    ]
-                ]
+                        'static-files' => [],
+                    ],
+                ],
             ]);
-            $factory = $this->fileLocRepoFactory;
+            $factory     = $this->fileLocRepoFactory;
             $fileLocRepo = $factory($this->mockContainer->reveal());
             $this->assertEquals(['/' => [$tmpDir2 . '/']], $fileLocRepo->listMappedDocumentRoots());
         } finally {
-            \rmdir($tmpDir2);
-            \rmdir($tmpDir1);
-            \chdir($cwd);
+            rmdir($tmpDir2);
+            rmdir($tmpDir1);
+            chdir($cwd);
         }
     }
 }

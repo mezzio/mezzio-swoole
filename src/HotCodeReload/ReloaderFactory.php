@@ -17,10 +17,10 @@ class ReloaderFactory
 {
     use LoggerResolvingTrait;
 
-    public function __invoke(ContainerInterface $container) : Reloader
+    public function __invoke(ContainerInterface $container): Reloader
     {
-        $config = $container->has('config') ? $container->get('config') : [];
-        $swooleConfig = $config['mezzio-swoole'] ?? [];
+        $config              = $container->has('config') ? $container->get('config') : [];
+        $swooleConfig        = $config['mezzio-swoole'] ?? [];
         $hotCodeReloadConfig = $swooleConfig['hot-code-reload'] ?? [];
 
         return new Reloader(

@@ -20,7 +20,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->request = $this->prophesize(Request::class)->reveal();
     }
@@ -37,7 +37,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 
     public function testCanProvideAlternateTypeMapViaConstructor()
     {
-        $typeMap = [
+        $typeMap    = [
             'asc' => 'application/octet-stream',
         ];
         $middleware = new ContentTypeFilterMiddleware($typeMap);
@@ -46,7 +46,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 
     public function testMiddlewareReturnsFailureResponseIfFileNotAllowedByTypeMap()
     {
-        $next = static function ($request, $filename) {
+        $next       = static function ($request, $filename) {
             TestCase::fail('Should not have invoked next middleware');
         };
         $middleware = new ContentTypeFilterMiddleware([
@@ -61,8 +61,8 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 
     public function testMiddlewareAddsContentTypeToResponseWhenResourceLocatedAndAllowed()
     {
-        $expected = new StaticResourceResponse();
-        $next = static function ($request, $filename) use ($expected) {
+        $expected   = new StaticResourceResponse();
+        $next       = static function ($request, $filename) use ($expected) {
             return $expected;
         };
         $middleware = new ContentTypeFilterMiddleware();

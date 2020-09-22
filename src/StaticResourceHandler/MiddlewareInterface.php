@@ -15,7 +15,7 @@ use Swoole\Http\Request;
 interface MiddlewareInterface
 {
     /**
-     * @param string $filename The discovered filename being returned.
+     * @param string   $filename The discovered filename being returned.
      * @param callable $next has the signature:
      *     function (Request $request, string $filename) : StaticResourceResponse
      */
@@ -23,5 +23,5 @@ interface MiddlewareInterface
         Request $request,
         string $filename,
         callable $next
-    ) : StaticResourceResponse;
+    ): StaticResourceResponse;
 }

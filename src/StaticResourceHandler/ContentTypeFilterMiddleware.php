@@ -12,6 +12,7 @@ namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Swoole\Http\Request;
 
+use function file_exists;
 use function pathinfo;
 
 use const PATHINFO_EXTENSION;
@@ -104,27 +105,31 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
      */
     private $cacheTypeFile = [];
 
-    /**
-     * @var array[string, string] Extension => mimetype map
-     */
+    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
+    /** @var array<string, string> Extension => mimetype map */
     private $typeMap;
+    // phpcs:enable
 
+    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidParamName
     /**
-     * @param null|array[string, string] $typeMap Map of extensions to Content-Type
+     * @param null|array<string, string> $typeMap Map of extensions to Content-Type
      *     values. If `null` is provided, the default list in TYPE_MAP_DEFAULT will
      *     be used. Otherwise, the list provided is used verbatim.
      */
     public function __construct(?array $typeMap = null)
     {
-        $this->typeMap = null === $typeMap ? self::TYPE_MAP_DEFAULT : $typeMap;
+        $this->typeMap = $typeMap ?? self::TYPE_MAP_DEFAULT;
     }
+
+    // phpcs:enable
 
     /**
      * {@inheritDoc}
      */
-    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
     {
-        if (! isset($this->cacheTypeFile[$filename])
+        if (
+            ! isset($this->cacheTypeFile[$filename])
             && ! $this->cacheFile($filename)
         ) {
             $response = new StaticResourceResponse();
@@ -140,7 +145,7 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
     /**
      * Attempt to cache a static file resource.
      */
-    private function cacheFile(string $fileName) : bool
+    private function cacheFile(string $fileName): bool
     {
         $type = pathinfo($fileName, PATHINFO_EXTENSION);
         if (! isset($this->typeMap[$type])) {

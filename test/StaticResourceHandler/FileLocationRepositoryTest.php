@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
  * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
@@ -9,17 +10,26 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
+use Exception;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
+use function chdir;
+use function getcwd;
+use function mkdir;
+use function realpath;
+use function rmdir;
+use function sys_get_temp_dir;
+use function time;
+
 class FileLocationRepositoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
-        $this->testDir = __DIR__;
-        $this->testValDir = __DIR__ . '/';
+        $this->container   = $this->prophesize(ContainerInterface::class);
+        $this->testDir     = __DIR__;
+        $this->testValDir  = __DIR__ . '/';
         $this->fileLocRepo = new FileLocationRepository(['/' => $this->testValDir]);
     }
 
@@ -27,8 +37,10 @@ class FileLocationRepositoryTest extends TestCase
     {
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
-            ['/' => [$this->testValDir],
-            '/foo/' => [$this->testValDir]],
+            [
+                '/'     => [$this->testValDir],
+                '/foo/' => [$this->testValDir],
+            ],
             $this->fileLocRepo->listMappedDocumentRoots()
         );
     }
@@ -39,20 +51,23 @@ class FileLocationRepositoryTest extends TestCase
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $dir2);
         $this->assertEquals(
-            ['/' => [$this->testValDir],
-            '/foo/' => [$this->testValDir, $dir2]],
+            [
+                '/'     => [$this->testValDir],
+                '/foo/' => [$this->testValDir, $dir2],
+            ],
             $this->fileLocRepo->listMappedDocumentRoots()
         );
     }
-
 
     public function testNoDupeAddMappedRoot()
     {
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
-            ['/' => [$this->testValDir],
-            '/foo/' => [$this->testValDir]],
+            [
+                '/'     => [$this->testValDir],
+                '/foo/' => [$this->testValDir],
+            ],
             $this->fileLocRepo->listMappedDocumentRoots()
         );
     }
@@ -62,11 +77,11 @@ class FileLocationRepositoryTest extends TestCase
         // Note - we are creating a temporary location to create a public folder,
         // since mocking is_dir and making phpcs happy at the same time
         // is problematic
-        $cwd = \getcwd();
-        $seed = time();
-        $tmpDir = \sys_get_temp_dir();
+        $cwd     = getcwd();
+        $seed    = time();
+        $tmpDir  = sys_get_temp_dir();
         $tmpDir1 = $tmpDir . '/' . $seed;
-        $tmpDir2 = $tmpDir1 . '/' . 'public';
+        $tmpDir2 = $tmpDir1 . '/public';
         try {
             mkdir($tmpDir1);
             mkdir($tmpDir2);
@@ -77,9 +92,9 @@ class FileLocationRepositoryTest extends TestCase
                 $this->fileLocRepo->listMappedDocumentRoots()
             );
         } finally {
-            \rmdir($tmpDir2);
-            \rmdir($tmpDir1);
-            \chdir($cwd);
+            rmdir($tmpDir2);
+            rmdir($tmpDir1);
+            chdir($cwd);
         }
     }
 
@@ -89,8 +104,10 @@ class FileLocationRepositoryTest extends TestCase
         $dir = getcwd() . '/';
         $this->fileLocRepo->addMappedDocumentRoot('foo/', $this->testDir);
         $this->assertEquals(
-            ['/' => [$this->testValDir],
-            '/foo/' => [$this->testValDir]],
+            [
+                '/'     => [$this->testValDir],
+                '/foo/' => [$this->testValDir],
+            ],
             $this->fileLocRepo->listMappedDocumentRoots()
         );
     }
@@ -101,8 +118,10 @@ class FileLocationRepositoryTest extends TestCase
         $dir = getcwd() . '/';
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
-            ['/' => [$this->testValDir],
-            '/foo/' => [$this->testValDir]],
+            [
+                '/'     => [$this->testValDir],
+                '/foo/' => [$this->testValDir],
+            ],
             $this->fileLocRepo->listMappedDocumentRoots()
         );
     }
@@ -113,8 +132,10 @@ class FileLocationRepositoryTest extends TestCase
         $dir = getcwd();
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
-            ['/' => [$this->testValDir],
-            '/foo/' => [$this->testValDir]],
+            [
+                '/'     => [$this->testValDir],
+                '/foo/' => [$this->testValDir],
+            ],
             $this->fileLocRepo->listMappedDocumentRoots()
         );
     }
@@ -122,7 +143,7 @@ class FileLocationRepositoryTest extends TestCase
     public function testValidateDirectoryFaultsIfDirectoryExists()
     {
         // validateDirectory called from addMappDocumentRoot
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $msg = 'The document root for "/foo/", "BOGUS", does not exist; please check your configuration.';
         $this->expectExceptionMessage($msg);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', 'BOGUS');
@@ -149,7 +170,7 @@ class FileLocationRepositoryTest extends TestCase
 
     public function testFindFileExists()
     {
-        $dir = realpath(__DIR__ . '/../TestAsset');
+        $dir  = realpath(__DIR__ . '/../TestAsset');
         $full = realpath($dir . '/content.txt');
         // Add two directories for "test" so we can make sure non-matches are skipped
         $this->fileLocRepo->addMappedDocumentRoot('/test/', getcwd());

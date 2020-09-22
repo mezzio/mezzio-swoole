@@ -19,15 +19,13 @@ use function sprintf;
 
 class StaticResourceResponse
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $contentLength = 0;
 
-    /**
-     * @var array[string, string]
-     */
+    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
+    /** @var array<string, string> */
     private $headers = [];
+    // phpcs:enable
 
     /**
      * @var bool Does this response represent a failure to locate the requested
@@ -35,19 +33,13 @@ class StaticResourceResponse
      */
     private $isFailure = false;
 
-    /**
-     * @var callable
-     */
+    /** @var callable */
     private $responseContentCallback;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $sendContent = true;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $status;
 
     /**
@@ -61,18 +53,18 @@ class StaticResourceResponse
         bool $sendContent = true,
         ?callable $responseContentCallback = null
     ) {
-        $this->status = $status;
-        $this->headers = $headers;
-        $this->sendContent = $sendContent;
+        $this->status                  = $status;
+        $this->headers                 = $headers;
+        $this->sendContent             = $sendContent;
         $this->responseContentCallback = $responseContentCallback
-            ?: function (SwooleHttpResponse $response, string $filename) : void {
+            ?: function (SwooleHttpResponse $response, string $filename): void {
                 $this->contentLength = filesize($filename);
                 $response->header('Content-Length', (string) $this->contentLength, true);
                 $response->sendfile($filename);
             };
     }
 
-    public function addHeader(string $name, string $value) : void
+    public function addHeader(string $name, string $value): void
     {
         $this->headers[$name] = $value;
     }
@@ -82,12 +74,12 @@ class StaticResourceResponse
      *
      * This is exposed to allow logging the content emitted.
      */
-    public function getContentLength() : int
+    public function getContentLength(): int
     {
         return $this->contentLength;
     }
 
-    public function disableContent() : void
+    public function disableContent(): void
     {
         $this->sendContent = false;
     }
@@ -97,7 +89,7 @@ class StaticResourceResponse
      *
      * This is exposed to allow logging specific response headers when present.
      */
-    public function getHeader(string $name) : string
+    public function getHeader(string $name): string
     {
         return $this->headers[$name] ?? '';
     }
@@ -107,7 +99,7 @@ class StaticResourceResponse
      *
      * This is exposed for logging purposes.
      */
-    public function getHeaderSize() : int
+    public function getHeaderSize(): int
     {
         $headers = [];
         foreach ($this->headers as $header => $value) {
@@ -124,7 +116,7 @@ class StaticResourceResponse
      *
      * This is exposed to allow logging the status code emitted.
      */
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -132,7 +124,7 @@ class StaticResourceResponse
     /**
      * Can the requested resource be served?
      */
-    public function isFailure() : bool
+    public function isFailure(): bool
     {
         return $this->isFailure;
     }
@@ -143,7 +135,7 @@ class StaticResourceResponse
      * Call this method if the requested resource does not exist, or if it
      * fails certain validation checks.
      */
-    public function markAsFailure() : void
+    public function markAsFailure(): void
     {
         $this->isFailure = true;
     }
@@ -157,7 +149,7 @@ class StaticResourceResponse
      * If content has been disabled, it calls $response->end() instead of the
      * content callback.
      */
-    public function sendSwooleResponse(SwooleHttpResponse $response, string $filename) : void
+    public function sendSwooleResponse(SwooleHttpResponse $response, string $filename): void
     {
         $response->status($this->status);
         foreach ($this->headers as $header => $value) {
@@ -169,22 +161,22 @@ class StaticResourceResponse
         $this->sendContent ? $contentSender($response, $filename) : $response->end();
     }
 
-    public function setContentLength(int $length) : void
+    public function setContentLength(int $length): void
     {
         $this->contentLength = $length;
     }
 
     /**
-     * @param callable $responseContentCallback Callback to use when emitting
-     *     the response body content via Swoole. Must have the signature:
-     *     function (SwooleHttpResponse $response, string $filename) : void
+     * @param callable $callback Callback to use when emitting the response body
+     *     content via Swoole. Must have the signature:
+     *     function (SwooleHttpResponse $response, string $filename): void
      */
-    public function setResponseContentCallback(callable $callback) : void
+    public function setResponseContentCallback(callable $callback): void
     {
         $this->responseContentCallback = $callback;
     }
 
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }

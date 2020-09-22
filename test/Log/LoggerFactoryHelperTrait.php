@@ -17,15 +17,15 @@ use Psr\Log\LoggerInterface;
 
 trait LoggerFactoryHelperTrait
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->container->has(SwooleLoggerFactory::SWOOLE_LOGGER)->willReturn(false);
-        $this->logger = $this->prophesize(LoggerInterface::class)->reveal();
+        $this->logger    = $this->prophesize(LoggerInterface::class)->reveal();
         $this->formatter = $this->prophesize(AccessLogFormatterInterface::class)->reveal();
     }
 
-    private function createContainerMockWithNamedLogger() : ContainerInterface
+    private function createContainerMockWithNamedLogger(): ContainerInterface
     {
         $this->createContainerMockWithConfigAndNotPsrLogger([
             'mezzio-swoole' => [
@@ -41,7 +41,7 @@ trait LoggerFactoryHelperTrait
         return $this->container->reveal();
     }
 
-    private function createContainerMockWithConfigAndPsrLogger(?array $config = null) : ContainerInterface
+    private function createContainerMockWithConfigAndPsrLogger(?array $config = null): ContainerInterface
     {
         $this->registerConfigService($config);
         $this->container->has(LoggerInterface::class)->willReturn(true);
@@ -50,7 +50,7 @@ trait LoggerFactoryHelperTrait
         return $this->container->reveal();
     }
 
-    private function createContainerMockWithConfigAndNotPsrLogger(?array $config = null) : ContainerInterface
+    private function createContainerMockWithConfigAndNotPsrLogger(?array $config = null): ContainerInterface
     {
         $this->registerConfigService($config);
         $this->container->has(LoggerInterface::class)->willReturn(false);
@@ -59,9 +59,9 @@ trait LoggerFactoryHelperTrait
         return $this->container->reveal();
     }
 
-    private function registerConfigService(?array $config = null) : void
+    private function registerConfigService(?array $config = null): void
     {
-        $hasConfig = $config !== null;
+        $hasConfig            = $config !== null;
         $shouldBeCalledMethod = $hasConfig ? 'shouldBeCalled' : 'shouldNotBeCalled';
 
         $this->container->has('config')->willReturn($hasConfig);

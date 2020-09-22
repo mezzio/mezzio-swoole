@@ -10,18 +10,18 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-use Mezzio\Swoole\StaticMappedResourceHandler;
 use Mezzio\Swoole\StaticMappedResourceHandlerFactory;
-use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
-use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
+use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
@@ -30,9 +30,9 @@ use function sprintf;
 
 class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container       = $this->prophesize(ContainerInterface::class);
         $this->mockFileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
     }
 
@@ -42,7 +42,7 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
         $this->assertInstanceOf($type, $middleware);
     }
 
-    public function getMiddlewareByType(string $type, array $middlewareList)
+    public function getMiddlewareByType(string $type, array $middlewareList): MiddlewareInterface
     {
         foreach ($middlewareList as $middleware) {
             if ($middleware instanceof $type) {
@@ -61,14 +61,14 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => __DIR__ . '/TestAsset',
-                        'type-map' => [
+                        'document-root'           => __DIR__ . '/TestAsset',
+                        'type-map'                => [
                             'png' => 'image/png',
                             'txt' => 'text/plain',
                         ],
                         'clearstatcache-interval' => 3600,
-                        'etag-type' => 'strong',
-                        'directives' => [
+                        'etag-type'               => 'strong',
+                        'directives'              => [
                             '/\.txt$/' => [
                                 'cache-control' => [
                                     'no-cache',
@@ -81,12 +81,12 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
                                     'no-transform',
                                 ],
                                 'last-modified' => true,
-                                'etag' => true,
+                                'etag'          => true,
                             ],
                         ],
-                        'gzip' => [
-                            'level' => 1
-                        ]
+                        'gzip'                    => [
+                            'level' => 1,
+                        ],
                     ],
                 ],
             ],

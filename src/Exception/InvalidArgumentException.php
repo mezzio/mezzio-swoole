@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
+use InvalidArgumentException as BaseException;
+
+class InvalidArgumentException extends BaseException implements ExceptionInterface
 {
 }

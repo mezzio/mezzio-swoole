@@ -21,9 +21,7 @@ use function unlink;
 
 class PidManager
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $pidFile = '';
 
     public function __construct(string $pidFile)
@@ -34,9 +32,9 @@ class PidManager
     /**
      * Write master pid and manager pid to pid file
      *
-     * @throws Exception\RuntimeException When $pidFile is not writable
+     * @throws Exception\RuntimeException When $pidFile is not writable.
      */
-    public function write(int $masterPid, int $managerPid) : void
+    public function write(int $masterPid, int $managerPid): void
     {
         if (! is_writable($this->pidFile) && ! is_writable(dirname($this->pidFile))) {
             throw new Exception\RuntimeException(sprintf('Pid file "%s" is not writable', $this->pidFile));
@@ -52,12 +50,12 @@ class PidManager
      *     @var string $managerPid
      * }
      */
-    public function read() : array
+    public function read(): array
     {
         $pids = [];
         if (is_readable($this->pidFile)) {
             $content = file_get_contents($this->pidFile);
-            $pids = explode(',', $content);
+            $pids    = explode(',', $content);
         }
         return $pids;
     }
@@ -65,7 +63,7 @@ class PidManager
     /**
      * Delete pid file
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         if (is_writable($this->pidFile)) {
             return unlink($this->pidFile);

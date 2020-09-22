@@ -14,10 +14,10 @@ use Swoole\Http\Request;
 
 class HeadMiddleware implements MiddlewareInterface
 {
-    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
     {
         $response = $next($request, $filename);
-        $server = $request->server;
+        $server   = $request->server;
         if ($server['request_method'] !== 'HEAD') {
             return $response;
         }

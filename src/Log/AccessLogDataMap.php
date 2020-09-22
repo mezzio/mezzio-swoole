@@ -47,14 +47,10 @@ class AccessLogDataMap
      */
     private $endTime;
 
-    /**
-     * @var SwooleHttpRequest
-     */
+    /** @var SwooleHttpRequest */
     private $request;
 
-    /**
-     * @var ?PsrResponse
-     */
+    /** @var null|PsrResponse */
     private $psrResponse;
 
     /**
@@ -64,17 +60,15 @@ class AccessLogDataMap
      */
     private $useHostnameLookups;
 
-    /**
-     * @var StaticResourceResponse
-     */
+    /** @var StaticResourceResponse */
     private $staticResource;
 
     public static function createWithPsrResponse(
         SwooleHttpRequest $request,
         PsrResponse $response,
         bool $useHostnameLookups = false
-    ) : self {
-        $map = new self($request, $useHostnameLookups);
+    ): self {
+        $map              = new self($request, $useHostnameLookups);
         $map->psrResponse = $response;
         return $map;
     }
@@ -83,8 +77,8 @@ class AccessLogDataMap
         SwooleHttpRequest $request,
         StaticResourceResponse $response,
         bool $useHostnameLookups = false
-    ) : self {
-        $map = new self($request, $useHostnameLookups);
+    ): self {
+        $map                 = new self($request, $useHostnameLookups);
         $map->staticResource = $response;
         return $map;
     }
@@ -92,7 +86,7 @@ class AccessLogDataMap
     /**
      * Client IP address of the request (%a)
      */
-    public function getClientIp() : string
+    public function getClientIp(): string
     {
         $headers = ['x-real-ip', 'client-ip', 'x-forwarded-for'];
 
@@ -108,7 +102,7 @@ class AccessLogDataMap
     /**
      * Local IP-address (%A)
      */
-    public function getLocalIp() : string
+    public function getLocalIp(): string
     {
         return $this->getServerParamIp('REMOTE_ADDR');
     }
@@ -121,7 +115,7 @@ class AccessLogDataMap
      * @todo We likely need a way of injecting the document root, instead of
      *     assuming it's getcwd() . /public.
      */
-    public function getFilename() : string
+    public function getFilename(): string
     {
         if ($this->psrResponse) {
             return getcwd() . '/public/index.php';
@@ -132,7 +126,7 @@ class AccessLogDataMap
     /**
      * Size of the message in bytes, excluding HTTP headers (%B, %b)
      */
-    public function getBodySize(string $default) : string
+    public function getBodySize(string $default): string
     {
         if ($this->psrResponse) {
             return (string) $this->psrResponse->getBody()->getSize() ?: $default;
@@ -144,7 +138,7 @@ class AccessLogDataMap
      * Remote hostname (%h)
      * Will log the IP address if hostnameLookups is false.
      */
-    public function getRemoteHostname() : string
+    public function getRemoteHostname(): string
     {
         $ip = $this->getClientIp();
 
@@ -156,7 +150,7 @@ class AccessLogDataMap
     /**
      * The message protocol (%H)
      */
-    public function getProtocol() : string
+    public function getProtocol(): string
     {
         return $this->getServerParam('server_protocol');
     }
@@ -164,7 +158,7 @@ class AccessLogDataMap
     /**
      * The request method (%m)
      */
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->getServerParam('request_method');
     }
@@ -172,7 +166,7 @@ class AccessLogDataMap
     /**
      * Returns a message header
      */
-    public function getRequestHeader(string $name) : string
+    public function getRequestHeader(string $name): string
     {
         return $this->request->header[strtolower($name)] ?? '-';
     }
@@ -180,7 +174,7 @@ class AccessLogDataMap
     /**
      * Returns a message header
      */
-    public function getResponseHeader(string $name) : string
+    public function getResponseHeader(string $name): string
     {
         if ($this->psrResponse) {
             return $this->psrResponse->getHeaderLine($name) ?: '-';
@@ -191,7 +185,7 @@ class AccessLogDataMap
     /**
      * Returns a environment variable (%e)
      */
-    public function getEnv(string $name) : string
+    public function getEnv(string $name): string
     {
         return getenv($name) ?: '-';
     }
@@ -199,7 +193,7 @@ class AccessLogDataMap
     /**
      * Returns a cookie value (%{VARNAME}C)
      */
-    public function getCookie(string $name) : string
+    public function getCookie(string $name): string
     {
         return $this->request->cookie[$name] ?? '-';
     }
@@ -207,14 +201,14 @@ class AccessLogDataMap
     /**
      * The canonical port of the server serving the request. (%p)
      */
-    public function getPort(string $format) : string
+    public function getPort(string $format): string
     {
         switch ($format) {
             case 'canonical':
             case 'local':
                 preg_match(self::HOST_PORT_REGEX, $this->request->header['host'] ?? '', $matches);
-                $port = $matches['port'] ?? null;
-                $port = $port ?: $this->getServerParam('server_port', '80');
+                $port   = $matches['port'] ?? null;
+                $port   = $port ?: $this->getServerParam('server_port', '80');
                 $scheme = $this->getServerParam('https', '');
                 return $scheme && $port === '80' ? '443' : $port;
             default:
@@ -226,7 +220,7 @@ class AccessLogDataMap
      * The query string (%q)
      * (prepended with a ? if a query string exists, otherwise an empty string).
      */
-    public function getQuery() : string
+    public function getQuery(): string
     {
         $query = $this->request->get ?? [];
         return [] === $query ? '' : sprintf('?%s', http_build_query($query));
@@ -235,7 +229,7 @@ class AccessLogDataMap
     /**
      * Status. (%s)
      */
-    public function getStatus() : string
+    public function getStatus(): string
     {
         return $this->psrResponse
             ? (string) $this->psrResponse->getStatusCode()
@@ -245,7 +239,7 @@ class AccessLogDataMap
     /**
      * Remote user if the request was authenticated. (%u)
      */
-    public function getRemoteUser() : string
+    public function getRemoteUser(): string
     {
         return $this->getServerParam('REMOTE_USER');
     }
@@ -253,7 +247,7 @@ class AccessLogDataMap
     /**
      * The URL path requested, not including any query string. (%U)
      */
-    public function getPath() : string
+    public function getPath(): string
     {
         return $this->getServerParam('PATH_INFO');
     }
@@ -261,7 +255,7 @@ class AccessLogDataMap
     /**
      * The canonical ServerName of the server serving the request. (%v)
      */
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->getRequestHeader('host');
     }
@@ -269,7 +263,7 @@ class AccessLogDataMap
     /**
      * The server name according to the UseCanonicalName setting. (%V)
      */
-    public function getServerName() : string
+    public function getServerName(): string
     {
         return gethostname();
     }
@@ -277,7 +271,7 @@ class AccessLogDataMap
     /**
      * First line of request. (%r)
      */
-    public function getRequestLine() : string
+    public function getRequestLine(): string
     {
         return sprintf(
             '%s %s%s %s',
@@ -291,7 +285,7 @@ class AccessLogDataMap
     /**
      * Returns the response status line
      */
-    public function getResponseLine() : string
+    public function getResponseLine(): string
     {
         $reasonPhrase = '';
         if ($this->psrResponse && $this->psrResponse->getReasonPhrase()) {
@@ -308,15 +302,17 @@ class AccessLogDataMap
     /**
      * Bytes transferred (received and sent), including request and headers (%S)
      */
-    public function getTransferredSize() : string
+    public function getTransferredSize(): string
     {
         return (string) ($this->getRequestMessageSize(0) + $this->getResponseMessageSize(0)) ?: '-';
     }
 
     /**
      * Get the request message size (including first line and headers)
+     *
+     * @param null|int $default
      */
-    public function getRequestMessageSize($default = null) : ?int
+    public function getRequestMessageSize($default = null): ?int
     {
         $strlen = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
 
@@ -348,8 +344,10 @@ class AccessLogDataMap
 
     /**
      * Get the response message size (including first line and headers)
+     *
+     * @param null|int $default
      */
-    public function getResponseMessageSize($default = null) : ?int
+    public function getResponseMessageSize($default = null): ?int
     {
         $bodySize = $this->psrResponse
             ? $this->psrResponse->getBody()->getSize()
@@ -359,7 +357,7 @@ class AccessLogDataMap
             return $default;
         }
 
-        $strlen = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
+        $strlen        = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
         $firstLineSize = $strlen($this->getResponseLine());
 
         $headerSize = $this->psrResponse
@@ -372,15 +370,15 @@ class AccessLogDataMap
     /**
      * Returns the request time (%t, %{format}t)
      */
-    public function getRequestTime(string $format) : string
+    public function getRequestTime(string $format): string
     {
         $begin = $this->getServerParam('request_time_float');
-        $time = $begin;
+        $time  = $begin;
 
         if (strpos($format, 'begin:') === 0) {
             $format = substr($format, 6);
         } elseif (strpos($format, 'end:') === 0) {
-            $time = $this->endTime;
+            $time   = $this->endTime;
             $format = substr($format, 4);
         }
 
@@ -399,7 +397,7 @@ class AccessLogDataMap
     /**
      * The time taken to serve the request. (%T, %{format}T)
      */
-    public function getRequestDuration(string $format) : string
+    public function getRequestDuration(string $format): string
     {
         $begin = $this->getServerParam('request_time_float');
         switch ($format) {
@@ -414,15 +412,15 @@ class AccessLogDataMap
 
     private function __construct(SwooleHttpRequest $request, bool $useHostnameLookups)
     {
-        $this->endTime = microtime(true);
-        $this->request = $request;
+        $this->endTime            = microtime(true);
+        $this->request            = $request;
         $this->useHostnameLookups = $useHostnameLookups;
     }
 
     /**
      * Returns an server parameter value
      */
-    private function getServerParam(string $key, string $default = '-') : string
+    private function getServerParam(string $key, string $default = '-'): string
     {
         $value = $this->request->server[strtolower($key)] ?? $default;
         return (string) $value;
@@ -431,7 +429,7 @@ class AccessLogDataMap
     /**
      * Returns an ip from the server params
      */
-    private function getServerParamIp(string $key) : string
+    private function getServerParamIp(string $key): string
     {
         $ip = $this->getServerParam($key);
 
@@ -440,7 +438,7 @@ class AccessLogDataMap
             : $ip;
     }
 
-    private function getPsrResponseHeaderSize() : int
+    private function getPsrResponseHeaderSize(): int
     {
         if (! $this->psrResponse) {
             return 0;

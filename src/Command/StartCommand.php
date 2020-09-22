@@ -42,9 +42,7 @@ EOH;
         'config/routes.php',
     ];
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     private $container;
 
     public function __construct(ContainerInterface $container, string $name = 'start')
@@ -53,7 +51,7 @@ EOH;
         parent::__construct($name);
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setDescription('Start the web server.');
         $this->setHelp(self::HELP);
@@ -71,7 +69,7 @@ EOH;
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->pidManager = $this->container->get(PidManager::class);
         if ($this->isRunning()) {

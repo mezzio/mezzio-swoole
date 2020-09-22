@@ -29,11 +29,9 @@ class SwooleEmitter implements EmitterInterface
     /**
      * @see https://www.swoole.co.uk/docs/modules/swoole-http-server/methods-properties#swoole-http-response-write
      */
-    const CHUNK_SIZE = 2097152; // 2 MB
+    public const CHUNK_SIZE = 2097152; // 2 MB
 
-    /**
-     * @var SwooleHttpResponse
-     */
+    /** @var SwooleHttpResponse */
     private $swooleResponse;
 
     public function __construct(SwooleHttpResponse $response)
@@ -44,7 +42,7 @@ class SwooleEmitter implements EmitterInterface
     /**
      * Emits a response for the Swoole environment.
      */
-    public function emit(ResponseInterface $response) : bool
+    public function emit(ResponseInterface $response): bool
     {
         if (PHP_SAPI !== 'cli' || ! extension_loaded('swoole')) {
             return false;
@@ -59,7 +57,7 @@ class SwooleEmitter implements EmitterInterface
     /**
      * Emit the status code
      */
-    private function emitStatusCode(ResponseInterface $response) : void
+    private function emitStatusCode(ResponseInterface $response): void
     {
         $this->swooleResponse->status($response->getStatusCode());
     }
@@ -67,7 +65,7 @@ class SwooleEmitter implements EmitterInterface
     /**
      * Emit the headers
      */
-    private function emitHeaders(ResponseInterface $response) : void
+    private function emitHeaders(ResponseInterface $response): void
     {
         foreach ($response->withoutHeader(SetCookies::SET_COOKIE_HEADER)->getHeaders() as $name => $values) {
             $name = $this->filterHeader($name);
@@ -78,7 +76,7 @@ class SwooleEmitter implements EmitterInterface
     /**
      * Emit the message body.
      */
-    private function emitBody(ResponseInterface $response) : void
+    private function emitBody(ResponseInterface $response): void
     {
         $body = $response->getBody();
         $body->rewind();
@@ -97,7 +95,7 @@ class SwooleEmitter implements EmitterInterface
     /**
      * Emit the cookies
      */
-    private function emitCookies(ResponseInterface $response) : void
+    private function emitCookies(ResponseInterface $response): void
     {
         foreach (SetCookies::fromResponse($response)->getAll() as $cookie) {
             $sameSite = $cookie->getSameSite() ? substr($cookie->getSameSite()->asString(), 9) : '';

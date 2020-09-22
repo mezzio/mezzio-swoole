@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.WriteOnlyProperty
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
@@ -26,9 +26,7 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
-    /**
-     * @var PidManager
-     */
+    /** @var PidManager */
     private $pidManager;
 
     public function __construct(PidManager $pidManager, string $name = 'status')
@@ -37,13 +35,13 @@ EOH;
         parent::__construct($name);
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setDescription('Get the status of the web server.');
         $this->setHelp(self::HELP);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $message = $this->isRunning()
             ? '<info>Server is running</info>'

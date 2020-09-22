@@ -25,10 +25,11 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->applicationPipeline = $this->prophesize(ApplicationPipeline::class);
         $this->applicationPipeline->willImplement(RequestHandlerInterface::class);
@@ -36,12 +37,12 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->serverRequest = $this->prophesize(ServerRequestInterface::class);
 
         $this->serverRequestError = $this->prophesize(ServerRequestErrorResponseGenerator::class);
-        $this->serverFactory = $this->prophesize(ServerFactory::class);
-        $this->pidManager = $this->prophesize(PidManager::class);
+        $this->serverFactory      = $this->prophesize(ServerFactory::class);
+        $this->pidManager         = $this->prophesize(PidManager::class);
 
         $this->staticResourceHandler = $this->prophesize(StaticResourceHandlerInterface::class);
-        $this->logger = $this->prophesize(AccessLogInterface::class);
-        $this->hotCodeReloader = $this->prophesize(Reloader::class);
+        $this->logger                = $this->prophesize(AccessLogInterface::class);
+        $this->hotCodeReloader       = $this->prophesize(Reloader::class);
 
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->container
@@ -99,15 +100,15 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 
         // Legacy Zend Framework class
         $this->container
-            ->has(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+            ->has(LegacyAccessLogInterface::class)
             ->willReturn(false);
 
         $this->container
-            ->get(\Zend\Expressive\Swoole\Log\AccessLogInterface::class)
+            ->get(LegacyAccessLogInterface::class)
             ->shouldNotBeCalled();
     }
 
-    public function configureAbsentConfiguration() : void
+    public function configureAbsentConfiguration(): void
     {
         $this->container
             ->has('config')
@@ -118,7 +119,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ->shouldNotBeCalled();
     }
 
-    public function configureAbsentHotCodeReloader() : void
+    public function configureAbsentHotCodeReloader(): void
     {
         $this->container
             ->has(Reloader::class)
@@ -136,7 +137,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->configureAbsentConfiguration();
         $this->configureAbsentHotCodeReloader();
         $factory = new SwooleRequestHandlerRunnerFactory();
-        $runner = $factory($this->container->reveal());
+        $runner  = $factory($this->container->reveal());
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeEmpty('staticResourceHandler', $runner);
         $this->assertAttributeInstanceOf(Psr3AccessLogDecorator::class, 'logger', $runner);
@@ -155,12 +156,12 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ->will([$this->logger, 'reveal']);
 
         $factory = new SwooleRequestHandlerRunnerFactory();
-        $runner = $factory($this->container->reveal());
+        $runner  = $factory($this->container->reveal());
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame($this->logger->reveal(), 'logger', $runner);
     }
 
-    public function testFactoryWillUseConfiguredStaticResourceHandlerWhenPresent()
+    public function testFactoryWillUseConfiguredStaticResourceHandlerWhenPresent(): SwooleRequestHandlerRunner
     {
         $this->configureAbsentLoggerService();
         $this->configureAbsentHotCodeReloader();
@@ -184,7 +185,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ]);
 
         $factory = new SwooleRequestHandlerRunnerFactory();
-        $runner = $factory($this->container->reveal());
+        $runner  = $factory($this->container->reveal());
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame($this->staticResourceHandler->reveal(), 'staticResourceHandler', $runner);
 
@@ -212,7 +213,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ]);
 
         $factory = new SwooleRequestHandlerRunnerFactory();
-        $runner = $factory($this->container->reveal());
+        $runner  = $factory($this->container->reveal());
 
         $this->container
             ->get(StaticResourceHandlerInterface::class)
@@ -248,7 +249,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ]);
 
         $factory = new SwooleRequestHandlerRunnerFactory();
-        $runner = $factory($this->container->reveal());
+        $runner  = $factory($this->container->reveal());
 
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame('mezzio-swoole-test', 'processName', $runner);
@@ -273,7 +274,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ]);
 
         $factory = new SwooleRequestHandlerRunnerFactory();
-        $runner = $factory($this->container->reveal());
+        $runner  = $factory($this->container->reveal());
 
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame($this->hotCodeReloader->reveal(), 'hotCodeReloader', $runner);

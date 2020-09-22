@@ -29,7 +29,7 @@ use const UPLOAD_ERR_OK;
 
 class ServerRequestSwooleFactoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);
     }
@@ -45,12 +45,12 @@ class ServerRequestSwooleFactoryTest extends TestCase
         $swooleRequest = $this->createMock(SwooleHttpRequest::class);
 
         $swooleRequest->server = [
-            'path_info' => '/',
-            'remote_port' => 45314,
-            'REQUEST_METHOD' => 'POST',
-            'REQUEST_TIME' => time(),
-            'REQUEST_URI' => '/some/path',
-            'server_port' => 9501,
+            'path_info'       => '/',
+            'remote_port'     => 45314,
+            'REQUEST_METHOD'  => 'POST',
+            'REQUEST_TIME'    => time(),
+            'REQUEST_URI'     => '/some/path',
+            'server_port'     => 9501,
             'server_protocol' => 'HTTP/2',
         ];
 
@@ -70,16 +70,16 @@ class ServerRequestSwooleFactoryTest extends TestCase
         $swooleRequest->files = [
             [
                 'tmp_name' => __FILE__,
-                'size' => filesize(__FILE__),
-                'error' => UPLOAD_ERR_OK,
+                'size'     => filesize(__FILE__),
+                'error'    => UPLOAD_ERR_OK,
             ],
         ];
 
         $swooleRequest->header = [
-            'Accept' => 'application/*+json',
+            'Accept'       => 'application/*+json',
             'Content-Type' => 'application/json',
-            'Cookie' => 'yummy_cookie=choco; tasty_cookie=strawberry',
-            'host' => 'localhost:9501',
+            'Cookie'       => 'yummy_cookie=choco; tasty_cookie=strawberry',
+            'host'         => 'localhost:9501',
         ];
 
         $swooleRequest->method('rawContent')->willReturn('this is the content');

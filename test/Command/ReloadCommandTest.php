@@ -13,6 +13,7 @@ namespace MezzioTest\Swoole\Command;
 use Mezzio\Swoole\Command\ReloadCommand;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -28,12 +29,15 @@ class ReloadCommandTest extends TestCase
 {
     use ReflectMethodTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->input  = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
     }
 
+    /**
+     * @return Application|ObjectProphecy
+     */
     public function mockApplication()
     {
         $helperSet   = $this->prophesize(HelperSet::class);
@@ -44,7 +48,7 @@ class ReloadCommandTest extends TestCase
         return $application;
     }
 
-    public function testConstructorAcceptsServerMode()
+    public function testConstructorAcceptsServerMode(): ReloadCommand
     {
         $command = new ReloadCommand(SWOOLE_PROCESS);
         $this->assertAttributeSame(SWOOLE_PROCESS, 'serverMode', $command);
@@ -70,7 +74,7 @@ class ReloadCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsServerMode
      */
-    public function testCommandDefinesNumWorkersOption(ReloadCommand $command)
+    public function testCommandDefinesNumWorkersOption(ReloadCommand $command): InputOption
     {
         $this->assertTrue($command->getDefinition()->hasOption('num-workers'));
         return $command->getDefinition()->getOption('num-workers');

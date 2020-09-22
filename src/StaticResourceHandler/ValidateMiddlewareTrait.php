@@ -19,10 +19,10 @@ trait ValidateMiddlewareTrait
     /**
      * Validate that each middleware provided is callable.
      *
-     * @throws InvalidStaticResourceMiddlewareException for any non-callable
+     * @throws InvalidStaticResourceMiddlewareException For any non-callable
      *     middleware encountered.
      */
-    private function validateMiddleware(array $middlewareList) : void
+    private function validateMiddleware(array $middlewareList): void
     {
         foreach ($middlewareList as $position => $middleware) {
             if (! is_callable($middleware)) {

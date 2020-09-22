@@ -17,14 +17,10 @@ use Swoole\Http\Request;
 
 class Psr3AccessLogDecorator implements AccessLogInterface
 {
-    /**
-     * @var AccessLogFormatter
-     */
+    /** @var AccessLogFormatter */
     private $formatter;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     private $logger;
 
     /**
@@ -40,12 +36,12 @@ class Psr3AccessLogDecorator implements AccessLogInterface
         AccessLogFormatterInterface $formatter,
         bool $useHostnameLookups = false
     ) {
-        $this->logger = $logger;
-        $this->formatter = $formatter;
+        $this->logger             = $logger;
+        $this->formatter          = $formatter;
         $this->useHostnameLookups = $useHostnameLookups;
     }
 
-    public function logAccessForStaticResource(Request $request, StaticResourceResponse $response) : void
+    public function logAccessForStaticResource(Request $request, StaticResourceResponse $response): void
     {
         $message = $this->formatter->format(
             AccessLogDataMap::createWithStaticResource($request, $response, $this->useHostnameLookups)
@@ -55,7 +51,7 @@ class Psr3AccessLogDecorator implements AccessLogInterface
             : $this->logger->info($message);
     }
 
-    public function logAccessForPsr7Resource(Request $request, ResponseInterface $response) : void
+    public function logAccessForPsr7Resource(Request $request, ResponseInterface $response): void
     {
         $message = $this->formatter->format(
             AccessLogDataMap::createWithPsrResponse($request, $response, $this->useHostnameLookups)
@@ -64,6 +60,9 @@ class Psr3AccessLogDecorator implements AccessLogInterface
             ? $this->logger->error($message)
             : $this->logger->info($message);
     }
+
+    // phpcs:disable WebimpressCodingStandard.Functions.Param.MissingSpecification
+    // phpcs:disable WebimpressCodingStandard.Functions.ReturnType.ReturnValue
 
     /**
      * {@inheritDoc}

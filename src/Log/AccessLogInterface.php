@@ -17,7 +17,7 @@ use Swoole\Http\Request;
 
 interface AccessLogInterface extends LoggerInterface
 {
-    public function logAccessForStaticResource(Request $request, StaticResourceResponse $response) : void;
+    public function logAccessForStaticResource(Request $request, StaticResourceResponse $response): void;
 
-    public function logAccessForPsr7Resource(Request $request, ResponseInterface $response) : void;
+    public function logAccessForPsr7Resource(Request $request, ResponseInterface $response): void;
 }

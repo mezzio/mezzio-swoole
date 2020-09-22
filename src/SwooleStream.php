@@ -55,9 +55,9 @@ final class SwooleStream implements StreamInterface
         $this->request = $request;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    // phpcs:disable WebimpressCodingStandard.Functions.Param.MissingSpecification
+    // phpcs:disable WebimpressCodingStandard.Functions.ReturnType.ReturnValue
+
     public function getContents()
     {
         // If we're at the end of the string, return an empty string.
@@ -89,18 +89,12 @@ final class SwooleStream implements StreamInterface
         return $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         $this->body !== null || $this->initRawContent();
         return $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSize()
     {
         if (null === $this->bodySize) {
@@ -110,40 +104,28 @@ final class SwooleStream implements StreamInterface
         return $this->bodySize;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tell()
     {
         return $this->index;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function eof()
     {
         return $this->index >= $this->getSize();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isReadable()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function read($length)
     {
         $this->body !== null || $this->initRawContent();
         $result = substr($this->body, $this->index, $length);
 
         // Reset index based on legnth; should not be > EOF position.
-        $size = $this->getSize();
+        $size        = $this->getSize();
         $this->index = $this->index + $length >= $size
             ? $size
             : $this->index + $length;
@@ -151,17 +133,11 @@ final class SwooleStream implements StreamInterface
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSeekable()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function seek($offset, $whence = SEEK_SET)
     {
         $size = $this->getSize();
@@ -198,57 +174,41 @@ final class SwooleStream implements StreamInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         $this->index = 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isWritable()
     {
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function write($string)
     {
         throw new RuntimeException('Stream is not writable');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMetadata($key = null)
     {
         return $key ? null : [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function detach()
     {
         return $this->request;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function close()
     {
     }
 
+    // phpcs:enable
+
     /**
      * Memoize the request raw content in the $body property, if not already done.
      */
-    private function initRawContent() : void
+    private function initRawContent(): void
     {
         if ($this->body) {
             return;

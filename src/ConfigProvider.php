@@ -20,6 +20,18 @@ use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Zend\Expressive\Swoole\Command\ReloadCommand as LegacyReloadCommand;
+use Zend\Expressive\Swoole\Command\StartCommand as LegacyStartCommand;
+use Zend\Expressive\Swoole\Command\StatusCommand as LegacyStatusCommand;
+use Zend\Expressive\Swoole\Command\StopCommand as LegacyStopCommand;
+use Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface as LegacyFileWatcherInterface;
+use Zend\Expressive\Swoole\HotCodeReload\Reloader as LegacyReloader;
+use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
+use zend\expressive\swoole\pidmanager as LegacyPidManager;
+use Zend\Expressive\Swoole\StaticResourceHandler as LegacyStaticResourceHandler;
+use Zend\Expressive\Swoole\StaticResourceHandlerInterface as LegacyStaticResourceHandlerInterface;
+use Zend\Expressive\Swoole\SwooleRequestHandlerRunner as LegacySwooleRequestHandlerRunner;
+use Zend\HttpHandlerRunner\RequestHandlerRunner as LegacyRequestHandlerRunner;
 
 use function extension_loaded;
 
@@ -27,7 +39,7 @@ use const PHP_SAPI;
 
 class ConfigProvider
 {
-    public function __invoke() : array
+    public function __invoke(): array
     {
         $config = PHP_SAPI === 'cli' && extension_loaded('swoole')
             ? ['dependencies' => $this->getDependencies()]
@@ -38,7 +50,7 @@ class ConfigProvider
         return $config;
     }
 
-    public function getDefaultConfig() : array
+    public function getDefaultConfig(): array
     {
         return [
             'swoole-http-server' => [
@@ -47,7 +59,7 @@ class ConfigProvider
                 // each http worker `mezzio-worker-n` and each task worker
                 // `mezzio-task-worker-n` where n is the id of the worker
                 'process-name' => 'mezzio',
-                'options' => [
+                'options'      => [
                     // We set a default for this. Without one, Swoole\Http\Server
                     // defaults to the value of `ulimit -n`. Unfortunately, in
                     // virtualized or containerized environments, this often
@@ -63,7 +75,7 @@ class ConfigProvider
         ];
     }
 
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return [
             'factories'  => [
@@ -85,25 +97,25 @@ class ConfigProvider
             'invokables' => [
                 InotifyFileWatcher::class => InotifyFileWatcher::class,
             ],
-            'aliases' => [
+            'aliases'    => [
                 RequestHandlerRunner::class            => SwooleRequestHandlerRunner::class,
                 StaticResourceHandlerInterface::class  => StaticResourceHandler::class,
                 FileWatcherInterface::class            => InotifyFileWatcher::class,
                 FileLocationRepositoryInterface::class => FileLocationRepository::class,
 
                 // Legacy Zend Framework aliases
-                \Zend\Expressive\Swoole\Command\ReloadCommand::class => Command\ReloadCommand::class,
-                \Zend\Expressive\Swoole\Command\StartCommand::class => Command\StartCommand::class,
-                \Zend\Expressive\Swoole\Command\StatusCommand::class => Command\StatusCommand::class,
-                \Zend\Expressive\Swoole\Command\StopCommand::class => Command\StopCommand::class,
-                \Zend\Expressive\Swoole\Log\AccessLogInterface::class => Log\AccessLogInterface::class,
-                \Zend\Expressive\Swoole\PidManager::class => PidManager::class,
-                \Zend\Expressive\Swoole\SwooleRequestHandlerRunner::class => SwooleRequestHandlerRunner::class,
-                \Zend\Expressive\Swoole\StaticResourceHandler::class => StaticResourceHandler::class,
-                \Zend\Expressive\Swoole\HotCodeReload\Reloader::class => Reloader::class,
-                \Zend\HttpHandlerRunner\RequestHandlerRunner::class => RequestHandlerRunner::class,
-                \Zend\Expressive\Swoole\StaticResourceHandlerInterface::class => StaticResourceHandlerInterface::class,
-                \Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface::class => FileWatcherInterface::class,
+                LegacyReloadCommand::class                  => Command\ReloadCommand::class,
+                LegacyStartCommand::class                   => Command\StartCommand::class,
+                LegacyStatusCommand::class                  => Command\StatusCommand::class,
+                LegacyStopCommand::class                    => Command\StopCommand::class,
+                LegacyAccessLogInterface::class             => Log\AccessLogInterface::class,
+                LegacyPidManager::class                     => PidManager::class,
+                LegacySwooleRequestHandlerRunner::class     => SwooleRequestHandlerRunner::class,
+                LegacyStaticResourceHandler::class          => StaticResourceHandler::class,
+                LegacyReloader::class                       => Reloader::class,
+                LegacyRequestHandlerRunner::class           => RequestHandlerRunner::class,
+                LegacyStaticResourceHandlerInterface::class => StaticResourceHandlerInterface::class,
+                LegacyFileWatcherInterface::class           => FileWatcherInterface::class,
             ],
             'delegators' => [
                 'Mezzio\WhoopsPageHandler' => [

@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCapsProperty
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
@@ -31,11 +31,9 @@ class ETagMiddleware implements MiddlewareInterface
      * ETag validation type
      */
     public const ETAG_VALIDATION_STRONG = 'strong';
-    public const ETAG_VALIDATION_WEAK = 'weak';
+    public const ETAG_VALIDATION_WEAK   = 'weak';
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $allowedETagValidationTypes = [
         self::ETAG_VALIDATION_STRONG,
         self::ETAG_VALIDATION_WEAK,
@@ -66,14 +64,14 @@ class ETagMiddleware implements MiddlewareInterface
             ));
         }
 
-        $this->etagDirectives = $etagDirectives;
+        $this->etagDirectives     = $etagDirectives;
         $this->etagValidationType = $etagValidationType;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function __invoke(Request $request, string $filename, callable $next) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse
     {
         $response = $next($request, $filename);
 
@@ -84,7 +82,7 @@ class ETagMiddleware implements MiddlewareInterface
         return $this->prepareETag($request, $filename, $response);
     }
 
-    private function getETagFlagForPath(string $path) : bool
+    private function getETagFlagForPath(string $path): bool
     {
         foreach ($this->etagDirectives as $regexp) {
             if (preg_match($regexp, $path)) {
@@ -94,19 +92,12 @@ class ETagMiddleware implements MiddlewareInterface
         return false;
     }
 
-    /**
-     * @return bool Returns true if the request issued an if-match and/or
-     *     if-none-match header with a matching ETag; in such cases, a 304
-     *     status is emitted with no content. Boolean false indicates the file
-     *     content should be provided, assuming other conditions require it as
-     *     well.
-     */
     private function prepareETag(
         Request $request,
         string $filename,
         StaticResourceResponse $response
-    ) : StaticResourceResponse {
-        $etag = '';
+    ): StaticResourceResponse {
+        $etag         = '';
         $lastModified = filemtime($filename) ?? 0;
         switch ($this->etagValidationType) {
             case self::ETAG_VALIDATION_WEAK:
@@ -126,7 +117,7 @@ class ETagMiddleware implements MiddlewareInterface
         $response->addHeader('ETag', $etag);
 
         // Determine if ETag the client expects matches calculated ETag
-        $ifMatch = $request->header['if-match'] ?? '';
+        $ifMatch     = $request->header['if-match'] ?? '';
         $ifNoneMatch = $request->header['if-none-match'] ?? '';
         $clientEtags = explode(',', $ifMatch ?: $ifNoneMatch);
         array_walk($clientEtags, 'trim');

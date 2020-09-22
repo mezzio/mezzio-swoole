@@ -17,11 +17,11 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     /**
      * @link http://httpd.apache.org/docs/2.4/mod/mod_log_config.html#examples
      */
-    public const FORMAT_COMMON = '%h %l %u %t "%r" %>s %b';
+    public const FORMAT_COMMON       = '%h %l %u %t "%r" %>s %b';
     public const FORMAT_COMMON_VHOST = '%v %h %l %u %t "%r" %>s %b';
-    public const FORMAT_COMBINED = '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"';
-    public const FORMAT_REFERER = '%{Referer}i -> %U';
-    public const FORMAT_AGENT = '%{User-Agent}i';
+    public const FORMAT_COMBINED     = '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"';
+    public const FORMAT_REFERER      = '%{Referer}i -> %U';
+    public const FORMAT_AGENT        = '%{User-Agent}i';
 
     /**
      * @link https://httpd.apache.org/docs/2.4/logs.html#virtualhost
@@ -30,6 +30,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
 
     /**
      * @link https://anonscm.debian.org/cgit/pkg-apache/apache2.git/tree/debian/config-dir/apache2.conf.in#n212
+     *
      * @codingStandardsIgnoreStart
      * phpcs:disable
      */
@@ -54,7 +55,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     /**
      * Transform a log format to the final string to log.
      */
-    public function format(AccessLogDataMap $map) : string
+    public function format(AccessLogDataMap $map): string
     {
         $message = $this->replaceConstantDirectives($this->format, $map);
         $message = $this->replaceVariableDirectives($message, $map);
@@ -64,7 +65,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     private function replaceConstantDirectives(
         string $format,
         AccessLogDataMap $map
-    ) : string {
+    ): string {
         return preg_replace_callback(
             '/%(?:[<>])?([%aABbDfhHklLmpPqrRstTuUvVXIOS])/',
             static function (array $matches) use ($map) {
@@ -133,7 +134,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     private function replaceVariableDirectives(
         string $format,
         AccessLogDataMap $map
-    ) : string {
+    ): string {
         return preg_replace_callback(
             '/%(?:[<>])?{([^}]+)}([aCeinopPtT])/',
             static function (array $matches) use ($map) {

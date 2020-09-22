@@ -19,9 +19,7 @@ use function array_shift;
  */
 class MiddlewareQueue
 {
-    /**
-     * @var MiddlewareInterface[]
-     */
+    /** @var MiddlewareInterface[] */
     private $middleware;
 
     public function __construct(array $middleware)
@@ -29,7 +27,7 @@ class MiddlewareQueue
         $this->middleware = $middleware;
     }
 
-    public function __invoke(Request $request, string $filename) : StaticResourceResponse
+    public function __invoke(Request $request, string $filename): StaticResourceResponse
     {
         if ([] === $this->middleware) {
             return new StaticResourceResponse();

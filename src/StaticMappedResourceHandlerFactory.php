@@ -68,7 +68,7 @@ use Psr\Container\ContainerInterface;
  */
 class StaticMappedResourceHandlerFactory extends AbstractStaticResourceHandlerFactory
 {
-    public function __invoke(ContainerInterface $container) : StaticMappedResourceHandler
+    public function __invoke(ContainerInterface $container): StaticMappedResourceHandler
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
         return new StaticMappedResourceHandler(

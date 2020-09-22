@@ -20,10 +20,10 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticResourceHandlerTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->docRoot = __DIR__ . '/TestAsset';
-        $this->request = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $this->docRoot  = __DIR__ . '/TestAsset';
+        $this->request  = $this->prophesize(SwooleHttpRequest::class)->reveal();
         $this->response = $this->prophesize(SwooleHttpResponse::class)->reveal();
     }
 
@@ -39,12 +39,12 @@ class StaticResourceHandlerTest extends TestCase
             'request_uri' => '/image.png',
         ];
 
-        $middleware = new class() implements MiddlewareInterface {
+        $middleware = new class () implements MiddlewareInterface {
             public function __invoke(
                 SwooleHttpRequest $request,
                 string $filename,
                 callable $next
-            ) : StaticResourceResponse {
+            ): StaticResourceResponse {
                 $response = new StaticResourceResponse();
                 $response->markAsFailure();
                 return $response;
@@ -67,7 +67,7 @@ class StaticResourceHandlerTest extends TestCase
         $expectedResponse->isFailure()->willReturn(false);
         $expectedResponse->sendSwooleResponse($this->response, $filename)->shouldBeCalled();
 
-        $middleware = new class($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)
@@ -79,7 +79,7 @@ class StaticResourceHandlerTest extends TestCase
                 SwooleHttpRequest $request,
                 string $filename,
                 callable $next
-            ) : StaticResourceResponse {
+            ): StaticResourceResponse {
                 return $this->response;
             }
         };

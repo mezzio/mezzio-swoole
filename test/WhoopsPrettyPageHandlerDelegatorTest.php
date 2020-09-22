@@ -21,15 +21,15 @@ class WhoopsPrettyPageHandlerDelegatorTest extends TestCase
     /** @var ServiceManager */
     private $container;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $dependencies = (new ConfigProvider())()['dependencies'];
         // @see https://github.com/mezzio/mezzio-skeleton/blob/master/src/MezzioInstaller/Resources/config/error-handler-whoops.php
         $dependencies['factories']['Mezzio\WhoopsPageHandler'] = WhoopsPageHandlerFactory::class;
-        $this->container = new ServiceManager($dependencies);
+        $this->container                                       = new ServiceManager($dependencies);
     }
 
-    public function testDefaultConfigurationDecoratesPageHandler() : void
+    public function testDefaultConfigurationDecoratesPageHandler(): void
     {
         $handler = $this->container->get('Mezzio\WhoopsPageHandler');
         $this->assertInstanceOf(PrettyPageHandler::class, $handler);

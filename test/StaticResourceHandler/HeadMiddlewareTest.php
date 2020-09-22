@@ -20,15 +20,15 @@ class HeadMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->next = static function ($request, $filename) {
+        $this->next    = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
         $this->request = $this->prophesize(Request::class)->reveal();
     }
 
-    public function nonHeadMethods() : array
+    public function nonHeadMethods(): array
     {
         return [
             'GET'     => ['GET'],
@@ -49,7 +49,7 @@ class HeadMiddlewareTest extends TestCase
         $this->request->server = [
             'request_method' => $method,
         ];
-        $middleware = new HeadMiddleware();
+        $middleware            = new HeadMiddleware();
 
         $response = $middleware($this->request, '/some/path', $this->next);
 
@@ -61,7 +61,7 @@ class HeadMiddlewareTest extends TestCase
         $this->request->server = [
             'request_method' => 'HEAD',
         ];
-        $middleware = new HeadMiddleware();
+        $middleware            = new HeadMiddleware();
 
         $response = $middleware($this->request, '/some/path', $this->next);
 

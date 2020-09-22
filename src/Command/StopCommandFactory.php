@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 
 class StopCommandFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): StopCommand
     {
         return new StopCommand($container->get(PidManager::class));
     }

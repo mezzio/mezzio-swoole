@@ -14,6 +14,7 @@ use InvalidArgumentException;
 
 use function array_key_exists;
 use function file_exists;
+use function in_array;
 use function is_array;
 use function is_dir;
 use function rtrim;
@@ -126,7 +127,7 @@ class FileLocationRepository implements FileLocationRepositoryInterface
     {
         foreach ($this->mappedDocRoots as $prefix => $directories) {
             foreach ($directories as $directory) {
-                if (stripos($filename, $prefix) == 0) {
+                if (stripos($filename, $prefix) === 0) {
                     $mappedFileName = $directory . substr($filename, strlen($prefix));
                     if (file_exists($mappedFileName)) {
                         return $mappedFileName;

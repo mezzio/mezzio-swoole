@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Command\TestAsset;
 
+// phpcs:disable WebimpressCodingStandard.NamingConventions.Interface.Suffix
 /**
  * Dummy interface defining the HTTP server.
  *
@@ -22,5 +23,6 @@ namespace MezzioTest\Swoole\Command\TestAsset;
  */
 interface HttpServer
 {
-    public function set(array $options) : void;
+    public function set(array $options): void;
 }
+// phpcs:enable

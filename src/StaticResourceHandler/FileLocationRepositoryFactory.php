@@ -24,7 +24,7 @@ class FileLocationRepositoryFactory
     /**
      * Create a file location repository, initializing with the static files setting configured by mezzio-swoole
      */
-    public function __invoke(ContainerInterface $container) : FileLocationRepository
+    public function __invoke(ContainerInterface $container): FileLocationRepository
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
 

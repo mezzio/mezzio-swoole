@@ -17,6 +17,8 @@ namespace Mezzio\Swoole\StaticResourceHandler;
 interface FileLocationRepositoryInterface
 {
     public function addMappedDocumentRoot(string $prefix, string $directory): void;
+
     public function listMappedDocumentRoots(): array;
+
     public function findFile(string $filename): ?string;
 }

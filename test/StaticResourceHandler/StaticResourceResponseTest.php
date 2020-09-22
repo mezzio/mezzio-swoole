@@ -19,8 +19,8 @@ class StaticResourceResponseTest extends TestCase
     public function testSendSwooleResponsePopulatesStatusAndHeadersAndCallsContentCallback()
     {
         $expectedFilename = '/image.png';
-        $swooleResponse = $this->prophesize(SwooleResponse::class);
-        $response = new StaticResourceResponse();
+        $swooleResponse   = $this->prophesize(SwooleResponse::class);
+        $response         = new StaticResourceResponse();
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');
@@ -38,9 +38,9 @@ class StaticResourceResponseTest extends TestCase
 
     public function testSendSwooleResponseSkipsSendingContentWhenContentDisabled()
     {
-        $filename = '/image.png';
+        $filename       = '/image.png';
         $swooleResponse = $this->prophesize(SwooleResponse::class);
-        $response = new StaticResourceResponse();
+        $response       = new StaticResourceResponse();
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');

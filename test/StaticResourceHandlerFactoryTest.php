@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\StaticResourceHandler;
+use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandlerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -20,7 +21,7 @@ use function sprintf;
 
 class StaticResourceHandlerFactoryTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);
     }
@@ -31,7 +32,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
         $this->assertInstanceOf($type, $middleware);
     }
 
-    public function getMiddlewareByType(string $type, array $middlewareList)
+    public function getMiddlewareByType(string $type, array $middlewareList): MiddlewareInterface
     {
         foreach ($middlewareList as $middleware) {
             if ($middleware instanceof $type) {
@@ -50,14 +51,14 @@ class StaticResourceHandlerFactoryTest extends TestCase
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'static-files' => [
-                        'document-root' => __DIR__ . '/TestAsset',
-                        'type-map' => [
+                        'document-root'           => __DIR__ . '/TestAsset',
+                        'type-map'                => [
                             'png' => 'image/png',
                             'txt' => 'text/plain',
                         ],
                         'clearstatcache-interval' => 3600,
-                        'etag-type' => 'strong',
-                        'directives' => [
+                        'etag-type'               => 'strong',
+                        'directives'              => [
                             '/\.txt$/' => [
                                 'cache-control' => [
                                     'no-cache',
@@ -70,7 +71,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
                                     'no-transform',
                                 ],
                                 'last-modified' => true,
-                                'etag' => true,
+                                'etag'          => true,
                             ],
                         ],
                     ],

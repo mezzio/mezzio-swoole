@@ -25,9 +25,9 @@ use const SEEK_END;
 
 class SwooleStreamTest extends TestCase
 {
-    const DEFAULT_CONTENT = 'This is a test!';
+    public const DEFAULT_CONTENT = 'This is a test!';
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         if (! extension_loaded('swoole')) {
             $this->markTestSkipped('The Swoole extension is not available');

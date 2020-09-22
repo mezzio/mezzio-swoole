@@ -25,14 +25,10 @@ class Reloader
      */
     private $fileWatcher;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     private $logger;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $interval;
 
     /**
@@ -45,11 +41,11 @@ class Reloader
     public function __construct(FileWatcherInterface $fileWatcher, LoggerInterface $logger, int $interval)
     {
         $this->fileWatcher = $fileWatcher;
-        $this->interval = $interval;
-        $this->logger = $logger;
+        $this->interval    = $interval;
+        $this->logger      = $logger;
     }
 
-    public function onWorkerStart(SwooleServer $server, int $workerId) : void
+    public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
         // This method will be called for each started worker.
         // We will register our tick function on the first worker.
@@ -58,7 +54,7 @@ class Reloader
         }
     }
 
-    public function onTick(SwooleServer $server) : void
+    public function onTick(SwooleServer $server): void
     {
         $this->watchIncludedFiles();
         $changedFilePaths = $this->fileWatcher->readChangedFilePaths();
@@ -76,7 +72,7 @@ class Reloader
      * have a swoole server property, and handle the case in which it wouldn't
      * exist.
      */
-    private function generateTickCallback(SwooleServer $server) : callable
+    private function generateTickCallback(SwooleServer $server): callable
     {
         $reloader = $this;
 
@@ -88,7 +84,7 @@ class Reloader
     /**
      * Start watching included files.
      */
-    private function watchIncludedFiles() : void
+    private function watchIncludedFiles(): void
     {
         foreach (array_diff(get_included_files(), $this->watchedFilePaths) as $filePath) {
             $this->fileWatcher->addFilePath($filePath);
