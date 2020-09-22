@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
-use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
