@@ -26,7 +26,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
@@ -100,15 +99,6 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 
         $this->container
             ->get(AccessLogInterface::class)
-            ->shouldNotBeCalled();
-
-        // Legacy Zend Framework class
-        $this->container
-            ->has(LegacyAccessLogInterface::class)
-            ->willReturn(false);
-
-        $this->container
-            ->get(LegacyAccessLogInterface::class)
             ->shouldNotBeCalled();
     }
 

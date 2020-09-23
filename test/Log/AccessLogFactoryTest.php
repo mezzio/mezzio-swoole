@@ -18,7 +18,6 @@ use Mezzio\Swoole\Log\StdoutLogger;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface as LegacyAccessLogFormatterInterface;
 
 class AccessLogFactoryTest extends TestCase
 {
@@ -30,10 +29,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
 
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->createContainerMockWithConfigAndNotPsrLogger());
 
@@ -47,10 +43,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
 
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->createContainerMockWithConfigAndPsrLogger());
 
@@ -64,10 +57,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
 
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->createContainerMockWithNamedLogger());
 
@@ -95,10 +85,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
 
         $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
         $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
 
         $logger = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
             'mezzio-swoole' => [

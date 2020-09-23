@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Log;
 
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface as LegacyAccessLogFormatterInterface;
 
 /**
  * Create and return an access logger.
@@ -52,10 +51,6 @@ class AccessLogFactory
     {
         if ($container->has(AccessLogFormatterInterface::class)) {
             return $container->get(AccessLogFormatterInterface::class);
-        }
-
-        if ($container->has(LegacyAccessLogFormatterInterface::class)) {
-            return $container->get(LegacyAccessLogFormatterInterface::class);
         }
 
         return new AccessLogFormatter(

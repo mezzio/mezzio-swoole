@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
+- Removes support for services named after legacy Zend Framework/Expressive classes.
+
 - Removes support for Swoole versions prior to 4.5.
 
 - Removes support for PHP versions prior to 7.4.
