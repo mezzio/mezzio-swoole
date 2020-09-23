@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.8.0 - TBD
+## 3.0.0 - TBD
 
 ### Added
 
@@ -18,7 +18,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- Removes support for Swoole versions prior to 4.5.
+
+- Removes support for PHP versions prior to 7.4.
 
 ### Fixed
 
@@ -52,28 +54,6 @@ All notable changes to this project will be documented in this file, in reverse 
 #### Documentation,Enhancement
 
  - [22: Add Mapped Document Roots functionality](https://github.com/mezzio/mezzio-swoole/pull/22) thanks to @jasonterando
-
-## 2.6.7 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
 
 ## 2.6.6 - 2020-06-17
 
