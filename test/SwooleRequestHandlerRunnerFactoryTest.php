@@ -12,7 +12,6 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\ApplicationPipeline;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
-use Mezzio\Swoole\Event\WorkerListenerProvider;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\Log\AccessLogInterface;
@@ -142,7 +141,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ->shouldNotBeCalled();
     }
 
-    public function configureAbsentWorkerListenerProvider() : void
+    public function configureAbsentWorkerListenerProvider(): void
     {
         $this->container
             ->has(WorkerListenerProviderInterface::class)

@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
+ */
+
+declare(strict_types=1);
+
 namespace Mezzio\Swoole\Event;
 
 use Swoole\Http\Server as SwooleHttpServer;
 
-abstract class SwooleWorkerEvent
+abstract class AbstractSwooleWorkerEvent
 {
     /**
      * Swoole HTTP Server Instance
@@ -13,33 +21,20 @@ abstract class SwooleWorkerEvent
      */
     protected $httpServer;
 
-    /**
-     * @var integer
-     */
+    /** @var int */
     protected $workerId;
 
-    /**
-     * OnWorkerStartEvent constructor.
-     * @param SwooleHttpServer $httpServer
-     * @param int $workerId
-     */
     public function __construct(SwooleHttpServer $httpServer, int $workerId)
     {
         $this->httpServer = $httpServer;
-        $this->workerId = $workerId;
+        $this->workerId   = $workerId;
     }
 
-    /**
-     * @return SwooleHttpServer
-     */
     public function getHttpServer(): SwooleHttpServer
     {
         return $this->httpServer;
     }
 
-    /**
-     * @return int
-     */
     public function getWorkerId(): int
     {
         return $this->workerId;

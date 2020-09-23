@@ -112,9 +112,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /** @var null|Reloader */
     private $hotCodeReloader;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $dispatcher;
 
     public function __construct(
@@ -230,12 +228,9 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     }
 
     /**
-     * @param SwooleHttpServer $server
-     * @param $workerId
-     *
      * Handle a workerstop event for swoole HTTP server worker process
      */
-    public function onWorkerStop(SwooleHttpServer $server, $workerId): void
+    public function onWorkerStop(SwooleHttpServer $server, int $workerId): void
     {
         if ($this->dispatcher) {
             $this->dispatcher->dispatch(new OnWorkerStopEvent($server, $workerId));
@@ -243,12 +238,9 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     }
 
     /**
-     * @param SwooleHttpServer $server
-     * @param $workerId
-     *
      * Handle a workererror event for swoole HTTP server worker process
      */
-    public function onWorkerError(SwooleHttpServer $server, $workerId): void
+    public function onWorkerError(SwooleHttpServer $server, int $workerId): void
     {
         if ($this->dispatcher) {
             $this->dispatcher->dispatch(new OnWorkerErrorEvent($server, $workerId));

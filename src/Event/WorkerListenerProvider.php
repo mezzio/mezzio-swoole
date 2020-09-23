@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
+ */
+
+declare(strict_types=1);
 
 namespace Mezzio\Swoole\Event;
 
-use Psr\EventDispatcher\ListenerProviderInterface;
+use function in_array;
 
 class WorkerListenerProvider implements WorkerListenerProviderInterface
 {
@@ -21,9 +28,10 @@ class WorkerListenerProvider implements WorkerListenerProviderInterface
         }
     }
 
-    public function addListener(string $eventType, callable $listener) : void
+    public function addListener(string $eventType, callable $listener): void
     {
-        if (isset($this->listeners[$eventType])
+        if (
+            isset($this->listeners[$eventType])
             && in_array($listener, $this->listeners[$eventType], true)
         ) {
             return;

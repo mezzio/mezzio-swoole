@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Mezzio\Swoole\Event\SwooleWorkerDispatcher;
-use Mezzio\Swoole\Event\SwooleWorkerDispatcherInterface;
 use Mezzio\Swoole\Event\WorkerListenerProvider;
 use Mezzio\Swoole\Event\WorkerListenerProviderFactory;
 use Mezzio\Swoole\Event\WorkerListenerProviderInterface;
@@ -104,11 +102,11 @@ class ConfigProvider
                 InotifyFileWatcher::class => InotifyFileWatcher::class,
             ],
             'aliases'    => [
-                RequestHandlerRunner::class             => SwooleRequestHandlerRunner::class,
-                StaticResourceHandlerInterface::class   => StaticResourceHandler::class,
-                FileWatcherInterface::class             => InotifyFileWatcher::class,
-                FileLocationRepositoryInterface::class  => FileLocationRepository::class,
-                WorkerListenerProviderInterface::class  => WorkerListenerProvider::class,
+                RequestHandlerRunner::class            => SwooleRequestHandlerRunner::class,
+                StaticResourceHandlerInterface::class  => StaticResourceHandler::class,
+                FileWatcherInterface::class            => InotifyFileWatcher::class,
+                FileLocationRepositoryInterface::class => FileLocationRepository::class,
+                WorkerListenerProviderInterface::class => WorkerListenerProvider::class,
 
                 // Legacy Zend Framework aliases
                 LegacyReloadCommand::class                  => Command\ReloadCommand::class,
