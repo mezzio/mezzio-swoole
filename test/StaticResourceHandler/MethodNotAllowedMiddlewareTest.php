@@ -14,11 +14,13 @@ use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request;
 
 class MethodNotAllowedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

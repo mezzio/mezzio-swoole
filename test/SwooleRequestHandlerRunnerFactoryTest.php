@@ -21,6 +21,7 @@ use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -30,6 +31,7 @@ use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

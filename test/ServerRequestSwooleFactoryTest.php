@@ -13,6 +13,7 @@ namespace MezzioTest\Swoole;
 use Mezzio\Swoole\ServerRequestSwooleFactory;
 use Mezzio\Swoole\SwooleStream;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -29,6 +30,8 @@ use const UPLOAD_ERR_OK;
 
 class ServerRequestSwooleFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);

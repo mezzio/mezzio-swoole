@@ -15,6 +15,7 @@ use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request;
 
 use function gmstrftime;
@@ -24,6 +25,7 @@ use function trim;
 class LastModifiedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

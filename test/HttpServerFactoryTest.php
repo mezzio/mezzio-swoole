@@ -12,8 +12,8 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\HttpServerFactory;
-use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Swoole\Event as SwooleEvent;
@@ -43,6 +43,8 @@ use const SWOOLE_UNIX_STREAM;
 
 class HttpServerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @var ContainerInterface|ObjectProphecy */
     private $container;
 
@@ -318,7 +320,7 @@ class HttpServerFactoryTest extends TestCase
 
         // Xdebug is not ready yet in swoole.
         if (extension_loaded('xdebug')) {
-            $this->expectException(Warning::class);
+            $this->expectWarning();
 
             go(static function () {
             });

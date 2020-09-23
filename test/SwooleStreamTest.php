@@ -12,6 +12,7 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\SwooleStream;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -25,6 +26,8 @@ use const SEEK_END;
 
 class SwooleStreamTest extends TestCase
 {
+    use ProphecyTrait;
+
     public const DEFAULT_CONTENT = 'This is a test!';
 
     protected function setUp(): void

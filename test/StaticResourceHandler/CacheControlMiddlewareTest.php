@@ -15,11 +15,13 @@ use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request;
 
 class CacheControlMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use ProphecyTrait;
 
     public function testConstructorRaisesExceptionForInvalidRegexKey()
     {

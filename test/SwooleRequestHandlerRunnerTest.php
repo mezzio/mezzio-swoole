@@ -20,6 +20,7 @@ use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -37,6 +38,8 @@ use const PHP_OS;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->requestHandler = $this->prophesize(RequestHandlerInterface::class);

@@ -17,6 +17,7 @@ use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ProphecyInterface;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
@@ -36,6 +37,7 @@ use const PATH_SEPARATOR;
 class StartCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
     use ReflectMethodTrait;
 
     protected function setUp(): void

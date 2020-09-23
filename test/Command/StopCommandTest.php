@@ -15,6 +15,7 @@ use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,6 +25,7 @@ use function getmypid;
 class StopCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
     use ReflectMethodTrait;
 
     protected function setUp(): void

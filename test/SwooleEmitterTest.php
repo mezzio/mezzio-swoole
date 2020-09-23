@@ -14,6 +14,7 @@ use Laminas\Diactoros\Response;
 use Mezzio\Swoole\SwooleEmitter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 use function base64_encode;
@@ -22,6 +23,8 @@ use function substr;
 
 class SwooleEmitterTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->swooleResponse = $this->prophesize(SwooleHttpResponse::class);

@@ -17,6 +17,7 @@ use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -26,6 +27,7 @@ use Swoole\Http\Request;
 class Psr3AccessLogDecoratorTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {
@@ -129,7 +131,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
         $this->formatter
             ->format(
                 Argument::that(static function ($mapper) use ($request, $response) {
-                    TestCase::assertInstanceOf(AccessLogDataMap::class, $mapper);
+                    Psr3AccessLogDecoratorTest::assertInstanceOf(AccessLogDataMap::class, $mapper);
                     Psr3AccessLogDecoratorTest::assertAttributeSame($request, 'request', $mapper);
                     Psr3AccessLogDecoratorTest::assertAttributeSame($response->reveal(), 'psrResponse', $mapper);
                     Psr3AccessLogDecoratorTest::assertAttributeSame(false, 'useHostnameLookups', $mapper);

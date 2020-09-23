@@ -14,11 +14,13 @@ use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request;
 
 class OptionsMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

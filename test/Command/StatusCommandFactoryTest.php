@@ -15,11 +15,13 @@ use Mezzio\Swoole\Command\StatusCommandFactory;
 use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 class StatusCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
 
     public function testFactoryProducesCommand()
     {

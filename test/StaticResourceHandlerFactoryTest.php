@@ -14,6 +14,7 @@ use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandlerFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 
@@ -22,6 +23,7 @@ use function sprintf;
 class StaticResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

@@ -14,11 +14,13 @@ use Mezzio\Swoole\Command\StartCommand;
 use Mezzio\Swoole\Command\StartCommandFactory;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 class StartCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
 
     public function testFactoryProducesCommand()
     {

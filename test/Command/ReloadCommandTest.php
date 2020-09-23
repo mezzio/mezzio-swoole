@@ -14,6 +14,7 @@ use Mezzio\Swoole\Command\ReloadCommand;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -29,6 +30,7 @@ use const SWOOLE_PROCESS;
 class ReloadCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
     use ReflectMethodTrait;
 
     protected function setUp(): void

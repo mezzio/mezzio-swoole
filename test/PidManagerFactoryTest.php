@@ -13,10 +13,13 @@ namespace MezzioTest\Swoole;
 use Mezzio\Swoole\PidManager;
 use Mezzio\Swoole\PidManagerFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 class PidManagerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->container         = $this->prophesize(ContainerInterface::class);

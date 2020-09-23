@@ -26,13 +26,12 @@
     "extra": {
     },
     "require": {
-        "php": "^7.2",
-        "ext-swoole": "^4.4.6",
+        "php": "^7.4",
+        "ext-swoole": "^4.5",
         "composer/package-versions-deprecated": "^1.11",
         "dflydev/fig-cookies": "^2.0.1",
         "laminas/laminas-diactoros": "^1.8 || ^2.0",
         "laminas/laminas-httphandlerrunner": "^1.0.1",
-        "laminas/laminas-zendframework-bridge": "^1.0",
         "mezzio/mezzio": "^3.0.2",
         "psr/container": "^1.0",
         "psr/http-message": "^1.0",
@@ -45,7 +44,8 @@
         "filp/whoops": "^2.1",
         "laminas/laminas-coding-standard": "~2.1.0",
         "laminas/laminas-servicemanager": "^3.3",
-        "phpunit/phpunit": "^8.5.2",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.3.10",
         "swoole/ide-helper": "^4.5"
     },
     "conflict": {

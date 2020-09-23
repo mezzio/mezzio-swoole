@@ -14,6 +14,7 @@ use Mezzio\Swoole\Command\ReloadCommand;
 use Mezzio\Swoole\Command\ReloadCommandFactory;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 use const SWOOLE_BASE;
@@ -22,6 +23,7 @@ use const SWOOLE_PROCESS;
 class ReloadCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use ProphecyTrait;
 
     public function testFactoryUsesDefaultsToCreateCommandWhenNoConfigPresent()
     {

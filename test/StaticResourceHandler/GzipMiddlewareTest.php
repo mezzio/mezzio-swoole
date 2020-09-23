@@ -17,6 +17,7 @@ use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionProperty;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
@@ -30,6 +31,7 @@ use function mb_strlen;
 class GzipMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

@@ -12,10 +12,13 @@ namespace MezzioTest\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Response as SwooleResponse;
 
 class StaticResourceResponseTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testSendSwooleResponsePopulatesStatusAndHeadersAndCallsContentCallback()
     {
         $expectedFilename = '/image.png';

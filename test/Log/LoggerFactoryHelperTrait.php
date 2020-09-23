@@ -12,11 +12,14 @@ namespace MezzioTest\Swoole\Log;
 
 use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\SwooleLoggerFactory;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 trait LoggerFactoryHelperTrait
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->container = $this->prophesize(ContainerInterface::class);

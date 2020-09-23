@@ -15,6 +15,7 @@ use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request;
 
 use function array_unshift;
@@ -27,6 +28,7 @@ use function sprintf;
 class ETagMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use ProphecyTrait;
 
     protected function setUp(): void
     {

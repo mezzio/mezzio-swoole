@@ -13,12 +13,15 @@ namespace MezzioTest\Swoole\Log;
 use Mezzio\Swoole\Log\AccessLogDataMap;
 use Mezzio\Swoole\Log\AccessLogFormatter;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 use function gethostname;
 use function implode;
 
 class AccessLogFormatterTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFormatterDelegatesToDataMapToReplacePlaceholdersInFormat()
     {
         $hostname = gethostname();

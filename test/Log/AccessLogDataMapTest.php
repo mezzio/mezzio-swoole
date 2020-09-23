@@ -12,11 +12,14 @@ namespace MezzioTest\Swoole\Log;
 
 use Mezzio\Swoole\Log\AccessLogDataMap;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ResponseInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 
 class AccessLogDataMapTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->request  = $this->prophesize(SwooleHttpRequest::class)->reveal();

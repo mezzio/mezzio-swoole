@@ -13,6 +13,7 @@ namespace MezzioTest\Swoole;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 use function chdir;
@@ -24,6 +25,8 @@ use function time;
 
 class FileLocationRepositoryFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         $this->mockContainer      = $this->prophesize(ContainerInterface::class);
