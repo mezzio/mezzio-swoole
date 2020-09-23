@@ -91,9 +91,9 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /**
      * Handle a workererror event for swoole HTTP server worker process
      */
-    public function onWorkerError(SwooleHttpServer $server, int $workerId): void
+    public function onWorkerError(SwooleHttpServer $server, int $workerId, int $exitCode, int $signal): void
     {
-        $this->dispatcher->dispatch(new Event\WorkerErrorEvent($server, $workerId));
+        $this->dispatcher->dispatch(new Event\WorkerErrorEvent($server, $workerId, $exitCode, $signal));
     }
 
     /**
