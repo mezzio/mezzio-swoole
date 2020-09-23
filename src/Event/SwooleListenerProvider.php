@@ -10,9 +10,11 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Event;
 
+use Psr\EventDispatcher\ListenerProviderInterface;
+
 use function in_array;
 
-class WorkerListenerProvider implements WorkerListenerProviderInterface
+class SwooleListenerProvider implements ListenerProviderInterface
 {
     private $listeners = [];
 
@@ -22,6 +24,7 @@ class WorkerListenerProvider implements WorkerListenerProviderInterface
             if (! $event instanceof $eventType) {
                 continue;
             }
+
             foreach ($listeners as $listener) {
                 yield $listener;
             }

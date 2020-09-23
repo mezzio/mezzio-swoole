@@ -10,6 +10,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Event;
 
-class OnWorkerStopEvent extends AbstractSwooleWorkerEvent
+class WorkerStopEvent extends AbstractSwooleWorkerEvent
 {
 }

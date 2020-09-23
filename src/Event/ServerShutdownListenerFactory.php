@@ -10,12 +10,17 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Event;
 
+use Mezzio\Swoole\Log\AccessLogInterface;
+use Mezzio\Swoole\PidManager;
 use Psr\Container\ContainerInterface;
 
-class WorkerListenerProviderFactory
+final class ServerShutdownListenerFactory
 {
-    public function __invoke(ContainerInterface $container): WorkerListenerProvider
+    public function __invoke(ContainerInterface $container): ServerShutdownListener
     {
-        return new WorkerListenerProvider();
+        return new ServerShutdownListener(
+            $container->get(PidManager::class),
+            $container->get(AccessLogInterface::class)
+        );
     }
 }

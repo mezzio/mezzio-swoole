@@ -14,7 +14,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class SwooleWorkerDispatcher implements EventDispatcherInterface
+class EventDispatcher implements EventDispatcherInterface
 {
     /** @var ListenerProviderInterface */
     private $listenerProvider;

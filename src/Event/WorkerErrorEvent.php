@@ -10,9 +10,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Event;
 
-use Psr\EventDispatcher\ListenerProviderInterface;
-
-interface WorkerListenerProviderInterface extends ListenerProviderInterface
+class WorkerErrorEvent extends AbstractSwooleWorkerEvent
 {
-    public function addListener(string $eventType, callable $listener): void;
 }

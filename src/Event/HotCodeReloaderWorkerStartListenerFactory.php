@@ -8,18 +8,17 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\Swoole;
+namespace Mezzio\Swoole\Event;
 
+use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Container\ContainerInterface;
-use Swoole\Http\Server as SwooleHttpServer;
 
-class SwooleRequestHandlerRunnerFactory
+final class HotCodeReloaderWorkerStartListenerFactory
 {
-    public function __invoke(ContainerInterface $container): SwooleRequestHandlerRunner
+    public function __invoke(ContainerInterface $container): HotCodeReloaderWorkerStartListener
     {
-        return new SwooleRequestHandlerRunner(
-            $container->get(SwooleHttpServer::class),
-            $container->get(Event\EventDispatcherInterface::class)
+        return new HotCodeReloaderWorkerStartListener(
+            $container->get(Reloader::class)
         );
     }
 }

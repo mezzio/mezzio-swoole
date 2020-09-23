@@ -8,18 +8,16 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\Swoole;
+namespace Mezzio\Swoole\Event;
 
 use Psr\Container\ContainerInterface;
-use Swoole\Http\Server as SwooleHttpServer;
 
-class SwooleRequestHandlerRunnerFactory
+class EventDispatcherFactory
 {
-    public function __invoke(ContainerInterface $container): SwooleRequestHandlerRunner
+    public function __invoke(ContainerInterface $container): EventDispatcher
     {
-        return new SwooleRequestHandlerRunner(
-            $container->get(SwooleHttpServer::class),
-            $container->get(Event\EventDispatcherInterface::class)
+        return new EventDispatcher(
+            $container->get(SwooleListenerProvider::class)
         );
     }
 }
