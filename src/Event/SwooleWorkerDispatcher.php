@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
+ * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
+ * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
+ */
+
+declare(strict_types=1);
+
 namespace Mezzio\Swoole\Event;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -16,7 +24,10 @@ class SwooleWorkerDispatcher implements EventDispatcherInterface
         $this->listenerProvider = $listenerProvider;
     }
 
-    public function dispatch(object $event): object
+    /**
+     * @return object Returns the event passed to the method.
+     */
+    public function dispatch(object $event)
     {
         $stoppable = $event instanceof StoppableEventInterface;
 
