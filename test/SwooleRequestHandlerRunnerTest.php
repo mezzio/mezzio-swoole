@@ -10,438 +10,159 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-use Laminas\Diactoros\Response;
-use Mezzio\Response\ServerRequestErrorResponseGenerator;
-use Mezzio\Swoole\HotCodeReload\Reloader;
-use Mezzio\Swoole\PidManager;
-use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
-use Mezzio\Swoole\StaticResourceHandlerInterface;
+use Mezzio\Swoole\Event\RequestEvent;
+use Mezzio\Swoole\Event\ServerShutdownEvent;
+use Mezzio\Swoole\Event\ServerStartEvent;
+use Mezzio\Swoole\Event\WorkerErrorEvent;
+use Mezzio\Swoole\Event\WorkerStartEvent;
+use Mezzio\Swoole\Event\WorkerStopEvent;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
 
-use function file_exists;
-use function file_get_contents;
-use function getcwd;
-use function is_dir;
-use function posix_getpid;
-use function sprintf;
-
-use const PHP_OS;
+use function random_int;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
     /**
-     * @var RequestHandlerInterface|MockObject
-     * @psalm-var MockObject&RequestHandlerInterface
+     * @var EventDispatcherInterface|MockObject
+     * @psalm-var EventDispatcherInterface&MockObject
      */
-    private $requestHandler;
-
-    /**
-     * @var PidManager|MockObject
-     * @psalm-var MockObject&PidManager
-     */
-    private $pidManager;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * @var SwooleHttpServer|MockObject
-     * @psalm-var MockObject&SwooleHttpServer
+     * @psalm-var SwooleHttpServer&MockObject
      */
-    private $httpServer;
+    private SwooleHttpServer $httpServer;
 
-    /**
-     * @var StaticResourceHandlerInterface|MockObject
-     * @psalm-var MockObject&StaticResourceHandlerInterface
-     */
-    private $staticResourceHandler;
+    private SwooleRequestHandlerRunner $runner;
 
-    /** @var callable */
-    private $serverRequestFactory;
-
-    /** @var callable */
-    private $serverRequestError;
-
-    /** @psalm-var null */
-    private $logger;
-
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $this->httpServer            = $this->createMock(SwooleHttpServer::class);
+        $this->dispatcher            = $this->createMock(EventDispatcherInterface::class);
 
-        $this->serverRequestFactory = function (): ServerRequestInterface {
-            return $this->createMock(ServerRequestInterface::class);
-        };
+        $this->httpServer->expects($this->atLeastOnce())->method('getMasterPid')->willReturn(0);
+        $this->httpServer->expects($this->atLeastOnce())->method('getManagerPid')->willReturn(0);
 
-        $this->serverRequestError = function (): ServerRequestErrorResponseGenerator {
-            return $this->createMock(ServerRequestErrorResponseGenerator::class);
-        };
-
-        $this->pidManager = $this->createMock(PidManager::class);
-
-        $this->httpServer = $this->createMock(SwooleHttpServer::class);
-
-        $this->staticResourceHandler = $this->createMock(StaticResourceHandlerInterface::class);
-
-        $this->logger = null;
+        $this->runner     = new SwooleRequestHandlerRunner($this->httpServer, $this->dispatcher);
     }
 
-    public function testConstructor(): void
+
+
+    public function testConstructorRaisesExceptionWhenMasterPidIsNotZero(): void
     {
-        $this->assertIsObject(new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger
-        ));
+        $httpServer = $this->createMock(SwooleHttpServer::class);
+        $httpServer->expects($this->once())->method('getMasterPid')->willReturn(1);
+        $httpServer->expects($this->never())->method('getManagerPid');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('already been started');
+        new SwooleRequestHandlerRunner($httpServer, $this->dispatcher);
     }
 
-    public function testRun(): void
+    public function testConstructorRaisesExceptionWhenManagerPidIsNotZero(): void
     {
-        $this->pidManager
-            ->method('read')
-            ->willReturn([]);
+        $httpServer = $this->createMock(SwooleHttpServer::class);
+        $httpServer->expects($this->once())->method('getMasterPid')->willReturn(0);
+        $httpServer->expects($this->once())->method('getManagerPid')->willReturn(1);
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('already been started');
+        new SwooleRequestHandlerRunner($httpServer, $this->dispatcher);
+    }
+
+    public function testRunRegistersHttpServerListenersAndStartsServer(): void
+    {
         $this->httpServer
+            ->expects($this->exactly(6))
             ->method('on')
-            ->willReturn(null);
-
-        $this->httpServer
-            ->method('start')
-            ->willReturn(null);
-
-        $this->staticResourceHandler
-            ->method('processStaticResource')
-            ->with($this->any())
-            ->willReturn(null);
-
-        $requestHandler = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger
-        );
+            ->withConsecutive(
+                ['start', [$this->runner, 'onStart']],
+                ['workerstart', [$this->runner, 'onWorkerStart']],
+                ['workerstop', [$this->runner, 'onWorkerStop']],
+                ['workererror', [$this->runner, 'onWorkerError']],
+                ['request', [$this->runner, 'onRequest']],
+                ['shutdown', [$this->runner, 'onShutdown']],
+            );
 
         $this->httpServer
             ->expects($this->once())
             ->method('start');
 
-        // Listeners are attached to each of:
-        // - start
-        // - workerstart
-        // - workerstop
-        // - workererror
-        // - request
-        // - shutdown
-        $this->httpServer
-            ->expects($this->exactly(6))
-            ->method('on');
-
-        $requestHandler->run();
+        $this->assertNull($this->runner->run());
     }
 
-    public function testOnStart(): void
+    public function testOnStartDispatchesServerStartEvent(): void
     {
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger
-        );
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new ServerStartEvent($this->httpServer)));
 
-        $runner->onStart($swooleServer = $this->createMock(SwooleHttpServer::class));
-        $this->expectOutputString(sprintf(
-            "Swoole is running at :0, in %s\n",
-            getcwd()
-        ));
+        $this->runner->onStart($this->httpServer);
     }
 
-    public function testOnRequestDelegatesToApplicationWhenNoStaticResourceHandlerPresent(): void
+    public function testOnWorkerStartDispatchesWorkerStartEvent(): void
     {
-        $content      = 'Content!';
-        $psr7Response = new Response();
-        $psr7Response->getBody()->write($content);
+        $workerId = random_int(1, 4);
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new WorkerStartEvent($this->httpServer, $workerId)));
 
-        $this->requestHandler
-            ->method('handle')
-            ->with($this->isInstanceOf(ServerRequestInterface::class))
-            ->willReturn($psr7Response);
+        $this->runner->onWorkerStart($this->httpServer, $workerId);
+    }
 
-        $request         = $this->createMock(SwooleHttpRequest::class);
-        $request->server = [
-            'request_uri'    => '/',
-            'remote_addr'    => '127.0.0.1',
-            'request_method' => 'GET',
-        ];
-        $request->get    = [];
+    public function testOnWorkerStopDispatchesWorkerStopEvent(): void
+    {
+        $workerId = random_int(1, 4);
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new WorkerStopEvent($this->httpServer, $workerId)));
 
+        $this->runner->onWorkerStop($this->httpServer, $workerId);
+    }
+
+    public function testOnWorkerErrorDispatchesWorkerErrorEvent(): void
+    {
+        $workerId = random_int(1, 4);
+        $exitCode = random_int(1, 127);
+        $signal   = random_int(1, 7);
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new WorkerErrorEvent($this->httpServer, $workerId, $exitCode, $signal)));
+
+        $this->runner->onWorkerError($this->httpServer, $workerId, $exitCode, $signal);
+    }
+
+    public function testOnRequestDispatchesRequestEvent(): void
+    {
+        $request  = $this->createMock(SwooleHttpRequest::class);
         $response = $this->createMock(SwooleHttpResponse::class);
-        $response
+        $this->dispatcher
             ->expects($this->once())
-            ->method('status')
-            ->with(200);
-        $response
+            ->method('dispatch')
+            ->with($this->equalTo(new RequestEvent($request, $response)));
+
+        $this->runner->onRequest($request, $response);
+    }
+
+    public function testOnShutdownDispatchesServerShutdownEvent(): void
+    {
+        $this->dispatcher
             ->expects($this->once())
-            ->method('end')
-            ->with($content);
+            ->method('dispatch')
+            ->with($this->equalTo(new ServerShutdownEvent($this->httpServer)));
 
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            null,
-            $this->logger
-        );
-
-        $runner->onRequest($request, $response);
-
-        $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
-    }
-
-    public function testOnRequestDelegatesToApplicationWhenStaticResourceHandlerDoesNotMatchPath(): void
-    {
-        $content      = 'Content!';
-        $psr7Response = new Response();
-        $psr7Response->getBody()->write($content);
-
-        $this->requestHandler
-            ->method('handle')
-            ->with($this->isInstanceOf(ServerRequestInterface::class))
-            ->willReturn($psr7Response);
-
-        $request         = $this->createMock(SwooleHttpRequest::class);
-        $request->server = [
-            'request_uri'    => '/',
-            'remote_addr'    => '127.0.0.1',
-            'request_method' => 'GET',
-        ];
-        $request->get    = [];
-
-        $response = $this->createMock(SwooleHttpResponse::class);
-        $response
-            ->expects($this->once())
-            ->method('status')
-            ->with(200);
-        $response
-            ->expects($this->once())
-            ->method('end')
-            ->with($content);
-
-        $this->staticResourceHandler
-            ->method('processStaticResource')
-            ->with($request, $response)
-            ->willReturn(null);
-
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger
-        );
-
-        $runner->onRequest($request, $response);
-
-        $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
-    }
-
-    public function testOnRequestDelegatesToStaticResourceHandlerOnMatch(): void
-    {
-        $this->requestHandler
-            ->expects($this->never())
-            ->method('handle');
-
-        $request         = $this->createMock(SwooleHttpRequest::class);
-        $request->server = [
-            'request_uri'    => '/',
-            'remote_addr'    => '127.0.0.1',
-            'request_method' => 'GET',
-        ];
-        $request->get    = [];
-
-        $response = $this->createMock(SwooleHttpResponse::class);
-
-        $staticResponse = $this->createMock(StaticResourceResponse::class);
-        $staticResponse->method('getStatus')->willReturn(200);
-        $staticResponse->method('getContentLength')->willReturn(200);
-
-        $this->staticResourceHandler
-            ->method('processStaticResource')
-            ->with($request, $response)
-            ->willReturn($staticResponse);
-
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger
-        );
-
-        $runner->onRequest($request, $response);
-
-        $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
-    }
-
-    public function testProcessNameIsUsedToCreateMasterProcessNameOnStart(): void
-    {
-        if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
-            $this->markTestSkipped(
-                'Testing process names is only performed on *nix systems (with the exception of MacOS)'
-            );
-        }
-
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger,
-            'test' // Process name
-        );
-
-        $pid                       = posix_getpid();
-        $swooleServer              = $this->createMock(SwooleHttpServer::class);
-        $swooleServer->master_pid  = 55555;
-        $swooleServer->manager_pid = $pid;
-
-        $runner->onStart($swooleServer);
-        $this->expectOutputString(sprintf(
-            "Swoole is running at :0, in %s\n",
-            getcwd()
-        ));
-
-        $processFile = sprintf('/proc/%d/cmdline', $pid);
-        $this->assertTrue(file_exists($processFile));
-
-        $contents = file_get_contents($processFile);
-        $this->assertStringContainsString('test-master', $contents);
-    }
-
-    public function testProcessNameIsUsedToCreateWorkerProcessNameOnWorkerStart(): void
-    {
-        if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
-            $this->markTestSkipped(
-                'Testing process names is only performed on *nix systems (with the exception of MacOS)'
-            );
-        }
-
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger,
-            'test' // Process name
-        );
-
-        $pid = posix_getpid();
-
-        $swooleServer          = $this->createMock(SwooleHttpServer::class);
-        $swooleServer->setting = [
-            'worker_num' => $pid + 1,
-        ];
-
-        $runner->onWorkerStart($swooleServer, $pid);
-        $this->expectOutputString(sprintf(
-            "Worker started in %s with ID %d\n",
-            getcwd(),
-            $pid
-        ));
-
-        $processFile = sprintf('/proc/%d/cmdline', $pid);
-        $this->assertTrue(file_exists($processFile));
-
-        $contents = file_get_contents($processFile);
-        $this->assertStringContainsString('test-worker', $contents);
-    }
-
-    public function testProcessNameIsUsedToCreateTaskWorkerProcessNameOnWorkerStart(): void
-    {
-        if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
-            $this->markTestSkipped(
-                'Testing process names is only performed on *nix systems (with the exception of MacOS)'
-            );
-        }
-
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger,
-            'test' // Process name
-        );
-
-        $pid = posix_getpid();
-
-        $swooleServer          = $this->createMock(SwooleHttpServer::class);
-        $swooleServer->setting = [
-            'worker_num' => $pid - 2,
-        ];
-
-        $runner->onWorkerStart($swooleServer, $pid);
-        $this->expectOutputString(sprintf(
-            "Worker started in %s with ID %d\n",
-            getcwd(),
-            $pid
-        ));
-
-        $processFile = sprintf('/proc/%d/cmdline', $pid);
-        $this->assertTrue(file_exists($processFile));
-
-        $contents = file_get_contents($processFile);
-        $this->assertStringContainsString('test-task-worker', $contents);
-    }
-
-    public function testHotCodeReloaderTriggeredOnWorkerStart(): void
-    {
-        $this->httpServer->setting = [
-            'worker_num' => posix_getpid(),
-        ];
-
-        $hotCodeReloader = $this->createMock(Reloader::class);
-        $hotCodeReloader
-            ->expects(static::once())
-            ->method('onWorkerStart')
-            ->with($this->httpServer, 0);
-
-        $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler,
-            $this->serverRequestFactory,
-            $this->serverRequestError,
-            $this->pidManager,
-            $this->httpServer,
-            $this->staticResourceHandler,
-            $this->logger,
-            SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME,
-            $hotCodeReloader
-        );
-        $runner->onWorkerStart($this->httpServer, 0);
+        $this->runner->onShutdown($this->httpServer);
     }
 }
