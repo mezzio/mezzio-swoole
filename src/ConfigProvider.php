@@ -21,8 +21,8 @@ use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
-use function getcwd;
 use function extension_loaded;
+use function getcwd;
 
 use const PHP_SAPI;
 
@@ -61,7 +61,7 @@ class ConfigProvider
                 'static-files' => [
                     'enable' => true,
                 ],
-                'listeners' => [
+                'listeners'    => [
                     Event\ServerStartEvent::class => [
                         Event\ServerStartListener::class,
                     ],
@@ -82,7 +82,7 @@ class ConfigProvider
                     //         Event\RequestHandlerRequestListener::class,
                     //     ]),
                     // </code>
-                    Event\RequestEvent::class => [
+                    Event\RequestEvent::class        => [
                         Event\StaticResourceRequestListener::class,
                         Event\RequestHandlerRequestListener::class,
                     ],
@@ -96,6 +96,7 @@ class ConfigProvider
 
     public function getDependencies(): array
     {
+        // phpcs:disable Generic.Files.LineLength.TooLong
         return [
             'factories'  => [
                 Command\ReloadCommand::class                    => Command\ReloadCommandFactory::class,
@@ -136,5 +137,6 @@ class ConfigProvider
                 ],
             ],
         ];
+        // phpcs:enable
     }
 }

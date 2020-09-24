@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 
+use function iterator_to_array;
+
 class SwooleListenerProviderFactoryTest extends TestCase
 {
     public function invalidListenerTypes(): iterable
@@ -36,7 +38,7 @@ class SwooleListenerProviderFactoryTest extends TestCase
      */
     public function testFactoryRaisesErrorForNonCallableNonStringListeners($invalidListener): void
     {
-        $config = [
+        $config    = [
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'listeners' => [
@@ -68,12 +70,12 @@ class SwooleListenerProviderFactoryTest extends TestCase
 
     public function testFactoryRaisesErrorForNonexistentListenerService(): void
     {
-        $config = [
+        $config    = [
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'listeners' => [
                         stdClass::class => [
-                            'ClassDoesNotExist'
+                            'ClassDoesNotExist',
                         ],
                     ],
                 ],
@@ -100,12 +102,12 @@ class SwooleListenerProviderFactoryTest extends TestCase
 
     public function testFactoryRaisesErrorForNonCallableListenerService(): void
     {
-        $config = [
+        $config    = [
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'listeners' => [
                         stdClass::class => [
-                            'UncallableListener'
+                            'UncallableListener',
                         ],
                     ],
                 ],
@@ -135,12 +137,12 @@ class SwooleListenerProviderFactoryTest extends TestCase
         $listener = function (stdClass $event): void {
         };
 
-        $config = [
+        $config    = [
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'listeners' => [
                         stdClass::class => [
-                            'ValidListener'
+                            'ValidListener',
                         ],
                     ],
                 ],

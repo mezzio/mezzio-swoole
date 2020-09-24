@@ -22,7 +22,7 @@ class SwooleListenerProviderTest extends TestCase
     {
         $listenerForTestEvent = function (TestAsset\TestEvent $e) {
         };
-        $listenerForStdclass = function (stdClass $e) {
+        $listenerForStdclass  = function (stdClass $e) {
         };
 
         $provider = new SwooleListenerProvider();

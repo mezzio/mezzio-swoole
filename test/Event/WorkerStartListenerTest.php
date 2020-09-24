@@ -26,7 +26,7 @@ class WorkerStartListenerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->cwd = getcwd();
+        $this->cwd                           = getcwd();
         WorkerStartListener::$setProcessName = 'swoole_process_name';
     }
 

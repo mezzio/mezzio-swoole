@@ -23,7 +23,7 @@ class WorkerStartListenerFactoryTest extends TestCase
     {
         $config    = [
             'mezzio-swoole' => [
-                'application_root' => __DIR__,
+                'application_root'   => __DIR__,
                 'swoole-http-server' => [
                     'process-name' => 'the-process-name',
                 ],

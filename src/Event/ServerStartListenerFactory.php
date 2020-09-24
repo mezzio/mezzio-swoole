@@ -15,6 +15,8 @@ use Mezzio\Swoole\PidManager;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use Psr\Container\ContainerInterface;
 
+use function getcwd;
+
 final class ServerStartListenerFactory
 {
     public function __invoke(ContainerInterface $container): ServerStartListener

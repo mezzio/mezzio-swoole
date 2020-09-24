@@ -26,7 +26,7 @@ class ServerStartListenerFactoryTest extends TestCase
         $logger     = $this->createMock(LoggerInterface::class);
         $config     = [
             'mezzio-swoole' => [
-                'application_root' => __DIR__,
+                'application_root'   => __DIR__,
                 'swoole-http-server' => [
                     'process-name' => 'alternate-process-name',
                 ],

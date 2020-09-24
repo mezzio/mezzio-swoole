@@ -51,7 +51,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->httpServer->expects($this->atLeastOnce())->method('getMasterPid')->willReturn(0);
         $this->httpServer->expects($this->atLeastOnce())->method('getManagerPid')->willReturn(0);
 
-        $this->runner     = new SwooleRequestHandlerRunner($this->httpServer, $this->dispatcher);
+        $this->runner = new SwooleRequestHandlerRunner($this->httpServer, $this->dispatcher);
     }
 
 

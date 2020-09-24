@@ -14,6 +14,9 @@ use Mezzio\Swoole\Exception\InvalidListenerException;
 use Psr\Container\ContainerInterface;
 use Webmozart\Assert\Assert;
 
+use function is_callable;
+use function is_string;
+
 class SwooleListenerProviderFactory
 {
     public function __invoke(ContainerInterface $container): SwooleListenerProvider

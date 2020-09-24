@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Event;
 
 use Mezzio\Swoole\Event\EventDispatcher;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
@@ -24,7 +23,7 @@ class EventDispatcherTest extends TestCase
 
     public function setUp(): void
     {
-        $this->provider = $this->createMock(ListenerProviderInterface::class);
+        $this->provider   = $this->createMock(ListenerProviderInterface::class);
         $this->dispatcher = new EventDispatcher($this->provider);
     }
 

@@ -17,6 +17,9 @@ use function sprintf;
 
 class InvalidListenerException extends InvalidArgumentException
 {
+    /**
+     * @param mixed $listener
+     */
     public static function forListenerOfEvent($listener, string $event): self
     {
         return new self(sprintf(

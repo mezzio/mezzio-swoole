@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
+use function chdir;
 use function getcwd;
 use function random_int;
 
@@ -27,7 +28,7 @@ class ServerStartListenerTest extends TestCase
     public function setUp(): void
     {
         ServerStartListener::$setProcessName = 'swoole_set_process_name';
-        $this->cwd = getcwd();
+        $this->cwd                           = getcwd();
     }
 
     public function tearDown(): void

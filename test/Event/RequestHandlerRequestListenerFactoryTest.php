@@ -14,7 +14,6 @@ use Mezzio\ApplicationPipeline;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
 use Mezzio\Swoole\Event\RequestHandlerRequestListener;
 use Mezzio\Swoole\Event\RequestHandlerRequestListenerFactory;
-use Mezzio\Swoole\Log\AccessLogFactory;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;

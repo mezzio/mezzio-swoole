@@ -20,7 +20,7 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
 {
     public function testProducesHotCodeReloaderListenerUsingReloaderFromContainer(): void
     {
-        $reloader = $this->createMock(Reloader::class);
+        $reloader  = $this->createMock(Reloader::class);
         $container = $this->createMock(ContainerInterface::class);
         $container
             ->expects($this->once())

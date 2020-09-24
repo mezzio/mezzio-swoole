@@ -23,8 +23,8 @@ class ServerShutdownListener
         PidManager $pidManager,
         LoggerInterface $logger
     ) {
-        $this->pidManager  = $pidManager;
-        $this->logger      = $logger;
+        $this->pidManager = $pidManager;
+        $this->logger     = $logger;
     }
 
     public function __invoke(ServerShutdownEvent $event): void

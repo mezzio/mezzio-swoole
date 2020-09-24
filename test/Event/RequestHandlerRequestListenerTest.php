@@ -40,7 +40,7 @@ class RequestHandlerRequestListenerTest extends TestCase
         $this->swooleRequest  = $this->createMock(SwooleHttpRequest::class);
         $this->swooleResponse = $this->createMock(SwooleHttpResponse::class);
 
-        $this->request   = $request = $this->createMock(ServerRequestInterface::class);
+        $this->request  = $request = $this->createMock(ServerRequestInterface::class);
         $requestFactory = function (SwooleHttpRequest $swooleRequest) use ($request): ServerRequestInterface {
             if ($this->exceptionToThrowOnRequestGeneration) {
                 throw $this->exceptionToThrowOnRequestGeneration;
@@ -48,7 +48,7 @@ class RequestHandlerRequestListenerTest extends TestCase
             return $request;
         };
 
-        $this->errorResponse = $errorResponse = $this->createMock(ResponseInterface::class);
+        $this->errorResponse    = $errorResponse = $this->createMock(ResponseInterface::class);
         $errorResponseGenerator = function (Throwable $e) use ($errorResponse): ResponseInterface {
             if ($this->exceptionToThrowOnRequestGeneration) {
                 TestCase::assertSame($this->exceptionToThrowOnRequestGeneration, $e);
