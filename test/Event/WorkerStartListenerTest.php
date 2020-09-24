@@ -43,7 +43,7 @@ class WorkerStartListenerTest extends TestCase
         $processName                   = 'the-process-name';
         $server                        = $this->createMock(SwooleHttpServer::class);
         $server->setting['worker_num'] = 4;
-        $workerId                      = random_int(1, 4);
+        $workerId                      = random_int(0, 3);
         $listener                      = new WorkerStartListener($logger, $cwd, $processName);
         $event                         = new WorkerStartEvent($server, $workerId);
         $listener::$setProcessName     = function (string $name) use ($processName, $workerId): void {
@@ -72,7 +72,7 @@ class WorkerStartListenerTest extends TestCase
         $processName                   = 'the-process-name';
         $server                        = $this->createMock(SwooleHttpServer::class);
         $server->setting['worker_num'] = 4;
-        $workerId                      = random_int(5, 8);
+        $workerId                      = random_int(4, 7);
         $listener                      = new WorkerStartListener($logger, $cwd, $processName);
         $event                         = new WorkerStartEvent($server, $workerId);
         $listener::$setProcessName     = function (string $name) use ($processName, $workerId): void {
