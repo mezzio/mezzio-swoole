@@ -12,7 +12,7 @@ namespace Mezzio\Swoole\Event;
 
 use Psr\Container\ContainerInterface;
 
-class EventDispatcherFactory
+final class EventDispatcherFactory
 {
     public function __invoke(ContainerInterface $container): EventDispatcher
     {
