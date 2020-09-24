@@ -51,7 +51,7 @@ class ServerStartListener
     {
         $server = $event->getServer();
 
-        $this->pidManager->write($server->master_pid, $server->manager_pid);
+        $this->pidManager->write($server->getMasterPid(), $server->getManagerPid());
 
         // Reset CWD
         chdir($this->cwd);
