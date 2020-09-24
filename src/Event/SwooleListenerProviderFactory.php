@@ -12,6 +12,7 @@ namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\Exception\InvalidListenerException;
 use Psr\Container\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 class SwooleListenerProviderFactory
 {
@@ -22,8 +23,13 @@ class SwooleListenerProviderFactory
         $provider = new SwooleListenerProvider();
 
         foreach ($config as $event => $listeners) {
+            Assert::stringNotEmpty($event);
+            Assert::isList($listeners);
             foreach ($listeners as $listener) {
-                $provider->addListener($event, $this->prepareListener($listener));
+                $provider->addListener(
+                    $event,
+                    $this->prepareListener($container, $listener, $event)
+                );
             }
         }
 
