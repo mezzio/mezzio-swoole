@@ -12,6 +12,7 @@ namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
+use Psr\Container\ContainerInterface;
 
 use function getcwd;
 
