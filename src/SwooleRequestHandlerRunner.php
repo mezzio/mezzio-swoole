@@ -63,6 +63,8 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         $this->httpServer->on('workerstop', [$this, 'onWorkerStop']);
         $this->httpServer->on('workererror', [$this, 'onWorkerError']);
         $this->httpServer->on('request', [$this, 'onRequest']);
+        $this->httpServer->on('beforereload', [$this, 'onBeforeReload']);
+        $this->httpServer->on('afterreload', [$this, 'onAfterReload']);
         $this->httpServer->start();
     }
 
@@ -120,6 +122,22 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     public function onRequest(SwooleHttpRequest $request, SwooleHttpResponse $response): void
     {
         $this->dispatcher->dispatch(new Event\RequestEvent($request, $response));
+    }
+
+    /**
+     * Handle a beforereload event (hot code reloading)
+     */
+    public function onBeforeReload(SwooleHttpServer $server): void
+    {
+        $this->dispatcher->dispatch(new Event\BeforeReloadEvent($server));
+    }
+
+    /**
+     * Handle an afterreload event (hot code reloading)
+     */
+    public function onAfterReload(SwooleHttpServer $server): void
+    {
+        $this->dispatcher->dispatch(new Event\AfterReloadEvent($server));
     }
 
     /**

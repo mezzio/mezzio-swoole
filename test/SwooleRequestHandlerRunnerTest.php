@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
+use Mezzio\Swoole\Event\AfterReloadEvent;
+use Mezzio\Swoole\Event\BeforeReloadEvent;
 use Mezzio\Swoole\Event\ManagerStartEvent;
 use Mezzio\Swoole\Event\ManagerStopEvent;
 use Mezzio\Swoole\Event\RequestEvent;
@@ -83,7 +85,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testRunRegistersHttpServerListenersAndStartsServer(): void
     {
         $this->httpServer
-            ->expects($this->exactly(8))
+            ->expects($this->exactly(10))
             ->method('on')
             ->withConsecutive(
                 ['start', [$this->runner, 'onStart']],
@@ -94,6 +96,8 @@ class SwooleRequestHandlerRunnerTest extends TestCase
                 ['workerstop', [$this->runner, 'onWorkerStop']],
                 ['workererror', [$this->runner, 'onWorkerError']],
                 ['request', [$this->runner, 'onRequest']],
+                ['beforereload', [$this->runner, 'onBeforeReload']],
+                ['afterreload', [$this->runner, 'onAfterReload']],
             );
 
         $this->httpServer
@@ -188,5 +192,25 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->with($this->equalTo(new ServerShutdownEvent($this->httpServer)));
 
         $this->runner->onShutdown($this->httpServer);
+    }
+
+    public function testOnBeforeReloadDispatchesBeforeReloadEvent(): void
+    {
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new BeforeReloadEvent($this->httpServer)));
+
+        $this->runner->onBeforeReload($this->httpServer);
+    }
+
+    public function testOnAfterReloadDispatchesAfterReloadEvent(): void
+    {
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new AfterReloadEvent($this->httpServer)));
+
+        $this->runner->onAfterReload($this->httpServer);
     }
 }

@@ -85,6 +85,22 @@ class RequestEvent implements StoppableEventInterface
 }
 
 /**
+ * Describes "beforereload" event (prior to hot code reload)
+ */
+class BeforeReloadEvent
+{
+    public function getServer(): SwooleHttpServer;
+}
+
+/**
+ * Describes "afterreload" event (after hot code reload)
+ */
+class AfterReloadEvent
+{
+    public function getServer(): SwooleHttpServer;
+}
+
+/**
  * Describes "shutdown" event
  */
 class ServerShutdownEvent
