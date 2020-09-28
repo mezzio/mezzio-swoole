@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
+use Mezzio\Swoole\Event\ManagerStartEvent;
+use Mezzio\Swoole\Event\ManagerStopEvent;
 use Mezzio\Swoole\Event\RequestEvent;
 use Mezzio\Swoole\Event\ServerShutdownEvent;
 use Mezzio\Swoole\Event\ServerStartEvent;
@@ -81,15 +83,17 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testRunRegistersHttpServerListenersAndStartsServer(): void
     {
         $this->httpServer
-            ->expects($this->exactly(6))
+            ->expects($this->exactly(8))
             ->method('on')
             ->withConsecutive(
                 ['start', [$this->runner, 'onStart']],
+                ['shutdown', [$this->runner, 'onShutdown']],
+                ['managerstart', [$this->runner, 'onManagerStart']],
+                ['managerstop', [$this->runner, 'onManagerStop']],
                 ['workerstart', [$this->runner, 'onWorkerStart']],
                 ['workerstop', [$this->runner, 'onWorkerStop']],
                 ['workererror', [$this->runner, 'onWorkerError']],
                 ['request', [$this->runner, 'onRequest']],
-                ['shutdown', [$this->runner, 'onShutdown']],
             );
 
         $this->httpServer
@@ -107,6 +111,26 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->with($this->equalTo(new ServerStartEvent($this->httpServer)));
 
         $this->runner->onStart($this->httpServer);
+    }
+
+    public function testOnManagerStartDispatchesManagerStartEvent(): void
+    {
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new ManagerStartEvent($this->httpServer)));
+
+        $this->runner->onManagerStart($this->httpServer);
+    }
+
+    public function testOnManagerStopDispatchesManagerStopEvent(): void
+    {
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new ManagerStopEvent($this->httpServer)));
+
+        $this->runner->onManagerStop($this->httpServer);
     }
 
     public function testOnWorkerStartDispatchesWorkerStartEvent(): void

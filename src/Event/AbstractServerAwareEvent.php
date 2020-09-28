@@ -12,18 +12,17 @@ namespace Mezzio\Swoole\Event;
 
 use Swoole\Http\Server as SwooleHttpServer;
 
-abstract class AbstractSwooleWorkerEvent extends AbstractServerAwareEvent
+abstract class AbstractServerAwareEvent
 {
-    protected int $workerId;
+    protected SwooleHttpServer $server;
 
-    public function __construct(SwooleHttpServer $server, int $workerId)
+    public function __construct(SwooleHttpServer $server)
     {
-        $this->server   = $server;
-        $this->workerId = $workerId;
+        $this->server = $server;
     }
 
-    public function getWorkerId(): int
+    public function getServer(): SwooleHttpServer
     {
-        return $this->workerId;
+        return $this->server;
     }
 }

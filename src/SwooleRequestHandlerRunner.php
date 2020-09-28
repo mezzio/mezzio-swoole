@@ -56,20 +56,38 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     public function run(): void
     {
         $this->httpServer->on('start', [$this, 'onStart']);
+        $this->httpServer->on('shutdown', [$this, 'onShutdown']);
+        $this->httpServer->on('managerstart', [$this, 'onManagerStart']);
+        $this->httpServer->on('managerstop', [$this, 'onManagerStop']);
         $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
         $this->httpServer->on('workerstop', [$this, 'onWorkerStop']);
         $this->httpServer->on('workererror', [$this, 'onWorkerError']);
         $this->httpServer->on('request', [$this, 'onRequest']);
-        $this->httpServer->on('shutdown', [$this, 'onShutdown']);
         $this->httpServer->start();
     }
 
     /**
-     * Handle a start event for swoole HTTP server manager process.
+     * Handle a start event for swoole HTTP server process.
      */
     public function onStart(SwooleHttpServer $server): void
     {
         $this->dispatcher->dispatch(new Event\ServerStartEvent($server));
+    }
+
+    /**
+     * Handle a managerstart event for swoole HTTP server manager process
+     */
+    public function onManagerStart(SwooleHttpServer $server): void
+    {
+        $this->dispatcher->dispatch(new Event\ManagerStartEvent($server));
+    }
+
+    /**
+     * Handle a managerstop event for swoole HTTP server manager process
+     */
+    public function onManagerStop(SwooleHttpServer $server): void
+    {
+        $this->dispatcher->dispatch(new Event\ManagerStopEvent($server));
     }
 
     /**

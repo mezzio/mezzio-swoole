@@ -29,6 +29,22 @@ class ServerStartEvent
 }
 
 /**
+ * Describes "managerstart" event
+ */
+class ManagerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+}
+
+/**
+ * Describes "managerstop" event
+ */
+class ManagerStopEvent
+{
+    public function getServer(): SwooleHttpServer;
+}
+
+/**
  * Describes "workerstart" event
  */
 class WorkerStartEvent
