@@ -6,11 +6,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- Adds a variety of event types based on Swoole HTTP Server events, as well as default listeners, a [PSR-14](https://www.php-fig.org/psr/psr-14) listener provider to aggregate them, and a simple PSR-14 dispatcher implementation for triggering them. See the [events chapter of the documentation](https://docs.mezzio.dev/mezzio-swoole/v3/events/) for more details.
 
 ### Changed
 
-- Nothing.
+- Rewrites the internals of `Mezzio\Swoole\SwooleRequestHandlerRunner` to trigger events via a [PSR-14](https://www.php-fig.org/psr/psr-14) event dispatcher. See the [events chapter of the documentation](https://docs.mezzio.dev/mezzio-swoole/v3/events/) for more details.
 
 ### Deprecated
 
