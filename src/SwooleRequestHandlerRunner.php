@@ -65,6 +65,8 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         $this->httpServer->on('request', [$this, 'onRequest']);
         $this->httpServer->on('beforereload', [$this, 'onBeforeReload']);
         $this->httpServer->on('afterreload', [$this, 'onAfterReload']);
+        $this->httpServer->on('task', [$this, 'onTask']);
+        $this->httpServer->on('finish', [$this, 'onTaskFinish']);
         $this->httpServer->start();
     }
 
@@ -138,6 +140,27 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     public function onAfterReload(SwooleHttpServer $server): void
     {
         $this->dispatcher->dispatch(new Event\AfterReloadEvent($server));
+    }
+
+    /**
+     * Handle a "task" event (process a task)
+     *
+     * @param mixed $data
+     */
+    public function onTask(SwooleHttpServer $server, int $taskId, int $workerId, $data): void
+    {
+        $event = $this->dispatcher->dispatch(new Event\TaskEvent($server, $taskId, $workerId, $data));
+        $server->finish($server, $taskId, $event->getReturnValue());
+    }
+
+    /**
+     * Handle a task "finish" event
+     *
+     * @param mixed $returnData Return value provided to "finish" event.
+     */
+    public function onTaskFinish(SwooleHttpServer $server, int $taskId, $returnData): void
+    {
+        $this->dispatcher->dispatch(new Event\TaskFinishEvent($server, $taskId, $returnData));
     }
 
     /**

@@ -17,6 +17,8 @@ use Mezzio\Swoole\Event\ManagerStopEvent;
 use Mezzio\Swoole\Event\RequestEvent;
 use Mezzio\Swoole\Event\ServerShutdownEvent;
 use Mezzio\Swoole\Event\ServerStartEvent;
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Event\TaskFinishEvent;
 use Mezzio\Swoole\Event\WorkerErrorEvent;
 use Mezzio\Swoole\Event\WorkerStartEvent;
 use Mezzio\Swoole\Event\WorkerStopEvent;
@@ -85,8 +87,23 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testRunRegistersHttpServerListenersAndStartsServer(): void
     {
         $this->httpServer
-            ->expects($this->exactly(10))
+            ->expects($this->exactly(12))
             ->method('on')
+            ->will($this->returnValueMap([
+                ['start', [$this->runner, 'onStart'], null],
+                ['shutdown', [$this->runner, 'onShutdown'], null],
+                ['managerstart', [$this->runner, 'onManagerStart'], null],
+                ['managerstop', [$this->runner, 'onManagerStop'], null],
+                ['workerstart', [$this->runner, 'onWorkerStart'], null],
+                ['workerstop', [$this->runner, 'onWorkerStop'], null],
+                ['workererror', [$this->runner, 'onWorkerError'], null],
+                ['request', [$this->runner, 'onRequest'], null],
+                ['beforereload', [$this->runner, 'onBeforeReload'], null],
+                ['afterreload', [$this->runner, 'onAfterReload'], null],
+                ['task', [$this->runner, 'onTask'], null],
+                ['finish', [$this->runner, 'onTaskFinish'], null],
+            ]));
+        /*
             ->withConsecutive(
                 ['start', [$this->runner, 'onStart']],
                 ['shutdown', [$this->runner, 'onShutdown']],
@@ -98,7 +115,10 @@ class SwooleRequestHandlerRunnerTest extends TestCase
                 ['request', [$this->runner, 'onRequest']],
                 ['beforereload', [$this->runner, 'onBeforeReload']],
                 ['afterreload', [$this->runner, 'onAfterReload']],
+                ['task', [$this->runner, 'onTask']],
+                ['finish', [$this->runner, 'onTaskFinish']],
             );
+         */
 
         $this->httpServer
             ->expects($this->once())
@@ -212,5 +232,47 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->with($this->equalTo(new AfterReloadEvent($this->httpServer)));
 
         $this->runner->onAfterReload($this->httpServer);
+    }
+
+    public function testOnTaskFinishDispatchesTaskFinishEvent(): void
+    {
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo(new TaskFinishEvent($this->httpServer, 1, 'computed value')));
+
+        $this->runner->onTaskFinish($this->httpServer, 1, 'computed value');
+    }
+
+    public function testOnTaskDispatchesTaskEvent(): void
+    {
+        $expected = 'computed';
+
+        $server = $this->httpServer;
+        $server
+            ->expects($this->once())
+            ->method('finish')
+            ->with($server, 1, $expected);
+
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->callback(function (TaskEvent $event) use ($server, $expected) {
+                if (
+                    $event->getServer() !== $server
+                    || $event->getTaskId() !== 1
+                    || $event->getWorkerId() !== 10
+                    || $event->getData() !== ['values', 'to', 'process']
+                ) {
+                    return false;
+                }
+
+                $event->setReturnValue($expected);
+
+                return true;
+            }))
+            ->will($this->returnArgument(0));
+
+        $this->runner->onTask($this->httpServer, 1, 10, ['values', 'to', 'process']);
     }
 }
