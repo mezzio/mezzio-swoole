@@ -146,11 +146,13 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      * Handle a "task" event (process a task)
      *
      * @param mixed $data
+     * @return mixed Return value from task event
      */
-    public function onTask(SwooleHttpServer $server, int $taskId, int $workerId, $data): void
+    public function onTask(SwooleHttpServer $server, int $taskId, int $workerId, $data)
     {
-        $event = $this->dispatcher->dispatch(new Event\TaskEvent($server, $taskId, $workerId, $data));
-        $server->finish($server, $taskId, $event->getReturnValue());
+        return $this->dispatcher
+            ->dispatch(new Event\TaskEvent($server, $taskId, $workerId, $data))
+            ->getReturnValue();
     }
 
     /**
