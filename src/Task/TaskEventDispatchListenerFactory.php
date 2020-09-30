@@ -23,8 +23,8 @@ class TaskEventDispatchListenerFactory
 
         return new TaskEventDispatchListener(
             $container,
-            $dispatcherService,
-            $loggerService
+            $container->get($dispatcherService),
+            $loggerService ? $container->get($loggerService) : null
         );
     }
 }
