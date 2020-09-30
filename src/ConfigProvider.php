@@ -120,6 +120,7 @@ class ConfigProvider
                 StaticMappedResourceHandler::class              => StaticMappedResourceHandlerFactory::class,
                 SwooleHttpServer::class                         => HttpServerFactory::class,
                 Task\TaskEventDispatchListener::class           => Task\TaskEventDispatchListenerFactory::class,
+                Task\TaskInvokerListener::class                 => Task\TaskInvokerListenerFactory::class,
                 Reloader::class                                 => ReloaderFactory::class,
                 FileLocationRepository::class                   => FileLocationRepositoryFactory::class,
             ],

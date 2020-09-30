@@ -46,8 +46,10 @@ class TaskEventDispatchListener
             $event->setReturnValue($this->dispatcher->dispatch($data));
         } catch (Throwable $e) {
             $this->logDispatchError($e, $event);
+        } finally {
+            // Notify the server that processing of the task has finished:
+            $event->taskProcessingComplete();
         }
-        $event->taskProcessingComplete();
     }
 
     private function logDispatchError(Throwable $e, TaskEvent $event): void
