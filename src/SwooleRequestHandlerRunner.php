@@ -16,6 +16,8 @@ use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
 
+use const SWOOLE_PROCESS;
+
 /**
  * Starts a Swoole web server that handles incoming requests.
  *
@@ -55,8 +57,11 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     public function run(): void
     {
-        $this->httpServer->on('start', [$this, 'onStart']);
-        $this->httpServer->on('shutdown', [$this, 'onShutdown']);
+        if ($this->httpServer->mode === SWOOLE_PROCESS) {
+            $this->httpServer->on('start', [$this, 'onStart']);
+            $this->httpServer->on('shutdown', [$this, 'onShutdown']);
+        }
+
         $this->httpServer->on('managerstart', [$this, 'onManagerStart']);
         $this->httpServer->on('managerstop', [$this, 'onManagerStop']);
         $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
@@ -67,6 +72,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         $this->httpServer->on('afterreload', [$this, 'onAfterReload']);
         $this->httpServer->on('task', [$this, 'onTask']);
         $this->httpServer->on('finish', [$this, 'onTaskFinish']);
+
         $this->httpServer->start();
     }
 
