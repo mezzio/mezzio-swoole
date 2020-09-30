@@ -19,10 +19,12 @@ class TaskEventDispatchListenerFactory
     {
         $config            = $container->has('config') ? $container->get('config') : [];
         $dispatcherService = $config['mezzio-swoole']['task-dispatcher-service'] ?? EventDispatcherInterface::class;
+        $loggerService     = $config['mezzio-swoole']['task-logger-service'] ?? null;
 
         return new TaskEventDispatchListener(
             $container,
-            $dispatcherService
+            $dispatcherService,
+            $loggerService
         );
     }
 }

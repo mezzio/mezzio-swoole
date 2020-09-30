@@ -15,6 +15,8 @@ use Mezzio\Swoole\Event\TaskEvent;
 use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
+use Throwable;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,10 +32,12 @@ class TaskEventDispatchListener
     private ContainerInterface $container;
 
     private string $dispatcherServiceName;
+    private ?string $loggerServiceName;
 
     public function __construct(
         $container,
-        string $dispatcherServiceName = SwooleEventDispatcherInterface::class
+        string $dispatcherServiceName = SwooleEventDispatcherInterface::class,
+        ?string $loggerServiceName = null
     ) {
         if (! $container->has($dispatcherServiceName)) {
             throw new InvalidArgumentException(sprintf(
@@ -45,6 +49,7 @@ class TaskEventDispatchListener
 
         $this->container             = $container;
         $this->dispatcherServiceName = $dispatcherServiceName;
+        $this->loggerServiceName     = $loggerServiceName;
     }
 
     public function __invoke(TaskEvent $event): void
@@ -54,10 +59,41 @@ class TaskEventDispatchListener
             return;
         }
 
-        $dispatcher = $this->container->get($this->dispatcherServiceName);
-        Assert::isInstanceOf($dispatcher, EventDispatcherInterface::class);
+        try {
+            $dispatcher = $this->container->get($this->dispatcherServiceName);
+            Assert::isInstanceOf($dispatcher, EventDispatcherInterface::class);
 
-        $event->setReturnValue($dispatcher->dispatch($data));
+            $event->setReturnValue($dispatcher->dispatch($data));
+        } catch (Throwable $e) {
+            $this->logDispatchError($e, $event);
+        }
         $event->taskProcessingComplete();
+    }
+
+    private function logDispatchError(Throwable $e, TaskEvent $event): void
+    {
+        if (empty($this->loggerServiceName)) {
+            return;
+        }
+
+        if (! $this->container->has($this->loggerServiceName)) {
+            return;
+        }
+
+        $logger = $this->container->get($this->loggerServiceName);
+        if (! $logger instanceof LoggerInterface) {
+            return;
+        }
+
+        $logger->error('Error processing task {taskId}: {error}', [
+            'taskId' => $event->getTaskId(),
+            'error'  => sprintf(
+                "[%s - %d] %s\n%s",
+                get_class($e),
+                $e->getCode(),
+                $e->getMessage(),
+                $e->getTraceAsString()
+            ),
+        ]);
     }
 }
