@@ -12,6 +12,13 @@ namespace Mezzio\Swoole\Task;
 
 use Psr\Container\ContainerInterface;
 
+use function array_shift;
+use function get_class;
+use function is_array;
+use function is_object;
+use function is_string;
+use function sprintf;
+
 /**
  * Representation of a task to execute via task worker.
  *
@@ -25,14 +32,16 @@ use Psr\Container\ContainerInterface;
  */
 final class Task implements TaskInterface
 {
-    /**
-     * @var callable
-     */
+    /** @var callable */
     private $handler;
 
     /** @psalm-var list<mixed> */
     private array $payload;
 
+    /**
+     * @param array $payload Array of arguments for the $serviceName.
+     * @psalm-param list<mixed> $payload
+     */
     public function __construct(callable $handler, ...$payload)
     {
         $this->handler = $handler;
@@ -41,12 +50,20 @@ final class Task implements TaskInterface
 
     /**
      * Container argument ignored in this implementation.
+     *
+     * @return array
      */
     public function __invoke(ContainerInterface $container)
     {
         return ($this->handler)(...$this->payload);
     }
 
+    /**
+     * Cannot add return types to internal interface methods in implementing
+     * classes.
+     *
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [
@@ -55,7 +72,10 @@ final class Task implements TaskInterface
         ];
     }
 
-    private function serializeHandler($handler) : string
+    /**
+     * @param mixed $handler
+     */
+    private function serializeHandler($handler): string
     {
         if (is_object($handler)) {
             return get_class($handler);

@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 
 class TaskInvokerListenerFactory
 {
-    public function __invoke(ContainerInterface $container) : TaskInvokerListener
+    public function __invoke(ContainerInterface $container): TaskInvokerListener
     {
         $config        = $container->has('config') ? $container->get('config') : [];
         $loggerService = $config['mezzio-swoole']['task-logger-service'] ?? null;

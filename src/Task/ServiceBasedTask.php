@@ -29,6 +29,10 @@ final class ServiceBasedTask implements TaskInterface
 
     private string $serviceName;
 
+    /**
+     * @param array $payload Array of arguments for the $serviceName.
+     * @psalm-param list<mixed> $payload
+     */
     public function __construct(string $serviceName, ...$payload)
     {
         $this->serviceName = $serviceName;
@@ -44,6 +48,12 @@ final class ServiceBasedTask implements TaskInterface
         $listener(...$this->payload);
     }
 
+    /**
+     * Cannot add return types to internal interface methods in implementing
+     * classes.
+     *
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [

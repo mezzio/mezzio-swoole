@@ -13,6 +13,8 @@ namespace Mezzio\Swoole\Task;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
+use function is_callable;
+
 /**
  * Decorates listeners as DeferredListener instances.
  *
@@ -30,7 +32,7 @@ class DeferredListenerDelegator
      * If the $factory does not produce a PHP callable, this method
      * returns it verbatim. Otherwise, it decorates it as a DeferredListener.
      *
-     * @return DeferredListener|mixed
+     * @return array|object|DeferredListener
      */
     public function __invoke(
         ContainerInterface $container,

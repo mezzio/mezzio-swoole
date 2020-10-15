@@ -28,9 +28,7 @@ final class DeferredListener
 {
     private SwooleHttpServer $server;
 
-    /**
-     * @var callable
-     */
+    /** @var callable */
     private $listener;
 
     public function __construct(SwooleHttpServer $server, callable $listener)
@@ -39,7 +37,7 @@ final class DeferredListener
         $this->listener = $listener;
     }
 
-    public function __invoke(object $event) : void
+    public function __invoke(object $event): void
     {
         $this->server->task(new Task($this->listener, $event));
     }

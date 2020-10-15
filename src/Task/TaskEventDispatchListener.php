@@ -11,26 +11,26 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Task;
 
 use Mezzio\Swoole\Event\TaskEvent;
-use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use function get_class;
+use function is_object;
+use function sprintf;
+
 /**
  * Listener that dispatches TaskEvent `$data` arguments as events.
  */
-class TaskEventDispatchListener
+final class TaskEventDispatchListener
 {
-    private ContainerInterface $container;
     private EventDispatcherInterface $dispatcher;
     private ?LoggerInterface $logger;
 
     public function __construct(
-        $container,
         EventDispatcherInterface $dispatcher,
         ?LoggerInterface $logger = null
     ) {
-        $this->container  = $container;
         $this->dispatcher = $dispatcher;
         $this->logger     = $logger;
     }

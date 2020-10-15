@@ -35,7 +35,7 @@ final class DeferredServiceListener
         $this->serviceName = $serviceName;
     }
 
-    public function __invoke(object $event) : void
+    public function __invoke(object $event): void
     {
         $this->server->task(new ServiceBasedTask($this->serviceName, $event));
     }

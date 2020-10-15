@@ -16,6 +16,10 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Throwable;
 
+use function get_class;
+use function json_encode;
+use function sprintf;
+
 /**
  * Derived from phly/phly-swoole-taskworker, @copyright Copyright (c) Matthew Weier O'Phinney
  */
@@ -30,7 +34,7 @@ final class TaskInvokerListener
         $this->logger    = $logger;
     }
 
-    public function __invoke(TaskEvent $event) : void
+    public function __invoke(TaskEvent $event): void
     {
         $task = $event->getData();
         if (! $task instanceof TaskInterface) {

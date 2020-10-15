@@ -27,4 +27,8 @@
         <exclude-pattern>test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php</exclude-pattern>
         <exclude-pattern>test/SwooleRequestHandlerRunnerFactoryTest.php</exclude-pattern>
     </rule>
+
+    <rule ref="WebimpressCodingStandard.Functions.Param.InconsistentVariadic">
+        <exclude-pattern>/src/Task/*Task.php</exclude-pattern>
+    </rule>
 </ruleset>

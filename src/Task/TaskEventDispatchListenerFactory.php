@@ -13,7 +13,7 @@ namespace Mezzio\Swoole\Task;
 use Mezzio\Swoole\Event\EventDispatcherInterface;
 use Psr\Container\ContainerInterface;
 
-class TaskEventDispatchListenerFactory
+final class TaskEventDispatchListenerFactory
 {
     public function __invoke(ContainerInterface $container): TaskEventDispatchListener
     {
@@ -22,7 +22,6 @@ class TaskEventDispatchListenerFactory
         $loggerService     = $config['mezzio-swoole']['task-logger-service'] ?? null;
 
         return new TaskEventDispatchListener(
-            $container,
             $container->get($dispatcherService),
             $loggerService ? $container->get($loggerService) : null
         );
