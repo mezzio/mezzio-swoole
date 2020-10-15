@@ -25,15 +25,9 @@ use Psr\Container\ContainerInterface;
  */
 final class ServiceBasedTask implements TaskInterface
 {
-    /**
-     * @var array
-     */
-    private $payload;
+    private array $payload;
 
-    /**
-     * @var string
-     */
-    private $serviceName;
+    private string $serviceName;
 
     public function __construct(string $serviceName, ...$payload)
     {
@@ -41,7 +35,7 @@ final class ServiceBasedTask implements TaskInterface
         $this->payload     = $payload;
     }
 
-    public function __invoke(ContainerInterface $container) : void
+    public function __invoke(ContainerInterface $container): void
     {
         $deferred = $container->get($this->serviceName);
         $listener = $deferred instanceof DeferredServiceListener
