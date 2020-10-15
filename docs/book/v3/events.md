@@ -101,6 +101,53 @@ class AfterReloadEvent
 }
 
 /**
+ * Describes "task" event
+ */
+class TaskEvent implements StoppableEventInterface
+{
+    public function isPropagationStopped(): bool;
+    public function getServer(): SwooleHttpServer;
+    public function getTaskId(): int;
+    public function getWorkerId(): int;
+
+    /**
+     * Data passed to the task() method
+     */
+    public function getData(): mixed;
+
+    /**
+     * "Return value" of the task; what to pass to finish()
+     *
+     * @param mixed $returnValue
+     */
+    public function setReturnValue($returnValue): void;
+
+    /** @return mixed */
+    public function getReturnValue();
+
+    /**
+     * Call this to indicate processing is complete, and to stop processing
+     * further listeners.
+     */
+    public function taskProcessingComplete(): void;
+}
+
+/**
+ * Describes "finish" event, called when processing a task has been completed
+ */
+class TaskFinishEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getTaskId(): int;
+
+    /**
+     * Data passed to the finish() method
+     */
+    public function getData(): mixed;
+}
+
+
+/**
  * Describes "shutdown" event
  */
 class ServerShutdownEvent
