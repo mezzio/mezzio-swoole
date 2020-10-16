@@ -14,7 +14,6 @@ use Psr\Container\ContainerInterface;
 
 use function array_shift;
 use function get_class;
-use function is_array;
 use function is_object;
 use function is_string;
 use function sprintf;
@@ -73,7 +72,8 @@ final class Task implements TaskInterface
     }
 
     /**
-     * @param mixed $handler
+     * @param callable|string|object $handler Mixed, as recursive call may use a
+     *     class name or a non-invokable class instance.
      */
     private function serializeHandler($handler): string
     {
@@ -83,10 +83,6 @@ final class Task implements TaskInterface
 
         if (is_string($handler)) {
             return $handler;
-        }
-
-        if (! is_array($handler)) {
-            return '<unknown>';
         }
 
         $classOrObject = array_shift($handler);

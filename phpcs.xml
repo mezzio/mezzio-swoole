@@ -30,5 +30,12 @@
 
     <rule ref="WebimpressCodingStandard.Functions.Param.InconsistentVariadic">
         <exclude-pattern>/src/Task/*Task.php</exclude-pattern>
+        <exclude-pattern>/test/TestAsset/CallableObject.php</exclude-pattern>
+        <exclude-pattern>/test/TestAsset/ClassWithCallbacks.php</exclude-pattern>
+    </rule>
+
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>/test/Task/TaskEventDispatchListener*Test.php</exclude-pattern>
+        <exclude-pattern>/test/Task/TaskInvokerListener*Test.php</exclude-pattern>
     </rule>
 </ruleset>

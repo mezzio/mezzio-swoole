@@ -39,13 +39,16 @@ final class ServiceBasedTask implements TaskInterface
         $this->payload     = $payload;
     }
 
-    public function __invoke(ContainerInterface $container): void
+    /**
+     * @return mixed
+     */
+    public function __invoke(ContainerInterface $container)
     {
         $deferred = $container->get($this->serviceName);
         $listener = $deferred instanceof DeferredServiceListener
             ? $deferred->getListener()
             : $deferred;
-        $listener(...$this->payload);
+        return $listener(...$this->payload);
     }
 
     /**
