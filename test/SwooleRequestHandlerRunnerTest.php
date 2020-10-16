@@ -33,6 +33,9 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 use function random_int;
 
+use const SWOOLE_BASE;
+use const SWOOLE_PROCESS;
+
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
     /**
@@ -84,8 +87,35 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         new SwooleRequestHandlerRunner($httpServer, $this->dispatcher);
     }
 
-    public function testRunRegistersHttpServerListenersAndStartsServer(): void
+    public function testRunRegistersExpectedHttpServerListenersAndStartsServerWhenInBaseMode(): void
     {
+        $this->httpServer->mode = SWOOLE_BASE;
+        $this->httpServer
+            ->expects($this->exactly(10))
+            ->method('on')
+            ->will($this->returnValueMap([
+                ['managerstart', [$this->runner, 'onManagerStart'], null],
+                ['managerstop', [$this->runner, 'onManagerStop'], null],
+                ['workerstart', [$this->runner, 'onWorkerStart'], null],
+                ['workerstop', [$this->runner, 'onWorkerStop'], null],
+                ['workererror', [$this->runner, 'onWorkerError'], null],
+                ['request', [$this->runner, 'onRequest'], null],
+                ['beforereload', [$this->runner, 'onBeforeReload'], null],
+                ['afterreload', [$this->runner, 'onAfterReload'], null],
+                ['task', [$this->runner, 'onTask'], null],
+                ['finish', [$this->runner, 'onTaskFinish'], null],
+            ]));
+
+        $this->httpServer
+            ->expects($this->once())
+            ->method('start');
+
+        $this->assertNull($this->runner->run());
+    }
+
+    public function testRunRegistersExpectedHttpServerListenersAndStartsServerWhenInProcessMode(): void
+    {
+        $this->httpServer->mode = SWOOLE_PROCESS;
         $this->httpServer
             ->expects($this->exactly(12))
             ->method('on')
@@ -103,22 +133,6 @@ class SwooleRequestHandlerRunnerTest extends TestCase
                 ['task', [$this->runner, 'onTask'], null],
                 ['finish', [$this->runner, 'onTaskFinish'], null],
             ]));
-        /*
-            ->withConsecutive(
-                ['start', [$this->runner, 'onStart']],
-                ['shutdown', [$this->runner, 'onShutdown']],
-                ['managerstart', [$this->runner, 'onManagerStart']],
-                ['managerstop', [$this->runner, 'onManagerStop']],
-                ['workerstart', [$this->runner, 'onWorkerStart']],
-                ['workerstop', [$this->runner, 'onWorkerStop']],
-                ['workererror', [$this->runner, 'onWorkerError']],
-                ['request', [$this->runner, 'onRequest']],
-                ['beforereload', [$this->runner, 'onBeforeReload']],
-                ['afterreload', [$this->runner, 'onAfterReload']],
-                ['task', [$this->runner, 'onTask']],
-                ['finish', [$this->runner, 'onTaskFinish']],
-            );
-         */
 
         $this->httpServer
             ->expects($this->once())
@@ -252,7 +266,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $server
             ->expects($this->once())
             ->method('finish')
-            ->with($server, 1, $expected);
+            ->with($expected);
 
         $this->dispatcher
             ->expects($this->once())
