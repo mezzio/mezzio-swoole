@@ -21,7 +21,9 @@ nav:
         - "Command Line Tooling": v3/command-line.md
         - "How it works": v3/how-it-works.md
         - "Considerations when using Swoole": v3/considerations.md
-        - Migration: v3/migration.md
+      - Cookbook:
+          - "Removing the StaticResourceRequestListener": v3/cookbook/static-resource-listener-removal.md
+      - Migration: v3/migration.md
     - v2:
       - Introduction: v2/intro.md
       - Reference:
