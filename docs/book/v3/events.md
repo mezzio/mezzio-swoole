@@ -12,12 +12,13 @@ Additionally, the arguments passed to the Swoole listener are now aggregated int
 
 All event classes are in the `Mezzio\Swoole\Event` namespace.
 
+### Start Event
+
+Describes the "start" event emitted by the Swoole HTTP Server.
+
 ```php
 namespace Mezzio\Swoole\Event;
 
-use Psr\EventDispatcher\StoppableEventInterface;
-use Swoole\Http\Request as SwooleHttpRequest;
-use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
 
 /**
@@ -27,44 +28,79 @@ class ServerStartEvent
 {
     public function getServer(): SwooleHttpServer;
 }
+```
 
-/**
- * Describes "managerstart" event
- */
+### Manager Start Event
+
+Describes the "managerstart" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class ManagerStartEvent
 {
     public function getServer(): SwooleHttpServer;
 }
+```
 
-/**
- * Describes "managerstop" event
- */
+### Manager Stop Event
+
+Describes the "managerstop" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class ManagerStopEvent
 {
     public function getServer(): SwooleHttpServer;
 }
+```
 
-/**
- * Describes "workerstart" event
- */
+### Worker Start Event
+
+Describes the "workerstart" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class WorkerStartEvent
 {
     public function getServer(): SwooleHttpServer;
     public function getWorkerId(): int;
 }
+```
 
-/**
- * Describes "workerstop" event
- */
+### Worker Stop Event
+
+Describes the "workerstop" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class WorkerStopEvent
 {
     public function getServer(): SwooleHttpServer;
     public function getWorkerId(): int;
 }
+```
 
-/**
- * Describes "workererror" event
- */
+### Worker Error Event
+
+Describes the "workererror" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class WorkerErrorEvent
 {
     public function getServer(): SwooleHttpServer;
@@ -72,10 +108,20 @@ class WorkerErrorEvent
     public function getExitCode(): int;
     public function getSignal(): int;
 }
+```
 
-/**
- * Describes "request" event
- */
+### Request Event
+
+Describes the "request" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Psr\EventDispatcher\StoppableEventInterface;
+use Swoole\Http\Request as SwooleHttpRequest;
+use Swoole\Http\Response as SwooleHttpResponse;
+use Swoole\Http\Server as SwooleHttpServer;
+
 class RequestEvent implements StoppableEventInterface
 {
     public function isPropagationStopped(): bool;
@@ -83,26 +129,48 @@ class RequestEvent implements StoppableEventInterface
     public function getResponse(): SwooleHttpResponse;
     public function responseSent(): void;
 }
+```
 
-/**
- * Describes "beforereload" event (prior to hot code reload)
- */
+### Before Reload Event
+
+Describes the "beforereload" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class BeforeReloadEvent
 {
     public function getServer(): SwooleHttpServer;
 }
+```
 
-/**
- * Describes "afterreload" event (after hot code reload)
- */
+### After Reload Event
+
+Describes the "afterreload" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class AfterReloadEvent
 {
     public function getServer(): SwooleHttpServer;
 }
+```
 
-/**
- * Describes "task" event
- */
+### Task Event
+
+Describes the "task" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Psr\EventDispatcher\StoppableEventInterface;
+use Swoole\Http\Server as SwooleHttpServer;
+
 class TaskEvent implements StoppableEventInterface
 {
     public function isPropagationStopped(): bool;
@@ -131,10 +199,17 @@ class TaskEvent implements StoppableEventInterface
      */
     public function taskProcessingComplete(): void;
 }
+```
 
-/**
- * Describes "finish" event, called when processing a task has been completed
- */
+### Finish Event
+
+Describes the "finish" event emitted by the Swoole HTTP Server, called when processing a task has been completed.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class TaskFinishEvent
 {
     public function getServer(): SwooleHttpServer;
@@ -145,11 +220,17 @@ class TaskFinishEvent
      */
     public function getData(): mixed;
 }
+```
 
+### Shutdown Event
 
-/**
- * Describes "shutdown" event
- */
+Describes the "shutdown" event emitted by the Swoole HTTP Server.
+
+```php
+namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
 class ServerShutdownEvent
 {
     public function getServer(): SwooleHttpServer;
