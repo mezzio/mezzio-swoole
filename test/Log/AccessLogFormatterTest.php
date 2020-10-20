@@ -13,49 +13,53 @@ namespace MezzioTest\Swoole\Log;
 use Mezzio\Swoole\Log\AccessLogDataMap;
 use Mezzio\Swoole\Log\AccessLogFormatter;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 use function gethostname;
 use function implode;
 
 class AccessLogFormatterTest extends TestCase
 {
-    use ProphecyTrait;
-
-    public function testFormatterDelegatesToDataMapToReplacePlaceholdersInFormat()
+    public function testFormatterDelegatesToDataMapToReplacePlaceholdersInFormat(): void
     {
         $hostname = gethostname();
 
-        $dataMap = $this->prophesize(AccessLogDataMap::class);
-        $dataMap->getClientIp()->willReturn('127.0.0.10'); // %a
-        $dataMap->getLocalIp()->willReturn('127.0.0.1'); // %A
-        $dataMap->getBodySize('0')->willReturn('1234'); // %B
-        $dataMap->getBodySize('-')->willReturn('1234'); // %b
-        $dataMap->getRequestDuration('ms')->willReturn('4321'); // %D
-        $dataMap->getFilename()->willReturn(__FILE__); // %f
-        $dataMap->getRemoteHostname()->willReturn($hostname); // %h
-        $dataMap->getProtocol()->willReturn('HTTP/1.1'); // %H
-        $dataMap->getMethod()->willReturn('POST'); // %m
-        $dataMap->getPort('canonical')->willReturn('9000'); // %p
-        $dataMap->getQuery()->willReturn('?foo=bar'); // %q
-        $dataMap->getRequestLine()->willReturn('POST /path?foo=bar HTTP/1.1'); // %r
-        $dataMap->getStatus()->willReturn('202'); // %s
-        $dataMap->getRequestTime('begin:%d/%b/%Y:%H:%M:%S %z')->willReturn('[1234567890]'); // %t
-        $dataMap->getRequestDuration('s')->willReturn('22'); // %T
-        $dataMap->getRemoteUser()->willReturn('mezzio'); // %u
-        $dataMap->getPath()->willReturn('/path'); // %U
-        $dataMap->getHost()->willReturn('mezzio.local'); // %v
-        $dataMap->getServerName()->willReturn('mezzio.local'); // %V
-        $dataMap->getRequestMessageSize('-')->willReturn('78'); // %I
-        $dataMap->getResponseMessageSize('-')->willReturn('89'); // %O
-        $dataMap->getTransferredSize()->willReturn('123'); // %S
-        $dataMap->getCookie('cookie_name')->willReturn('chocolate'); // %{cookie_name}C
-        $dataMap->getEnv('env_name')->willReturn('php'); // %{env_name}e
-        $dataMap->getRequestHeader('X-Request-Header')->willReturn('request'); // %{X-Request-Header}i
-        $dataMap->getResponseHeader('X-Response-Header')->willReturn('response'); // %{X-Response-Header}o
-        $dataMap->getPort('local')->willReturn('9999'); // %{local}p
-        $dataMap->getRequestTime('end:sec')->willReturn('[1234567890]'); // %{end:sec}t
-        $dataMap->getRequestDuration('us')->willReturn('22'); // %{us}T
+        $dataMap = $this->createMock(AccessLogDataMap::class);
+        $dataMap->method('getClientIp')->willReturn('127.0.0.10'); // %a
+        $dataMap->method('getLocalIp')->willReturn('127.0.0.1'); // %A
+        $dataMap
+            ->method('getBodySize')
+            ->withConsecutive(['0'], ['-']) // %B / %b
+            ->willReturn('1234');
+        $dataMap
+            ->method('getRequestDuration')
+            ->withConsecutive(['ms'], ['s'], ['us']) // %D / %T / %{us}T
+            ->willReturnOnConsecutiveCalls('4321', '22', '22');
+        $dataMap->method('getFilename')->willReturn(__FILE__); // %f
+        $dataMap->method('getRemoteHostname')->willReturn($hostname); // %h
+        $dataMap->method('getProtocol')->willReturn('HTTP/1.1'); // %H
+        $dataMap->method('getMethod')->willReturn('POST'); // %m
+        $dataMap
+            ->method('getPort')
+            ->withConsecutive(['canonical'], ['local']) // %p / %{local}p
+            ->willReturnOnConsecutiveCalls('9000', '9999');
+        $dataMap->method('getQuery')->willReturn('?foo=bar'); // %q
+        $dataMap->method('getRequestLine')->willReturn('POST /path?foo=bar HTTP/1.1'); // %r
+        $dataMap->method('getStatus')->willReturn('202'); // %s
+        $dataMap
+            ->method('getRequestTime')
+            ->withConsecutive(['begin:%d/%b/%Y:%H:%M:%S %z'], ['end:sec']) // %t / %{end:sec}t
+            ->willReturnOnConsecutiveCalls('[1234567890]', '[1234567890]');
+        $dataMap->method('getRemoteUser')->willReturn('mezzio'); // %u
+        $dataMap->method('getPath')->willReturn('/path'); // %U
+        $dataMap->method('getHost')->willReturn('mezzio.local'); // %v
+        $dataMap->method('getServerName')->willReturn('mezzio.local'); // %V
+        $dataMap->method('getRequestMessageSize')->with('-')->willReturn(78); // %I
+        $dataMap->method('getResponseMessageSize')->with('-')->willReturn(89); // %O
+        $dataMap->method('getTransferredSize')->willReturn('123'); // %S
+        $dataMap->method('getCookie')->with('cookie_name')->willReturn('chocolate'); // %{cookie_name}C
+        $dataMap->method('getEnv')->with('env_name')->willReturn('php'); // %{env_name}e
+        $dataMap->method('getRequestHeader')->with('X-Request-Header')->willReturn('request'); // %{X-Request-Header}i
+        $dataMap->method('getResponseHeader')->with('X-Response-Header')->willReturn('response'); // %{X-Response-Header}o
 
         $format   = '%a %A %B %b %D %f %h %H %m %p %q %r %s %t %T %u %U %v %V %I %O %S'
             . ' %{cookie_name}C %{env_name}e %{X-Request-Header}i %{X-Response-Header}o'
@@ -95,7 +99,7 @@ class AccessLogFormatterTest extends TestCase
 
         $formatter = new AccessLogFormatter($format);
 
-        $message = $formatter->format($dataMap->reveal());
+        $message = $formatter->format($dataMap);
 
         $this->assertEquals($expected, $message);
     }

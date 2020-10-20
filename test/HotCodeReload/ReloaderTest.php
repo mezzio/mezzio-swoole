@@ -20,7 +20,10 @@ use Swoole\Server as SwooleServer;
 
 class ReloaderTest extends TestCase
 {
-    /** @var FileWatcherInterface|MockObject */
+    /**
+     * @var FileWatcherInterface|MockObject
+     * @psalm-var MockObject&FileWatcherInterface
+     */
     private $fileWatcher;
 
     /** @var int */

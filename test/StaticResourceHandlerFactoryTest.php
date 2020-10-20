@@ -13,29 +13,43 @@ namespace MezzioTest\Swoole;
 use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandlerFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
+use Webmozart\Assert\Assert;
 
 use function sprintf;
 
 class StaticResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
-    use ProphecyTrait;
+
+    /**
+     * @var ContainerInterface|MockObject
+     * @psalm-var MockObject&ContainerInterface
+     */
+    private $container;
 
     protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
     }
 
-    public function assertHasMiddlewareOfType(string $type, array $middlewareList)
+    /**
+     * @psalm-param class-string $type
+     * @psalm-param list<MiddlewareInterface> $middlewareList
+     */
+    public function assertHasMiddlewareOfType(string $type, array $middlewareList): void
     {
         $middleware = $this->getMiddlewareByType($type, $middlewareList);
         $this->assertInstanceOf($type, $middleware);
     }
 
+    /**
+     * @psalm-param class-string $type
+     * @psalm-param list<MiddlewareInterface> $middlewareList
+     */
     public function getMiddlewareByType(string $type, array $middlewareList): MiddlewareInterface
     {
         foreach ($middlewareList as $middleware) {
@@ -49,7 +63,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
         ));
     }
 
-    public function testFactoryConfiguresHandlerBasedOnConfiguration()
+    public function testFactoryConfiguresHandlerBasedOnConfiguration(): void
     {
         $config = [
             'mezzio-swoole' => [
@@ -83,11 +97,11 @@ class StaticResourceHandlerFactoryTest extends TestCase
             ],
         ];
 
-        $this->container->get('config')->willReturn($config);
+        $this->container->method('get')->with('config')->willReturn($config);
 
         $factory = new StaticResourceHandlerFactory();
 
-        $handler = $factory($this->container->reveal());
+        $handler = $factory($this->container);
 
         $this->assertAttributeSame(
             $config['mezzio-swoole']['swoole-http-server']['static-files']['document-root'],
@@ -98,6 +112,8 @@ class StaticResourceHandlerFactoryTest extends TestCase
         $r = new ReflectionProperty($handler, 'middleware');
         $r->setAccessible(true);
         $middleware = $r->getValue($handler);
+        Assert::isList($middleware);
+        Assert::allIsInstanceOf($middleware, MiddlewareInterface::class);
 
         $this->assertHasMiddlewareOfType(StaticResourceHandler\ContentTypeFilterMiddleware::class, $middleware);
         $this->assertHasMiddlewareOfType(StaticResourceHandler\MethodNotAllowedMiddleware::class, $middleware);

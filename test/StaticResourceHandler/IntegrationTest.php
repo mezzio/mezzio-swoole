@@ -13,8 +13,6 @@ namespace MezzioTest\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
@@ -27,13 +25,20 @@ use function trim;
 
 class IntegrationTest extends TestCase
 {
-    use ProphecyTrait;
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $docRoot;
 
     protected function setUp(): void
     {
         $this->docRoot = __DIR__ . '/../TestAsset';
     }
 
+    /**
+     * @psalm-return array<array-key, list<string>>
+     */
     public function unsupportedHttpMethods(): array
     {
         return [
@@ -48,21 +53,25 @@ class IntegrationTest extends TestCase
     /**
      * @dataProvider unsupportedHttpMethods
      */
-    public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method)
+    public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method): void
     {
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
             'request_method' => $method,
             'request_uri'    => '/image.png',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'image/png', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', 'GET, HEAD, OPTIONS', true)->shouldBeCalled();
-        $response->status(405)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile()->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'image/png', true],
+                ['Allow', 'GET, HEAD, OPTIONS', true],
+            ]));
+        $response->expects($this->once())->method('status')->with(405);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile');
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -71,25 +80,29 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\HeadMiddleware(),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest()
+    public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest(): void
     {
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
             'request_method' => 'OPTIONS',
             'request_uri'    => '/image.png',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'image/png', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', 'GET, HEAD, OPTIONS', true)->shouldBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile()->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'image/png', true],
+                ['Allow', 'GET, HEAD, OPTIONS', true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile');
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -98,11 +111,11 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\HeadMiddleware(),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath()
+    public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -110,22 +123,27 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [];
         $request->server = [
             'request_method' => 'GET',
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldBeCalled();
-        $response->header('Cache-Control', 'public, no-transform', true)->shouldBeCalled();
-        $response->header('Last-Modified', $lastModifiedFormatted, true)->shouldBeCalled();
-        $response->header('ETag', $etag, true)->shouldBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldNotBeCalled();
-        $response->sendfile($file)->shouldBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(5))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Content-Length', $this->anything(), true],
+                ['Cache-Control', 'public, no-transform', true],
+                ['Last-Modified', $lastModifiedFormatted, true],
+                ['ETag', $etag, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->never())->method('end');
+        $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -141,11 +159,11 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\ETagMiddleware(['/\.txt$/']),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath()
+    public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -153,22 +171,26 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [];
         $request->server = [
             'request_method' => 'HEAD',
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Cache-Control', 'public, no-transform', true)->shouldBeCalled();
-        $response->header('Last-Modified', $lastModifiedFormatted, true)->shouldBeCalled();
-        $response->header('ETag', $etag, true)->shouldBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile($file)->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(4))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Cache-Control', 'public, no-transform', true],
+                ['Last-Modified', $lastModifiedFormatted, true],
+                ['ETag', $etag, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -187,11 +209,11 @@ class IntegrationTest extends TestCase
             ),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath()
+    public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -199,23 +221,27 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [];
         $request->server = [
             'request_method' => 'OPTIONS',
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', 'GET, HEAD, OPTIONS', true)->shouldBeCalled();
-        $response->header('Cache-Control', 'public, no-transform', true)->shouldBeCalled();
-        $response->header('Last-Modified', $lastModifiedFormatted, true)->shouldBeCalled();
-        $response->header('ETag', $etag, true)->shouldBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile($file)->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(5))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Allow', 'GET, HEAD, OPTIONS', true],
+                ['Cache-Control', 'public, no-transform', true],
+                ['Last-Modified', $lastModifiedFormatted, true],
+                ['ETag', $etag, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -234,11 +260,11 @@ class IntegrationTest extends TestCase
             ),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
+    public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -246,7 +272,7 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
             'if-modified-since' => $lastModifiedFormatted,
             'if-match'          => $etag,
@@ -256,16 +282,18 @@ class IntegrationTest extends TestCase
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', 'public, no-transform', true)->shouldBeCalled();
-        $response->header('Last-Modified', Argument::any())->shouldNotBeCalled();
-        $response->header('ETag', Argument::any())->shouldNotBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldNotBeCalled();
-        $response->sendfile($file)->shouldBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(3))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Content-Length', $this->anything(), true],
+                ['Cache-Control', 'public, no-transform', true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->never())->method('end');
+        $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -281,11 +309,11 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\ETagMiddleware([]),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
+    public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -293,7 +321,7 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
             'if-modified-since' => $lastModifiedFormatted,
             'if-match'          => $etag,
@@ -303,16 +331,17 @@ class IntegrationTest extends TestCase
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', 'public, no-transform', true)->shouldBeCalled();
-        $response->header('Last-Modified', Argument::any())->shouldNotBeCalled();
-        $response->header('ETag', Argument::any())->shouldNotBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile($file)->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Cache-Control', 'public, no-transform', true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -328,11 +357,11 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\ETagMiddleware([]),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -340,7 +369,7 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
             'if-match' => $etag,
         ];
@@ -349,16 +378,17 @@ class IntegrationTest extends TestCase
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', Argument::any())->shouldNotBeCalled();
-        $response->header('Last-Modified', Argument::any())->shouldNotBeCalled();
-        $response->header('ETag', $etag, true)->shouldBeCalled();
-        $response->status(304)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile($file)->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['ETag', $etag, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(304);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -375,11 +405,11 @@ class IntegrationTest extends TestCase
             ),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -387,7 +417,7 @@ class IntegrationTest extends TestCase
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
             'if-none-match' => $etag,
         ];
@@ -396,16 +426,17 @@ class IntegrationTest extends TestCase
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', Argument::any())->shouldNotBeCalled();
-        $response->header('Last-Modified', Argument::any())->shouldNotBeCalled();
-        $response->header('ETag', $etag, true)->shouldBeCalled();
-        $response->status(304)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile($file)->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['ETag', $etag, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(304);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -422,33 +453,35 @@ class IntegrationTest extends TestCase
             ),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceCanGenerateStrongETagValue()
+    public function testSendStaticResourceCanGenerateStrongETagValue(): void
     {
         $file        = $this->docRoot . '/content.txt';
         $contentType = 'text/plain';
         $etag        = md5_file($file);
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [];
         $request->server = [
             'request_method' => 'GET',
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', Argument::any())->shouldNotBeCalled();
-        $response->header('Last-Modified', Argument::any())->shouldNotBeCalled();
-        $response->header('ETag', $etag, true)->shouldBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldNotBeCalled();
-        $response->sendfile($file)->shouldBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(3))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Content-Length', $this->anything(), true],
+                ['ETag', $etag, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->never())->method('end');
+        $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -465,18 +498,18 @@ class IntegrationTest extends TestCase
             ),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
             'if-modified-since' => $lastModifiedFormatted,
         ];
@@ -485,16 +518,17 @@ class IntegrationTest extends TestCase
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldNotBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', Argument::any())->shouldNotBeCalled();
-        $response->header('Last-Modified', $lastModifiedFormatted, true)->shouldBeCalled();
-        $response->header('ETag', Argument::any())->shouldNotBeCalled();
-        $response->status(304)->shouldBeCalled();
-        $response->end()->shouldBeCalled();
-        $response->sendfile($file)->shouldNotBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Last-Modified', $lastModifiedFormatted, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(304);
+        $response->expects($this->once())->method('end');
+        $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -508,11 +542,11 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\ETagMiddleware([]),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince()
+    public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince(): void
     {
         $file                     = $this->docRoot . '/content.txt';
         $contentType              = 'text/plain';
@@ -521,7 +555,7 @@ class IntegrationTest extends TestCase
         $ifModifiedSince          = $lastModified - 3600;
         $ifModifiedSinceFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $ifModifiedSince));
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
             'if-modified-since' => $ifModifiedSinceFormatted,
         ];
@@ -530,16 +564,18 @@ class IntegrationTest extends TestCase
             'request_uri'    => '/content.txt',
         ];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
-        $response->header('Content-Type', 'text/plain', true)->shouldBeCalled();
-        $response->header('Content-Length', Argument::any(), true)->shouldBeCalled();
-        $response->header('Allow', Argument::any())->shouldNotBeCalled();
-        $response->header('Cache-Control', Argument::any())->shouldNotBeCalled();
-        $response->header('Last-Modified', $lastModifiedFormatted, true)->shouldBeCalled();
-        $response->header('ETag', Argument::any())->shouldNotBeCalled();
-        $response->status(200)->shouldBeCalled();
-        $response->end()->shouldNotBeCalled();
-        $response->sendfile($file)->shouldBeCalled();
+        $response = $this->createMock(SwooleHttpResponse::class);
+        $response
+            ->expects($this->exactly(3))
+            ->method('header')
+            ->will($this->returnValueMap([
+                ['Content-Type', 'text/plain', true],
+                ['Content-Length', $this->anything(), true],
+                ['Last-Modified', $lastModifiedFormatted, true],
+            ]));
+        $response->expects($this->once())->method('status')->with(200);
+        $response->expects($this->never())->method('end');
+        $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
             new StaticResourceHandler\ContentTypeFilterMiddleware(),
@@ -553,7 +589,7 @@ class IntegrationTest extends TestCase
             new StaticResourceHandler\ETagMiddleware([]),
         ]);
 
-        $result = $handler->processStaticResource($request, $response->reveal());
+        $result = $handler->processStaticResource($request, $response);
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 }

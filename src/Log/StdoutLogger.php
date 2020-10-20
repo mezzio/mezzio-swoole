@@ -13,6 +13,8 @@ namespace Mezzio\Swoole\Log;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
+use function is_array;
+use function is_string;
 use function printf;
 use function sprintf;
 use function str_replace;
@@ -75,6 +77,7 @@ class StdoutLogger implements LoggerInterface
     public function log($level, $message, array $context = [])
     {
         foreach ($context as $key => $value) {
+            $value   = is_string($value) || is_array($value) ? $value : (string) $value;
             $search  = sprintf('{%s}', $key);
             $message = str_replace($search, $value, $message);
         }

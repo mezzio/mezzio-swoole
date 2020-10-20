@@ -28,6 +28,31 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
+## 2.8.0 - 2020-10-20
+
+### Added
+
+- [#33](https://github.com/mezzio/mezzio-swoole/pull/33) adds support for PHP 8.
+
+### Removed
+
+- [#33](https://github.com/mezzio/mezzio-swoole/pull/33) removes support for Swoole versions prior to 4.5.5.
+
+- [#33](https://github.com/mezzio/mezzio-swoole/pull/33) removes support for PHP 7.2.
+
+-----
+
+### Release Notes for [2.8.0](https://github.com/mezzio/mezzio-swoole/milestone/7)
+
+- Total issues resolved: **1**
+- Total pull requests resolved: **2**
+- Total contributors: **2**
+
+#### Enhancement
+
+ - [34: Psalm integration](https://github.com/mezzio/mezzio-swoole/pull/34) thanks to @weierophinney and @boesing
+ - [33: PHP 8 Support](https://github.com/mezzio/mezzio-swoole/pull/33) thanks to @weierophinney
+
 ## 2.7.0 - 2020-09-22
 
 ### Added
@@ -494,7 +519,7 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Removed
 
 - [zendframework/zend-expressive-swoole#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) removes the `Mezzio\Swoole\ServerFactory` and
-  `ServerFactoryFactory` classes, as well as the `Mezzio\Swoole\ServerFactory` 
+  `ServerFactoryFactory` classes, as well as the `Mezzio\Swoole\ServerFactory`
   service. Users should instead reference the `Swoole\Http\Server` service,
   which is now registered via the `Mezzio\Swoole\HttpServerFactory`
   factory, detailed in the "Added" section above.

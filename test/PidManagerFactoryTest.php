@@ -10,26 +10,31 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-use Mezzio\Swoole\PidManager;
 use Mezzio\Swoole\PidManagerFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 class PidManagerFactoryTest extends TestCase
 {
-    use ProphecyTrait;
+    /**
+     * @var ContainerInterface|MockObject
+     * @psalm-var MockObject&ContainerInterface
+     */
+    private $container;
+
+    /** @var PidManagerFactory */
+    private $pidManagerFactory;
 
     protected function setUp(): void
     {
-        $this->container         = $this->prophesize(ContainerInterface::class);
+        $this->container         = $this->createMock(ContainerInterface::class);
         $this->pidManagerFactory = new PidManagerFactory();
     }
 
-    public function testFactoryReturnsAPidManager()
+    public function testFactoryReturnsAPidManager(): void
     {
-        $factory    = $this->pidManagerFactory;
-        $pidManager = $factory($this->container->reveal());
-        $this->assertInstanceOf(PidManager::class, $pidManager);
+        $factory = $this->pidManagerFactory;
+        $this->assertIsObject($factory($this->container));
     }
 }

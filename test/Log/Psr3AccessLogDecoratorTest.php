@@ -15,29 +15,69 @@ use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ReflectionClass;
+use ReflectionProperty;
 use Swoole\Http\Request;
 
 class Psr3AccessLogDecoratorTest extends TestCase
 {
     use AttributeAssertionTrait;
-    use ProphecyTrait;
+
+    /**
+     * @var LoggerInterface|MockObject
+     * @psalm-var MockObject&LoggerInterface
+     */
+    private $psr3Logger;
+
+    /**
+     * @var AccessLogFormatterInterface|MockObject
+     * @psalm-var MockObject&AccessLogFormatterInterface
+     */
+    private $formatter;
+
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
+    private $request;
+
+    /**
+     * @var Psr7Response|MockObject
+     * @psalm-var MockObject&Psr7Response
+     */
+    private $psr7Response;
+
+    /**
+     * @var StaticResourceResponse|MockObject
+     * @psalm-var MockObject&StaticResourceResponse
+     */
+    private $staticResponse;
 
     protected function setUp(): void
     {
-        $this->psr3Logger     = $this->prophesize(LoggerInterface::class);
-        $this->formatter      = $this->prophesize(AccessLogFormatterInterface::class);
-        $this->request        = $this->prophesize(Request::class)->reveal();
-        $this->psr7Response   = $this->prophesize(Psr7Response::class);
-        $this->staticResponse = $this->prophesize(StaticResourceResponse::class);
+        $this->psr3Logger     = $this->createMock(LoggerInterface::class);
+        $this->formatter      = $this->createMock(AccessLogFormatterInterface::class);
+        $this->request        = $this->createMock(Request::class);
+        $this->psr7Response   = $this->createMock(Psr7Response::class);
+        $this->staticResponse = $this->createMock(StaticResourceResponse::class);
     }
 
+    /** @return mixed */
+    private function getPropertyForInstance(string $property, object $instance)
+    {
+        $r = new ReflectionProperty($instance, $property);
+        $r->setAccessible(true);
+        return $r->getValue($instance);
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list<string>>
+     */
     public function psr3Methods(): iterable
     {
         $r = new ReflectionClass(LoggerInterface::class);
@@ -50,25 +90,30 @@ class Psr3AccessLogDecoratorTest extends TestCase
     /**
      * @dataProvider psr3Methods
      */
-    public function testProxiesToPsr3Methods(string $method)
+    public function testProxiesToPsr3Methods(string $method): void
     {
-        $logger = new Psr3AccessLogDecorator($this->psr3Logger->reveal(), $this->formatter->reveal());
+        $logger = new Psr3AccessLogDecorator($this->psr3Logger, $this->formatter);
         switch ($method) {
             case 'log':
                 $this->psr3Logger
-                    ->log(LogLevel::DEBUG, 'message', ['foo' => 'bar'])
-                    ->shouldBeCalled();
+                    ->expects($this->once())
+                    ->method('log')
+                    ->with(LogLevel::DEBUG, 'message', ['foo' => 'bar']);
                 $this->assertNull($logger->log(LogLevel::DEBUG, 'message', ['foo' => 'bar']));
                 break;
             default:
                 $this->psr3Logger
-                    ->$method('message', ['foo' => 'bar'])
-                    ->shouldBeCalled();
+                    ->expects($this->once())
+                    ->method($method)
+                    ->with('message', ['foo' => 'bar']);
                 $this->assertNull($logger->$method('message', ['foo' => 'bar']));
                 break;
         }
     }
 
+    /**
+     * @psalm-return array<array-key, array{0: int, 1: string}>
+     */
     public function statusLogMethodValues(): array
     {
         return [
@@ -86,33 +131,28 @@ class Psr3AccessLogDecoratorTest extends TestCase
     public function testLogAccessForStaticResourceFormatsMessageAndPassesItToPsr3Logger(
         int $status,
         string $logMethod
-    ) {
+    ): void {
         $expected = 'message';
-        $request  = $this->request;
 
-        $response = $this->staticResponse;
-        $response->getStatus()->willReturn($status);
+        $this->staticResponse->method('getStatus')->willReturn($status);
 
         $this->formatter
-            ->format(
-                Argument::that(static function ($mapper) use ($request, $response) {
-                    TestCase::assertInstanceOf(AccessLogDataMap::class, $mapper);
-                    Psr3AccessLogDecoratorTest::assertAttributeSame($request, 'request', $mapper);
-                    Psr3AccessLogDecoratorTest::assertAttributeSame($response->reveal(), 'staticResource', $mapper);
-                    Psr3AccessLogDecoratorTest::assertAttributeSame(false, 'useHostnameLookups', $mapper);
-                    return true;
-                })
-            )
+            ->method('format')
+            ->with($this->callback(function (AccessLogDataMap $mapper) {
+                return $this->request === $this->getPropertyForInstance('request', $mapper)
+                    && $this->staticResponse === $this->getPropertyForInstance('staticResource', $mapper)
+                    && false === $this->getPropertyForInstance('useHostnameLookups', $mapper);
+            }))
             ->willReturn($expected);
 
-        $this->psr3Logger->$logMethod($expected)->shouldBeCalled();
+        $this->psr3Logger
+            ->expects($this->once())
+            ->method($logMethod)
+            ->with($expected);
 
-        $logger = new Psr3AccessLogDecorator($this->psr3Logger->reveal(), $this->formatter->reveal());
+        $logger = new Psr3AccessLogDecorator($this->psr3Logger, $this->formatter);
 
-        $this->assertNull($logger->logAccessForStaticResource(
-            $this->request,
-            $response->reveal()
-        ));
+        $this->assertNull($logger->logAccessForStaticResource($this->request, $this->staticResponse));
     }
 
     /**
@@ -121,32 +161,27 @@ class Psr3AccessLogDecoratorTest extends TestCase
     public function testLogAccessForPsr7ResourceFormatsMessageAndPassesItToPsr3Logger(
         int $status,
         string $logMethod
-    ) {
+    ): void {
         $expected = 'message';
-        $request  = $this->request;
 
-        $response = $this->psr7Response;
-        $response->getStatusCode()->willReturn($status);
+        $this->psr7Response->method('getStatusCode')->willReturn($status);
 
         $this->formatter
-            ->format(
-                Argument::that(static function ($mapper) use ($request, $response) {
-                    Psr3AccessLogDecoratorTest::assertInstanceOf(AccessLogDataMap::class, $mapper);
-                    Psr3AccessLogDecoratorTest::assertAttributeSame($request, 'request', $mapper);
-                    Psr3AccessLogDecoratorTest::assertAttributeSame($response->reveal(), 'psrResponse', $mapper);
-                    Psr3AccessLogDecoratorTest::assertAttributeSame(false, 'useHostnameLookups', $mapper);
-                    return true;
-                })
-            )
+             ->method('format')
+             ->with($this->callback(function (AccessLogDataMap $mapper) {
+                return $this->request === $this->getPropertyForInstance('request', $mapper)
+                    && $this->psr7Response === $this->getPropertyForInstance('psrResponse', $mapper)
+                    && false === $this->getPropertyForInstance('useHostnameLookups', $mapper);
+             }))
             ->willReturn($expected);
 
-        $this->psr3Logger->$logMethod($expected)->shouldBeCalled();
+        $this->psr3Logger
+            ->expects($this->once())
+            ->method($logMethod)
+            ->with($expected);
 
-        $logger = new Psr3AccessLogDecorator($this->psr3Logger->reveal(), $this->formatter->reveal());
+        $logger = new Psr3AccessLogDecorator($this->psr3Logger, $this->formatter);
 
-        $this->assertNull($logger->logAccessForPsr7Resource(
-            $this->request,
-            $response->reveal()
-        ));
+        $this->assertNull($logger->logAccessForPsr7Resource($this->request, $this->psr7Response));
     }
 }

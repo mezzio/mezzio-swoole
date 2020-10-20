@@ -15,31 +15,59 @@ use Mezzio\Swoole\StaticMappedResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticMappedResourceHandlerTest extends TestCase
 {
-    use ProphecyTrait;
+    /**
+     * @var FileLocationRepositoryInterface|MockObject
+     * @psalm-var MockObject&FileLocationRepositoryInterface
+     */
+    private $fileLocRepo;
+
+    /**
+     * @var SwooleHttpRequest|MockObject
+     * @psalm-var MockObject&SwooleHttpRequest
+     */
+    private $request;
+
+    /**
+     * @var SwooleHttpResponse|MockObject
+     * @psalm-var MockObject&SwooleHttpResponse
+     */
+    private $response;
+
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $uri;
+
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $fullPath;
 
     protected function setUp(): void
     {
         $this->uri         = '/image.png';
         $this->fullPath    = __DIR__ . '/TestAsset' . $this->uri;
-        $this->fileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
-        $this->request     = $this->prophesize(SwooleHttpRequest::class)->reveal();
-        $this->response    = $this->prophesize(SwooleHttpResponse::class)->reveal();
+        $this->fileLocRepo = $this->createMock(FileLocationRepositoryInterface::class);
+        $this->request     = $this->createMock(SwooleHttpRequest::class);
+        $this->response    = $this->createMock(SwooleHttpResponse::class);
     }
 
-    public function testConstructorRaisesExceptionForInvalidMiddlewareValue()
+    public function testConstructorRaisesExceptionForInvalidMiddlewareValue(): void
     {
         $this->expectException(Exception\InvalidStaticResourceMiddlewareException::class);
-        new StaticMappedResourceHandler($this->fileLocRepo->reveal(), [$this]);
+        new StaticMappedResourceHandler($this->fileLocRepo, [$this]);
     }
 
-    public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse()
+    public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse(): void
     {
         $this->request->server = [
             'request_uri' => $this->uri,
@@ -57,21 +85,24 @@ class StaticMappedResourceHandlerTest extends TestCase
             }
         };
 
-        $handler = new StaticMappedResourceHandler($this->fileLocRepo->reveal(), [$middleware]);
+        $handler = new StaticMappedResourceHandler($this->fileLocRepo, [$middleware]);
         $this->assertNull($handler->processStaticResource($this->request, $this->response));
     }
 
-    public function testProcessStaticResourceReturnsStaticResponseWhenSuccessful()
+    public function testProcessStaticResourceReturnsStaticResponseWhenSuccessful(): void
     {
         $this->request->server = [
             'request_uri' => $this->uri,
         ];
 
-        $expectedResponse = $this->prophesize(StaticResourceResponse::class);
-        $expectedResponse->isFailure()->willReturn(false);
-        $expectedResponse->sendSwooleResponse($this->response, $this->fullPath)->shouldBeCalled();
+        $expectedResponse = $this->createMock(StaticResourceResponse::class);
+        $expectedResponse->method('isFailure')->willReturn(false);
+        $expectedResponse
+            ->expects($this->atLeastOnce())
+            ->method('sendSwooleResponse')
+            ->with($this->response, $this->fullPath);
 
-        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class ($expectedResponse) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)
@@ -88,25 +119,25 @@ class StaticMappedResourceHandlerTest extends TestCase
             }
         };
 
-        $this->fileLocRepo->findFile($this->uri)->willReturn($this->fullPath);
-        $handler = new StaticMappedResourceHandler($this->fileLocRepo->reveal(), [$middleware]);
+        $this->fileLocRepo->method('findFile')->with($this->uri)->willReturn($this->fullPath);
+        $handler = new StaticMappedResourceHandler($this->fileLocRepo, [$middleware]);
 
         $this->assertSame(
-            $expectedResponse->reveal(),
+            $expectedResponse,
             $handler->processStaticResource($this->request, $this->response)
         );
     }
 
-    public function testProcessStaticResourceReturnsNullWhenMiddlewareFails()
+    public function testProcessStaticResourceReturnsNullWhenMiddlewareFails(): void
     {
         $this->request->server = [
             'request_uri' => $this->uri,
         ];
 
-        $expectedResponse = $this->prophesize(StaticResourceResponse::class);
-        $expectedResponse->isFailure()->willReturn(true);
+        $expectedResponse = $this->createMock(StaticResourceResponse::class);
+        $expectedResponse->method('isFailure')->willReturn(true);
 
-        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class ($expectedResponse) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)
@@ -123,21 +154,21 @@ class StaticMappedResourceHandlerTest extends TestCase
             }
         };
 
-        $this->fileLocRepo->findFile($this->uri)->willReturn($this->fullPath);
-        $handler = new StaticMappedResourceHandler($this->fileLocRepo->reveal(), [$middleware]);
+        $this->fileLocRepo->method('findFile')->with($this->uri)->willReturn($this->fullPath);
+        $handler = new StaticMappedResourceHandler($this->fileLocRepo, [$middleware]);
         $this->assertSame(
             null,
             $handler->processStaticResource($this->request, $this->response)
         );
     }
 
-    public function testProcessStaticResourceReturnsNullOnInvalidFile()
+    public function testProcessStaticResourceReturnsNullOnInvalidFile(): void
     {
         $this->request->server = [
             'request_uri' => '/BOGUS',
         ];
 
-        $handler = new StaticMappedResourceHandler($this->fileLocRepo->reveal(), []);
+        $handler = new StaticMappedResourceHandler($this->fileLocRepo, []);
 
         $this->assertSame(
             null,

@@ -17,4 +17,14 @@
 
     <!-- Include all rules from Laminas Coding Standard -->
     <rule ref="LaminasCodingStandard" />
+
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>test/Log/AccessLogFactoryTest.php</exclude-pattern>
+        <exclude-pattern>test/Log/AccessLogFormatterTest.php</exclude-pattern>
+        <exclude-pattern>test/Log/SwooleLoggerFactoryTest.php</exclude-pattern>
+        <exclude-pattern>test/StaticResourceHandler/IntegrationMappedTest.php</exclude-pattern>
+        <exclude-pattern>test/StaticResourceHandler/IntegrationTest.php</exclude-pattern>
+        <exclude-pattern>test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php</exclude-pattern>
+        <exclude-pattern>test/SwooleRequestHandlerRunnerFactoryTest.php</exclude-pattern>
+    </rule>
 </ruleset>

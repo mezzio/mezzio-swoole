@@ -26,8 +26,8 @@
     "extra": {
     },
     "require": {
-        "php": "^7.4",
-        "ext-swoole": "^4.5",
+        "php": "^7.4 || ~8.0.0",
+        "ext-swoole": "^4.5.5",
         "composer/package-versions-deprecated": "^1.11",
         "dflydev/fig-cookies": "^2.0.1",
         "laminas/laminas-diactoros": "^1.8 || ^2.0",
@@ -44,12 +44,11 @@
         "filp/whoops": "^2.1",
         "laminas/laminas-coding-standard": "~2.1.0",
         "laminas/laminas-servicemanager": "^3.3",
-        "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.3.10",
-        "swoole/ide-helper": "^4.5"
-    },
-    "conflict": {
-        "phpspec/prophecy": "<1.10.2"
+        "psalm/plugin-phpunit": "^0.13.0",
+        "swoole/ide-helper": "^4.5.5",
+        "vimeo/psalm": "^4.0",
+        "webmozart/assert": "^1.9"
     },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading."
@@ -74,6 +73,7 @@
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
+        "static-analysis": "psalm --shepherd --stats",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },

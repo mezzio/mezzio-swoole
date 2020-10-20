@@ -15,10 +15,8 @@ use Mezzio\MiddlewareFactory;
 use Mezzio\Swoole\Command\StartCommand;
 use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ProphecyInterface;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 use Symfony\Component\Console\Command\Command;
@@ -26,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function array_key_exists;
 use function get_include_path;
 use function getmypid;
 use function realpath;
@@ -37,15 +36,41 @@ use const PATH_SEPARATOR;
 class StartCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
-    use ProphecyTrait;
     use ReflectMethodTrait;
+
+    /**
+     * @var ContainerInterface|MockObject
+     * @psalm-var MockObject&ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var InputInterface|MockObject
+     * @psalm-var MockObject&InputInterface
+     */
+    private $input;
+
+    /** @var string */
+    private $originalIncludePath;
+
+    /**
+     * @var OutputInterface|MockObject
+     * @psalm-var MockObject&OutputInterface
+     */
+    private $output;
+
+    /**
+     * @var PidManager|MockObject
+     * @psalm-var MockObject&PidManager
+     */
+    private $pidManager;
 
     protected function setUp(): void
     {
-        $this->container  = $this->prophesize(ContainerInterface::class);
-        $this->input      = $this->prophesize(InputInterface::class);
-        $this->output     = $this->prophesize(OutputInterface::class);
-        $this->pidManager = $this->prophesize(PidManager::class);
+        $this->container  = $this->createMock(ContainerInterface::class);
+        $this->input      = $this->createMock(InputInterface::class);
+        $this->output     = $this->createMock(OutputInterface::class);
+        $this->pidManager = $this->createMock(PidManager::class);
 
         $this->originalIncludePath = get_include_path();
         set_include_path(sprintf(
@@ -61,26 +86,17 @@ class StartCommandTest extends TestCase
         set_include_path($this->originalIncludePath);
     }
 
-    /** @param object $instance */
-    public function pushServiceToContainer(string $name, $instance): void
-    {
-        if ($instance instanceof ProphecyInterface) {
-            $instance = $instance->reveal();
-        }
-        $this->container->get($name)->willReturn($instance);
-    }
-
     public function testConstructorAcceptsContainer(): StartCommand
     {
-        $command = new StartCommand($this->container->reveal());
-        $this->assertAttributeSame($this->container->reveal(), 'container', $command);
+        $command = new StartCommand($this->container);
+        $this->assertAttributeSame($this->container, 'container', $command);
         return $command;
     }
 
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testConstructorSetsDefaultName(StartCommand $command)
+    public function testConstructorSetsDefaultName(StartCommand $command): void
     {
         $this->assertSame('start', $command->getName());
     }
@@ -88,7 +104,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testStartCommandIsASymfonyConsoleCommand(StartCommand $command)
+    public function testStartCommandIsASymfonyConsoleCommand(StartCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);
     }
@@ -105,7 +121,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesNumWorkersOption
      */
-    public function testNumWorkersOptionIsRequired(InputOption $option)
+    public function testNumWorkersOptionIsRequired(InputOption $option): void
     {
         $this->assertTrue($option->isValueRequired());
     }
@@ -113,7 +129,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesNumWorkersOption
      */
-    public function testNumWorkersOptionDefinesShortOption(InputOption $option)
+    public function testNumWorkersOptionDefinesShortOption(InputOption $option): void
     {
         $this->assertSame('w', $option->getShortcut());
     }
@@ -130,7 +146,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesDaemonizeOption
      */
-    public function testDaemonizeOptionHasNoValue(InputOption $option)
+    public function testDaemonizeOptionHasNoValue(InputOption $option): void
     {
         $this->assertFalse($option->acceptValue());
     }
@@ -138,49 +154,41 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesDaemonizeOption
      */
-    public function testDaemonizeOptionDefinesShortOption(InputOption $option)
+    public function testDaemonizeOptionDefinesShortOption(InputOption $option): void
     {
         $this->assertSame('d', $option->getShortcut());
     }
 
-    public function testExecuteReturnsErrorIfServerIsRunningInBaseMode()
+    public function testExecuteReturnsErrorIfServerIsRunningInBaseMode(): void
     {
-        $this->pidManager->read()->willReturn([getmypid(), null]);
-        $this->pushServiceToContainer(PidManager::class, $this->pidManager);
+        $this->pidManager->method('read')->willReturn([getmypid(), null]);
+        $this->container->method('get')->with(PidManager::class)->willReturn($this->pidManager);
 
-        $command = new StartCommand($this->container->reveal());
-
-        $execute = $this->reflectMethod($command, 'execute');
-
-        $this->assertSame(1, $execute->invoke(
-            $command,
-            $this->input->reveal(),
-            $this->output->reveal()
-        ));
+        $command = new StartCommand($this->container);
 
         $this->output
-            ->writeln(Argument::containingString('Server is already running'))
-            ->shouldHaveBeenCalled();
+            ->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('Server is already running'));
+
+        $execute = $this->reflectMethod($command, 'execute');
+        $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecuteReturnsErrorIfServerIsRunningInProcessMode()
+    public function testExecuteReturnsErrorIfServerIsRunningInProcessMode(): void
     {
-        $this->pidManager->read()->willReturn([1000000, getmypid()]);
-        $this->pushServiceToContainer(PidManager::class, $this->pidManager);
+        $this->pidManager->method('read')->willReturn([1000000, getmypid()]);
+        $this->container->method('get')->with(PidManager::class)->willReturn($this->pidManager);
 
-        $command = new StartCommand($this->container->reveal());
-
-        $execute = $this->reflectMethod($command, 'execute');
-
-        $this->assertSame(1, $execute->invoke(
-            $command,
-            $this->input->reveal(),
-            $this->output->reveal()
-        ));
+        $command = new StartCommand($this->container);
 
         $this->output
-            ->writeln(Argument::containingString('Server is already running'))
-            ->shouldHaveBeenCalled();
+            ->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('Server is already running'));
+
+        $execute = $this->reflectMethod($command, 'execute');
+        $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
     public function noRunningProcesses(): iterable
@@ -194,111 +202,107 @@ class StartCommandTest extends TestCase
     /**
      * @dataProvider noRunningProcesses
      */
-    public function testExecuteRunsApplicationIfServerIsNotCurrentlyRunning(array $pids)
+    public function testExecuteRunsApplicationIfServerIsNotCurrentlyRunning(array $pids): void
     {
-        $this->input->getOption('daemonize')->willReturn(true);
-        $this->input->getOption('num-workers')->willReturn(6);
+        $httpServer        = $this->createMock(TestAsset\HttpServer::class);
+        $middlewareFactory = $this->createMock(MiddlewareFactory::class);
+        $application       = $this->createMock(Application::class);
 
-        $this->pidManager->read()->willReturn($pids);
-        $this->pushServiceToContainer(PidManager::class, $this->pidManager);
+        $this->input
+            ->method('getOption')
+            ->will($this->returnValueMap([
+                ['daemonize', true],
+                ['num-workers', 6],
+            ]));
 
-        $httpServer = $this->prophesize(TestAsset\HttpServer::class);
-        $this->pushServiceToContainer(SwooleHttpServer::class, $httpServer);
+        $this->pidManager->method('read')->willReturn($pids);
 
-        $middlewareFactory = $this->prophesize(MiddlewareFactory::class);
-        $this->pushServiceToContainer(MiddlewareFactory::class, $middlewareFactory);
+        $httpServer
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->callback(static function (array $options) {
+                return array_key_exists('daemonize', $options)
+                    && array_key_exists('worker_num', $options)
+                    && true === $options['daemonize']
+                    && 6 === $options['worker_num'];
+            }));
 
-        $application = $this->prophesize(Application::class);
-        $this->pushServiceToContainer(Application::class, $application);
+        $application->expects($this->once())->method('run');
 
-        $command = new StartCommand($this->container->reveal());
+        $this->output
+            ->expects($this->never())
+            ->method('writeln')
+            ->with($this->stringContains('Server is already running'));
+
+        $this->container
+            ->method('get')
+            ->will($this->returnValueMap([
+                [PidManager::class, $this->pidManager],
+                [SwooleHttpServer::class, $httpServer],
+                [MiddlewareFactory::class, $middlewareFactory],
+                [Application::class, $application],
+            ]));
+
+        $command = new StartCommand($this->container);
 
         $execute = $this->reflectMethod($command, 'execute');
 
-        $this->assertSame(0, $execute->invoke(
-            $command,
-            $this->input->reveal(),
-            $this->output->reveal()
-        ));
-
-        $httpServer
-            ->set(Argument::that(static function ($options) {
-                TestCase::assertArrayHasKey('daemonize', $options);
-                TestCase::assertArrayHasKey('worker_num', $options);
-                TestCase::assertTrue($options['daemonize']);
-                TestCase::assertSame(6, $options['worker_num']);
-                return $options;
-            }))
-            ->shouldHaveBeenCalled();
-
-        $application->run()->shouldHaveBeenCalled();
-
-        $this->output
-            ->writeln(Argument::containingString('Server is already running'))
-            ->shouldNotHaveBeenCalled();
+        $this->assertSame(0, $execute->invoke($command, $this->input, $this->output));
     }
 
     /**
      * @dataProvider noRunningProcesses
      */
-    public function testExecuteRunsApplicationWithoutSettingOptionsIfNoneProvided(array $pids)
+    public function testExecuteRunsApplicationWithoutSettingOptionsIfNoneProvided(array $pids): void
     {
-        $this->input->getOption('daemonize')->willReturn(false);
-        $this->input->getOption('num-workers')->willReturn(null);
+        $this->input
+            ->method('getOption')
+            ->will($this->returnValueMap([
+                ['daemonize', false],
+                ['num-workers', null],
+            ]));
 
         [$command, $httpServer, $application] = $this->prepareSuccessfulStartCommand($pids);
 
-        $execute = $this->reflectMethod($command, 'execute');
-
-        $this->assertSame(0, $execute->invoke(
-            $command,
-            $this->input->reveal(),
-            $this->output->reveal()
-        ));
-
-        $this->container->get(SwooleHttpServer::class)->shouldNotHaveBeenCalled();
-
-        $httpServer
-            ->set(Argument::any())
-            ->shouldNotHaveBeenCalled();
-
-        $application->run()->shouldHaveBeenCalled();
+        $httpServer->expects($this->never())->method('set');
+        $application->expects($this->once())->method('run');
 
         $this->output
-            ->writeln(Argument::containingString('Server is already running'))
-            ->shouldNotHaveBeenCalled();
+            ->expects($this->never())
+            ->method('writeln')
+            ->with($this->stringContains('Server is already running'));
+
+        $execute = $this->reflectMethod($command, 'execute');
+        $this->assertSame(0, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecutionDoesNotFailEvenIfProgrammaticConfigFilesDoNotExist()
+    public function testExecutionDoesNotFailEvenIfProgrammaticConfigFilesDoNotExist(): void
     {
         set_include_path($this->originalIncludePath);
 
         [$command] = $this->prepareSuccessfulStartCommand([]);
 
         $execute = $this->reflectMethod($command, 'execute');
-
-        $this->assertSame(0, $execute->invoke(
-            $command,
-            $this->input->reveal(),
-            $this->output->reveal()
-        ));
+        $this->assertSame(0, $execute->invoke($command, $this->input, $this->output));
     }
 
     private function prepareSuccessfulStartCommand(array $pids): array
     {
-        $this->pidManager->read()->willReturn($pids);
-        $this->pushServiceToContainer(PidManager::class, $this->pidManager);
+        $httpServer        = $this->createMock(TestAsset\HttpServer::class);
+        $middlewareFactory = $this->createMock(MiddlewareFactory::class);
+        $application       = $this->createMock(Application::class);
 
-        $httpServer = $this->prophesize(TestAsset\HttpServer::class);
-        $this->pushServiceToContainer(SwooleHttpServer::class, $httpServer);
+        $this->pidManager->method('read')->willReturn($pids);
+        $this->container
+            ->method('get')
+            ->will($this->returnValueMap([
+                [PidManager::class, $this->pidManager],
+                [SwooleHttpServer::class, $httpServer],
+                [MiddlewareFactory::class, $middlewareFactory],
+                [Application::class, $application],
+            ]));
 
-        $middlewareFactory = $this->prophesize(MiddlewareFactory::class);
-        $this->pushServiceToContainer(MiddlewareFactory::class, $middlewareFactory);
-
-        $application = $this->prophesize(Application::class);
-        $this->pushServiceToContainer(Application::class, $application);
-
-        $command = new StartCommand($this->container->reveal());
+        $command = new StartCommand($this->container);
 
         return [$command, $httpServer, $application];
     }

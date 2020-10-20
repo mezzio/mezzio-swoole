@@ -13,20 +13,28 @@ namespace MezzioTest\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Swoole\Http\Request;
 
 class MethodNotAllowedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
-    use ProphecyTrait;
+
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
+    private $request;
 
     protected function setUp(): void
     {
-        $this->request = $this->prophesize(Request::class)->reveal();
+        $this->request = $this->createMock(Request::class);
     }
 
+    /**
+     * @psalm-return array<string, list<non-empty-string>>
+     */
     public function alwaysAllowedMethods(): array
     {
         return [
@@ -36,6 +44,9 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-return array<string, list<non-empty-string>>
+     */
     public function neverAllowedMethods(): array
     {
         return [
@@ -48,14 +59,18 @@ class MethodNotAllowedMiddlewareTest extends TestCase
 
     /**
      * @dataProvider alwaysAllowedMethods
+     * @psalm-param non-empty-string $method
      */
-    public function testMiddlewareDoesNothingForAllowedMethods(string $method)
+    public function testMiddlewareDoesNothingForAllowedMethods(string $method): void
     {
         $this->request->server = [
             'request_method' => $method,
         ];
         $response              = new StaticResourceResponse();
-        $next                  = static function ($request, $filename) use ($response) {
+        $next                  = static function (
+            Request $request,
+            string $filename
+        ) use ($response): StaticResourceResponse {
             return $response;
         };
         $middleware            = new MethodNotAllowedMiddleware();
@@ -67,20 +82,20 @@ class MethodNotAllowedMiddlewareTest extends TestCase
 
     /**
      * @dataProvider neverAllowedMethods
+     * @psalm-param non-empty-string $method
      */
-    public function testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods(string $method)
+    public function testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods(string $method): void
     {
         $this->request->server = [
             'request_method' => $method,
         ];
-        $next                  = function ($request, $filename) {
+        $next                  = function (Request $request, string $filename): void {
             $this->fail('Should not have reached next()');
         };
         $middleware            = new MethodNotAllowedMiddleware();
 
         $response = $middleware($this->request, '/does/not/matter', $next);
 
-        $this->assertInstanceOf(StaticResourceResponse::class, $response);
         $this->assertStatus(405, $response);
         $this->assertHeaderExists('Allow', $response);
         $this->assertHeaderSame('GET, HEAD, OPTIONS', 'Allow', $response);
