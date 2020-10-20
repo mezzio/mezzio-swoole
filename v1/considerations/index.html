@@ -213,17 +213,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v1
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="../../v2/intro/" class="dropdown-item">
@@ -456,7 +456,6 @@ proxy class that decorates the original service:</p>
         return $this-&gt;proxy-&gt;someMethodDefinedInInterface($argument);
     }
 }</code></pre>
-
 <p>You would then:</p>
 <ul>
 <li>Map the factory for the original service to the implementation name.</li>
@@ -473,7 +472,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <p>If you were writing to the interface, and not the implementation, you can now
 guarantee that any non-interface methods that changed state can now no longer be
 called.</p>
@@ -487,7 +485,6 @@ to decorate the original instance in the proxy class:</p>
 {
     return new ProxyService($callback());
 }</code></pre>
-
 <p>(You can also use the delegator factory approach with the previous proxy service
 example.)</p>
 <h3>Extension</h3>
@@ -509,7 +506,6 @@ would query. This is a potentially bad situation!</p>
         ));
     }
 }</code></pre>
-
 <p>In your factory that creates an instance of <code>DataMapper</code>, have it instead return
 a <code>StatelessDataMapper</code> instance, and you're now safe.</p>
 <h3>Factories</h3>
@@ -543,7 +539,6 @@ class SomeHandler implements RequestHandlerInterface
         ));
     }
 }</code></pre>
-
 <p>What we will do is modify it to accept a <em>callable</em> to the constructor. We will
 then call that factory <em>just before</em> we need the renderer; we <em>will not</em> store
 the result in the handler, as we want to ensure we have a new instance each
@@ -574,7 +569,6 @@ class SomeHandler implements RequestHandlerInterface
         ));
     }
 }</code></pre>
-
 <p>From here, we create a factory for our dependency injection container that will
 return the factory we use here. As an example, if we are using the <a href="https://docs.mezzio.dev/mezzio/v3/features/template/laminas-view/">laminas-view
 integration</a>,
@@ -594,7 +588,6 @@ class LaminasViewRendererFactoryFactory
         };
     }
 }</code></pre>
-
 <p>If we mapped this to the "service" <code>Mezzio\Template\TemplateRendererInterfaceFactory</code>,
 our factory for the <code>SomeHandler</code> class would then look like:</p>
 <pre class="highlight"><code class="language-php">use Mezzio\Template\TemplateRendererInterfaceFactory;
@@ -605,7 +598,6 @@ function (ContainerInterface $container) : SomeHandler
         $container-&gt;get(TemplateRendererInterfaceFactory::class)
     );
 }</code></pre>
-
 <p>This approach ensures we get a new instance with known state at precisely the
 moment we wish to execute the functionality. By ensuring we <em>do not</em> store the
 instance in any way, we also ensure it is garbage collected when the instance
@@ -653,7 +645,6 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
         return $handler-&gt;handle($request-&gt;withAttribute(__CLASS__, $defaults));
     }
 }</code></pre>
-
 <p>Once that change is made, you would then change your handler to do the
 following:</p>
 <ul>
@@ -668,7 +659,6 @@ return new HtmlResponse($renderer-&gt;render(
         // handler-specific parameters here
     ])
 ));</code></pre>
-
 <p>This approach, while it requires more work on the part of handler authors,
 ensures that the renderer state does not vary between requests, making it
 safer for usage with Swoole and other long-running processes.</p>

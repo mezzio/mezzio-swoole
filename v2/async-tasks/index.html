@@ -243,17 +243,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v2
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="../intro/" class="dropdown-item active">
@@ -397,7 +397,6 @@ no concurrency and tasks will execute one after the other.</p>
         ],
     ],
 ];</code></pre>
-
 <blockquote>
 <h3>No CLI option for task_worker_num</h3>
 <p>Unlike <code>worker_num</code>, there is no CLI option for <code>task_worker_num</code>. This is
@@ -452,7 +451,6 @@ where:</p>
 <p>To register the handler with the server, you must call it's <code>on()</code> method,
 <strong>before</strong> the server has been started:</p>
 <pre class="highlight"><code class="language-php">$server-&gt;on('task', $callable);</code></pre>
-
 <p>As previously mentioned, you must also register an event handler for the
 <code>finish</code> event. This callback for this event should have the following
 signature:</p>
@@ -461,13 +459,11 @@ signature:</p>
     int $taskId,
     $userData
 ) : void</code></pre>
-
 <p>The first two parameters are identical to the <code>task</code> event handler. The
 <code>$userData</code> parameter will contain the return value of the <code>task</code> event
 handler. </p>
 <p>Registering your callable for the <code>finish</code> event is accomplished like this:</p>
 <pre class="highlight"><code class="language-php">$server-&gt;on('finish', $callable);</code></pre>
-
 <blockquote>
 <h3>There can be only one</h3>
 <p>There can be <strong>only one</strong> event handler per event type. Subsequent calls to
@@ -477,7 +473,6 @@ handler. </p>
 <code>finish</code> handler <strong>will not be called</strong>. The Swoole documentation recommends
 that the task worker callback manually finish the task in these situations:</p>
 <pre class="highlight"><code class="language-php">$server-&gt;finish('');</code></pre>
-
 <p>Even if you do not call the above method, the handler <strong>must</strong> be defined, or
 the server will refuse to start.</p>
 </blockquote>
@@ -531,7 +526,6 @@ class TaskWorker
         $server-&gt;finish('');
     }
 }</code></pre>
-
 <p>This invokable class needs to be attached to the <code>$server-&gt;on('task')</code> event
 before the server has started. The easiest place to accomplish this is in a
 <a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>
@@ -559,7 +553,6 @@ class TaskWorkerDelegator
         return $server;
     }
 }</code></pre>
-
 <p>Next, we'll register it with our container:</p>
 <pre class="highlight"><code class="language-php">// In config/autoload/dependencies.php:
 
@@ -572,7 +565,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <p>With this in place, we can now trigger tasks within our application. In the
 scenario outlined above, the task worker expects <em>messages</em>; it then <em>notifies</em>
 listeners of that message so they may respond to it.</p>

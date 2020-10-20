@@ -213,17 +213,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v1
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="../../v2/intro/" class="dropdown-item">
@@ -376,7 +376,6 @@ interface AccessLogInterface extends LoggerInterface
         ResponseInterface $response
     ) : void;
 }</code></pre>
-
 <p>To allow usage of a standard PSR-3 logger, we also provide a decorator,
 <code>Mezzio\Swoole\Log\Psr3AccessLogDecorator</code>, which decorates the PSR-3
 logger and provides a standard implementation for the two methods listed above.
@@ -395,7 +394,6 @@ interface <code>Mezzio\Swoole\Log\AccessLogFormatterInterface</code>:</p>
 {
     public function format(AccessLogDataMap $map) : string;
 }</code></pre>
-
 <p><code>AccessLogDataMap</code> is a class used internally by the <code>Psr3AccessLogDecorator</code> in
 order to map Apache log placeholders to request/response values.</p>
 <p>Our default <code>AccessLogFormatterInterface</code> implementation, <code>AccessLogFormatter</code>,
@@ -430,7 +428,6 @@ $runner = new SwooleRequestHandlerRunner(
     $staticResourceHandler,
     $logger // &lt;-- AccessLoggerInterface instance
 );</code></pre>
-
 <h3>Container usage</h3>
 <p>If you are using a <a href="https://www.php-fig.org/psr/psr-11/">PSR-11</a> container, the
 <code>SwooleRequestHandlerRunnerFactory</code> will retrieve a log instance using the
@@ -456,7 +453,6 @@ instance for you.</p>
         ],
     ],
 ],</code></pre>
-
 <h3>Using Monolog as a PSR-3 logger</h3>
 <p>When using <a href="https://seldaek.github.io/monolog/">Monolog</a> with a <code>StreamHandler</code>,
 you must supply a file or a stream resource descriptor. We recommend using one
@@ -511,7 +507,6 @@ class LoggerFactory
         return $logger;
     }
 }</code></pre>
-
 <p>If you then wire this to the <code>Psr\Log\LoggerInterface</code> service, it will be used
 by Swoole for the purposes of access logs as well.</p>
 

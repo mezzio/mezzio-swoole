@@ -243,17 +243,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v2
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="../intro/" class="dropdown-item active">
@@ -418,7 +418,6 @@ function (ContainerInterface $container) : Swoole\SwooleRequestHandlerRunner
             : null
     );
 }</code></pre>
-
 <p>If you are using the default factory provided (<code>Mezzio\Swoole\SwooleRequestHandlerRunnerFactory</code>),
 you can also disable the functionality via configuration. To do this, set the
 <code>mezzio-swoole.swoole-http-server.static-files.enable</code> flag to
@@ -432,7 +431,6 @@ boolean <code>false</code>:</p>
         ],
     ],
 ];</code></pre>
-
 </blockquote>
 <h2 id="middleware">Middleware</h2>
 <p>The <code>StaticResourceHandler</code> implementation performs its work by composing a
@@ -592,7 +590,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <blockquote>
 <h3>Security warning</h3>
 <p>Never add <code>php</code> as an allowed static file extension, as doing so could expose
@@ -666,7 +663,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <h2 id="writing-middleware">Writing Middleware</h2>
 <p>Static resource middleware must implement
 <code>Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface</code>, which
@@ -688,7 +684,6 @@ interface MiddlewareInterface
         callable $next
     ) : StaticResourceResponse;
 }</code></pre>
-
 <p>The <code>$next</code> argument has the following signature:</p>
 <pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\StaticResourceHandler;
 
@@ -698,7 +693,6 @@ public function __invoke(
     Request $request,
     string $filename
 ) : StaticResourceResponse;</code></pre>
-
 <p>Typically, middleware will look something like this:</p>
 <pre class="highlight"><code class="language-php">$response = $next($request, $filename);
 
@@ -706,7 +700,6 @@ public function __invoke(
 // return $response;
 
 // Otherwise, manipulate the returned $response instance and then return it.</code></pre>
-
 <p>Middleware either produces or manipulates a
 <code>Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse</code> instance.
 That class looks like the following:</p>
@@ -751,7 +744,6 @@ That class looks like the following:</p>
 
     public function setStatus(int $status) : void;
 }</code></pre>
-
 <p>Most middleware will conditionally set the status, one or more headers, and
 potentially disable returning the response body (via <code>disableContent()</code>).
 Middleware that restricts access or filters out specific files will also use
@@ -797,7 +789,6 @@ interface StaticResourceHandlerInterface
         SwooleHttpResponse $response
     ) : ?StaticResourceHandler\StaticResourceResponse;
 }</code></pre>
-
 <p>Once implemented, map the service
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to a factory that
 returns your custom implementation within your <code>dependencies</code> configuration.</p>
@@ -823,10 +814,8 @@ The structure of your module files looks like this:</p>
 |   |   ├── home.html
 |   |   ├── style.css
 │   ├── layouts</code></pre>
-
 <p>In your <code>home.html</code> template, you can refer to the <code>style.css</code> file, using <code>/awesome-home</code> as follows:</p>
 <pre class="highlight"><code class="language-html">&lt;link href="/awesome-home/style.css" rel="stylesheet" type="text/css"&gt;</code></pre>
-
 <p>Currently, however, this will cause errors, as the stylesheet will not be available under the <code>public/</code> tree of the application.
 You would need to copy or symlink the files to the appropriate location to make that work.</p>
 <p>The <code>StaticMappedResourceHandler</code> solves this problem.</p>
@@ -855,7 +844,6 @@ You would need to copy or symlink the files to the appropriate location to make 
             ]
         ];
     }</code></pre>
-
 <p>Note that prefixes are always the first part after the host, and specifying the initial slash is optional (i.e. <code>awsesome-home</code> and <code>/awesome-home</code> both work and represent the same thing).</p>
 <p>In step #4, in your application's configuration (<code>autoload/dependencies.global.php</code> is a good place), override the default implementation of <code>StaticResourceHandlerInterface</code>:</p>
 <pre class="highlight"><code class="language-php">return [
@@ -865,7 +853,6 @@ You would need to copy or symlink the files to the appropriate location to make 
             // Fully\Qualified\ClassOrInterfaceName::class =&gt; Fully\Qualified\ClassName::class,
         ],
         // etc.</code></pre>
-
 <p>For step #3, an alternative to storing a configuration is dynamically associating <code>/awesome-home</code> to a directory in code (probably within a factory).
 This approach could be useful if the directory of the assets isn't know until runtime.</p>
 <pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
@@ -888,7 +875,6 @@ class AwesomeHomeHandlerFactory
         );
     }
 }</code></pre>
-
 <p>When the template renders, the client will request <code>/awesome-home/style.css</code>, which the <code>StaticMappedResourceHandler</code> will now retrieve from the <code>templates/home/</code> folder of the module.</p>
 <p><code>Mezzio\Swoole\StaticMappedResourceHandler</code> uses the <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepository</code> (which implements <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface</code>) to maintain an association of URI prefixes with file directories.
 If you require using a file location that requires authentication, decompression, etc. you can override the default functionality by creating your own implementation of <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface</code>.</p>

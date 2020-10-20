@@ -213,17 +213,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v1
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="../../v2/intro/" class="dropdown-item">
@@ -517,7 +517,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <blockquote>
 <h3>Security warning</h3>
 <p>Never add <code>php</code> as an allowed static file extension, as doing so could expose
@@ -590,7 +589,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <h2 id="writing-middleware">Writing Middleware</h2>
 <p>Static resource middleware must implement
 <code>Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface</code>, which
@@ -612,7 +610,6 @@ interface MiddlewareInterface
         callable $next
     ) : StaticResourceResponse;
 }</code></pre>
-
 <p>The <code>$next</code> argument has the following signature:</p>
 <pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\StaticResourceHandler;
 
@@ -622,7 +619,6 @@ public function __invoke(
     Request $request,
     string $filename
 ) : StaticResourceResponse;</code></pre>
-
 <p>Typically, middleware will look something like this:</p>
 <pre class="highlight"><code class="language-php">$response = $next($request, $filename);
 
@@ -630,7 +626,6 @@ public function __invoke(
 // return $response;
 
 // Otherwise, manipulate the returned $response instance and then return it.</code></pre>
-
 <p>Middleware either produces or manipulates a
 <code>Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse</code> instance.
 That class looks like the following:</p>
@@ -675,7 +670,6 @@ That class looks like the following:</p>
 
     public function setStatus(int $status) : void;
 }</code></pre>
-
 <p>Most middleware will conditionally set the status, one or more headers, and
 potentially disable returning the response body (via <code>disableContent()</code>).
 Middleware that restricts access or filters out specific files will also use
@@ -721,7 +715,6 @@ interface StaticResourceHandlerInterface
         SwooleHttpResponse $response
     ) : ?StaticResourceHandler\StaticResourceResponse;
 }</code></pre>
-
 <p>Once implemented, map the service
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to a factory that
 returns your custom implementation within your <code>dependencies</code> configuration.</p>

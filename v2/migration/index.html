@@ -243,17 +243,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v2
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="../intro/" class="dropdown-item active">
@@ -367,7 +367,6 @@ update your code to adapt to them.</p>
 <h2 id="controlling-the-server">Controlling the server</h2>
 <p>In version 1, you would execute the web server via the entry script, e.g.:</p>
 <pre class="highlight"><code class="language-bash">$ php public/index.php start</code></pre>
-
 <p>With version 2, we ship the command line tools for controlling your server via
 the binary <code>mezzio-swoole</code>:</p>
 <pre class="highlight"><code class="language-bash"># Start the server:
@@ -376,7 +375,6 @@ $ ./vendor/bin/mezzio-swoole start -d
 $ ./vendor/bin/mezzio-swoole reload
 # Stop the server:
 $ ./vendor/bin/mezzio-swoole stop</code></pre>
-
 <p>While you can still call <code>php public/index.php</code>, you cannot daemonize the server
 using that command, nor reload or stop it (other than using <code>Ctrl-C</code>). You will
 need to change any deployment commands you currently use to consume the new
@@ -398,7 +396,6 @@ defaults to <code>true</code>. To set system-wide coroutine support, toggle the
         ],
     ]
 ];</code></pre>
-
 <h2 id="serverfactory">ServerFactory</h2>
 <p>Version 2 refactors the architecture slightly to allow providing the HTTP server
 as a service, which allows us to <a href="../async-tasks/">enable async task workers</a>.</p>

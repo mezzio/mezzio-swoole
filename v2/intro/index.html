@@ -243,17 +243,17 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 <div class="version-selector">
     <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
                 v2
             
         </button>
-        <div class="dropdown-menu" aria-labelledby="version-selector-dropdown">
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
                     <a href="./" class="dropdown-item active">
@@ -362,25 +362,21 @@ or the low-level Linux kernel.</p>
 <p>You can install the Swoole extension on Linux or Mac environments using the
 following commands:</p>
 <pre class="highlight"><code class="language-bash">$ pecl install swoole</code></pre>
-
 <p>For more information on the extension, <a href="https://pecl.php.net/package/swoole">visit its package details on PECL</a>.</p>
 <h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
 <p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
 <pre class="highlight"><code class="language-bash">$ composer require mezzio/mezzio-swoole</code></pre>
-
 <h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
 <p>mezzio-swoole enables an Mezzio application to be executed with
 the <a href="https://www.swoole.co.uk/">Swoole</a> extension. This means you can run the
 application from the command line, <strong>without requiring a web server</strong>.</p>
 <p>You can run the application using the following command:</p>
 <pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole start</code></pre>
-
 <p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
 <blockquote>
 <h3>Other commands</h3>
 <p>To get a list of all available commands, run the command without arguments:</p>
 <pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole</code></pre>
-
 <p>If you add the argument <code>help</code> before any command name, the tooling will
 provide you with more detailed information on that command.</p>
 <h3>Mezzio skeleton versions prior to 3.1.0</h3>
@@ -395,7 +391,6 @@ contents:</p>
 use Mezzio\Swoole\ConfigProvider;
 
 return (new ConfigProvider())();</code></pre>
-
 </blockquote>
 <p>You can change the host address and/or host name as well as the port using a
 configuration file, as follows:</p>
@@ -408,7 +403,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <h3>Providing additional Swoole configuration</h3>
 <p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify
 any accepted Swoole settings. For instance, the following configuration
@@ -448,7 +442,6 @@ return [
         ],
     ],
 ];</code></pre>
-
 <blockquote>
 <h3>SSL support</h3>
 <p>By default, Swoole is not compiled with SSL support. To enable SSL in Swoole, it
