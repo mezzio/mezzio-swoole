@@ -14,6 +14,7 @@ use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareQueue;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
@@ -21,33 +22,42 @@ class MiddlewareQueueTest extends TestCase
 {
     use AssertResponseTrait;
 
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
+    private $request;
+
     protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
     }
 
-    public function testEmptyMiddlewareQueueReturnsSuccessfulResponseValue()
+    public function testEmptyMiddlewareQueueReturnsSuccessfulResponseValue(): void
     {
+        /** @psalm-suppress InternalClass */
         $queue = new MiddlewareQueue([]);
 
         $response = $queue($this->request, 'some/filename.txt');
 
-        $this->assertInstanceOf(StaticResourceResponse::class, $response);
         $this->assertStatus(200, $response);
         $this->assertHeadersEmpty($response);
         $this->assertShouldSendContent($response);
     }
 
-    public function testReturnsResponseGeneratedByMiddleware()
+    public function testReturnsResponseGeneratedByMiddleware(): void
     {
+        /** @psalm-var MockObject&StaticResourceResponse $response */
         $response = $this->createMock(StaticResourceResponse::class);
 
+        /** @psalm-var MockObject&MiddlewareInterface $middleware */
         $middleware = $this->createMock(MiddlewareInterface::class);
         $middleware
             ->method('__invoke')
             ->with($this->request, 'some/filename.txt', $this->isInstanceOf(MiddlewareQueue::class))
             ->willReturn($response);
 
+        /** @psalm-suppress InternalClass */
         $queue = new MiddlewareQueue([$middleware]);
 
         $result = $queue($this->request, 'some/filename.txt');
@@ -55,21 +65,31 @@ class MiddlewareQueueTest extends TestCase
         $this->assertSame($response, $result);
     }
 
-    public function testEachMiddlewareReceivesSameQueueInstance()
+    public function testEachMiddlewareReceivesSameQueueInstance(): void
     {
+        /** @psalm-var MockObject&MiddlewareInterface $second */
         $second = $this->createMock(MiddlewareInterface::class);
 
+        /** @psalm-var MockObject&MiddlewareInterface $first */
         $first = $this->createMock(MiddlewareInterface::class);
         $first
             ->method('__invoke')
             ->with($this->request, 'some/filename.txt', $this->isInstanceOf(MiddlewareQueue::class))
             ->will($this->returnCallback(
-                function (Request $request, string $filename, callable $middlewareQueue) use ($second) {
+                function (
+                    Request $request,
+                    string $filename,
+                    MiddlewareQueue $middlewareQueue
+                ) use ($second): StaticResourceResponse {
                     $second
                         ->method('__invoke')
                         ->with($request, $filename, $middlewareQueue)
                         ->will($this->returnCallback(
-                            function (Request $request, string $filename, callable $middlewareQueue) {
+                            function (
+                                Request $request,
+                                string $filename,
+                                MiddlewareQueue $middlewareQueue
+                            ): StaticResourceResponse {
                                 $response = $middlewareQueue($request, $filename);
                                 $response->setStatus(304);
                                 $response->addHeader('X-Hit', 'second');
@@ -82,14 +102,11 @@ class MiddlewareQueueTest extends TestCase
                 }
             ));
 
-        $queue = new MiddlewareQueue([
-            $first,
-            $second,
-        ]);
+        /** @psalm-suppress InternalClass */
+        $queue = new MiddlewareQueue([$first, $second]);
 
         $response = $queue($this->request, 'some/filename.txt');
 
-        $this->assertInstanceOf(StaticResourceResponse::class, $response);
         $this->assertStatus(304, $response);
         $this->assertHeaderExists('X-Hit', $response);
         $this->assertHeaderSame('second', 'X-Hit', $response);

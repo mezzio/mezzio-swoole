@@ -26,6 +26,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
+use Webmozart\Assert\Assert;
 
 use function sprintf;
 
@@ -33,10 +34,16 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /** @var ContainerInterface|MockObject */
+    /**
+     * @var ContainerInterface|MockObject
+     * @psalm-var MockObject&ContainerInterface
+     */
     private $container;
 
-    /** @var FileLocationRepositoryInterface|MockObject */
+    /**
+     * @var FileLocationRepositoryInterface|MockObject
+     * @psalm-var MockObject&FileLocationRepositoryInterface
+     */
     private $fileLocRepo;
 
     protected function setUp(): void
@@ -45,12 +52,20 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
         $this->fileLocRepo = $this->createMock(FileLocationRepositoryInterface::class);
     }
 
-    public function assertHasMiddlewareOfType(string $type, array $middlewareList)
+    /**
+     * @psalm-param class-string $type
+     * @psalm-param list<MiddlewareInterface> $middlewareList
+     */
+    public function assertHasMiddlewareOfType(string $type, array $middlewareList): void
     {
         $middleware = $this->getMiddlewareByType($type, $middlewareList);
         $this->assertInstanceOf($type, $middleware);
     }
 
+    /**
+     * @psalm-param class-string $type
+     * @psalm-param list<MiddlewareInterface> $middlewareList
+     */
     public function getMiddlewareByType(string $type, array $middlewareList): MiddlewareInterface
     {
         foreach ($middlewareList as $middleware) {
@@ -64,7 +79,7 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
         ));
     }
 
-    public function testFactoryConfiguresHandlerBasedOnConfiguration()
+    public function testFactoryConfiguresHandlerBasedOnConfiguration(): void
     {
         $config = [
             'mezzio-swoole' => [
@@ -121,6 +136,9 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
         $r = new ReflectionProperty($handler, 'middleware');
         $r->setAccessible(true);
         $middleware = $r->getValue($handler);
+
+        Assert::isList($middleware);
+        Assert::allIsInstanceOf($middleware, MiddlewareInterface::class);
 
         $this->assertHasMiddlewareOfType(ContentTypeFilterMiddleware::class, $middleware);
         $this->assertHasMiddlewareOfType(MethodNotAllowedMiddleware::class, $middleware);

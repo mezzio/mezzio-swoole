@@ -22,6 +22,7 @@ use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
@@ -38,12 +39,27 @@ use function trim;
  */
 class IntegrationMappedTest extends TestCase
 {
+    /**
+     * @var FileLocationRepositoryInterface|MockObject
+     * @psalm-var MockObject&FileLocationRepositoryInterface
+     */
+    private $mockFileLocRepo;
+
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $assetPath;
+
     protected function setUp(): void
     {
         $this->assetPath       = __DIR__ . '/../TestAsset';
         $this->mockFileLocRepo = $this->createMock(FileLocationRepositoryInterface::class);
     }
 
+    /**
+     * @psalm-return array<array-key, list<string>>
+     */
     public function unsupportedHttpMethods(): array
     {
         return [
@@ -58,7 +74,7 @@ class IntegrationMappedTest extends TestCase
     /**
      * @dataProvider unsupportedHttpMethods
      */
-    public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method)
+    public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method): void
     {
         $this->mockFileLocRepo->method('findFile')->with('/image.png')->willReturn($this->assetPath . '/image.png');
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -93,7 +109,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest()
+    public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest(): void
     {
         $this->mockFileLocRepo->method('findFile')->with('/image.png')->willReturn($this->assetPath . '/image.png');
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -128,7 +144,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath()
+    public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -180,7 +196,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath()
+    public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -234,7 +250,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath()
+    public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -290,7 +306,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
+    public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -343,7 +359,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
+    public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -395,7 +411,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -446,7 +462,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -497,7 +513,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceCanGenerateStrongETagValue()
+    public function testSendStaticResourceCanGenerateStrongETagValue(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -546,7 +562,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
@@ -594,7 +610,7 @@ class IntegrationMappedTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince()
+    public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince(): void
     {
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);

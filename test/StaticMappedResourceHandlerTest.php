@@ -22,14 +22,35 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticMappedResourceHandlerTest extends TestCase
 {
-    /** @var FileLocationRepositoryInterface|MockObject */
+    /**
+     * @var FileLocationRepositoryInterface|MockObject
+     * @psalm-var MockObject&FileLocationRepositoryInterface
+     */
     private $fileLocRepo;
 
-    /** @var SwooleHttpRequest|MockObject */
+    /**
+     * @var SwooleHttpRequest|MockObject
+     * @psalm-var MockObject&SwooleHttpRequest
+     */
     private $request;
 
-    /** @var SwooleHttpResponse|MockObject */
+    /**
+     * @var SwooleHttpResponse|MockObject
+     * @psalm-var MockObject&SwooleHttpResponse
+     */
     private $response;
+
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $uri;
+
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $fullPath;
 
     protected function setUp(): void
     {
@@ -40,13 +61,13 @@ class StaticMappedResourceHandlerTest extends TestCase
         $this->response    = $this->createMock(SwooleHttpResponse::class);
     }
 
-    public function testConstructorRaisesExceptionForInvalidMiddlewareValue()
+    public function testConstructorRaisesExceptionForInvalidMiddlewareValue(): void
     {
         $this->expectException(Exception\InvalidStaticResourceMiddlewareException::class);
         new StaticMappedResourceHandler($this->fileLocRepo, [$this]);
     }
 
-    public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse()
+    public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse(): void
     {
         $this->request->server = [
             'request_uri' => $this->uri,
@@ -68,7 +89,7 @@ class StaticMappedResourceHandlerTest extends TestCase
         $this->assertNull($handler->processStaticResource($this->request, $this->response));
     }
 
-    public function testProcessStaticResourceReturnsStaticResponseWhenSuccessful()
+    public function testProcessStaticResourceReturnsStaticResponseWhenSuccessful(): void
     {
         $this->request->server = [
             'request_uri' => $this->uri,
@@ -107,7 +128,7 @@ class StaticMappedResourceHandlerTest extends TestCase
         );
     }
 
-    public function testProcessStaticResourceReturnsNullWhenMiddlewareFails()
+    public function testProcessStaticResourceReturnsNullWhenMiddlewareFails(): void
     {
         $this->request->server = [
             'request_uri' => $this->uri,
@@ -141,7 +162,7 @@ class StaticMappedResourceHandlerTest extends TestCase
         );
     }
 
-    public function testProcessStaticResourceReturnsNullOnInvalidFile()
+    public function testProcessStaticResourceReturnsNullOnInvalidFile(): void
     {
         $this->request->server = [
             'request_uri' => '/BOGUS',

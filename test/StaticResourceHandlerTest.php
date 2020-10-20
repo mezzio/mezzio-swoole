@@ -14,12 +14,31 @@ use Mezzio\Swoole\Exception;
 use Mezzio\Swoole\StaticResourceHandler;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticResourceHandlerTest extends TestCase
 {
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $docRoot;
+
+    /**
+     * @var SwooleHttpRequest|MockObject
+     * @psalm-var MockObject&SwooleHttpRequest
+     */
+    private $request;
+
+    /**
+     * @var SwooleHttpResponse|MockObject
+     * @psalm-var MockObject&SwooleHttpResponse
+     */
+    private $response;
+
     protected function setUp(): void
     {
         $this->docRoot  = __DIR__ . '/TestAsset';
@@ -27,13 +46,13 @@ class StaticResourceHandlerTest extends TestCase
         $this->response = $this->createMock(SwooleHttpResponse::class);
     }
 
-    public function testConstructorRaisesExceptionForInvalidMiddlewareValue()
+    public function testConstructorRaisesExceptionForInvalidMiddlewareValue(): void
     {
         $this->expectException(Exception\InvalidStaticResourceMiddlewareException::class);
         new StaticResourceHandler($this->docRoot, [$this]);
     }
 
-    public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse()
+    public function testProcessStaticResourceReturnsNullIfMiddlewareReturnsFailureResponse(): void
     {
         $this->request->server = [
             'request_uri' => '/image.png',
@@ -55,7 +74,7 @@ class StaticResourceHandlerTest extends TestCase
         $this->assertNull($handler->processStaticResource($this->request, $this->response));
     }
 
-    public function testProcessStaticResourceReturnsStaticResponseWhenSuccessful()
+    public function testProcessStaticResourceReturnsStaticResponseWhenSuccessful(): void
     {
         $filename = $this->docRoot . '/image.png';
 

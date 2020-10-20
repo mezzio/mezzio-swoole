@@ -11,25 +11,25 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Log;
 
 use Laminas\Stdlib\ArrayUtils;
-use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\SwooleLoggerFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Webmozart\Assert\Assert;
 
 trait LoggerFactoryHelperTrait
 {
-    protected function setUp(): void
+    /**
+     * @psalm-param array<string, array<string, bool|object>> $methodMap
+     */
+    private function createContainerMockWithNamedLogger(array $methodMap = []): ContainerInterface
     {
-        $this->logger    = $this->createMock(LoggerInterface::class);
-        $this->formatter = $this->createMock(AccessLogFormatterInterface::class);
-    }
+        /** @psalm-var array<string, array<string, bool|object>> $methodMap */
+        $methodMap = ArrayUtils::merge($methodMap, [
+            'get' => ['my_logger' => $this->logger],
+        ]);
 
-    private function createContainerMockWithNamedLogger(): ContainerInterface
-    {
         return $this->createContainerMockWithConfigAndNotPsrLogger(
-            [
-                'get' => ['my_logger' => $this->logger],
-            ],
+            $methodMap,
             [
                 'mezzio-swoole' => [
                     'swoole-http-server' => [
@@ -42,6 +42,10 @@ trait LoggerFactoryHelperTrait
         );
     }
 
+    /**
+     * @psalm-param array<string, array<string, bool|object>> $methodMap
+     * @psalm-param null|array<string, mixed> $config
+     */
     private function createContainerMockWithConfigAndPsrLogger(
         array $methodMap = [],
         ?array $config = null
@@ -52,9 +56,14 @@ trait LoggerFactoryHelperTrait
             'get' => [LoggerInterface::class => $this->logger],
         ]);
 
+        /** @psalm-var array<string, array<string, bool|object>> $methodMap */
         return $this->mockContainer($methodMap);
     }
 
+    /**
+     * @psalm-param array<string, array<string, bool|object>> $methodMap
+     * @psalm-param null|array<string, mixed> $config
+     */
     private function createContainerMockWithConfigAndNotPsrLogger(
         array $methodMap = [],
         ?array $config = null
@@ -64,9 +73,13 @@ trait LoggerFactoryHelperTrait
             'has' => [LoggerInterface::class => false],
         ]);
 
+        /** @psalm-var array<string, array<string, bool|object>> $methodMap */
         return $this->mockContainer($methodMap);
     }
 
+    /**
+     * @psalm-param null|array<string, mixed> $config
+     */
     private function registerConfigService(?array $config = null): array
     {
         $spec = [
@@ -82,6 +95,9 @@ trait LoggerFactoryHelperTrait
         return $spec;
     }
 
+    /**
+     * @psalm-param array<string, array<string, bool|object>> $methodMap
+     */
     private function mockContainer(array $methodMap): ContainerInterface
     {
         $methodMap = ArrayUtils::merge($methodMap, [
@@ -89,9 +105,12 @@ trait LoggerFactoryHelperTrait
         ]);
         $container = $this->createMock(ContainerInterface::class);
         foreach ($methodMap as $method => $serviceMap) {
-            $valueMap = [];
+            Assert::stringNotEmpty($method);
+            Assert::isMap($serviceMap);
 
+            $valueMap = [];
             foreach ($serviceMap as $service => $value) {
+                Assert::stringNotEmpty($service);
                 $valueMap[] = [$service, $value];
             }
 

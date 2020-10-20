@@ -29,6 +29,7 @@ class InotifyFileWatcherTest extends TestCase
         if (! extension_loaded('inotify')) {
             static::markTestSkipped('The Inotify extension is not available');
         }
+
         $file = tmpfile();
         if (false === $file) {
             static::markTestSkipped('Unable to create a temporary file');

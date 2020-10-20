@@ -16,23 +16,17 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigProviderTest extends TestCase
 {
+    /** @var ConfigProvider */
+    private $provider;
+
     protected function setUp(): void
     {
         $this->provider = new ConfigProvider();
     }
 
-    public function testInvocationReturnsArray(): array
+    public function testReturnedArrayContainsDependencies(): array
     {
         $config = ($this->provider)();
-        $this->assertIsArray($config);
-        return $config;
-    }
-
-    /**
-     * @depends testInvocationReturnsArray
-     */
-    public function testReturnedArrayContainsDependencies(array $config): array
-    {
         $this->assertArrayHasKey('dependencies', $config);
         $this->assertIsArray($config['dependencies']);
         return $config['dependencies'];

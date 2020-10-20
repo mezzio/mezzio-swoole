@@ -11,18 +11,38 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Log;
 
 use Mezzio\Swoole\Log\AccessLogDataMap;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 
 class AccessLogDataMapTest extends TestCase
 {
+    /**
+     * @var SwooleHttpRequest|MockObject
+     * @psalm-var MockObject&SwooleHttpRequest
+     */
+    private $request;
+
+    /**
+     * @var ResponseInterface|MockObject
+     * @psalm-var MockObject&ResponseInterface
+     */
+    private $response;
+
     protected function setUp(): void
     {
         $this->request  = $this->createMock(SwooleHttpRequest::class);
         $this->response = $this->createMock(ResponseInterface::class);
     }
 
+    /**
+     * @psalm-return iterable<array-key, array{
+     *     0: array<string, string>,
+     *     1: array<string, string>,
+     *     2: string,
+     * }>
+     */
     public function provideServer(): iterable
     {
         yield 'no address' => [[], [], '-'];
@@ -53,8 +73,10 @@ class AccessLogDataMapTest extends TestCase
 
     /**
      * @dataProvider provideServer
+     * @psalm-param array<string, string> $headers
+     * @psalm-param array<string, string> $server
      */
-    public function testClietnIpIsProperlyResolved(array $headers, array $server, string $expectedIp)
+    public function testClientIpIsProperlyResolved(array $headers, array $server, string $expectedIp): void
     {
         $this->request->server = $server;
         $this->request->header = $headers;

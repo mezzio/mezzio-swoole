@@ -16,7 +16,7 @@ use Swoole\Http\Response as SwooleResponse;
 
 class StaticResourceResponseTest extends TestCase
 {
-    public function testSendSwooleResponsePopulatesStatusAndHeadersAndCallsContentCallback()
+    public function testSendSwooleResponsePopulatesStatusAndHeadersAndCallsContentCallback(): void
     {
         $expectedFilename = '/image.png';
 
@@ -34,15 +34,16 @@ class StaticResourceResponseTest extends TestCase
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');
-        $response->setResponseContentCallback(static function ($response, $filename) use ($expectedFilename) {
-            TestCase::assertInstanceOf(SwooleResponse::class, $response);
-            TestCase::assertSame($expectedFilename, $filename);
-        });
+        $response->setResponseContentCallback(
+            static function (SwooleResponse $response, string $filename) use ($expectedFilename): void {
+                TestCase::assertSame($expectedFilename, $filename);
+            }
+        );
 
         $this->assertNull($response->sendSwooleResponse($swooleResponse, $expectedFilename));
     }
 
-    public function testSendSwooleResponseSkipsSendingContentWhenContentDisabled()
+    public function testSendSwooleResponseSkipsSendingContentWhenContentDisabled(): void
     {
         $filename = '/image.png';
 
@@ -60,7 +61,7 @@ class StaticResourceResponseTest extends TestCase
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');
-        $response->setResponseContentCallback(static function ($response, $filename) {
+        $response->setResponseContentCallback(static function () {
             TestCase::fail('Callback should not have been called');
         });
         $response->disableContent();

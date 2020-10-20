@@ -14,6 +14,7 @@ use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
@@ -22,12 +23,18 @@ class ContentTypeFilterMiddlewareTest extends TestCase
     use AssertResponseTrait;
     use AttributeAssertionTrait;
 
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
+    private $request;
+
     protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
     }
 
-    public function testPassingNoArgumentsToConstructorSetsDefaultTypeMap()
+    public function testPassingNoArgumentsToConstructorSetsDefaultTypeMap(): void
     {
         $middleware = new ContentTypeFilterMiddleware();
         $this->assertAttributeSame(
@@ -37,7 +44,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
         );
     }
 
-    public function testCanProvideAlternateTypeMapViaConstructor()
+    public function testCanProvideAlternateTypeMapViaConstructor(): void
     {
         $typeMap    = [
             'asc' => 'application/octet-stream',
@@ -46,9 +53,9 @@ class ContentTypeFilterMiddlewareTest extends TestCase
         $this->assertAttributeSame($typeMap, 'typeMap', $middleware);
     }
 
-    public function testMiddlewareReturnsFailureResponseIfFileNotAllowedByTypeMap()
+    public function testMiddlewareReturnsFailureResponseIfFileNotAllowedByTypeMap(): void
     {
-        $next       = static function ($request, $filename) {
+        $next       = static function (Request $request, string $filename): void {
             TestCase::fail('Should not have invoked next middleware');
         };
         $middleware = new ContentTypeFilterMiddleware([
@@ -57,14 +64,13 @@ class ContentTypeFilterMiddlewareTest extends TestCase
 
         $response = $middleware($this->request, __DIR__ . '/../image.png', $next);
 
-        $this->assertInstanceOf(StaticResourceResponse::class, $response);
         $this->assertTrue($response->isFailure());
     }
 
-    public function testMiddlewareAddsContentTypeToResponseWhenResourceLocatedAndAllowed()
+    public function testMiddlewareAddsContentTypeToResponseWhenResourceLocatedAndAllowed(): void
     {
         $expected   = new StaticResourceResponse();
-        $next       = static function ($request, $filename) use ($expected) {
+        $next       = static function (Request $request, string $filename) use ($expected): StaticResourceResponse {
             return $expected;
         };
         $middleware = new ContentTypeFilterMiddleware();

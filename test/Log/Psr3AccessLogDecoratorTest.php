@@ -28,19 +28,34 @@ class Psr3AccessLogDecoratorTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /** @var LoggerInterface|MockObject */
+    /**
+     * @var LoggerInterface|MockObject
+     * @psalm-var MockObject&LoggerInterface
+     */
     private $psr3Logger;
 
-    /** @var AccessLogFormatterInterface|MockObject */
+    /**
+     * @var AccessLogFormatterInterface|MockObject
+     * @psalm-var MockObject&AccessLogFormatterInterface
+     */
     private $formatter;
 
-    /** @var Request|MockObject */
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
     private $request;
 
-    /** @var Psr7Response|MockObject */
+    /**
+     * @var Psr7Response|MockObject
+     * @psalm-var MockObject&Psr7Response
+     */
     private $psr7Response;
 
-    /** @var StaticResourceResponse|MockObject */
+    /**
+     * @var StaticResourceResponse|MockObject
+     * @psalm-var MockObject&StaticResourceResponse
+     */
     private $staticResponse;
 
     protected function setUp(): void
@@ -60,6 +75,9 @@ class Psr3AccessLogDecoratorTest extends TestCase
         return $r->getValue($instance);
     }
 
+    /**
+     * @psalm-return iterable<array-key, list<string>>
+     */
     public function psr3Methods(): iterable
     {
         $r = new ReflectionClass(LoggerInterface::class);
@@ -72,7 +90,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
     /**
      * @dataProvider psr3Methods
      */
-    public function testProxiesToPsr3Methods(string $method)
+    public function testProxiesToPsr3Methods(string $method): void
     {
         $logger = new Psr3AccessLogDecorator($this->psr3Logger, $this->formatter);
         switch ($method) {
@@ -93,6 +111,9 @@ class Psr3AccessLogDecoratorTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-return array<array-key, array{0: int, 1: string}>
+     */
     public function statusLogMethodValues(): array
     {
         return [
@@ -110,7 +131,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
     public function testLogAccessForStaticResourceFormatsMessageAndPassesItToPsr3Logger(
         int $status,
         string $logMethod
-    ) {
+    ): void {
         $expected = 'message';
 
         $this->staticResponse->method('getStatus')->willReturn($status);
@@ -140,7 +161,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
     public function testLogAccessForPsr7ResourceFormatsMessageAndPassesItToPsr3Logger(
         int $status,
         string $logMethod
-    ) {
+    ): void {
         $expected = 'message';
 
         $this->psr7Response->method('getStatusCode')->willReturn($status);

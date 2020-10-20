@@ -23,6 +23,7 @@ class WhoopsPrettyPageHandlerDelegatorTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @psalm-var array<array-key, array<array-key, string|callable>> $dependencies */
         $dependencies = (new ConfigProvider())()['dependencies'];
         // @see https://github.com/mezzio/mezzio-skeleton/blob/master/src/MezzioInstaller/Resources/config/error-handler-whoops.php
         $dependencies['factories']['Mezzio\WhoopsPageHandler'] = WhoopsPageHandlerFactory::class;

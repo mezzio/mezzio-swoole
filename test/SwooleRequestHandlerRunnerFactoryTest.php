@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole;
 
 use Laminas\Stdlib\ArrayUtils;
-use Mezzio\ApplicationPipeline;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\Log\AccessLogInterface;
@@ -20,16 +19,66 @@ use Mezzio\Swoole\PidManager;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
 use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
+
+    /**
+     * @var array
+     * @psalm-var array<array-key, array<array-key, mixed>>
+     */
+    private $containerMap;
+
+    /**
+     * @var RequestHandlerInterface|MockObject
+     * @psalm-var MockObject&RequestHandlerInterface
+     */
+    private $applicationPipeline;
+
+    /**
+     * @var ServerRequestInterface|MockObject
+     * @psalm-var MockObject&ServerRequestInterface
+     */
+    private $serverRequest;
+
+    /**
+     * @var ServerRequestErrorResponseGenerator|MockObject
+     * @psalm-var MockObject&ServerRequestErrorResponseGenerator
+     */
+    private $serverRequestError;
+
+    /**
+     * @var PidManager|MockObject
+     * @psalm-var MockObject&PidManager
+     */
+    private $pidManager;
+
+    /**
+     * @var StaticResourceHandlerInterface|MockObject
+     * @psalm-var MockObject&StaticResourceHandlerInterface
+     */
+    private $staticResourceHandler;
+
+    /**
+     * @var AccessLogInterface|MockObject
+     * @psalm-var MockObject&AccessLogInterface
+     */
+    private $logger;
+
+    /**
+     * @var Reloader|MockObject
+     * @psalm-var MockObject&Reloader
+     */
+    private $hotCodeReloader;
 
     protected function setUp(): void
     {
@@ -47,13 +96,13 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->containerMap = [
             'has' => [],
             'get' => [
-                ApplicationPipeline::class                 => $this->applicationPipeline,
+                'Mezzio\ApplicationPipeline'               => $this->applicationPipeline,
                 PidManager::class                          => $this->pidManager,
                 SwooleHttpServer::class                    => $this->createMock(SwooleHttpServer::class),
-                ServerRequestInterface::class              => function () {
+                ServerRequestInterface::class              => function (): ServerRequestInterface {
                     return $this->serverRequest;
                 },
-                ServerRequestErrorResponseGenerator::class => function () {
+                ServerRequestErrorResponseGenerator::class => function (): void {
                     $this->serverRequestError;
                 },
             ],
@@ -64,6 +113,8 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
     {
         $container = $this->createMock(ContainerInterface::class);
         foreach ($methodMap as $method => $serviceMap) {
+            Assert::string($method);
+            Assert::isMap($serviceMap);
             $valueMap = [];
             foreach ($serviceMap as $serviceName => $value) {
                 $valueMap[] = [$serviceName, $value];
@@ -73,6 +124,11 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         return $container;
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-param array<array-key, array<array-key, mixed>> $baseConfig
+     * @psalm-return array<array-key, array<array-key, mixed>>
+     */
     public function configureAbsentStaticResourceHandler(array $baseConfig = []): array
     {
         return ArrayUtils::merge($baseConfig, [
@@ -91,6 +147,11 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         ]);
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-param array<array-key, array<array-key, mixed>> $baseConfig
+     * @psalm-return array<array-key, array<array-key, mixed>>
+     */
     public function configureAbsentLoggerService(array $baseConfig = []): array
     {
         return ArrayUtils::merge($baseConfig, [
@@ -101,6 +162,11 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         ]);
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-param array<array-key, array<array-key, mixed>> $baseConfig
+     * @psalm-return array<array-key, array<array-key, mixed>>
+     */
     public function configureAbsentConfiguration(array $baseConfig = []): array
     {
         return ArrayUtils::merge($baseConfig, [
@@ -110,6 +176,11 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         ]);
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-param array<array-key, array<array-key, mixed>> $baseConfig
+     * @psalm-return array<array-key, array<array-key, mixed>>
+     */
     public function configureAbsentHotCodeReloader(array $baseConfig = []): array
     {
         return ArrayUtils::merge($baseConfig, [
@@ -119,7 +190,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         ]);
     }
 
-    public function testInvocationWithoutOptionalServicesConfiguresInstanceWithDefaults()
+    public function testInvocationWithoutOptionalServicesConfiguresInstanceWithDefaults(): void
     {
         $containerMap = $this->configureAbsentStaticResourceHandler($this->containerMap);
         $containerMap = $this->configureAbsentLoggerService($containerMap);
@@ -127,12 +198,11 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
         $factory      = new SwooleRequestHandlerRunnerFactory();
         $runner       = $factory($this->mockContainer($containerMap));
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeEmpty('staticResourceHandler', $runner);
         $this->assertAttributeInstanceOf(Psr3AccessLogDecorator::class, 'logger', $runner);
     }
 
-    public function testFactoryWillUseConfiguredPsr3LoggerWhenPresent()
+    public function testFactoryWillUseConfiguredPsr3LoggerWhenPresent(): void
     {
         $containerMap = $this->configureAbsentStaticResourceHandler($this->containerMap);
         $containerMap = $this->configureAbsentStaticResourceHandler($containerMap);
@@ -144,7 +214,6 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 
         $factory = new SwooleRequestHandlerRunnerFactory();
         $runner  = $factory($this->mockContainer($containerMap));
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame($this->logger, 'logger', $runner);
     }
 
@@ -167,13 +236,12 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 
         $factory = new SwooleRequestHandlerRunnerFactory();
         $runner  = $factory($this->mockContainer($containerMap));
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame($this->staticResourceHandler, 'staticResourceHandler', $runner);
 
         return $runner;
     }
 
-    public function testFactoryWillIgnoreConfiguredStaticResourceHandlerWhenStaticFilesAreDisabled()
+    public function testFactoryWillIgnoreConfiguredStaticResourceHandlerWhenStaticFilesAreDisabled(): void
     {
         $containerMap = $this->configureAbsentLoggerService($this->containerMap);
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
@@ -193,19 +261,18 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $factory = new SwooleRequestHandlerRunnerFactory();
         $runner  = $factory($this->mockContainer($containerMap));
 
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeEmpty('staticResourceHandler', $runner);
     }
 
     /**
      * @depends testFactoryWillUseConfiguredStaticResourceHandlerWhenPresent
      */
-    public function testFactoryUsesDefaultProcessNameIfNoneProvidedInConfiguration(SwooleRequestHandlerRunner $runner)
+    public function testFactoryUsesDefaultProcessNameIfNoneProvidedInConfiguration(SwooleRequestHandlerRunner $runner): void
     {
         $this->assertAttributeSame(SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME, 'processName', $runner);
     }
 
-    public function testFactoryUsesConfiguredProcessNameWhenPresent()
+    public function testFactoryUsesConfiguredProcessNameWhenPresent(): void
     {
         $containerMap = $this->configureAbsentLoggerService($this->containerMap);
         $containerMap = $this->configureAbsentHotCodeReloader($containerMap);
@@ -223,11 +290,10 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $factory = new SwooleRequestHandlerRunnerFactory();
         $runner  = $factory($this->mockContainer($containerMap));
 
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame('mezzio-swoole-test', 'processName', $runner);
     }
 
-    public function testFactoryWillUseConfiguredHotCodeReloaderWhenPresent()
+    public function testFactoryWillUseConfiguredHotCodeReloaderWhenPresent(): void
     {
         $containerMap                         = $this->configureAbsentLoggerService($this->containerMap);
         $containerMap['has'][Reloader::class] = true;
@@ -244,7 +310,6 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $factory = new SwooleRequestHandlerRunnerFactory();
         $runner  = $factory($this->mockContainer($containerMap));
 
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $runner);
         $this->assertAttributeSame($this->hotCodeReloader, 'hotCodeReloader', $runner);
     }
 }

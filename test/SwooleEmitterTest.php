@@ -22,7 +22,13 @@ use function substr;
 
 class SwooleEmitterTest extends TestCase
 {
-    /** @var SwooleHttpResponse|MockObject */
+    /** @var SwooleEmitter */
+    private $emitter;
+
+    /**
+     * @var SwooleHttpResponse|MockObject
+     * @psalm-var MockObject&SwooleHttpResponse
+     */
     private $swooleResponse;
 
     protected function setUp(): void
@@ -31,7 +37,7 @@ class SwooleEmitterTest extends TestCase
         $this->emitter        = new SwooleEmitter($this->swooleResponse);
     }
 
-    public function testEmit()
+    public function testEmit(): void
     {
         $response = (new Response())
             ->withStatus(200)
@@ -54,7 +60,7 @@ class SwooleEmitterTest extends TestCase
         $this->assertTrue($this->emitter->emit($response));
     }
 
-    public function testMultipleHeaders()
+    public function testMultipleHeaders(): void
     {
         $response = (new Response())
             ->withStatus(200)
@@ -76,7 +82,7 @@ class SwooleEmitterTest extends TestCase
         $this->assertTrue($this->emitter->emit($response));
     }
 
-    public function testMultipleSetCookieHeaders()
+    public function testMultipleSetCookieHeaders(): void
     {
         $response = (new Response())
             ->withStatus(200)
@@ -122,7 +128,7 @@ class SwooleEmitterTest extends TestCase
         $this->assertTrue($this->emitter->emit($response));
     }
 
-    public function testEmitWithBigContentBody()
+    public function testEmitWithBigContentBody(): void
     {
         $content  = base64_encode(random_bytes(SwooleEmitter::CHUNK_SIZE)); // CHUNK_SIZE * 1.33333
         $response = (new Response())

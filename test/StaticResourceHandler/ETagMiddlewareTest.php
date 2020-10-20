@@ -14,6 +14,7 @@ use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
@@ -28,29 +29,38 @@ class ETagMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
+    /** @var callable */
+    private $next;
+
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
+    private $request;
+
     protected function setUp(): void
     {
-        $this->next    = static function ($request, $filename) {
+        $this->next    = static function (Request $request, string $filename): StaticResourceResponse {
             return new StaticResourceResponse();
         };
         $this->request = $this->createMock(Request::class);
     }
 
-    public function testConstructorRaisesExceptionForInvalidRegexInDirectiveList()
+    public function testConstructorRaisesExceptionForInvalidRegexInDirectiveList(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('regex');
         new ETagMiddleware(['not-a-valid-regex']);
     }
 
-    public function testConstructorRaisesExceptionForInvalidETagValidationType()
+    public function testConstructorRaisesExceptionForInvalidETagValidationType(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('ETag validation type');
         new ETagMiddleware([], 'invalid-etag-validation-type');
     }
 
-    public function testMiddlewareDoesNothingWhenRequestPathDoesNotMatchADirective()
+    public function testMiddlewareDoesNothingWhenRequestPathDoesNotMatchADirective(): void
     {
         $this->request->server = [
             'request_uri' => '/any/path/at/all',
@@ -65,6 +75,14 @@ class ETagMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
+    /**
+     * @psalm-return array<array-key, array{
+     *     0: string,
+     *     1: string,
+     *     2: string,
+     *     3: string,
+     * }>
+     */
     public function expectedEtagProvider(): array
     {
         $filename     = __DIR__ . '/../TestAsset/image.png';
@@ -88,7 +106,7 @@ class ETagMiddlewareTest extends TestCase
         string $regex,
         string $filename,
         string $expectedETag
-    ) {
+    ): void {
         $this->request->server = [
             'request_uri' => '/images/' . basename($filename),
         ];
@@ -125,7 +143,7 @@ class ETagMiddlewareTest extends TestCase
         string $regex,
         string $filename,
         string $expectedETag
-    ) {
+    ): void {
         $this->request->server = [
             'request_uri' => '/images/' . basename($filename),
         ];

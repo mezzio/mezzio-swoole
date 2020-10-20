@@ -46,7 +46,9 @@
         "laminas/laminas-coding-standard": "~2.1.0",
         "laminas/laminas-servicemanager": "^3.3",
         "phpunit/phpunit": "^9.3",
-        "swoole/ide-helper": "^4.5.5"
+        "psalm/plugin-phpunit": "^0.13.0",
+        "swoole/ide-helper": "^4.5.5",
+        "vimeo/psalm": "^4.0"
     },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading."
@@ -71,6 +73,7 @@
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
+        "static-analysis": "psalm --shepherd --stats",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },

@@ -20,6 +20,7 @@ use Swoole\Http\Server as SwooleServer;
 use Swoole\Process;
 use Swoole\Runtime as SwooleRuntime;
 use Throwable;
+use Webmozart\Assert\Assert;
 
 use function array_merge;
 use function defined;
@@ -42,7 +43,10 @@ use const SWOOLE_UNIX_STREAM;
 
 class HttpServerFactoryTest extends TestCase
 {
-    /** @var ContainerInterface|MockObject */
+    /**
+     * @var ContainerInterface|MockObject
+     * @psalm-var MockObject&ContainerInterface
+     */
     private $container;
 
     protected function setUp(): void
@@ -110,6 +114,9 @@ class HttpServerFactoryTest extends TestCase
         ], $result);
     }
 
+    /**
+     * @psalm-return array<array-key, int[]>
+     */
     public function getInvalidPortNumbers(): array
     {
         return [
@@ -141,6 +148,9 @@ class HttpServerFactoryTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-return array<array-key, list<int|string>>
+     */
     public function invalidServerModes(): array
     {
         return [
@@ -153,7 +163,7 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidServerModes
-     * @param mixed $mode
+     * @param int|string $mode
      */
     public function testExceptionThrownForInvalidServerMode($mode): void
     {
@@ -173,6 +183,9 @@ class HttpServerFactoryTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-return array<array-key, list<int|string>>
+     */
     public function invalidSocketTypes(): array
     {
         return [
@@ -185,7 +198,7 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidSocketTypes
-     * @param mixed $type
+     * @param int|string $type
      */
     public function testExceptionThrownForInvalidSocketType($type): void
     {
@@ -205,7 +218,7 @@ class HttpServerFactoryTest extends TestCase
         }
     }
 
-    public function testServerOptionsAreCorrectlySetFromConfig()
+    public function testServerOptionsAreCorrectlySetFromConfig(): void
     {
         $serverOptions = [
             'pid_file' => '/tmp/swoole.pid',
@@ -229,6 +242,12 @@ class HttpServerFactoryTest extends TestCase
         $this->assertSame($serverOptions, $setOptions);
     }
 
+    /**
+     * @psalm-return array<array-key, array{
+     *     0: int,
+     *     1: array<string, string>,
+     * }>
+     */
     public function validSocketTypes(): array
     {
         $validTypes = [
@@ -255,6 +274,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @dataProvider validSocketTypes
      * @param int $socketType
+     * @psalm-param array<string, string> $additionalOptions
      */
     public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions): void
     {
@@ -285,7 +305,7 @@ class HttpServerFactoryTest extends TestCase
                 $swooleServer->on('Request', static function ($req, $rep) {
                     // noop
                 });
-                $swooleServer->on('Packet', static function ($server, $data, $clientInfo) {
+                $swooleServer->on('Packet', static function (SwooleServer $server, $data, $clientInfo) {
                     // noop
                 });
                 $swooleServer->start();
@@ -300,7 +320,7 @@ class HttpServerFactoryTest extends TestCase
         $this->assertSame('Server Started', $output);
     }
 
-    public function testFactoryCanEnableCoroutines()
+    public function testFactoryCanEnableCoroutines(): void
     {
         if (! method_exists(SwooleRuntime::class, 'enableCoroutine')) {
             $this->markTestSkipped('The installed version of Swoole does not support coroutines.');
@@ -324,12 +344,14 @@ class HttpServerFactoryTest extends TestCase
         } else {
             $i = 0;
             go(static function () use (&$i) {
+                Assert::integer($i);
                 usleep(1000);
-                $i++;
+                $i += 1;
                 SwooleEvent::exit();
             });
             go(function () use (&$i) {
-                $i++;
+                Assert::integer($i);
+                $i += 1;
                 $this->assertEquals(1, $i);
             });
         }

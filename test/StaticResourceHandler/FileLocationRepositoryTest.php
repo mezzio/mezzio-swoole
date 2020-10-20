@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MezzioTest\Swoole;
+namespace MezzioTest\Swoole\StaticResourceHandler;
 
 use Exception;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
@@ -24,6 +24,21 @@ use function time;
 
 class FileLocationRepositoryTest extends TestCase
 {
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $testDir;
+
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $testValDir;
+
+    /** @var FileLocationRepository */
+    private $fileLocRepo;
+
     protected function setUp(): void
     {
         $this->testDir     = __DIR__;
@@ -31,7 +46,7 @@ class FileLocationRepositoryTest extends TestCase
         $this->fileLocRepo = new FileLocationRepository(['/' => $this->testValDir]);
     }
 
-    public function testCanAddNewWithAddMappedRoot()
+    public function testCanAddNewWithAddMappedRoot(): void
     {
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
@@ -43,7 +58,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testCanAppendWithAddMappedRoot()
+    public function testCanAppendWithAddMappedRoot(): void
     {
         $dir2 = __DIR__ . '/../';
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
@@ -57,7 +72,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testNoDupeAddMappedRoot()
+    public function testNoDupeAddMappedRoot(): void
     {
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
@@ -70,7 +85,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testValidatePrefixReturnsSlashOnEmpty()
+    public function testValidatePrefixReturnsSlashOnEmpty(): void
     {
         // Note - we are creating a temporary location to create a public folder,
         // since mocking is_dir and making phpcs happy at the same time
@@ -96,7 +111,7 @@ class FileLocationRepositoryTest extends TestCase
         }
     }
 
-    public function testValidatePrefixPrependsSlash()
+    public function testValidatePrefixPrependsSlash(): void
     {
         // validatePrefix called from addMappDocumentRoot
         $dir = getcwd() . '/';
@@ -110,7 +125,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testValidatePrefixAppendsSlash()
+    public function testValidatePrefixAppendsSlash(): void
     {
         // validatePrefix called from addMappDocumentRoot
         $dir = getcwd() . '/';
@@ -124,7 +139,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testValidateDirectoryReturnsIfDirectoryExists()
+    public function testValidateDirectoryReturnsIfDirectoryExists(): void
     {
         // validateDirectory called from addMappDocumentRoot
         $dir = getcwd();
@@ -138,7 +153,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testValidateDirectoryFaultsIfDirectoryExists()
+    public function testValidateDirectoryFaultsIfDirectoryExists(): void
     {
         // validateDirectory called from addMappDocumentRoot
         $this->expectException(Exception::class);
@@ -147,7 +162,7 @@ class FileLocationRepositoryTest extends TestCase
         $this->fileLocRepo->addMappedDocumentRoot('/foo', 'BOGUS');
     }
 
-    public function testValidatePDirctoryAppendsSlash()
+    public function testValidatePDirctoryAppendsSlash(): void
     {
         // validatePrefix called from addMappDocumentRoot
         $dir = getcwd();
@@ -158,7 +173,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testListMappedDocumentRoots()
+    public function testListMappedDocumentRoots(): void
     {
         $this->assertEquals(
             ['/' => [$this->testValDir]],
@@ -166,7 +181,7 @@ class FileLocationRepositoryTest extends TestCase
         );
     }
 
-    public function testFindFileExists()
+    public function testFindFileExists(): void
     {
         $dir  = realpath(__DIR__ . '/../TestAsset');
         $full = realpath($dir . '/content.txt');
@@ -176,7 +191,7 @@ class FileLocationRepositoryTest extends TestCase
         $this->assertEquals($full, $this->fileLocRepo->findFile('/test/content.txt'));
     }
 
-    public function testFindFileDoesNotExist()
+    public function testFindFileDoesNotExist(): void
     {
         $this->assertEquals(null, $this->fileLocRepo->findFile('/foo'));
     }

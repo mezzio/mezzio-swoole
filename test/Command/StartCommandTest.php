@@ -38,16 +38,31 @@ class StartCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @var ContainerInterface|MockObject */
+    /**
+     * @var ContainerInterface|MockObject
+     * @psalm-var MockObject&ContainerInterface
+     */
     private $container;
 
-    /** @var InputInterface|MockObject */
+    /**
+     * @var InputInterface|MockObject
+     * @psalm-var MockObject&InputInterface
+     */
     private $input;
 
-    /** @var OutputInterface|MockObject */
+    /** @var string */
+    private $originalIncludePath;
+
+    /**
+     * @var OutputInterface|MockObject
+     * @psalm-var MockObject&OutputInterface
+     */
     private $output;
 
-    /** @var PidManager|MockObject */
+    /**
+     * @var PidManager|MockObject
+     * @psalm-var MockObject&PidManager
+     */
     private $pidManager;
 
     protected function setUp(): void
@@ -81,7 +96,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testConstructorSetsDefaultName(StartCommand $command)
+    public function testConstructorSetsDefaultName(StartCommand $command): void
     {
         $this->assertSame('start', $command->getName());
     }
@@ -89,7 +104,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testStartCommandIsASymfonyConsoleCommand(StartCommand $command)
+    public function testStartCommandIsASymfonyConsoleCommand(StartCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);
     }
@@ -106,7 +121,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesNumWorkersOption
      */
-    public function testNumWorkersOptionIsRequired(InputOption $option)
+    public function testNumWorkersOptionIsRequired(InputOption $option): void
     {
         $this->assertTrue($option->isValueRequired());
     }
@@ -114,7 +129,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesNumWorkersOption
      */
-    public function testNumWorkersOptionDefinesShortOption(InputOption $option)
+    public function testNumWorkersOptionDefinesShortOption(InputOption $option): void
     {
         $this->assertSame('w', $option->getShortcut());
     }
@@ -131,7 +146,7 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesDaemonizeOption
      */
-    public function testDaemonizeOptionHasNoValue(InputOption $option)
+    public function testDaemonizeOptionHasNoValue(InputOption $option): void
     {
         $this->assertFalse($option->acceptValue());
     }
@@ -139,12 +154,12 @@ class StartCommandTest extends TestCase
     /**
      * @depends testCommandDefinesDaemonizeOption
      */
-    public function testDaemonizeOptionDefinesShortOption(InputOption $option)
+    public function testDaemonizeOptionDefinesShortOption(InputOption $option): void
     {
         $this->assertSame('d', $option->getShortcut());
     }
 
-    public function testExecuteReturnsErrorIfServerIsRunningInBaseMode()
+    public function testExecuteReturnsErrorIfServerIsRunningInBaseMode(): void
     {
         $this->pidManager->method('read')->willReturn([getmypid(), null]);
         $this->container->method('get')->with(PidManager::class)->willReturn($this->pidManager);
@@ -160,7 +175,7 @@ class StartCommandTest extends TestCase
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecuteReturnsErrorIfServerIsRunningInProcessMode()
+    public function testExecuteReturnsErrorIfServerIsRunningInProcessMode(): void
     {
         $this->pidManager->method('read')->willReturn([1000000, getmypid()]);
         $this->container->method('get')->with(PidManager::class)->willReturn($this->pidManager);
@@ -187,7 +202,7 @@ class StartCommandTest extends TestCase
     /**
      * @dataProvider noRunningProcesses
      */
-    public function testExecuteRunsApplicationIfServerIsNotCurrentlyRunning(array $pids)
+    public function testExecuteRunsApplicationIfServerIsNotCurrentlyRunning(array $pids): void
     {
         $httpServer        = $this->createMock(TestAsset\HttpServer::class);
         $middlewareFactory = $this->createMock(MiddlewareFactory::class);
@@ -238,7 +253,7 @@ class StartCommandTest extends TestCase
     /**
      * @dataProvider noRunningProcesses
      */
-    public function testExecuteRunsApplicationWithoutSettingOptionsIfNoneProvided(array $pids)
+    public function testExecuteRunsApplicationWithoutSettingOptionsIfNoneProvided(array $pids): void
     {
         $this->input
             ->method('getOption')
@@ -261,7 +276,7 @@ class StartCommandTest extends TestCase
         $this->assertSame(0, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecutionDoesNotFailEvenIfProgrammaticConfigFilesDoNotExist()
+    public function testExecutionDoesNotFailEvenIfProgrammaticConfigFilesDoNotExist(): void
     {
         set_include_path($this->originalIncludePath);
 

@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Command;
 
-use Mezzio\Swoole\Command\StopCommand;
 use Mezzio\Swoole\Command\StopCommandFactory;
 use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
@@ -21,7 +20,7 @@ class StopCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    public function testFactoryProducesCommand()
+    public function testFactoryProducesCommand(): void
     {
         $pidManager = $this->createMock(PidManager::class);
         $container  = $this->createMock(ContainerInterface::class);
@@ -31,7 +30,6 @@ class StopCommandFactoryTest extends TestCase
 
         $command = $factory($container);
 
-        $this->assertInstanceOf(StopCommand::class, $command);
         $this->assertAttributeSame($pidManager, 'pidManager', $command);
     }
 }

@@ -23,7 +23,7 @@ class ReloadCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    public function testFactoryUsesDefaultsToCreateCommandWhenNoConfigPresent()
+    public function testFactoryUsesDefaultsToCreateCommandWhenNoConfigPresent(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(false);
@@ -35,6 +35,15 @@ class ReloadCommandFactoryTest extends TestCase
         $this->assertInstanceOf(ReloadCommand::class, $command);
     }
 
+    /**
+     * @psalm-return iterable<
+     *     array-key,
+     *     array{
+     *         0: array<string, array<string, array<string, mixed>>>,
+     *         1: int
+     *     }
+     * >
+     */
     public function configProvider(): iterable
     {
         yield 'empty' => [
@@ -56,8 +65,9 @@ class ReloadCommandFactoryTest extends TestCase
 
     /**
      * @dataProvider configProvider
+     * @psalm-param array<string, array<string, array<string, mixed>>> $config
      */
-    public function testFactoryUsesConfigToCreateCommandWhenPresent(array $config, int $mode)
+    public function testFactoryUsesConfigToCreateCommandWhenPresent(array $config, int $mode): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);

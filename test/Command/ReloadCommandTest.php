@@ -30,10 +30,16 @@ class ReloadCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @var InputInterface|MockObject */
+    /**
+     * @var InputInterface|MockObject
+     * @psalm-var MockObject&InputInterface
+     */
     private $input;
 
-    /** @var OutputInterface|MockObject */
+    /**
+     * @var OutputInterface|MockObject
+     * @psalm-var MockObject&OutputInterface
+     */
     private $output;
 
     protected function setUp(): void
@@ -44,6 +50,7 @@ class ReloadCommandTest extends TestCase
 
     /**
      * @return Application|MockObject
+     * @psalm-return MockObject&Application
      */
     public function mockApplication()
     {
@@ -63,7 +70,7 @@ class ReloadCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsServerMode
      */
-    public function testConstructorSetsDefaultName(ReloadCommand $command)
+    public function testConstructorSetsDefaultName(ReloadCommand $command): void
     {
         $this->assertSame('reload', $command->getName());
     }
@@ -71,7 +78,7 @@ class ReloadCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsServerMode
      */
-    public function testReloadCommandIsASymfonyConsoleCommand(ReloadCommand $command)
+    public function testReloadCommandIsASymfonyConsoleCommand(ReloadCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);
     }
@@ -88,7 +95,7 @@ class ReloadCommandTest extends TestCase
     /**
      * @depends testCommandDefinesNumWorkersOption
      */
-    public function testNumWorkersOptionIsRequired(InputOption $option)
+    public function testNumWorkersOptionIsRequired(InputOption $option): void
     {
         $this->assertTrue($option->isValueRequired());
     }
@@ -96,12 +103,12 @@ class ReloadCommandTest extends TestCase
     /**
      * @depends testCommandDefinesNumWorkersOption
      */
-    public function testNumWorkersOptionDefinesShortOption(InputOption $option)
+    public function testNumWorkersOptionDefinesShortOption(InputOption $option): void
     {
         $this->assertSame('w', $option->getShortcut());
     }
 
-    public function testExecuteEndsWithErrorWhenServerModeIsNotProcessMode()
+    public function testExecuteEndsWithErrorWhenServerModeIsNotProcessMode(): void
     {
         $command = new ReloadCommand(SWOOLE_BASE);
 
@@ -114,7 +121,7 @@ class ReloadCommandTest extends TestCase
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecuteEndsWithErrorWhenStopCommandFails()
+    public function testExecuteEndsWithErrorWhenStopCommandFails(): void
     {
         $command = new ReloadCommand(SWOOLE_PROCESS);
 
@@ -146,7 +153,7 @@ class ReloadCommandTest extends TestCase
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecuteEndsWithErrorWhenStartCommandFails()
+    public function testExecuteEndsWithErrorWhenStartCommandFails(): void
     {
         $command = new ReloadCommand(SWOOLE_PROCESS);
 
@@ -215,7 +222,7 @@ class ReloadCommandTest extends TestCase
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function testExecuteEndsWithSuccessWhenBothStopAndStartCommandsSucceed()
+    public function testExecuteEndsWithSuccessWhenBothStopAndStartCommandsSucceed(): void
     {
         $command = new ReloadCommand(SWOOLE_PROCESS);
 

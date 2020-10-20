@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole;
 
 use Laminas\Diactoros\Response;
-use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Mezzio\Swoole\PidManager;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -36,15 +36,48 @@ use const PHP_OS;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
+    /**
+     * @var RequestHandlerInterface|MockObject
+     * @psalm-var MockObject&RequestHandlerInterface
+     */
+    private $requestHandler;
+
+    /**
+     * @var PidManager|MockObject
+     * @psalm-var MockObject&PidManager
+     */
+    private $pidManager;
+
+    /**
+     * @var SwooleHttpServer|MockObject
+     * @psalm-var MockObject&SwooleHttpServer
+     */
+    private $httpServer;
+
+    /**
+     * @var StaticResourceHandlerInterface|MockObject
+     * @psalm-var MockObject&StaticResourceHandlerInterface
+     */
+    private $staticResourceHandler;
+
+    /** @var callable */
+    private $serverRequestFactory;
+
+    /** @var callable */
+    private $serverRequestError;
+
+    /** @psalm-var null */
+    private $logger;
+
     protected function setUp(): void
     {
         $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
 
-        $this->serverRequestFactory = function () {
+        $this->serverRequestFactory = function (): ServerRequestInterface {
             return $this->createMock(ServerRequestInterface::class);
         };
 
-        $this->serverRequestError = function () {
+        $this->serverRequestError = function (): ServerRequestErrorResponseGenerator {
             return $this->createMock(ServerRequestErrorResponseGenerator::class);
         };
 
@@ -55,17 +88,11 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->staticResourceHandler = $this->createMock(StaticResourceHandlerInterface::class);
 
         $this->logger = null;
-
-        $this->config = [
-            'options' => [
-                'document_root' => __DIR__ . '/TestAsset',
-            ],
-        ];
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
-        $requestHandler = new SwooleRequestHandlerRunner(
+        $this->assertIsObject(new SwooleRequestHandlerRunner(
             $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
@@ -73,12 +100,10 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             $this->httpServer,
             $this->staticResourceHandler,
             $this->logger
-        );
-        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $requestHandler);
-        $this->assertInstanceOf(RequestHandlerRunner::class, $requestHandler);
+        ));
     }
 
-    public function testRun()
+    public function testRun(): void
     {
         $this->pidManager
             ->method('read')
@@ -123,7 +148,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $requestHandler->run();
     }
 
-    public function testOnStart()
+    public function testOnStart(): void
     {
         $runner = new SwooleRequestHandlerRunner(
             $this->requestHandler,
@@ -142,7 +167,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         ));
     }
 
-    public function testOnRequestDelegatesToApplicationWhenNoStaticResourceHandlerPresent()
+    public function testOnRequestDelegatesToApplicationWhenNoStaticResourceHandlerPresent(): void
     {
         $content      = 'Content!';
         $psr7Response = new Response();
@@ -186,7 +211,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
     }
 
-    public function testOnRequestDelegatesToApplicationWhenStaticResourceHandlerDoesNotMatchPath()
+    public function testOnRequestDelegatesToApplicationWhenStaticResourceHandlerDoesNotMatchPath(): void
     {
         $content      = 'Content!';
         $psr7Response = new Response();
@@ -235,7 +260,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
     }
 
-    public function testOnRequestDelegatesToStaticResourceHandlerOnMatch()
+    public function testOnRequestDelegatesToStaticResourceHandlerOnMatch(): void
     {
         $this->requestHandler
             ->expects($this->never())
@@ -275,7 +300,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
     }
 
-    public function testProcessNameIsUsedToCreateMasterProcessNameOnStart()
+    public function testProcessNameIsUsedToCreateMasterProcessNameOnStart(): void
     {
         if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
             $this->markTestSkipped(
@@ -312,7 +337,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->assertStringContainsString('test-master', $contents);
     }
 
-    public function testProcessNameIsUsedToCreateWorkerProcessNameOnWorkerStart()
+    public function testProcessNameIsUsedToCreateWorkerProcessNameOnWorkerStart(): void
     {
         if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
             $this->markTestSkipped(
@@ -352,7 +377,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->assertStringContainsString('test-worker', $contents);
     }
 
-    public function testProcessNameIsUsedToCreateTaskWorkerProcessNameOnWorkerStart()
+    public function testProcessNameIsUsedToCreateTaskWorkerProcessNameOnWorkerStart(): void
     {
         if (PHP_OS === 'Darwin' || ! is_dir('/proc')) {
             $this->markTestSkipped(
@@ -392,7 +417,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->assertStringContainsString('test-task-worker', $contents);
     }
 
-    public function testHotCodeReloaderTriggeredOnWorkerStart()
+    public function testHotCodeReloaderTriggeredOnWorkerStart(): void
     {
         $this->httpServer->setting = [
             'worker_num' => posix_getpid(),

@@ -26,13 +26,22 @@ class StopCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @var InputInterface|MockObject */
+    /**
+     * @var InputInterface|MockObject
+     * @psalm-var MockObject&InputInterface
+     */
     private $input;
 
-    /** @var OutputInterface|MockObject */
+    /**
+     * @var OutputInterface|MockObject
+     * @psalm-var MockObject&OutputInterface
+     */
     private $output;
 
-    /** @var PidManager|MockObject */
+    /**
+     * @var PidManager|MockObject
+     * @psalm-var MockObject&PidManager
+     */
     private $pidManager;
 
     protected function setUp(): void
@@ -52,7 +61,7 @@ class StopCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsPidManager
      */
-    public function testConstructorSetsDefaultName(StopCommand $command)
+    public function testConstructorSetsDefaultName(StopCommand $command): void
     {
         $this->assertSame('stop', $command->getName());
     }
@@ -60,11 +69,14 @@ class StopCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsPidManager
      */
-    public function testStopCommandIsASymfonyConsoleCommand(StopCommand $command)
+    public function testStopCommandIsASymfonyConsoleCommand(StopCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);
     }
 
+    /**
+     * @psalm-return iterable<array-key, list<list<null|int>>>
+     */
     public function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
@@ -75,8 +87,9 @@ class StopCommandTest extends TestCase
 
     /**
      * @dataProvider noRunningProcesses
+     * @psalm-param list<null|int> $pids
      */
-    public function testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning(array $pids)
+    public function testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning(array $pids): void
     {
         $this->pidManager->method('read')->willReturn($pids);
 
@@ -96,6 +109,9 @@ class StopCommandTest extends TestCase
         ));
     }
 
+    /**
+     * @psalm-return iterable<array-key, list<list<null|int>>>
+     */
     public function runningProcesses(): iterable
     {
         yield 'base-mode'    => [[getmypid(), null]];
@@ -104,15 +120,16 @@ class StopCommandTest extends TestCase
 
     /**
      * @dataProvider runningProcesses
+     * @psalm-param list<null|int> $pids
      */
-    public function testExecuteReturnsErrorIfUnableToStopServer(array $pids)
+    public function testExecuteReturnsErrorIfUnableToStopServer(array $pids): void
     {
         $this->pidManager->method('read')->willReturn($pids);
         $this->pidManager->expects($this->never())->method('delete');
 
         $masterPid   = $pids[0];
         $spy         = (object) ['called' => false];
-        $killProcess = static function (int $pid, ?int $signal = null) use ($masterPid, $spy) {
+        $killProcess = static function (int $pid, ?int $signal = null) use ($masterPid, $spy): bool {
             TestCase::assertSame($masterPid, $pid);
             $spy->called = true;
             return $signal === 0;
@@ -143,15 +160,19 @@ class StopCommandTest extends TestCase
 
     /**
      * @dataProvider runningProcesses
+     * @psalm-param list<null|int> $pids
      */
-    public function testExecuteReturnsSuccessIfAbleToStopServer(array $pids)
+    public function testExecuteReturnsSuccessIfAbleToStopServer(array $pids): void
     {
         $this->pidManager->method('read')->willReturn($pids);
         $this->pidManager->expects($this->atLeastOnce())->method('delete');
 
         $masterPid   = $pids[0];
         $spy         = (object) ['called' => false];
-        $killProcess = static function (int $pid) use ($masterPid, $spy) {
+        $killProcess = /**
+                        * @return true
+                        */
+        static function (int $pid) use ($masterPid, $spy): bool {
             TestCase::assertSame($masterPid, $pid);
             $spy->called = true;
             return true;

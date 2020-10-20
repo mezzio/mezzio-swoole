@@ -21,7 +21,7 @@ class CacheControlMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    public function testConstructorRaisesExceptionForInvalidRegexKey()
+    public function testConstructorRaisesExceptionForInvalidRegexKey(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cache-Control regex');
@@ -30,7 +30,7 @@ class CacheControlMiddlewareTest extends TestCase
         ]);
     }
 
-    public function testConstructorRaisesExceptionForNonArrayDirectives()
+    public function testConstructorRaisesExceptionForNonArrayDirectives(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('must be an array of strings');
@@ -39,7 +39,7 @@ class CacheControlMiddlewareTest extends TestCase
         ]);
     }
 
-    public function testConstructorRaisesExceptionForNonStringDirective()
+    public function testConstructorRaisesExceptionForNonStringDirective(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('each must be a string');
@@ -48,7 +48,7 @@ class CacheControlMiddlewareTest extends TestCase
         ]);
     }
 
-    public function testConstructorRaisesExceptionForInvalidDirective()
+    public function testConstructorRaisesExceptionForInvalidDirective(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cache-Control directive');
@@ -57,7 +57,7 @@ class CacheControlMiddlewareTest extends TestCase
         ]);
     }
 
-    public function testMiddlewareDoesNothingIfPathDoesNotMatchAnyDirectives()
+    public function testMiddlewareDoesNothingIfPathDoesNotMatchAnyDirectives(): void
     {
         $middleware = new CacheControlMiddleware([
             '/\.txt$/' => [
@@ -71,7 +71,7 @@ class CacheControlMiddlewareTest extends TestCase
             'request_uri' => '/some/path.html',
         ];
 
-        $next = static function ($request, $filename) {
+        $next = static function (Request $request, string $filename): StaticResourceResponse {
             return new StaticResourceResponse();
         };
 
@@ -82,7 +82,7 @@ class CacheControlMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
-    public function testMiddlewareAddsCacheControlHeaderIfPathMatchesADirective()
+    public function testMiddlewareAddsCacheControlHeaderIfPathMatchesADirective(): void
     {
         $middleware = new CacheControlMiddleware([
             '/\.txt$/' => [
@@ -96,7 +96,7 @@ class CacheControlMiddlewareTest extends TestCase
             'request_uri' => '/some/path.txt',
         ];
 
-        $next = static function ($request, $filename) {
+        $next = static function (Request $request, string $filename): StaticResourceResponse {
             return new StaticResourceResponse();
         };
 

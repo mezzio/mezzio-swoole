@@ -138,6 +138,9 @@ final class SwooleStream implements StreamInterface
         return true;
     }
 
+    /**
+     * @psalm-return void
+     */
     public function seek($offset, $whence = SEEK_SET)
     {
         $size = $this->getSize();
@@ -174,6 +177,9 @@ final class SwooleStream implements StreamInterface
         }
     }
 
+    /**
+     * @psalm-return void
+     */
     public function rewind()
     {
         $this->index = 0;
@@ -194,7 +200,7 @@ final class SwooleStream implements StreamInterface
         return $key ? null : [];
     }
 
-    public function detach()
+    public function detach(): SwooleHttpRequest
     {
         return $this->request;
     }

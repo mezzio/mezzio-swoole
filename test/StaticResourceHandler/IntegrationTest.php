@@ -25,11 +25,20 @@ use function trim;
 
 class IntegrationTest extends TestCase
 {
+    /**
+     * @var string
+     * @psalm-var non-empty-string
+     */
+    private $docRoot;
+
     protected function setUp(): void
     {
         $this->docRoot = __DIR__ . '/../TestAsset';
     }
 
+    /**
+     * @psalm-return array<array-key, list<string>>
+     */
     public function unsupportedHttpMethods(): array
     {
         return [
@@ -44,7 +53,7 @@ class IntegrationTest extends TestCase
     /**
      * @dataProvider unsupportedHttpMethods
      */
-    public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method)
+    public function testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile(string $method): void
     {
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
@@ -75,7 +84,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest()
+    public function testSendStaticResourceEmitsAllowHeaderWith200ResponseForOptionsRequest(): void
     {
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
@@ -106,7 +115,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath()
+    public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -154,7 +163,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath()
+    public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -204,7 +213,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath()
+    public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -255,7 +264,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
+    public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -304,7 +313,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured()
+    public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -352,7 +361,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -400,7 +409,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -448,7 +457,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceCanGenerateStrongETagValue()
+    public function testSendStaticResourceCanGenerateStrongETagValue(): void
     {
         $file        = $this->docRoot . '/content.txt';
         $contentType = 'text/plain';
@@ -493,7 +502,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince()
+    public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince(): void
     {
         $file                  = $this->docRoot . '/content.txt';
         $contentType           = 'text/plain';
@@ -537,7 +546,7 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf(StaticResourceResponse::class, $result);
     }
 
-    public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince()
+    public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince(): void
     {
         $file                     = $this->docRoot . '/content.txt';
         $contentType              = 'text/plain';

@@ -15,6 +15,7 @@ use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
 use Mezzio\Swoole\Log\StdoutLogger;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -25,7 +26,10 @@ class ReloaderFactoryTest extends TestCase
     /** @var ServiceManager */
     private $container;
 
-    /** @var FileWatcherInterface */
+    /**
+     * @var FileWatcherInterface|MockObject
+     * @psalm-var MockObject&FileWatcherInterface
+     */
     private $fileWatcher;
 
     protected function setUp(): void
@@ -40,6 +44,7 @@ class ReloaderFactoryTest extends TestCase
 
     /**
      * @dataProvider provideServiceManagerServicesWithEmptyConfigurations
+     * @psalm-param array<array-key, array<array-key, array>> $services
      */
     public function testCreateUnconfigured(array $services): void
     {
@@ -73,6 +78,9 @@ class ReloaderFactoryTest extends TestCase
         static::assertAttributeSame($logger, 'logger', $reloader);
     }
 
+    /**
+     * @psalm-return iterable<array-key, list<array<array-key, array<array-key, array>>>>
+     */
     public function provideServiceManagerServicesWithEmptyConfigurations(): iterable
     {
         yield 'empty container' => [

@@ -14,6 +14,7 @@ use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
@@ -25,22 +26,31 @@ class LastModifiedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
+    /** @var callable */
+    private $next;
+
+    /**
+     * @var Request|MockObject
+     * @psalm-var MockObject&Request
+     */
+    private $request;
+
     protected function setUp(): void
     {
-        $this->next    = static function ($request, $filename) {
+        $this->next    = static function (Request $request, string $filename): StaticResourceResponse {
             return new StaticResourceResponse();
         };
         $this->request = $this->createMock(Request::class);
     }
 
-    public function testConstructorRaisesExceptionForInvalidRegexInDirectiveList()
+    public function testConstructorRaisesExceptionForInvalidRegexInDirectiveList(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('regex');
         new LastModifiedMiddleware(['not-a-valid-regex']);
     }
 
-    public function testMiddlewareDoesNothingWhenPathDoesNotMatchARegex()
+    public function testMiddlewareDoesNothingWhenPathDoesNotMatchARegex(): void
     {
         $this->request->server = [
             'request_uri' => '/some/path',
@@ -55,7 +65,7 @@ class LastModifiedMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
-    public function testMiddlewareCreatesLastModifiedHeaderWhenPathMatchesARegex()
+    public function testMiddlewareCreatesLastModifiedHeaderWhenPathMatchesARegex(): void
     {
         $this->request->server = [
             'request_uri' => '/images/image.png',
@@ -71,7 +81,7 @@ class LastModifiedMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
-    public function testMiddlewareDisablesContentWhenLastModifiedIsGreaterThanClientExpectation()
+    public function testMiddlewareDisablesContentWhenLastModifiedIsGreaterThanClientExpectation(): void
     {
         $ifModifiedSince = time() + 3600;
         $ifModifiedSince = trim(gmstrftime('%A %d-%b-%y %T %Z', $ifModifiedSince));

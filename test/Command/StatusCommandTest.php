@@ -26,13 +26,22 @@ class StatusCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @var InputInterface|MockObject */
+    /**
+     * @var InputInterface|MockObject
+     * @psalm-var MockObject&InputInterface
+     */
     private $input;
 
-    /** @var OutputInterface|MockObject */
+    /**
+     * @var OutputInterface|MockObject
+     * @psalm-var MockObject&OutputInterface
+     */
     private $output;
 
-    /** @var PidManager|MockObject */
+    /**
+     * @var PidManager|MockObject
+     * @psalm-var MockObject&PidManager
+     */
     private $pidManager;
 
     protected function setUp(): void
@@ -52,7 +61,7 @@ class StatusCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsPidManager
      */
-    public function testConstructorSetsDefaultName(StatusCommand $command)
+    public function testConstructorSetsDefaultName(StatusCommand $command): void
     {
         $this->assertSame('status', $command->getName());
     }
@@ -60,11 +69,14 @@ class StatusCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsPidManager
      */
-    public function testStatusCommandIsASymfonyConsoleCommand(StatusCommand $command)
+    public function testStatusCommandIsASymfonyConsoleCommand(StatusCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);
     }
 
+    /**
+     * @psalm-return iterable<array-key, list<list<int|null>>>
+     */
     public function runningProcesses(): iterable
     {
         yield 'base-mode'    => [[getmypid(), null]];
@@ -73,8 +85,9 @@ class StatusCommandTest extends TestCase
 
     /**
      * @dataProvider runningProcesses
+     * @psalm-param list<null|int> $pids
      */
-    public function testExecuteIndicatesRunningServerWhenServerDetected(array $pids)
+    public function testExecuteIndicatesRunningServerWhenServerDetected(array $pids): void
     {
         $this->pidManager->method('read')->willReturn($pids);
 
@@ -94,6 +107,9 @@ class StatusCommandTest extends TestCase
         ));
     }
 
+    /**
+     * @psalm-return iterable<array-key, list<list<null|int>>>
+     */
     public function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
@@ -104,8 +120,9 @@ class StatusCommandTest extends TestCase
 
     /**
      * @dataProvider noRunningProcesses
+     * @psalm-param list<null|int> $pids
      */
-    public function testExecuteIndicatesNoRunningServerWhenServerNotDetected(array $pids)
+    public function testExecuteIndicatesNoRunningServerWhenServerNotDetected(array $pids): void
     {
         $this->pidManager->method('read')->willReturn($pids);
 

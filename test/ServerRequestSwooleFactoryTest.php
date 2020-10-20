@@ -16,26 +16,18 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UriInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 
 use function array_shift;
 use function file_get_contents;
 use function filesize;
-use function is_callable;
 use function time;
 
 use const UPLOAD_ERR_OK;
 
 class ServerRequestSwooleFactoryTest extends TestCase
 {
-    public function testConstructor()
-    {
-        $factory = new ServerRequestSwooleFactory();
-        $this->assertInstanceOf(ServerRequestSwooleFactory::class, $factory);
-    }
-
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $swooleRequest = $this->createMock(SwooleHttpRequest::class);
 
@@ -81,10 +73,7 @@ class ServerRequestSwooleFactoryTest extends TestCase
 
         $factory = new ServerRequestSwooleFactory();
 
-        $result = $factory($this->createMock(ContainerInterface::class));
-
-        $this->assertTrue(is_callable($result));
-
+        $result  = $factory($this->createMock(ContainerInterface::class));
         $request = $result($swooleRequest);
 
         $this->assertInstanceOf(ServerRequestInterface::class, $request);
@@ -109,7 +98,6 @@ class ServerRequestSwooleFactoryTest extends TestCase
         );
 
         $uri = $request->getUri();
-        $this->assertInstanceOf(UriInterface::class, $uri);
         $this->assertEquals('localhost', $uri->getHost());
         $this->assertEquals(9501, $uri->getPort());
         $this->assertEquals('/some/path', $uri->getPath());

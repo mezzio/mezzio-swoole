@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\SwooleStream;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
@@ -27,11 +28,21 @@ class SwooleStreamTest extends TestCase
 {
     public const DEFAULT_CONTENT = 'This is a test!';
 
+    /**
+     * @var SwooleHttpRequest|MockObject
+     * @psalm-var SwooleHttpRequest&MockObject
+     */
+    private $request;
+
+    /** @var SwooleStream */
+    private $stream;
+
     protected function setUp(): void
     {
         if (! extension_loaded('swoole')) {
             $this->markTestSkipped('The Swoole extension is not available');
         }
+
         $this->request = $this->createMock(SwooleHttpRequest::class);
         $this->request
             ->method('rawContent')
@@ -51,7 +62,7 @@ class SwooleStreamTest extends TestCase
         $this->assertTrue($this->stream->eof());
     }
 
-    public function testGetContentsWithNoRawContent()
+    public function testGetContentsWithNoRawContent(): void
     {
         $request = $this->createMock(SwooleHttpRequest::class);
         $request
@@ -63,24 +74,24 @@ class SwooleStreamTest extends TestCase
         $this->assertEquals('', $stream->getContents());
     }
 
-    public function testStreamIsAPsr7StreamInterface()
+    public function testStreamIsAPsr7StreamInterface(): void
     {
         $this->assertInstanceOf(StreamInterface::class, $this->stream);
     }
 
-    public function testGetContentsWhenIndexIsAtStartOfContentReturnsFullContents()
+    public function testGetContentsWhenIndexIsAtStartOfContentReturnsFullContents(): void
     {
         $this->assertEquals(self::DEFAULT_CONTENT, $this->stream->getContents());
     }
 
-    public function testGetContentsReturnsOnlyFromIndexForward()
+    public function testGetContentsReturnsOnlyFromIndexForward(): void
     {
         $index = 10;
         $this->stream->seek($index);
         $this->assertEquals(substr(self::DEFAULT_CONTENT, $index), $this->stream->getContents());
     }
 
-    public function testGetContentsWithEmptyBodyReturnsEmptyString()
+    public function testGetContentsWithEmptyBodyReturnsEmptyString(): void
     {
         $request = $this->createMock(SwooleHttpRequest::class);
         $request
@@ -91,18 +102,18 @@ class SwooleStreamTest extends TestCase
         $this->assertEquals('', $this->stream->getContents());
     }
 
-    public function testToStringReturnsFullContents()
+    public function testToStringReturnsFullContents(): void
     {
         $this->assertEquals(self::DEFAULT_CONTENT, (string) $this->stream);
     }
 
-    public function testToStringReturnsAllContentsEvenWhenIndexIsNotAtStart()
+    public function testToStringReturnsAllContentsEvenWhenIndexIsNotAtStart(): void
     {
         $this->stream->seek(10);
         $this->assertEquals(self::DEFAULT_CONTENT, (string) $this->stream);
     }
 
-    public function testGetSizeReturnsRawContentSize()
+    public function testGetSizeReturnsRawContentSize(): void
     {
         $this->assertEquals(
             strlen(self::DEFAULT_CONTENT),
@@ -110,7 +121,7 @@ class SwooleStreamTest extends TestCase
         );
     }
 
-    public function testGetSizeWithEmptyBodyReturnsZero()
+    public function testGetSizeWithEmptyBodyReturnsZero(): void
     {
         $request = $this->createMock(SwooleHttpRequest::class);
         $request
@@ -121,7 +132,7 @@ class SwooleStreamTest extends TestCase
         $this->assertEquals(0, $this->stream->getSize());
     }
 
-    public function testTellIndicatesIndexInString()
+    public function testTellIndicatesIndexInString(): void
     {
         $tot = strlen(self::DEFAULT_CONTENT);
         for ($i = 0; $i < strlen(self::DEFAULT_CONTENT); $i++) {
@@ -130,19 +141,19 @@ class SwooleStreamTest extends TestCase
         }
     }
 
-    public function testIsReadableReturnsTrue()
+    public function testIsReadableReturnsTrue(): void
     {
         $this->assertTrue($this->stream->isReadable());
     }
 
-    public function testReadReturnsStringWithGivenLengthAndResetsIndex()
+    public function testReadReturnsStringWithGivenLengthAndResetsIndex(): void
     {
         $result = $this->stream->read(4);
         $this->assertEquals(substr(self::DEFAULT_CONTENT, 0, 4), $result);
         $this->assertEquals(4, $this->stream->tell());
     }
 
-    public function testReadReturnsSubstringFromCurrentIndex()
+    public function testReadReturnsSubstringFromCurrentIndex(): void
     {
         $this->stream->seek(4);
         $result = $this->stream->read(4);
@@ -150,12 +161,12 @@ class SwooleStreamTest extends TestCase
         $this->assertEquals(8, $this->stream->tell());
     }
 
-    public function testIsSeekableReturnsTrue()
+    public function testIsSeekableReturnsTrue(): void
     {
         $this->assertTrue($this->stream->isSeekable());
     }
 
-    public function testSeekUpdatesIndexPosition()
+    public function testSeekUpdatesIndexPosition(): void
     {
         $this->stream->seek(4);
         $this->assertEquals(4, $this->stream->tell());
@@ -165,14 +176,14 @@ class SwooleStreamTest extends TestCase
         $this->assertEquals(strlen(self::DEFAULT_CONTENT) - 1, $this->stream->tell());
     }
 
-    public function testSeekSetRaisesExceptionIfPositionOverflows()
+    public function testSeekSetRaisesExceptionIfPositionOverflows(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Offset cannot be longer than content size');
         $this->stream->seek(strlen(self::DEFAULT_CONTENT));
     }
 
-    public function testSeekCurRaisesExceptionIfPositionOverflows()
+    public function testSeekCurRaisesExceptionIfPositionOverflows(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
@@ -181,7 +192,7 @@ class SwooleStreamTest extends TestCase
         $this->stream->seek(strlen(self::DEFAULT_CONTENT), SEEK_CUR);
     }
 
-    public function testSeekEndRaisesExceptionIfPOsitionOverflows()
+    public function testSeekEndRaisesExceptionIfPOsitionOverflows(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
@@ -190,40 +201,40 @@ class SwooleStreamTest extends TestCase
         $this->stream->seek(1, SEEK_END);
     }
 
-    public function testRewindResetsPositionToZero()
+    public function testRewindResetsPositionToZero(): void
     {
         $this->stream->rewind();
         $this->assertEquals(0, $this->stream->tell());
     }
 
-    public function testIsWritableReturnsFalse()
+    public function testIsWritableReturnsFalse(): void
     {
         $this->assertFalse($this->stream->isWritable());
     }
 
-    public function testWriteRaisesException()
+    public function testWriteRaisesException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Stream is not writable');
         $this->stream->write('Hello!');
     }
 
-    public function testGetMetadataWithNoArgumentsReturnsEmptyArray()
+    public function testGetMetadataWithNoArgumentsReturnsEmptyArray(): void
     {
         $this->assertEquals([], $this->stream->getMetadata());
     }
 
-    public function testGetMetadataWithStringArgumentReturnsNull()
+    public function testGetMetadataWithStringArgumentReturnsNull(): void
     {
         $this->assertNull($this->stream->getMetadata('foo'));
     }
 
-    public function testDetachReturnsRequestInstance()
+    public function testDetachReturnsRequestInstance(): void
     {
         $this->assertSame($this->request, $this->stream->detach());
     }
 
-    public function testCloseReturnsNull()
+    public function testCloseReturnsNull(): void
     {
         $this->assertNull($this->stream->close());
     }

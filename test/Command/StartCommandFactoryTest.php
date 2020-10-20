@@ -20,7 +20,7 @@ class StartCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    public function testFactoryProducesCommand()
+    public function testFactoryProducesCommand(): void
     {
         $container = $this->createMock(ContainerInterface::class);
 

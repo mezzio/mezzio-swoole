@@ -16,8 +16,11 @@ use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\Psr3AccessLogDecorator;
 use Mezzio\Swoole\Log\StdoutLogger;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use ReflectionProperty;
+use Webmozart\Assert\Assert;
 use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface as LegacyAccessLogFormatterInterface;
 
 class AccessLogFactoryTest extends TestCase
@@ -25,7 +28,25 @@ class AccessLogFactoryTest extends TestCase
     use AttributeAssertionTrait;
     use LoggerFactoryHelperTrait;
 
-    public function testCreatesDecoratorWithStdoutLoggerAndAccessLogFormatterWhenNoConfigLoggerOrFormatterPresent()
+    /**
+     * @var LoggerInterface|MockObject
+     * @psalm-var LoggerInterface&MockObject
+     */
+    private $logger;
+
+    /**
+     * @var AccessLogFormatterInterface|MockObject
+     * @psalm-var AccessLogFormatterInterface&MockObject
+     */
+    private $formatter;
+
+    protected function setUp(): void
+    {
+        $this->logger    = $this->createMock(LoggerInterface::class);
+        $this->formatter = $this->createMock(AccessLogFormatterInterface::class);
+    }
+
+    public function testCreatesDecoratorWithStdoutLoggerAndAccessLogFormatterWhenNoConfigLoggerOrFormatterPresent(): void
     {
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
@@ -40,7 +61,7 @@ class AccessLogFactoryTest extends TestCase
         $this->assertAttributeInstanceOf(AccessLogFormatter::class, 'formatter', $logger);
     }
 
-    public function testUsesConfiguredStandardLoggerServiceWhenPresent()
+    public function testUsesConfiguredStandardLoggerServiceWhenPresent(): void
     {
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithConfigAndPsrLogger([
@@ -55,7 +76,7 @@ class AccessLogFactoryTest extends TestCase
         $this->assertAttributeInstanceOf(AccessLogFormatter::class, 'formatter', $logger);
     }
 
-    public function testUsesConfiguredCustomLoggerServiceWhenPresent()
+    public function testUsesConfiguredCustomLoggerServiceWhenPresent(): void
     {
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithNamedLogger([
@@ -70,7 +91,7 @@ class AccessLogFactoryTest extends TestCase
         $this->assertAttributeInstanceOf(AccessLogFormatter::class, 'formatter', $logger);
     }
 
-    public function testUsesConfiguredFormatterServiceWhenPresent()
+    public function testUsesConfiguredFormatterServiceWhenPresent(): void
     {
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
@@ -83,7 +104,7 @@ class AccessLogFactoryTest extends TestCase
         $this->assertAttributeSame($this->formatter, 'formatter', $logger);
     }
 
-    public function testUsesConfigurationToSeedGeneratedLoggerAndFormatter()
+    public function testUsesConfigurationToSeedGeneratedLoggerAndFormatter(): void
     {
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger(
@@ -113,6 +134,7 @@ class AccessLogFactoryTest extends TestCase
         $r = new ReflectionProperty($logger, 'formatter');
         $r->setAccessible(true);
         $formatter = $r->getValue($logger);
+        Assert::isInstanceOf($formatter, AccessLogFormatterInterface::class);
 
         $this->assertAttributeSame(AccessLogFormatter::FORMAT_COMBINED, 'format', $formatter);
     }
