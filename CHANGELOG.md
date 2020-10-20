@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#33](https://github.com/mezzio/mezzio-swoole/pull/33) adds support for PHP 8.
 
 ### Changed
 
@@ -18,7 +18,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#33](https://github.com/mezzio/mezzio-swoole/pull/33) removes support for Swoole versions prior to 4.5.5.
+
+- [#33](https://github.com/mezzio/mezzio-swoole/pull/33) removes support for PHP 7.2.
 
 ### Fixed
 
