@@ -28,14 +28,12 @@ class AccessLogFactoryTest extends TestCase
     public function testCreatesDecoratorWithStdoutLoggerAndAccessLogFormatterWhenNoConfigLoggerOrFormatterPresent()
     {
         $factory = new AccessLogFactory();
-
-        $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
-        $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
-
-        $logger = $factory($this->createContainerMockWithConfigAndNotPsrLogger());
+        $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
+            'has' => [
+                AccessLogFormatterInterface::class       => false,
+                LegacyAccessLogFormatterInterface::class => false,
+            ],
+        ]));
 
         $this->assertInstanceOf(Psr3AccessLogDecorator::class, $logger);
         $this->assertAttributeInstanceOf(StdoutLogger::class, 'logger', $logger);
@@ -45,14 +43,12 @@ class AccessLogFactoryTest extends TestCase
     public function testUsesConfiguredStandardLoggerServiceWhenPresent()
     {
         $factory = new AccessLogFactory();
-
-        $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
-        $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
-
-        $logger = $factory($this->createContainerMockWithConfigAndPsrLogger());
+        $logger  = $factory($this->createContainerMockWithConfigAndPsrLogger([
+            'has' => [
+                AccessLogFormatterInterface::class       => false,
+                LegacyAccessLogFormatterInterface::class => false,
+            ],
+        ]));
 
         $this->assertInstanceOf(Psr3AccessLogDecorator::class, $logger);
         $this->assertAttributeSame($this->logger, 'logger', $logger);
@@ -62,14 +58,12 @@ class AccessLogFactoryTest extends TestCase
     public function testUsesConfiguredCustomLoggerServiceWhenPresent()
     {
         $factory = new AccessLogFactory();
-
-        $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
-        $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
-
-        $logger = $factory($this->createContainerMockWithNamedLogger());
+        $logger  = $factory($this->createContainerMockWithNamedLogger([
+            'has' => [
+                AccessLogFormatterInterface::class       => false,
+                LegacyAccessLogFormatterInterface::class => false,
+            ],
+        ]));
 
         $this->assertInstanceOf(Psr3AccessLogDecorator::class, $logger);
         $this->assertAttributeSame($this->logger, 'logger', $logger);
@@ -79,11 +73,10 @@ class AccessLogFactoryTest extends TestCase
     public function testUsesConfiguredFormatterServiceWhenPresent()
     {
         $factory = new AccessLogFactory();
-
-        $this->container->has(AccessLogFormatterInterface::class)->willReturn(true);
-        $this->container->get(AccessLogFormatterInterface::class)->willReturn($this->formatter);
-
-        $logger = $factory($this->createContainerMockWithConfigAndNotPsrLogger());
+        $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
+            'has' => [AccessLogFormatterInterface::class => true],
+            'get' => [AccessLogFormatterInterface::class => $this->formatter],
+        ]));
 
         $this->assertInstanceOf(Psr3AccessLogDecorator::class, $logger);
         $this->assertAttributeInstanceOf(StdoutLogger::class, 'logger', $logger);
@@ -93,23 +86,24 @@ class AccessLogFactoryTest extends TestCase
     public function testUsesConfigurationToSeedGeneratedLoggerAndFormatter()
     {
         $factory = new AccessLogFactory();
-
-        $this->container->has(AccessLogFormatterInterface::class)->willReturn(false);
-
-        $this->container->has(LegacyAccessLogFormatterInterface::class)->willReturn(false);
-        $this->container->get(AccessLogFormatterInterface::class)->shouldNotBeCalled();
-        $this->container->get(LegacyAccessLogFormatterInterface::class)->shouldNotBeCalled();
-
-        $logger = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
-            'mezzio-swoole' => [
-                'swoole-http-server' => [
-                    'logger' => [
-                        'format'               => AccessLogFormatter::FORMAT_COMBINED,
-                        'use-hostname-lookups' => true,
+        $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger(
+            [
+                'has' => [
+                    AccessLogFormatterInterface::class       => false,
+                    LegacyAccessLogFormatterInterface::class => false,
+                ],
+            ],
+            [
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [
+                        'logger' => [
+                            'format'               => AccessLogFormatter::FORMAT_COMBINED,
+                            'use-hostname-lookups' => true,
+                        ],
                     ],
                 ],
             ],
-        ]));
+        ));
 
         $this->assertInstanceOf(Psr3AccessLogDecorator::class, $logger);
         $this->assertAttributeInstanceOf(StdoutLogger::class, 'logger', $logger);

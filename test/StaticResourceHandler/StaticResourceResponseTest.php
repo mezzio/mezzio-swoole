@@ -19,8 +19,18 @@ class StaticResourceResponseTest extends TestCase
     public function testSendSwooleResponsePopulatesStatusAndHeadersAndCallsContentCallback()
     {
         $expectedFilename = '/image.png';
-        $swooleResponse   = $this->prophesize(SwooleResponse::class);
-        $response         = new StaticResourceResponse();
+
+        $swooleResponse = $this->createMock(SwooleResponse::class);
+        $swooleResponse->expects($this->once())->method('status')->with(302);
+        $swooleResponse
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->withConsecutive(
+                ['Location', 'https://example.com', true],
+                ['Expires', '3600', true]
+            );
+
+        $response = new StaticResourceResponse();
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');
@@ -29,18 +39,24 @@ class StaticResourceResponseTest extends TestCase
             TestCase::assertSame($expectedFilename, $filename);
         });
 
-        $this->assertNull($response->sendSwooleResponse($swooleResponse->reveal(), $expectedFilename));
-
-        $swooleResponse->status(302)->shouldHaveBeenCalled();
-        $swooleResponse->header('Location', 'https://example.com', true)->shouldHaveBeenCalled();
-        $swooleResponse->header('Expires', '3600', true)->shouldHaveBeenCalled();
+        $this->assertNull($response->sendSwooleResponse($swooleResponse, $expectedFilename));
     }
 
     public function testSendSwooleResponseSkipsSendingContentWhenContentDisabled()
     {
-        $filename       = '/image.png';
-        $swooleResponse = $this->prophesize(SwooleResponse::class);
-        $response       = new StaticResourceResponse();
+        $filename = '/image.png';
+
+        $swooleResponse = $this->createMock(SwooleResponse::class);
+        $swooleResponse->expects($this->once())->method('status')->with(302);
+        $swooleResponse
+            ->expects($this->exactly(2))
+            ->method('header')
+            ->withConsecutive(
+                ['Location', 'https://example.com', true],
+                ['Expires', '3600', true]
+            );
+
+        $response = new StaticResourceResponse();
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');
@@ -49,10 +65,6 @@ class StaticResourceResponseTest extends TestCase
         });
         $response->disableContent();
 
-        $this->assertNull($response->sendSwooleResponse($swooleResponse->reveal(), $filename));
-
-        $swooleResponse->status(302)->shouldHaveBeenCalled();
-        $swooleResponse->header('Location', 'https://example.com', true)->shouldHaveBeenCalled();
-        $swooleResponse->header('Expires', '3600', true)->shouldHaveBeenCalled();
+        $this->assertNull($response->sendSwooleResponse($swooleResponse, $filename));
     }
 }

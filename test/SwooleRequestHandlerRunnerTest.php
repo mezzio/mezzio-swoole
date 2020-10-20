@@ -19,7 +19,6 @@ use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -39,21 +38,21 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->requestHandler = $this->prophesize(RequestHandlerInterface::class);
+        $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
 
         $this->serverRequestFactory = function () {
-            return $this->prophesize(ServerRequestInterface::class)->reveal();
+            return $this->createMock(ServerRequestInterface::class);
         };
 
         $this->serverRequestError = function () {
-            return $this->prophesize(ServerRequestErrorResponseGenerator::class)->reveal();
+            return $this->createMock(ServerRequestErrorResponseGenerator::class);
         };
 
-        $this->pidManager = $this->prophesize(PidManager::class);
+        $this->pidManager = $this->createMock(PidManager::class);
 
         $this->httpServer = $this->createMock(SwooleHttpServer::class);
 
-        $this->staticResourceHandler = $this->prophesize(StaticResourceHandlerInterface::class);
+        $this->staticResourceHandler = $this->createMock(StaticResourceHandlerInterface::class);
 
         $this->logger = null;
 
@@ -67,12 +66,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testConstructor()
     {
         $requestHandler = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger
         );
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $requestHandler);
@@ -82,7 +81,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testRun()
     {
         $this->pidManager
-            ->read()
+            ->method('read')
             ->willReturn([]);
 
         $this->httpServer
@@ -94,16 +93,17 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->willReturn(null);
 
         $this->staticResourceHandler
-            ->processStaticResource(Argument::any())
+            ->method('processStaticResource')
+            ->with($this->any())
             ->willReturn(null);
 
         $requestHandler = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger
         );
 
@@ -126,12 +126,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testOnStart()
     {
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger
         );
 
@@ -149,10 +149,11 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $psr7Response->getBody()->write($content);
 
         $this->requestHandler
-            ->handle(Argument::type(ServerRequestInterface::class))
+            ->method('handle')
+            ->with($this->isInstanceOf(ServerRequestInterface::class))
             ->willReturn($psr7Response);
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
             'request_uri'    => '/',
             'remote_addr'    => '127.0.0.1',
@@ -160,25 +161,27 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         ];
         $request->get    = [];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
+        $response = $this->createMock(SwooleHttpResponse::class);
         $response
-            ->status(200)
-            ->shouldBeCalled();
+            ->expects($this->once())
+            ->method('status')
+            ->with(200);
         $response
-            ->end($content)
-            ->shouldBeCalled();
+            ->expects($this->once())
+            ->method('end')
+            ->with($content);
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
             null,
             $this->logger
         );
 
-        $runner->onRequest($request, $response->reveal());
+        $runner->onRequest($request, $response);
 
         $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
     }
@@ -190,10 +193,11 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $psr7Response->getBody()->write($content);
 
         $this->requestHandler
-            ->handle(Argument::type(ServerRequestInterface::class))
+            ->method('handle')
+            ->with($this->isInstanceOf(ServerRequestInterface::class))
             ->willReturn($psr7Response);
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
             'request_uri'    => '/',
             'remote_addr'    => '127.0.0.1',
@@ -201,29 +205,32 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         ];
         $request->get    = [];
 
-        $response = $this->prophesize(SwooleHttpResponse::class);
+        $response = $this->createMock(SwooleHttpResponse::class);
         $response
-            ->status(200)
-            ->shouldBeCalled();
+            ->expects($this->once())
+            ->method('status')
+            ->with(200);
         $response
-            ->end($content)
-            ->shouldBeCalled();
+            ->expects($this->once())
+            ->method('end')
+            ->with($content);
 
         $this->staticResourceHandler
-            ->processStaticResource($request, $response->reveal())
+            ->method('processStaticResource')
+            ->with($request, $response)
             ->willReturn(null);
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger
         );
 
-        $runner->onRequest($request, $response->reveal());
+        $runner->onRequest($request, $response);
 
         $this->expectOutputRegex('/127\.0\.0\.1\s.*?\s"GET[^"]+" 200.*?\R$/');
     }
@@ -231,10 +238,10 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     public function testOnRequestDelegatesToStaticResourceHandlerOnMatch()
     {
         $this->requestHandler
-            ->handle(Argument::any())
-            ->shouldNotBeCalled();
+            ->expects($this->never())
+            ->method('handle');
 
-        $request         = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $request         = $this->createMock(SwooleHttpRequest::class);
         $request->server = [
             'request_uri'    => '/',
             'remote_addr'    => '127.0.0.1',
@@ -242,23 +249,24 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         ];
         $request->get    = [];
 
-        $response = $this->prophesize(SwooleHttpResponse::class)->reveal();
+        $response = $this->createMock(SwooleHttpResponse::class);
 
-        $staticResponse = $this->prophesize(StaticResourceResponse::class);
-        $staticResponse->getStatus()->willReturn(200);
-        $staticResponse->getContentLength()->willReturn(200);
+        $staticResponse = $this->createMock(StaticResourceResponse::class);
+        $staticResponse->method('getStatus')->willReturn(200);
+        $staticResponse->method('getContentLength')->willReturn(200);
 
         $this->staticResourceHandler
-            ->processStaticResource($request, $response)
-            ->will([$staticResponse, 'reveal']);
+            ->method('processStaticResource')
+            ->with($request, $response)
+            ->willReturn($staticResponse);
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger
         );
 
@@ -276,12 +284,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         }
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger,
             'test' // Process name
         );
@@ -313,12 +321,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         }
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger,
             'test' // Process name
         );
@@ -353,12 +361,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         }
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger,
             'test' // Process name
         );
@@ -397,12 +405,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->with($this->httpServer, 0);
 
         $runner = new SwooleRequestHandlerRunner(
-            $this->requestHandler->reveal(),
+            $this->requestHandler,
             $this->serverRequestFactory,
             $this->serverRequestError,
-            $this->pidManager->reveal(),
+            $this->pidManager,
             $this->httpServer,
-            $this->staticResourceHandler->reveal(),
+            $this->staticResourceHandler,
             $this->logger,
             SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME,
             $hotCodeReloader

@@ -30,7 +30,7 @@ class LastModifiedMiddlewareTest extends TestCase
         $this->next    = static function ($request, $filename) {
             return new StaticResourceResponse();
         };
-        $this->request = $this->prophesize(Request::class)->reveal();
+        $this->request = $this->createMock(Request::class);
     }
 
     public function testConstructorRaisesExceptionForInvalidRegexInDirectiveList()

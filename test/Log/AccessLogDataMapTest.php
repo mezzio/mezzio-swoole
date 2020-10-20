@@ -19,8 +19,8 @@ class AccessLogDataMapTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->request  = $this->prophesize(SwooleHttpRequest::class)->reveal();
-        $this->response = $this->prophesize(ResponseInterface::class)->reveal();
+        $this->request  = $this->createMock(SwooleHttpRequest::class);
+        $this->response = $this->createMock(ResponseInterface::class);
     }
 
     public function provideServer(): iterable

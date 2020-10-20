@@ -22,7 +22,7 @@ class OptionsMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->prophesize(Request::class)->reveal();
+        $this->request = $this->createMock(Request::class);
     }
 
     public function nonOptionsRequests(): array

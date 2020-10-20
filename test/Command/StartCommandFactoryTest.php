@@ -22,7 +22,7 @@ class StartCommandFactoryTest extends TestCase
 
     public function testFactoryProducesCommand()
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
 
         $factory = new StartCommandFactory();
 

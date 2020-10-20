@@ -32,12 +32,12 @@ class SwooleStreamTest extends TestCase
         if (! extension_loaded('swoole')) {
             $this->markTestSkipped('The Swoole extension is not available');
         }
-        $this->request = $this->prophesize(SwooleHttpRequest::class);
+        $this->request = $this->createMock(SwooleHttpRequest::class);
         $this->request
-            ->rawContent()
+            ->method('rawContent')
             ->willReturn(self::DEFAULT_CONTENT);
 
-        $this->stream = new SwooleStream($this->request->reveal());
+        $this->stream = new SwooleStream($this->request);
     }
 
     public function testEofWhenOneCharacterLeftCase(): void
@@ -53,12 +53,12 @@ class SwooleStreamTest extends TestCase
 
     public function testGetContentsWithNoRawContent()
     {
-        $request = $this->prophesize(SwooleHttpRequest::class);
+        $request = $this->createMock(SwooleHttpRequest::class);
         $request
-            ->rawContent()
+            ->method('rawContent')
             ->willReturn(false);
 
-        $stream = new SwooleStream($request->reveal());
+        $stream = new SwooleStream($request);
 
         $this->assertEquals('', $stream->getContents());
     }
@@ -82,10 +82,11 @@ class SwooleStreamTest extends TestCase
 
     public function testGetContentsWithEmptyBodyReturnsEmptyString()
     {
-        $this->request
-            ->rawContent()
+        $request = $this->createMock(SwooleHttpRequest::class);
+        $request
+            ->method('rawContent')
             ->willReturn('');
-        $this->stream = new SwooleStream($this->request->reveal());
+        $this->stream = new SwooleStream($request);
 
         $this->assertEquals('', $this->stream->getContents());
     }
@@ -111,10 +112,11 @@ class SwooleStreamTest extends TestCase
 
     public function testGetSizeWithEmptyBodyReturnsZero()
     {
-        $this->request
-            ->rawContent()
+        $request = $this->createMock(SwooleHttpRequest::class);
+        $request
+            ->method('rawContent')
             ->willReturn('');
-        $this->stream = new SwooleStream($this->request->reveal());
+        $this->stream = new SwooleStream($request);
 
         $this->assertEquals(0, $this->stream->getSize());
     }
@@ -218,7 +220,7 @@ class SwooleStreamTest extends TestCase
 
     public function testDetachReturnsRequestInstance()
     {
-        $this->assertSame($this->request->reveal(), $this->stream->detach());
+        $this->assertSame($this->request, $this->stream->detach());
     }
 
     public function testCloseReturnsNull()

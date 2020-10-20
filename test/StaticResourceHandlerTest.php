@@ -23,8 +23,8 @@ class StaticResourceHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->docRoot  = __DIR__ . '/TestAsset';
-        $this->request  = $this->prophesize(SwooleHttpRequest::class)->reveal();
-        $this->response = $this->prophesize(SwooleHttpResponse::class)->reveal();
+        $this->request  = $this->createMock(SwooleHttpRequest::class);
+        $this->response = $this->createMock(SwooleHttpResponse::class);
     }
 
     public function testConstructorRaisesExceptionForInvalidMiddlewareValue()
@@ -63,11 +63,11 @@ class StaticResourceHandlerTest extends TestCase
             'request_uri' => '/image.png',
         ];
 
-        $expectedResponse = $this->prophesize(StaticResourceResponse::class);
-        $expectedResponse->isFailure()->willReturn(false);
-        $expectedResponse->sendSwooleResponse($this->response, $filename)->shouldBeCalled();
+        $expectedResponse = $this->createMock(StaticResourceResponse::class);
+        $expectedResponse->method('isFailure')->willReturn(false);
+        $expectedResponse->expects($this->once())->method('sendSwooleResponse')->with($this->response, $filename);
 
-        $middleware = new class ($expectedResponse->reveal()) implements MiddlewareInterface {
+        $middleware = new class ($expectedResponse) implements MiddlewareInterface {
             private $response;
 
             public function __construct(StaticResourceResponse $response)
@@ -87,7 +87,7 @@ class StaticResourceHandlerTest extends TestCase
         $handler = new StaticResourceHandler($this->docRoot, [$middleware]);
 
         $this->assertSame(
-            $expectedResponse->reveal(),
+            $expectedResponse,
             $handler->processStaticResource($this->request, $this->response)
         );
     }

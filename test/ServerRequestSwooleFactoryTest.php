@@ -29,11 +29,6 @@ use const UPLOAD_ERR_OK;
 
 class ServerRequestSwooleFactoryTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        $this->container = $this->prophesize(ContainerInterface::class);
-    }
-
     public function testConstructor()
     {
         $factory = new ServerRequestSwooleFactory();
@@ -86,7 +81,7 @@ class ServerRequestSwooleFactoryTest extends TestCase
 
         $factory = new ServerRequestSwooleFactory();
 
-        $result = $factory($this->container->reveal());
+        $result = $factory($this->createMock(ContainerInterface::class));
 
         $this->assertTrue(is_callable($result));
 

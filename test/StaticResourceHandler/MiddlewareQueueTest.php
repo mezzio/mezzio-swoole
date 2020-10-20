@@ -15,7 +15,6 @@ use Mezzio\Swoole\StaticResourceHandler\MiddlewareQueue;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Swoole\Http\Request;
 
 class MiddlewareQueueTest extends TestCase
@@ -24,7 +23,7 @@ class MiddlewareQueueTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->prophesize(Request::class)->reveal();
+        $this->request = $this->createMock(Request::class);
     }
 
     public function testEmptyMiddlewareQueueReturnsSuccessfulResponseValue()
@@ -41,14 +40,15 @@ class MiddlewareQueueTest extends TestCase
 
     public function testReturnsResponseGeneratedByMiddleware()
     {
-        $response = $this->prophesize(StaticResourceResponse::class)->reveal();
+        $response = $this->createMock(StaticResourceResponse::class);
 
-        $middleware = $this->prophesize(MiddlewareInterface::class);
+        $middleware = $this->createMock(MiddlewareInterface::class);
         $middleware
-            ->__invoke($this->request, 'some/filename.txt', Argument::type(MiddlewareQueue::class))
+            ->method('__invoke')
+            ->with($this->request, 'some/filename.txt', $this->isInstanceOf(MiddlewareQueue::class))
             ->willReturn($response);
 
-        $queue = new MiddlewareQueue([$middleware->reveal()]);
+        $queue = new MiddlewareQueue([$middleware]);
 
         $result = $queue($this->request, 'some/filename.txt');
 
@@ -57,33 +57,34 @@ class MiddlewareQueueTest extends TestCase
 
     public function testEachMiddlewareReceivesSameQueueInstance()
     {
-        $second = $this->prophesize(MiddlewareInterface::class);
+        $second = $this->createMock(MiddlewareInterface::class);
 
-        $first = $this->prophesize(MiddlewareInterface::class);
+        $first = $this->createMock(MiddlewareInterface::class);
         $first
-            ->__invoke($this->request, 'some/filename.txt', Argument::that(static function ($queue) {
-                TestCase::assertInstanceOf(MiddlewareQueue::class, $queue);
-                return true;
-            }))
-            ->will(function ($args) use ($second) {
-                $second
-                    ->__invoke($args[0], $args[1], $args[2])
-                    ->will(function ($args) {
-                        $next     = $args[2];
-                        $response = $next($args[0], $args[1]);
-                        $response->setStatus(304);
-                        $response->addHeader('X-Hit', 'second');
-                        $response->disableContent();
-                        return $response;
-                    });
+            ->method('__invoke')
+            ->with($this->request, 'some/filename.txt', $this->isInstanceOf(MiddlewareQueue::class))
+            ->will($this->returnCallback(
+                function (Request $request, string $filename, callable $middlewareQueue) use ($second) {
+                    $second
+                        ->method('__invoke')
+                        ->with($request, $filename, $middlewareQueue)
+                        ->will($this->returnCallback(
+                            function (Request $request, string $filename, callable $middlewareQueue) {
+                                $response = $middlewareQueue($request, $filename);
+                                $response->setStatus(304);
+                                $response->addHeader('X-Hit', 'second');
+                                $response->disableContent();
+                                return $response;
+                            }
+                        ));
 
-                $next = $args[2];
-                return $next($args[0], $args[1]);
-            });
+                    return $middlewareQueue($request, $filename);
+                }
+            ));
 
         $queue = new MiddlewareQueue([
-            $first->reveal(),
-            $second->reveal(),
+            $first,
+            $second,
         ]);
 
         $response = $queue($this->request, 'some/filename.txt');

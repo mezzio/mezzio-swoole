@@ -19,14 +19,14 @@ class PidManagerFactoryTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->container         = $this->prophesize(ContainerInterface::class);
+        $this->container         = $this->createMock(ContainerInterface::class);
         $this->pidManagerFactory = new PidManagerFactory();
     }
 
     public function testFactoryReturnsAPidManager()
     {
         $factory    = $this->pidManagerFactory;
-        $pidManager = $factory($this->container->reveal());
+        $pidManager = $factory($this->container);
         $this->assertInstanceOf(PidManager::class, $pidManager);
     }
 }

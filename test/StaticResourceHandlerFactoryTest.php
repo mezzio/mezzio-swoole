@@ -25,7 +25,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
     }
 
     public function assertHasMiddlewareOfType(string $type, array $middlewareList)
@@ -81,11 +81,11 @@ class StaticResourceHandlerFactoryTest extends TestCase
             ],
         ];
 
-        $this->container->get('config')->willReturn($config);
+        $this->container->method('get')->with('config')->willReturn($config);
 
         $factory = new StaticResourceHandlerFactory();
 
-        $handler = $factory($this->container->reveal());
+        $handler = $factory($this->container);
 
         $this->assertAttributeSame(
             $config['mezzio-swoole']['swoole-http-server']['static-files']['document-root'],

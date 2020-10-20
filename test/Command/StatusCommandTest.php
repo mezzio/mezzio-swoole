@@ -13,8 +13,8 @@ namespace MezzioTest\Swoole\Command;
 use Mezzio\Swoole\Command\StatusCommand;
 use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,17 +26,26 @@ class StatusCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
+    /** @var InputInterface|MockObject */
+    private $input;
+
+    /** @var OutputInterface|MockObject */
+    private $output;
+
+    /** @var PidManager|MockObject */
+    private $pidManager;
+
     protected function setUp(): void
     {
-        $this->input      = $this->prophesize(InputInterface::class);
-        $this->output     = $this->prophesize(OutputInterface::class);
-        $this->pidManager = $this->prophesize(PidManager::class);
+        $this->input      = $this->createMock(InputInterface::class);
+        $this->output     = $this->createMock(OutputInterface::class);
+        $this->pidManager = $this->createMock(PidManager::class);
     }
 
     public function testConstructorAcceptsPidManager(): StatusCommand
     {
-        $command = new StatusCommand($this->pidManager->reveal());
-        $this->assertAttributeSame($this->pidManager->reveal(), 'pidManager', $command);
+        $command = new StatusCommand($this->pidManager);
+        $this->assertAttributeSame($this->pidManager, 'pidManager', $command);
         return $command;
     }
 
@@ -67,21 +76,22 @@ class StatusCommandTest extends TestCase
      */
     public function testExecuteIndicatesRunningServerWhenServerDetected(array $pids)
     {
-        $this->pidManager->read()->willReturn($pids);
+        $this->pidManager->method('read')->willReturn($pids);
 
-        $command = new StatusCommand($this->pidManager->reveal());
+        $command = new StatusCommand($this->pidManager);
+
+        $this->output
+            ->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('Server is running'));
 
         $execute = $this->reflectMethod($command, 'execute');
 
         $this->assertSame(0, $execute->invoke(
             $command,
-            $this->input->reveal(),
-            $this->output->reveal()
+            $this->input,
+            $this->output
         ));
-
-        $this->output
-            ->writeln(Argument::containingString('Server is running'))
-            ->shouldHaveBeenCalled();
     }
 
     public function noRunningProcesses(): iterable
@@ -97,20 +107,21 @@ class StatusCommandTest extends TestCase
      */
     public function testExecuteIndicatesNoRunningServerWhenServerNotDetected(array $pids)
     {
-        $this->pidManager->read()->willReturn($pids);
+        $this->pidManager->method('read')->willReturn($pids);
 
-        $command = new StatusCommand($this->pidManager->reveal());
+        $command = new StatusCommand($this->pidManager);
+
+        $this->output
+            ->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('Server is not running'));
 
         $execute = $this->reflectMethod($command, 'execute');
 
         $this->assertSame(0, $execute->invoke(
             $command,
-            $this->input->reveal(),
-            $this->output->reveal()
+            $this->input,
+            $this->output
         ));
-
-        $this->output
-            ->writeln(Argument::containingString('Server is not running'))
-            ->shouldHaveBeenCalled();
     }
 }

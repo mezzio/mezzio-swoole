@@ -13,7 +13,6 @@ namespace MezzioTest\Swoole;
 use Exception;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 
 use function chdir;
 use function getcwd;
@@ -27,7 +26,6 @@ class FileLocationRepositoryTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->container   = $this->prophesize(ContainerInterface::class);
         $this->testDir     = __DIR__;
         $this->testValDir  = __DIR__ . '/';
         $this->fileLocRepo = new FileLocationRepository(['/' => $this->testValDir]);

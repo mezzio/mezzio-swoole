@@ -22,6 +22,7 @@ use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
 use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
@@ -32,10 +33,16 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
+    /** @var ContainerInterface|MockObject */
+    private $container;
+
+    /** @var FileLocationRepositoryInterface|MockObject */
+    private $fileLocRepo;
+
     protected function setUp(): void
     {
-        $this->container       = $this->prophesize(ContainerInterface::class);
-        $this->mockFileLocRepo = $this->prophesize(FileLocationRepositoryInterface::class);
+        $this->container   = $this->createMock(ContainerInterface::class);
+        $this->fileLocRepo = $this->createMock(FileLocationRepositoryInterface::class);
     }
 
     public function assertHasMiddlewareOfType(string $type, array $middlewareList)
@@ -94,16 +101,19 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
             ],
         ];
 
-        $fileLocRepo = $this->mockFileLocRepo->reveal();
-        $this->container->get('config')->willReturn($config);
-        $this->container->get(FileLocationRepositoryInterface::class)->willReturn($fileLocRepo);
+        $this->container
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['config', $config],
+                [FileLocationRepositoryInterface::class, $this->fileLocRepo],
+            ]));
 
         $factory = new StaticMappedResourceHandlerFactory();
 
-        $handler = $factory($this->container->reveal());
+        $handler = $factory($this->container);
 
         $this->assertAttributeSame(
-            $fileLocRepo,
+            $this->fileLocRepo,
             'fileLocationRepo',
             $handler
         );

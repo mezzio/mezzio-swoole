@@ -25,13 +25,12 @@ class ReloadCommandFactoryTest extends TestCase
 
     public function testFactoryUsesDefaultsToCreateCommandWhenNoConfigPresent()
     {
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(false);
-        $container->get('config')->shouldNotBeCalled();
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->with('config')->willReturn(false);
 
         $factory = new ReloadCommandFactory();
 
-        $command = $factory($container->reveal());
+        $command = $factory($container);
 
         $this->assertInstanceOf(ReloadCommand::class, $command);
     }
@@ -60,13 +59,13 @@ class ReloadCommandFactoryTest extends TestCase
      */
     public function testFactoryUsesConfigToCreateCommandWhenPresent(array $config, int $mode)
     {
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn($config);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->with('config')->willReturn(true);
+        $container->method('get')->with('config')->willReturn($config);
 
         $factory = new ReloadCommandFactory();
 
-        $command = $factory($container->reveal());
+        $command = $factory($container);
 
         $this->assertInstanceOf(ReloadCommand::class, $command);
         $this->assertAttributeSame($mode, 'serverMode', $command);

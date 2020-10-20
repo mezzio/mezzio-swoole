@@ -23,13 +23,13 @@ class StopCommandFactoryTest extends TestCase
 
     public function testFactoryProducesCommand()
     {
-        $pidManager = $this->prophesize(PidManager::class)->reveal();
-        $container  = $this->prophesize(ContainerInterface::class);
-        $container->get(PidManager::class)->willReturn($pidManager);
+        $pidManager = $this->createMock(PidManager::class);
+        $container  = $this->createMock(ContainerInterface::class);
+        $container->method('get')->with(PidManager::class)->willReturn($pidManager);
 
         $factory = new StopCommandFactory();
 
-        $command = $factory($container->reveal());
+        $command = $factory($container);
 
         $this->assertInstanceOf(StopCommand::class, $command);
         $this->assertAttributeSame($pidManager, 'pidManager', $command);

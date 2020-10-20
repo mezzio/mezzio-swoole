@@ -52,7 +52,7 @@ class SwooleLoggerFactoryTest extends TestCase
      */
     public function testReturnsPsrLoggerWhenNoNamedLoggerIsFound(?array $config)
     {
-        $logger = (new SwooleLoggerFactory())($this->createContainerMockWithConfigAndPsrLogger($config));
+        $logger = (new SwooleLoggerFactory())($this->createContainerMockWithConfigAndPsrLogger([], $config));
         $this->assertSame($this->logger, $logger);
     }
 
@@ -61,7 +61,7 @@ class SwooleLoggerFactoryTest extends TestCase
      */
     public function testReturnsStdoutLoggerWhenOtherLoggersAreNotFound(?array $config)
     {
-        $logger = (new SwooleLoggerFactory())($this->createContainerMockWithConfigAndNotPsrLogger($config));
+        $logger = (new SwooleLoggerFactory())($this->createContainerMockWithConfigAndNotPsrLogger([], $config));
         $this->assertInstanceOf(StdoutLogger::class, $logger);
     }
 }

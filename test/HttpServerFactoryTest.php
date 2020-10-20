@@ -12,9 +12,8 @@ namespace MezzioTest\Swoole;
 
 use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\HttpServerFactory;
-use PHPUnit\Framework\Error\Warning;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Swoole\Event as SwooleEvent;
 use Swoole\Http\Server as SwooleServer;
@@ -43,13 +42,13 @@ use const SWOOLE_UNIX_STREAM;
 
 class HttpServerFactoryTest extends TestCase
 {
-    /** @var ContainerInterface|ObjectProphecy */
+    /** @var ContainerInterface|MockObject */
     private $container;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
     }
 
     public function testFactoryCanCreateServerWithDefaultConfiguration(): void
@@ -60,9 +59,9 @@ class HttpServerFactoryTest extends TestCase
          * @see https://github.com/swoole/swoole-src/issues/1754
          */
         $process = new Process(function (Process $worker) {
-            $this->container->get('config')->willReturn([]);
+            $this->container->method('get')->with('config')->willReturn([]);
             $factory      = new HttpServerFactory();
-            $swooleServer = $factory($this->container->reveal());
+            $swooleServer = $factory($this->container);
             $this->assertSame(HttpServerFactory::DEFAULT_HOST, $swooleServer->host);
             $this->assertSame(HttpServerFactory::DEFAULT_PORT, $swooleServer->port);
             $this->assertSame(SWOOLE_BASE, $swooleServer->mode);
@@ -78,7 +77,7 @@ class HttpServerFactoryTest extends TestCase
     public function testFactorySetsPortAndHostAsConfigured(): void
     {
         $process = new Process(function (Process $worker) {
-            $this->container->get('config')->willReturn([
+            $this->container->method('get')->with('config')->willReturn([
                 'mezzio-swoole' => [
                     'swoole-http-server' => [
                         'host'     => '0.0.0.0',
@@ -89,7 +88,7 @@ class HttpServerFactoryTest extends TestCase
                 ],
             ]);
             $factory      = new HttpServerFactory();
-            $swooleServer = $factory($this->container->reveal());
+            $swooleServer = $factory($this->container);
             $worker->write(json_encode([
                 'host' => $swooleServer->host,
                 'port' => $swooleServer->port,
@@ -126,7 +125,7 @@ class HttpServerFactoryTest extends TestCase
      */
     public function testExceptionThrownForOutOfRangePortNumber(int $port): void
     {
-        $this->container->get('config')->willReturn([
+        $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'port' => $port,
@@ -135,7 +134,7 @@ class HttpServerFactoryTest extends TestCase
         ]);
         $factory = new HttpServerFactory();
         try {
-            $factory($this->container->reveal());
+            $factory($this->container);
             $this->fail('An exception was not thrown');
         } catch (InvalidArgumentException $e) {
             $this->assertSame('Invalid port', $e->getMessage());
@@ -158,7 +157,7 @@ class HttpServerFactoryTest extends TestCase
      */
     public function testExceptionThrownForInvalidServerMode($mode): void
     {
-        $this->container->get('config')->willReturn([
+        $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'mode' => $mode,
@@ -167,7 +166,7 @@ class HttpServerFactoryTest extends TestCase
         ]);
         $factory = new HttpServerFactory();
         try {
-            $factory($this->container->reveal());
+            $factory($this->container);
             $this->fail('An exception was not thrown');
         } catch (InvalidArgumentException $e) {
             $this->assertSame('Invalid server mode', $e->getMessage());
@@ -190,7 +189,7 @@ class HttpServerFactoryTest extends TestCase
      */
     public function testExceptionThrownForInvalidSocketType($type): void
     {
-        $this->container->get('config')->willReturn([
+        $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'protocol' => $type,
@@ -199,7 +198,7 @@ class HttpServerFactoryTest extends TestCase
         ]);
         $factory = new HttpServerFactory();
         try {
-            $factory($this->container->reveal());
+            $factory($this->container);
             $this->fail('An exception was not thrown');
         } catch (InvalidArgumentException $e) {
             $this->assertSame('Invalid server protocol', $e->getMessage());
@@ -211,7 +210,7 @@ class HttpServerFactoryTest extends TestCase
         $serverOptions = [
             'pid_file' => '/tmp/swoole.pid',
         ];
-        $this->container->get('config')->willReturn([
+        $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'options' => $serverOptions,
@@ -220,7 +219,7 @@ class HttpServerFactoryTest extends TestCase
         ]);
         $process = new Process(function (Process $worker) {
             $factory      = new HttpServerFactory();
-            $swooleServer = $factory($this->container->reveal());
+            $swooleServer = $factory($this->container);
             $worker->write(json_encode($swooleServer->setting));
             $worker->exit();
         });
@@ -259,7 +258,7 @@ class HttpServerFactoryTest extends TestCase
      */
     public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions): void
     {
-        $this->container->get('config')->willReturn([
+        $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
                     'host'     => '127.0.0.1',
@@ -275,7 +274,7 @@ class HttpServerFactoryTest extends TestCase
         $process = new Process(function (Process $worker) {
             try {
                 $factory      = new HttpServerFactory();
-                $swooleServer = $factory($this->container->reveal());
+                $swooleServer = $factory($this->container);
                 $swooleServer->on('Start', static function (SwooleServer $server) use ($worker) {
                     // Give the server a chance to start up and avoid zombies
                     usleep(10000);
@@ -307,18 +306,18 @@ class HttpServerFactoryTest extends TestCase
             $this->markTestSkipped('The installed version of Swoole does not support coroutines.');
         }
 
-        $this->container->get('config')->willReturn([
+        $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'enable_coroutine' => true,
             ],
         ]);
 
         $factory = new HttpServerFactory();
-        $factory($this->container->reveal());
+        $factory($this->container);
 
         // Xdebug is not ready yet in swoole.
         if (extension_loaded('xdebug')) {
-            $this->expectException(Warning::class);
+            $this->expectWarning();
 
             go(static function () {
             });

@@ -120,7 +120,7 @@ trait AssertResponseTrait
             $regexp
         );
 
-        Assert::assertRegexp($regexp, $value, $message);
+        Assert::assertMatchesRegularExpression($regexp, $value, $message);
     }
 
     public function assertShouldSendContent(StaticResourceResponse $response, string $message = ''): void

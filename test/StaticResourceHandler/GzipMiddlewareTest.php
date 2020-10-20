@@ -16,7 +16,6 @@ use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use ReflectionProperty;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
@@ -33,11 +32,11 @@ class GzipMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->staticResponse = $this->prophesize(StaticResourceResponse::class);
-        $this->swooleRequest  = $this->prophesize(SwooleHttpRequest::class)->reveal();
+        $this->staticResponse = $this->createMock(StaticResourceResponse::class);
+        $this->swooleRequest  = $this->createMock(SwooleHttpRequest::class);
 
         $this->next = function ($request, $filename) {
-            return $this->staticResponse->reveal();
+            return $this->staticResponse;
         };
     }
 
@@ -50,36 +49,36 @@ class GzipMiddlewareTest extends TestCase
 
     public function testMiddlewareDoesNothingIfCompressionLevelLessThan1()
     {
+        $middleware                  = new GzipMiddleware(0);
         $this->swooleRequest->header = [
             'accept-encoding' => 'gzip',
         ];
-        $middleware                  = new GzipMiddleware(0);
 
-        $response = $middleware($this->swooleRequest, '/image.png', $this->next);
+        $this->staticResponse->expects($this->never())->method('setResponseContentCallback');
 
-        $this->staticResponse->setResponseContentCallback(Argument::any())->shouldNotHaveBeenCalled();
+        $middleware($this->swooleRequest, '/image.png', $this->next);
     }
 
     public function testMiddlewareDoesNothingIfNoAcceptEncodingRequestHeaderPresent()
     {
-        $this->swooleRequest->header = [];
         $middleware                  = new GzipMiddleware(9);
+        $this->swooleRequest->header = [];
 
-        $response = $middleware($this->swooleRequest, '/image.png', $this->next);
+        $this->staticResponse->expects($this->never())->method('setResponseContentCallback');
 
-        $this->staticResponse->setResponseContentCallback(Argument::any())->shouldNotHaveBeenCalled();
+        $middleware($this->swooleRequest, '/image.png', $this->next);
     }
 
     public function testMiddlewareDoesNothingAcceptEncodingRequestHeaderContainsUnrecognizedEncoding()
     {
+        $middleware                  = new GzipMiddleware(9);
         $this->swooleRequest->header = [
             'accept-encoding' => 'bz2',
         ];
-        $middleware                  = new GzipMiddleware(9);
 
-        $response = $middleware($this->swooleRequest, '/image.png', $this->next);
+        $this->staticResponse->expects($this->never())->method('setResponseContentCallback');
 
-        $this->staticResponse->setResponseContentCallback(Argument::any())->shouldNotHaveBeenCalled();
+        $middleware($this->swooleRequest, '/image.png', $this->next);
     }
 
     public function acceptedEncodings(): iterable
@@ -95,16 +94,17 @@ class GzipMiddlewareTest extends TestCase
     public function testMiddlewareInjectsResponseContentCallbackWhenItDetectsAnAcceptEncodingItCanHandle(
         string $encoding
     ) {
+        $middleware                  = new GzipMiddleware(9);
         $this->swooleRequest->header = [
             'accept-encoding' => $encoding,
         ];
-        $middleware                  = new GzipMiddleware(9);
-
-        $response = $middleware($this->swooleRequest, '/image.png', $this->next);
 
         $this->staticResponse
-            ->setResponseContentCallback(Argument::type(Closure::class))
-            ->shouldHaveBeenCalled();
+            ->expects($this->once())
+            ->method('setResponseContentCallback')
+            ->with($this->isInstanceOf(Closure::class));
+
+        $middleware($this->swooleRequest, '/image.png', $this->next);
     }
 
     /**
@@ -135,14 +135,18 @@ class GzipMiddlewareTest extends TestCase
         $r->setAccessible(true);
         $callback = $r->getValue($response);
 
-        $swooleResponse = $this->prophesize(SwooleHttpResponse::class);
-        $swooleResponse->header('Content-Encoding', $encoding, true)->shouldBeCalled();
-        $swooleResponse->header('Connection', 'close', true)->shouldBeCalled();
-        $swooleResponse->header('Content-Length', mb_strlen($expected), true)->shouldBeCalled();
+        $swooleResponse = $this->createMock(SwooleHttpResponse::class);
+        $swooleResponse
+            ->expects($this->exactly(3))
+            ->method('header')
+            ->withConsecutive(
+                ['Content-Encoding', $encoding, true],
+                ['Connection', 'close', true],
+                ['Content-Length', mb_strlen($expected), true]
+            );
+        $swooleResponse->expects($this->once())->method('write')->with($expected);
+        $swooleResponse->expects($this->once())->method('end');
 
-        $swooleResponse->write($expected)->shouldBeCalled();
-        $swooleResponse->end()->shouldBeCalled();
-
-        $this->assertNull($callback($swooleResponse->reveal(), $filename));
+        $this->assertNull($callback($swooleResponse, $filename));
     }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Log;
 
+use Laminas\Stdlib\ArrayUtils;
 use Mezzio\Swoole\Log\AccessLogFormatterInterface;
 use Mezzio\Swoole\Log\SwooleLoggerFactory;
 use Psr\Container\ContainerInterface;
@@ -19,52 +20,84 @@ trait LoggerFactoryHelperTrait
 {
     protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
-        $this->container->has(SwooleLoggerFactory::SWOOLE_LOGGER)->willReturn(false);
-        $this->logger    = $this->prophesize(LoggerInterface::class)->reveal();
-        $this->formatter = $this->prophesize(AccessLogFormatterInterface::class)->reveal();
+        $this->logger    = $this->createMock(LoggerInterface::class);
+        $this->formatter = $this->createMock(AccessLogFormatterInterface::class);
     }
 
     private function createContainerMockWithNamedLogger(): ContainerInterface
     {
-        $this->createContainerMockWithConfigAndNotPsrLogger([
-            'mezzio-swoole' => [
-                'swoole-http-server' => [
-                    'logger' => [
-                        'logger-name' => 'my_logger',
+        return $this->createContainerMockWithConfigAndNotPsrLogger(
+            [
+                'get' => ['my_logger' => $this->logger],
+            ],
+            [
+                'mezzio-swoole' => [
+                    'swoole-http-server' => [
+                        'logger' => [
+                            'logger-name' => 'my_logger',
+                        ],
                     ],
                 ],
-            ],
+            ]
+        );
+    }
+
+    private function createContainerMockWithConfigAndPsrLogger(
+        array $methodMap = [],
+        ?array $config = null
+    ): ContainerInterface {
+        $methodMap = ArrayUtils::merge($methodMap, $this->registerConfigService($config));
+        $methodMap = ArrayUtils::merge($methodMap, [
+            'has' => [LoggerInterface::class => true],
+            'get' => [LoggerInterface::class => $this->logger],
         ]);
-        $this->container->get('my_logger')->willReturn($this->logger);
 
-        return $this->container->reveal();
+        return $this->mockContainer($methodMap);
     }
 
-    private function createContainerMockWithConfigAndPsrLogger(?array $config = null): ContainerInterface
-    {
-        $this->registerConfigService($config);
-        $this->container->has(LoggerInterface::class)->willReturn(true);
-        $this->container->get(LoggerInterface::class)->shouldBeCalled()->willReturn($this->logger);
+    private function createContainerMockWithConfigAndNotPsrLogger(
+        array $methodMap = [],
+        ?array $config = null
+    ): ContainerInterface {
+        $methodMap = ArrayUtils::merge($methodMap, $this->registerConfigService($config));
+        $methodMap = ArrayUtils::merge($methodMap, [
+            'has' => [LoggerInterface::class => false],
+        ]);
 
-        return $this->container->reveal();
+        return $this->mockContainer($methodMap);
     }
 
-    private function createContainerMockWithConfigAndNotPsrLogger(?array $config = null): ContainerInterface
+    private function registerConfigService(?array $config = null): array
     {
-        $this->registerConfigService($config);
-        $this->container->has(LoggerInterface::class)->willReturn(false);
-        $this->container->get(LoggerInterface::class)->shouldNotBeCalled();
+        $spec = [
+            'has' => [
+                'config' => $config !== null,
+            ],
+        ];
 
-        return $this->container->reveal();
+        if ($config !== null) {
+            $spec['get']['config'] = $config;
+        }
+
+        return $spec;
     }
 
-    private function registerConfigService(?array $config = null): void
+    private function mockContainer(array $methodMap): ContainerInterface
     {
-        $hasConfig            = $config !== null;
-        $shouldBeCalledMethod = $hasConfig ? 'shouldBeCalled' : 'shouldNotBeCalled';
+        $methodMap = ArrayUtils::merge($methodMap, [
+            'has' => [SwooleLoggerFactory::SWOOLE_LOGGER => false],
+        ]);
+        $container = $this->createMock(ContainerInterface::class);
+        foreach ($methodMap as $method => $serviceMap) {
+            $valueMap = [];
 
-        $this->container->has('config')->willReturn($hasConfig);
-        $this->container->get('config')->{$shouldBeCalledMethod}()->willReturn($config);
+            foreach ($serviceMap as $service => $value) {
+                $valueMap[] = [$service, $value];
+            }
+
+            $container->method($method)->will($this->returnValueMap($valueMap));
+        }
+
+        return $container;
     }
 }
