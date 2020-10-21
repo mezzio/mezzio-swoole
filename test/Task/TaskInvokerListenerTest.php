@@ -23,6 +23,7 @@ use stdClass;
 
 use function array_key_exists;
 use function get_class;
+use function is_string;
 use function json_encode;
 use function strpos;
 
@@ -169,6 +170,7 @@ class TaskInvokerListenerTest extends TestCase
                         return array_key_exists('taskId', $context)
                             && $taskId === $context['taskId']
                             && array_key_exists('error', $context)
+                            && is_string($context['error'])
                             && false !== strpos($context['error'], get_class($exception));
                     }),
                 ]

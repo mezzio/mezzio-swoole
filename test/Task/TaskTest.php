@@ -37,7 +37,7 @@ class TaskTest extends TestCase
     }
 
     /**
-     * @psalm-return iterable<string, list<0: callable, 1: string>>
+     * @psalm-return iterable<array-key, array{0: callable, 1: string}>
      */
     public function provideHandlers(): iterable
     {

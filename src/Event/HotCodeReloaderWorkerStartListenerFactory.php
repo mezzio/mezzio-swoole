@@ -12,13 +12,15 @@ namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Container\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 final class HotCodeReloaderWorkerStartListenerFactory
 {
     public function __invoke(ContainerInterface $container): HotCodeReloaderWorkerStartListener
     {
-        return new HotCodeReloaderWorkerStartListener(
-            $container->get(Reloader::class)
-        );
+        $reloader = $container->get(Reloader::class);
+        Assert::isInstanceOf($reloader, Reloader::class);
+
+        return new HotCodeReloaderWorkerStartListener($reloader);
     }
 }

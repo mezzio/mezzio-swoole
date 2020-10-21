@@ -11,9 +11,11 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Task;
 
 use Psr\Container\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 use function array_shift;
 use function get_class;
+use function is_callable;
 use function is_object;
 use function is_string;
 use function sprintf;
@@ -50,7 +52,7 @@ final class Task implements TaskInterface
     /**
      * Container argument ignored in this implementation.
      *
-     * @return array
+     * @return mixed
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -86,7 +88,11 @@ final class Task implements TaskInterface
         }
 
         $classOrObject = array_shift($handler);
-        $method        = array_shift($handler);
+        Assert::true(is_string($classOrObject) || is_callable($classOrObject) || is_object($classOrObject));
+
+        $method = array_shift($handler);
+        Assert::stringNotEmpty($method);
+    
         return sprintf('%s::%s', $this->serializeHandler($classOrObject), $method);
     }
 }

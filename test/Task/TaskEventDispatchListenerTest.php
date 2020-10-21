@@ -21,6 +21,7 @@ use stdClass;
 
 use function array_key_exists;
 use function get_class;
+use function is_string;
 use function strpos;
 
 class TaskEventDispatchListenerTest extends TestCase
@@ -118,6 +119,7 @@ class TaskEventDispatchListenerTest extends TestCase
                     if (
                         ! array_key_exists('taskId', $context)
                         || ! array_key_exists('error', $context)
+                        || ! is_string($context['error'])
                     ) {
                         return false;
                     }

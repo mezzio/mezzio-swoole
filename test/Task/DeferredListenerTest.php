@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
 
 use function array_shift;
 use function count;
@@ -38,6 +39,7 @@ class DeferredListenerTest extends TestCase
                 $r = new ReflectionProperty($task, 'handler');
                 $r->setAccessible(true);
                 $handler = $r->getValue($task);
+                Assert::object($handler);
 
                 $r = new ReflectionProperty($task, 'payload');
                 $r->setAccessible(true);
@@ -48,6 +50,7 @@ class DeferredListenerTest extends TestCase
                 }
 
                 $foundEvent = array_shift($payload);
+                Assert::object($foundEvent);
 
                 return $listener === $handler && $event === $foundEvent;
             }));

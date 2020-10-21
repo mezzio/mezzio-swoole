@@ -49,6 +49,7 @@ class WorkerStartListener
         // Reset CWD
         chdir($this->cwd);
 
+        /** @psalm-suppress MixedArrayAccess */
         $processName = $workerId >= $server->setting['worker_num']
             ? sprintf('%s-task-worker-%d', $this->processName, $workerId)
             : sprintf('%s-worker-%d', $this->processName, $workerId);

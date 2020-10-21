@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\EventDispatcher;
 use Mezzio\Swoole\Event\EventDispatcherFactory;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
 use PHPUnit\Framework\TestCase;
@@ -29,9 +28,7 @@ class EventDispatcherFactoryTest extends TestCase
             ->with(SwooleListenerProvider::class)
             ->willReturn($provider);
 
-        $factory    = new EventDispatcherFactory();
-        $dispatcher = $factory($container);
-
-        $this->assertInstanceOf(EventDispatcher::class, $dispatcher);
+        $factory = new EventDispatcherFactory();
+        $this->assertIsObject($factory($container));
     }
 }

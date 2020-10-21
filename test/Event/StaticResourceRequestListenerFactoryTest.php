@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\StaticResourceRequestListener;
 use Mezzio\Swoole\Event\StaticResourceRequestListenerFactory;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
@@ -38,8 +37,6 @@ class StaticResourceRequestListenerFactoryTest extends TestCase
                 $logger
             );
 
-        $listener = $factory($container);
-
-        $this->assertInstanceOf(StaticResourceRequestListener::class, $listener);
+        $this->assertIsObject($factory($container));
     }
 }

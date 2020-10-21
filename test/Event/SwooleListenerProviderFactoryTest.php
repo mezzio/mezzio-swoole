@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\SwooleListenerProvider;
+use InvalidArgumentException;
 use Mezzio\Swoole\Event\SwooleListenerProviderFactory;
 use Mezzio\Swoole\Exception\InvalidListenerException;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +21,9 @@ use function iterator_to_array;
 
 class SwooleListenerProviderFactoryTest extends TestCase
 {
+    /**
+     * @psalm-return iterable<array-key, list<mixed>>
+     */
     public function invalidListenerTypes(): iterable
     {
         yield 'null'                => [null];
@@ -63,8 +66,7 @@ class SwooleListenerProviderFactoryTest extends TestCase
 
         $factory = new SwooleListenerProviderFactory();
 
-        $this->expectException(InvalidListenerException::class);
-        $this->expectExceptionMessage('expected callable or string');
+        $this->expectException(InvalidArgumentException::class);
         $factory($container);
     }
 
@@ -163,8 +165,6 @@ class SwooleListenerProviderFactoryTest extends TestCase
         $factory = new SwooleListenerProviderFactory();
 
         $provider = $factory($container);
-
-        $this->assertInstanceOf(SwooleListenerProvider::class, $provider);
 
         $listeners = iterator_to_array($provider->getListenersForEvent(new stdClass()));
         $this->assertSame([$listener], $listeners);

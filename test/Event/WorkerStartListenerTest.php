@@ -38,10 +38,14 @@ class WorkerStartListenerTest extends TestCase
 
     public function testListenerSwitchesToConfiguredDirectorySetsWorkerNameAndLogs(): void
     {
-        $logger                        = $this->createMock(LoggerInterface::class);
-        $cwd                           = __DIR__;
-        $processName                   = 'the-process-name';
-        $server                        = $this->createMock(SwooleHttpServer::class);
+        $logger      = $this->createMock(LoggerInterface::class);
+        $cwd         = __DIR__;
+        $processName = 'the-process-name';
+
+        /** @psalm-var SwooleHttpServer&\PHPUnit\Framework\MockObject\MockObject $server */
+        $server = $this->createMock(SwooleHttpServer::class);
+
+        /** @psalm-suppress MixedArrayAssignment */
         $server->setting['worker_num'] = 4;
         $workerId                      = random_int(0, 3);
         $listener                      = new WorkerStartListener($logger, $cwd, $processName);
@@ -67,10 +71,14 @@ class WorkerStartListenerTest extends TestCase
 
     public function testListenerSwitchesToConfiguredDirectorySetsTaskWorkerNameAndLogs(): void
     {
-        $logger                        = $this->createMock(LoggerInterface::class);
-        $cwd                           = __DIR__;
-        $processName                   = 'the-process-name';
-        $server                        = $this->createMock(SwooleHttpServer::class);
+        $logger      = $this->createMock(LoggerInterface::class);
+        $cwd         = __DIR__;
+        $processName = 'the-process-name';
+
+        /** @psalm-var SwooleHttpServer&\PHPUnit\Framework\MockObject\MockObject $server */
+        $server = $this->createMock(SwooleHttpServer::class);
+
+        /** @psalm-suppress MixedArrayAssignment */
         $server->setting['worker_num'] = 4;
         $workerId                      = random_int(4, 7);
         $listener                      = new WorkerStartListener($logger, $cwd, $processName);

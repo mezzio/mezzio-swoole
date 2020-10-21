@@ -31,13 +31,17 @@ class EventDispatcher implements EventDispatcherInterface
     {
         $stoppable = $event instanceof StoppableEventInterface;
 
+        /** @psalm-suppress MixedMethodCall */
         if ($stoppable && $event->isPropagationStopped()) {
             return $event;
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
+            /** @psalm-suppress MixedFunctionCall */
             $listener($event);
 
+            /** @psalm-suppress MixedMethodCall */
             if ($stoppable && $event->isPropagationStopped()) {
                 break;
             }

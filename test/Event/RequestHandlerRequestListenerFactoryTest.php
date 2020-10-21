@@ -10,9 +10,7 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\ApplicationPipeline;
 use Mezzio\Response\ServerRequestErrorResponseGenerator;
-use Mezzio\Swoole\Event\RequestHandlerRequestListener;
 use Mezzio\Swoole\Event\RequestHandlerRequestListenerFactory;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +27,10 @@ class RequestHandlerRequestListenerFactoryTest extends TestCase
     {
         $pipeline             = $this->createMock(RequestHandlerInterface::class);
         $requestFactory       = function (SwooleHttpRequest $request): ServerRequestInterface {
+            return $this->createMock(ServerRequestInterface::class);
         };
         $errorResponseFactory = function (Throwable $e): ResponseInterface {
+            return $this->createMock(ResponseInterface::class);
         };
         $logger               = $this->createMock(AccessLogInterface::class);
         $container            = $this->createMock(ContainerInterface::class);
@@ -38,7 +38,7 @@ class RequestHandlerRequestListenerFactoryTest extends TestCase
             ->expects($this->exactly(4))
             ->method('get')
             ->withConsecutive(
-                [ApplicationPipeline::class],
+                ['Mezzio\ApplicationPipeline'],
                 [ServerRequestInterface::class],
                 [ServerRequestErrorResponseGenerator::class],
                 [AccessLogInterface::class]
@@ -50,9 +50,7 @@ class RequestHandlerRequestListenerFactoryTest extends TestCase
                 $logger
             );
 
-        $factory  = new RequestHandlerRequestListenerFactory();
-        $listener = $factory($container);
-
-        $this->assertInstanceOf(RequestHandlerRequestListener::class, $listener);
+        $factory = new RequestHandlerRequestListenerFactory();
+        $this->assertIsObject($factory($container));
     }
 }

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Event;
 
 use Mezzio\Swoole\Event\EventDispatcher;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
@@ -18,8 +19,13 @@ use Psr\EventDispatcher\StoppableEventInterface;
 
 class EventDispatcherTest extends TestCase
 {
-    /** @psalm-var ListenerProviderInterface&MockObject */
+    /**
+     * @var ListenerProviderInterface|MockObject
+     * @psalm-var ListenerProviderInterface&MockObject
+     */
     private ListenerProviderInterface $provider;
+
+    private EventDispatcher $dispatcher;
 
     public function setUp(): void
     {
@@ -34,11 +40,13 @@ class EventDispatcherTest extends TestCase
 
     public function testDispatchNotifiesAllRelevantListenersAndReturnsEventWhenNoErrorsAreRaised(): void
     {
-        $spy = (object) ['caught' => 0];
+        $spy = new class {
+            public int $caught = 0;
+        };
 
         $listeners = [];
         for ($i = 0; $i < 5; $i += 1) {
-            $listeners[] = function (object $event) use ($spy) {
+            $listeners[] = function (object $event) use ($spy): void {
                 $spy->caught += 1;
             };
         }
@@ -72,7 +80,9 @@ class EventDispatcherTest extends TestCase
 
     public function testReturnsEarlyIfAnyListenersStopsPropagation(): void
     {
-        $spy = (object) ['caught' => 0];
+        $spy = new class {
+            public int $caught = 0;
+        };
 
         $event = new class ($spy) implements StoppableEventInterface {
             private $spy;
@@ -90,7 +100,7 @@ class EventDispatcherTest extends TestCase
 
         $listeners = [];
         for ($i = 0; $i < 5; $i += 1) {
-            $listeners[] = function (object $event) use ($spy) {
+            $listeners[] = function (object $event) use ($spy): void {
                 $spy->caught += 1;
             };
         }

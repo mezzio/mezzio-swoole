@@ -12,6 +12,7 @@ namespace Mezzio\Swoole\Task;
 
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
 
 use function is_callable;
 
@@ -25,7 +26,7 @@ use function is_callable;
  *
  * Derived from phly/phly-swoole-taskworker, @copyright Copyright (c) Matthew Weier O'Phinney
  */
-class DeferredServiceListenerDelegator
+final class DeferredServiceListenerDelegator
 {
     /**
      * Decorate a listener as a DeferredServiceListener
@@ -34,6 +35,7 @@ class DeferredServiceListenerDelegator
      * returns it verbatim. Otherwise, it decorates it as a DeferredServiceListener.
      *
      * @return array|object|DeferredServiceListener
+     * @psalm-suppress MixedInferredReturnType
      */
     public function __invoke(
         ContainerInterface $container,
@@ -42,13 +44,13 @@ class DeferredServiceListenerDelegator
     ) {
         $listener = $factory();
         if (! is_callable($listener)) {
+            /** @psalm-suppress MixedReturnStatement */
             return $listener;
         }
 
-        return new DeferredServiceListener(
-            $container->get(SwooleHttpServer::class),
-            $listener,
-            $serviceName
-        );
+        $server = $container->get(SwooleHttpServer::class);
+        Assert::isInstanceOf($server, SwooleHttpServer::class);
+
+        return new DeferredServiceListener($server, $listener, $serviceName);
     }
 }

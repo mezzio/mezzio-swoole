@@ -12,7 +12,6 @@ namespace MezzioTest\Swoole\Task;
 
 use Interop\Container\ContainerInterface;
 use Mezzio\Swoole\Event\EventDispatcherInterface as MezzioEventDispatcherInterface;
-use Mezzio\Swoole\Task\TaskEventDispatchListener;
 use Mezzio\Swoole\Task\TaskEventDispatchListenerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +41,6 @@ class TaskEventDispatchListenerFactoryTest extends TestCase
         $container->expects($this->once())->method('get')->with(MezzioEventDispatcherInterface::class)->willReturn($dispatcher);
 
         $listener = $factory($container);
-        $this->assertInstanceOf(TaskEventDispatchListener::class, $listener);
         $this->asssertPropertySame($dispatcher, 'dispatcher', $listener);
         $this->asssertPropertySame(null, 'logger', $listener);
     }
@@ -80,7 +78,6 @@ class TaskEventDispatchListenerFactoryTest extends TestCase
             ));
 
         $listener = $factory($container);
-        $this->assertInstanceOf(TaskEventDispatchListener::class, $listener);
         $this->asssertPropertySame($dispatcher, 'dispatcher', $listener);
         $this->asssertPropertySame($logger, 'logger', $listener);
     }

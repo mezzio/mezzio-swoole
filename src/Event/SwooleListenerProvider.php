@@ -16,8 +16,12 @@ use function in_array;
 
 class SwooleListenerProvider implements ListenerProviderInterface
 {
-    private $listeners = [];
+    /** @psalm-var array<string, list<callable>> */
+    private array $listeners = [];
 
+    /**
+     * @psalm-return \Traversable
+     */
     public function getListenersForEvent(object $event): iterable
     {
         foreach ($this->listeners as $eventType => $listeners) {
@@ -39,6 +43,7 @@ class SwooleListenerProvider implements ListenerProviderInterface
         ) {
             return;
         }
+
         $this->listeners[$eventType][] = $listener;
     }
 }

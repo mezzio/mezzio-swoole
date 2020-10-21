@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\ServerStartListener;
 use Mezzio\Swoole\Event\ServerStartListenerFactory;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\PidManager;
@@ -54,10 +53,8 @@ class ServerStartListenerFactoryTest extends TestCase
                 $logger
             );
 
-        $factory  = new ServerStartListenerFactory();
-        $listener = $factory($container);
-
-        $this->assertInstanceOf(ServerStartListener::class, $listener);
+        $factory = new ServerStartListenerFactory();
+        $this->assertIsObject($factory($container));
     }
 
     public function testFactoryCreatesListenerUsingServicesFromContainerAndDefaultsWhenConfigNotPresent(): void
@@ -84,9 +81,7 @@ class ServerStartListenerFactoryTest extends TestCase
                 $logger
             );
 
-        $factory  = new ServerStartListenerFactory();
-        $listener = $factory($container);
-
-        $this->assertInstanceOf(ServerStartListener::class, $listener);
+        $factory = new ServerStartListenerFactory();
+        $this->assertIsObject($factory($container));
     }
 }

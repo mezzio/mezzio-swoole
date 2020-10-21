@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\ServerShutdownListener;
 use Mezzio\Swoole\Event\ServerShutdownListenerFactory;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\PidManager;
@@ -37,9 +36,7 @@ class ServerShutdownListenerFactoryTest extends TestCase
                 $logger
             );
 
-        $factory  = new ServerShutdownListenerFactory();
-        $listener = $factory($container);
-
-        $this->assertInstanceOf(ServerShutdownListener::class, $listener);
+        $factory = new ServerShutdownListenerFactory();
+        $this->assertIsObject($factory($container));
     }
 }

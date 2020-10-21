@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Task;
 
 use Psr\Container\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Representation of a task to execute via task worker.
@@ -45,9 +46,12 @@ final class ServiceBasedTask implements TaskInterface
     public function __invoke(ContainerInterface $container)
     {
         $deferred = $container->get($this->serviceName);
+        Assert::isCallable($deferred);
+
         $listener = $deferred instanceof DeferredServiceListener
             ? $deferred->getListener()
             : $deferred;
+
         return $listener(...$this->payload);
     }
 

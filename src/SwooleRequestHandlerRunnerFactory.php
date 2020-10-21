@@ -11,15 +11,20 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
 
-class SwooleRequestHandlerRunnerFactory
+final class SwooleRequestHandlerRunnerFactory
 {
     public function __invoke(ContainerInterface $container): SwooleRequestHandlerRunner
     {
-        return new SwooleRequestHandlerRunner(
-            $container->get(SwooleHttpServer::class),
-            $container->get(Event\EventDispatcherInterface::class)
-        );
+        $server = $container->get(SwooleHttpServer::class);
+        Assert::isInstanceOf($server, SwooleHttpServer::class);
+
+        $dispatcher = $container->get(Event\EventDispatcherInterface::class);
+        Assert::isInstanceOf($dispatcher, EventDispatcherInterface::class);
+
+        return new SwooleRequestHandlerRunner($server, $dispatcher);
     }
 }

@@ -11,16 +11,37 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Task;
 
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Webmozart\Assert\Assert;
 
-class TaskInvokerListenerFactory
+final class TaskInvokerListenerFactory
 {
     public function __invoke(ContainerInterface $container): TaskInvokerListener
     {
-        $config        = $container->has('config') ? $container->get('config') : [];
-        $loggerService = $config['mezzio-swoole']['task-logger-service'] ?? null;
+        $config = $container->has('config') ? $container->get('config') : [];
+        Assert::isMap($config);
+
         return new TaskInvokerListener(
             $container,
-            $loggerService ? $container->get($loggerService) : null
+            $this->getLoggerService($config, $container)
         );
+    }
+
+    /**
+     * @psalm-param array<string, mixed> $config
+     * @psalm-suppress MixedInferredReturnType
+     */
+    private function getLoggerService(array $config, ContainerInterface $container): ?LoggerInterface
+    {
+        $loggerService = $config['mezzio-swoole']['task-logger-service'] ?? null;
+
+        if (null === $loggerService) {
+            return null;
+        }
+
+        Assert::stringNotEmpty($loggerService);
+
+        /** @psalm-suppress MixedReturnStatement */
+        return $container->get($loggerService);
     }
 }

@@ -13,14 +13,18 @@ namespace Mezzio\Swoole\Event;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
 use Psr\Container\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 final class StaticResourceRequestListenerFactory
 {
     public function __invoke(ContainerInterface $container): StaticResourceRequestListener
     {
-        return new StaticResourceRequestListener(
-            $container->get(StaticResourceHandlerInterface::class),
-            $container->get(AccessLogInterface::class)
-        );
+        $handler = $container->get(StaticResourceHandlerInterface::class);
+        Assert::isInstanceOf($handler, StaticResourceHandlerInterface::class);
+
+        $logger = $container->get(AccessLogInterface::class);
+        Assert::isInstanceOf($logger, AccessLogInterface::class);
+
+        return new StaticResourceRequestListener($handler, $logger);
     }
 }

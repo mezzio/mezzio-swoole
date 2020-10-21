@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Task;
 
-use Mezzio\Swoole\Task\TaskInvokerListener;
 use Mezzio\Swoole\Task\TaskInvokerListenerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -22,7 +21,7 @@ class TaskInvokerListenerFactoryTest extends TestCase
     /**
      * @param mixed $expected
      */
-    public function asssertPropertySame($expected, string $property, object $instance, string $message = ''): void
+    public function assertPropertySame($expected, string $property, object $instance, string $message = ''): void
     {
         $r = new ReflectionProperty($instance, $property);
         $r->setAccessible(true);
@@ -39,9 +38,8 @@ class TaskInvokerListenerFactoryTest extends TestCase
 
         $listener = $factory($container);
 
-        $this->assertInstanceOf(TaskInvokerListener::class, $listener);
-        $this->asssertPropertySame($container, 'container', $listener);
-        $this->asssertPropertySame(null, 'logger', $listener);
+        $this->assertPropertySame($container, 'container', $listener);
+        $this->assertPropertySame(null, 'logger', $listener);
     }
 
     public function testFactoryProducesListenerUsingServicesDerivedFromConfig(): void
@@ -70,8 +68,7 @@ class TaskInvokerListenerFactoryTest extends TestCase
 
         $listener = $factory($container);
 
-        $this->assertInstanceOf(TaskInvokerListener::class, $listener);
-        $this->asssertPropertySame($container, 'container', $listener);
-        $this->asssertPropertySame($logger, 'logger', $listener);
+        $this->assertPropertySame($container, 'container', $listener);
+        $this->assertPropertySame($logger, 'logger', $listener);
     }
 }

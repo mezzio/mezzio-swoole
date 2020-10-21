@@ -18,11 +18,11 @@ use function iterator_to_array;
 
 class SwooleListenerProviderTest extends TestCase
 {
-    public function testProviderAllowsListenerRegistrationAndReturnsListenersBasedOnEventType()
+    public function testProviderAllowsListenerRegistrationAndReturnsListenersBasedOnEventType(): void
     {
-        $listenerForTestEvent = function (TestAsset\TestEvent $e) {
+        $listenerForTestEvent = function (TestAsset\TestEvent $e): void {
         };
-        $listenerForStdclass  = function (stdClass $e) {
+        $listenerForStdclass  = function (stdClass $e): void {
         };
 
         $provider = new SwooleListenerProvider();
@@ -40,9 +40,9 @@ class SwooleListenerProviderTest extends TestCase
         );
     }
 
-    public function testProviderDoesNotAllowDuplicateRegistration()
+    public function testProviderDoesNotAllowDuplicateRegistration(): void
     {
-        $listenerForTestEvent = function (TestAsset\TestEvent $e) {
+        $listenerForTestEvent = function (TestAsset\TestEvent $e): void {
         };
 
         $provider = new SwooleListenerProvider();

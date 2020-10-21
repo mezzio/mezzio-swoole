@@ -25,14 +25,29 @@ use Throwable;
 
 class RequestHandlerRequestListenerTest extends TestCase
 {
+    /** @psalm-var SwooleEmitter&\PHPUnit\Framework\MockObject\MockObject */
     private SwooleEmitter $emitter;
+
+    /** @psalm-var ResponseInterface&\PHPUnit\Framework\MockObject\MockObject */
     private ResponseInterface $errorResponse;
+
     private ?Throwable $exceptionToThrowOnRequestGeneration = null;
+
     private RequestHandlerRequestListener $listener;
+
+    /** @psalm-var AccessLogInterface&\PHPUnit\Framework\MockObject\MockObject */
     private AccessLogInterface $logger;
+
+    /** @psalm-var ServerRequestInterface&\PHPUnit\Framework\MockObject\MockObject */
     private ServerRequestInterface $request;
+
+    /** @psalm-var RequestHandlerInterface&\PHPUnit\Framework\MockObject\MockObject */
     private RequestHandlerInterface $requestHandler;
+
+    /** @psalm-var SwooleHttpRequest&\PHPUnit\Framework\MockObject\MockObject */
     private SwooleHttpRequest $swooleRequest;
+
+    /** @psalm-var SwooleHttpResponse&\PHPUnit\Framework\MockObject\MockObject */
     private SwooleHttpResponse $swooleResponse;
 
     public function setUp(): void

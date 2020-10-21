@@ -37,6 +37,7 @@ class RequestHandlerRequestListener
      * response.
      *
      * @var null|callable
+     * @psalm-var null|callable(SwooleHttpResponse):SwooleEmitter
      */
     private $emitterFactory;
 
@@ -53,6 +54,7 @@ class RequestHandlerRequestListener
      * and must return a Psr\Http\Message\ResponseInterface instance.
      *
      * @var callable
+     * @psalm-var callable(Throwable):ResponseInterface
      */
     private $serverRequestErrorResponseGenerator;
 
@@ -61,6 +63,7 @@ class RequestHandlerRequestListener
      * The factory will the Swoole HTTP request as an argument.
      *
      * @var callable
+     * @psalm-var callable(SwooleHttpRequest):ServerRequestInterface
      */
     private $serverRequestFactory;
 
@@ -75,19 +78,25 @@ class RequestHandlerRequestListener
         $this->logger         = $logger;
 
         // Factories are cast as Closures to ensure return type safety.
+        /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestFactory
             = static function (SwooleHttpRequest $request) use ($serverRequestFactory): ServerRequestInterface {
+                /** @psalm-suppress MixedReturnStatement */
                 return $serverRequestFactory($request);
             };
 
+        /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestErrorResponseGenerator
             = static function (Throwable $exception) use ($serverRequestErrorResponseGenerator): ResponseInterface {
+                /** @psalm-suppress MixedReturnStatement */
                 return $serverRequestErrorResponseGenerator($exception);
             };
 
         if ($emitterFactory) {
+            /** @psalm-suppress MixedInferredReturnType */
             $this->emitterFactory
                 = static function (SwooleHttpResponse $response) use ($emitterFactory): SwooleEmitter {
+                    /** @psalm-suppress MixedReturnStatement */
                     return $emitterFactory($response);
                 };
         }

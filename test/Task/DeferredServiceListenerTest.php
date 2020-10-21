@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
 
 use function array_shift;
 use function count;
@@ -27,7 +28,7 @@ class DeferredServiceListenerTest extends TestCase
     public function testListenerIsAccessibleAfterInstantiation(): void
     {
         $server   = $this->createMock(SwooleHttpServer::class);
-        $listener = function () {
+        $listener = function (): void {
         };
         $deferred = new DeferredServiceListener($server, $listener, Closure::class);
 
@@ -38,7 +39,7 @@ class DeferredServiceListenerTest extends TestCase
     {
         $server   = $this->createMock(SwooleHttpServer::class);
         $event    = new stdClass();
-        $listener = function () {
+        $listener = function (): void {
         };
         $deferred = new DeferredServiceListener($server, $listener, 'ListenerServiceName');
 
@@ -49,6 +50,7 @@ class DeferredServiceListenerTest extends TestCase
                 $r = new ReflectionProperty($task, 'serviceName');
                 $r->setAccessible(true);
                 $serviceName = $r->getValue($task);
+                Assert::stringNotEmpty($serviceName);
 
                 $r = new ReflectionProperty($task, 'payload');
                 $r->setAccessible(true);
@@ -59,6 +61,8 @@ class DeferredServiceListenerTest extends TestCase
                 }
 
                 $discoveredEvent = array_shift($payload);
+                Assert::object($discoveredEvent);
+
                 return $serviceName === 'ListenerServiceName' && $event === $discoveredEvent;
             }));
 

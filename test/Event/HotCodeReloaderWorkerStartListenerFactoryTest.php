@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;
 use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListenerFactory;
 use Mezzio\Swoole\HotCodeReload\Reloader;
 use PHPUnit\Framework\TestCase;
@@ -28,9 +27,7 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
             ->with(Reloader::class)
             ->willReturn($reloader);
 
-        $factory  = new HotCodeReloaderWorkerStartListenerFactory();
-        $listener = $factory($container);
-
-        $this->assertInstanceOf(HotCodeReloaderWorkerStartListener::class, $listener);
+        $factory = new HotCodeReloaderWorkerStartListenerFactory();
+        $this->assertIsObject($factory($container));
     }
 }

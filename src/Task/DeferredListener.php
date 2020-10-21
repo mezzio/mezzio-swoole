@@ -39,6 +39,7 @@ final class DeferredListener
 
     public function __invoke(object $event): void
     {
+        /** @psalm-suppress InvalidArgument */
         $this->server->task(new Task($this->listener, $event));
     }
 }
