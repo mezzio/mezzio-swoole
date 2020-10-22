@@ -11,10 +11,20 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
+
+use function array_shift;
+use function count;
+use function gettype;
+use function is_int;
+use function is_object;
+use function sprintf;
 
 use const SWOOLE_PROCESS;
 
@@ -151,16 +161,48 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /**
      * Handle a "task" event (process a task)
      *
-     * @param mixed $data
+     * @param mixed[] $args
+     * @psalm-param array{0: object}|array{0: int, 1: int, 2: mixed} $args
      * @return mixed Return value from task event
      */
-    public function onTask(SwooleHttpServer $server, int $taskId, int $workerId, $data)
+    public function onTask(SwooleHttpServer $server, ...$args)
     {
-        $event = new Event\TaskEvent($server, $taskId, $workerId, $data);
+        if (0 === count($args)) {
+            throw new RuntimeException(sprintf(
+                '%s expects at least two arguments; received 1',
+                __METHOD__
+            ));
+        }
+
+        $task = array_shift($args);
+
+        if (! is_int($task) && ! is_object($task)) {
+            throw new RuntimeException(sprintf(
+                'Unexpected value for argument 2 of %s; expected int task ID or object task; received %s',
+                __METHOD__,
+                gettype($task)
+            ));
+        }
+
+        /** @psalm-suppress MixedArgument */
+        $event = is_int($task)
+            ? $this->createTaskEventFromStandardArguments($server, $task, ...$args)
+            : $this->createTaskEventFromTaskObject($server, $task);
+
         $this->dispatcher->dispatch($event);
 
         /** @psalm-suppress MixedAssignment */
         $returnValue = $event->getReturnValue();
+
+        if (is_object($task)) {
+            Assert::methodExists($task, 'finish');
+
+            /** @psalm-suppress MixedArgument */
+            /** @psalm-suppress MixedMethodCall */
+            $task->finish($returnValue);
+
+            return $returnValue;
+        }
 
         /** @psalm-suppress MixedArgument */
         $this->httpServer->finish($returnValue);
@@ -184,5 +226,28 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     public function onShutdown(SwooleHttpServer $server): void
     {
         $this->dispatcher->dispatch(new Event\ServerShutdownEvent($server));
+    }
+
+    /**
+     * @param mixed $data
+     */
+    private function createTaskEventFromStandardArguments(
+        SwooleHttpServer $server,
+        int $taskId,
+        int $workerId,
+        $data
+    ): TaskEvent {
+        return new TaskEvent($server, $taskId, $workerId, $data);
+    }
+
+    private function createTaskEventFromTaskObject(SwooleHttpServer $server, object $task): TaskEvent
+    {
+        Assert::propertyExists($task, 'id');
+        Assert::integer($task->id);
+        Assert::propertyExists($task, 'worker_id');
+        Assert::integer($task->worker_id);
+        Assert::propertyExists($task, 'data');
+
+        return new TaskEvent($server, $task->id, $task->worker_id, $task->data);
     }
 }

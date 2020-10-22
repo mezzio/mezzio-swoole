@@ -29,6 +29,7 @@
     </rule>
 
     <rule ref="WebimpressCodingStandard.Functions.Param.InconsistentVariadic">
+        <exclude-pattern>/src/SwooleRequestHandlerRunner.php</exclude-pattern>
         <exclude-pattern>/src/Task/*Task.php</exclude-pattern>
         <exclude-pattern>/test/TestAsset/CallableObject.php</exclude-pattern>
         <exclude-pattern>/test/TestAsset/ClassWithCallbacks.php</exclude-pattern>

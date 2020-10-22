@@ -256,7 +256,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->runner->onTaskFinish($this->httpServer, 1, 'computed value');
     }
 
-    public function testOnTaskDispatchesTaskEvent(): void
+    public function testOnTaskDispatchesTaskEventUsingStandardArguments(): void
     {
         $expected = 'computed';
 
@@ -286,5 +286,61 @@ class SwooleRequestHandlerRunnerTest extends TestCase
             ->will($this->returnArgument(0));
 
         $this->runner->onTask($this->httpServer, 1, 10, ['values', 'to', 'process']);
+    }
+
+    /**
+     * When task coroutines are enabled, a task object is provided instead.
+     */
+    public function testOnTaskDispatchesTaskEventUsingTaskObject(): void
+    {
+        $expected = 'computed';
+
+        $server = $this->httpServer;
+        $server
+            ->expects($this->once())
+            ->method('finish')
+            ->with($expected);
+
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->callback(function (TaskEvent $event) use ($server, $expected) {
+                if (
+                    $event->getServer() !== $server
+                    || $event->getTaskId() !== 1
+                    || $event->getWorkerId() !== 10
+                    || $event->getData() !== ['values', 'to', 'process']
+                ) {
+                    return false;
+                }
+
+                $event->setReturnValue($expected);
+
+                return true;
+            }))
+            ->will($this->returnArgument(0));
+
+        $task = new class ($server) {
+            public int $id = 1;
+
+            // phpcs:ignore
+            public int $worker_id = 10;
+
+            public array $data = ['values', 'to', 'process'];
+
+            private SwooleHttpServer $server;
+
+            public function __construct(SwooleHttpServer $server)
+            {
+                $this->server = $server;
+            }
+
+            public function finish(string $returnValue): void
+            {
+                $this->server->finish($returnValue);
+            }
+        };
+
+        $this->runner->onTask($this->httpServer, $task);
     }
 }
