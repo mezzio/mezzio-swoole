@@ -12,6 +12,7 @@ namespace Mezzio\Swoole\HotCodeReload;
 
 use Psr\Log\LoggerInterface;
 use Swoole\Server as SwooleServer;
+use Webmozart\Assert\Assert;
 
 use function array_diff;
 use function get_included_files;
@@ -87,6 +88,7 @@ class Reloader
     private function watchIncludedFiles(): void
     {
         foreach (array_diff(get_included_files(), $this->watchedFilePaths) as $filePath) {
+            Assert::stringNotEmpty($filePath);
             $this->fileWatcher->addFilePath($filePath);
             $this->watchedFilePaths[] = $filePath;
         }

@@ -13,13 +13,18 @@ namespace Mezzio\Swoole\HotCodeReload\FileWatcher;
 use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
 use Mezzio\Swoole\Exception\RuntimeException;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use Webmozart\Assert\Assert;
 
+use function array_merge;
 use function array_values;
 use function extension_loaded;
 use function inotify_add_watch;
 use function inotify_init;
 use function inotify_read;
+use function in_array;
 use function is_array;
+use function is_dir;
+use function scandir;
 use function stream_set_blocking;
 
 use const IN_MODIFY;
@@ -53,10 +58,16 @@ class InotifyFileWatcher implements FileWatcherInterface
      */
     public function addFilePath(string $path): void
     {
-        $wd                      = inotify_add_watch($this->inotify, $path, IN_MODIFY);
-        $this->filePathByWd[$wd] = $path;
+        $paths = is_dir($path) ? $this->listSubdirectoriesRecursively($path) : [$path];
+        foreach ($paths as $toWatch) {
+            $wd                      = inotify_add_watch($this->inotify, $toWatch, IN_MODIFY);
+            $this->filePathByWd[$wd] = $toWatch;
+        }
     }
 
+    /**
+     * @psalm-return list<non-empty-string>
+     */
     public function readChangedFilePaths(): array
     {
         $events = inotify_read($this->inotify);
@@ -75,6 +86,39 @@ class InotifyFileWatcher implements FileWatcherInterface
             }
         }
 
-        return array_values($paths);
+        $paths = array_values($paths);
+        Assert::allStringNotEmpty($paths);
+
+        return $paths;
+    }
+
+    /**
+     * @psalm-param non-empty-string $path
+     * @psalm-return list<non-empty-string>
+     */
+    private function listSubdirectoriesRecursively(string $path): array
+    {
+        $paths = [$path];
+
+        foreach (scandir($path) as $file) {
+            Assert::stringNotEmpty($file);
+
+            if (in_array($file, ['.', '..'], true)) {
+                // Skip current/parent directories
+                continue;
+            }
+
+            $filename = $path . '/' . $file;
+            if (! is_dir($filename)) {
+                continue;
+            }
+
+            $paths = array_merge($paths, $this->listSubdirectoriesRecursively($filename));
+        }
+
+        $paths = array_values($paths);
+        Assert::allStringNotEmpty($paths);
+
+        return $paths;
     }
 }

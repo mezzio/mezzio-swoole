@@ -47,6 +47,7 @@ class InotifyFileWatcherTest extends TestCase
 
     public function testReadChangedFilePathsIsNonBlocking(): void
     {
+        /** @psalm-var non-empty-string $path */
         $path    = stream_get_meta_data($this->file)['uri'];
         $subject = new InotifyFileWatcher();
         $subject->addFilePath($path);
