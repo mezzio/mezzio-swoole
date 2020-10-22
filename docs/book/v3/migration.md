@@ -34,3 +34,8 @@ public function __construct(
 
 As such, if you were providing your own factory for the class, or instantiating it manually, you will need to update your code.
 See the [chapter on events](events.md) for more information on how the the [PSR-14 event dispatcher](https://www.php-fig.org/psr/psr-14/) is used internally, and what listeners are provided.
+
+### Reloader
+
+The class `Mezzio\Swoole\HotCodeReload\Reloader` and its associated factory have been removed.
+Use the [HotCodeReloaderWorkerStartListener](hot-code-reload.md) instead.

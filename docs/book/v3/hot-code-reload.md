@@ -1,21 +1,16 @@
 # Hot Code Reload
 
-To ease development against a running Swoole HTTP server, hot code reloading can
-be enabled.
+To ease development against a running Swoole HTTP server, hot code reloading can be enabled.
 
-With this feature enabled, a Swoole worker will monitor included PHP files using
-`inotify`, and will restart all workers if a file is changed, thus mitigating
-the need to manually restart the server to test changes.
+With this feature enabled, a Swoole worker will monitor included PHP files using `inotify`, and will restart all workers if a file is changed, thus mitigating the need to manually restart the server to test changes.
 
-**This feature should only be used in your local development environment, and
-should not be used in production!**
+**This feature should only be used in your local development environment, and should not be used in production!**
 
 ## Requirements
 
 - `ext-inotify`
 
-This library ships with an [inotify](http://php.net/manual/en/book.inotify.php)
-based implementation of `Mezzio\Swoole\HotCodeReload\FileWatcherInterface`.
+This library ships with an [inotify](http://php.net/manual/en/book.inotify.php) based implementation of `Mezzio\Swoole\HotCodeReload\FileWatcherInterface`.
 In order to use it, the `inotify` extension must be loaded.
 
 ## Configuration

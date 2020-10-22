@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
+- [#28](https://github.com/mezzio/mezzio-swoole/pull/28) removes the class `Mezzio\Swoole\HotCodeReload\Reloader` and its associated factory. Users should use `Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener` instead. In most cases, this will be a non-issue, as it was used internally only in the past.
+
 - Removes support for services named after legacy Zend Framework/Expressive classes.
 
 - Removes support for Swoole versions prior to 4.5.

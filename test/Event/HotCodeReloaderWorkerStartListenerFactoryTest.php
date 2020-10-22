@@ -11,21 +11,57 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Event;
 
 use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListenerFactory;
-use Mezzio\Swoole\HotCodeReload\Reloader;
+use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use Mezzio\Swoole\Log\AccessLogInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
 {
-    public function testProducesHotCodeReloaderListenerUsingReloaderFromContainer(): void
+    public function testProducesHotCodeReloaderListenerWithDefaultConfiguration(): void
     {
-        $reloader  = $this->createMock(Reloader::class);
-        $container = $this->createMock(ContainerInterface::class);
+        $fileWatcher = $this->createMock(FileWatcherInterface::class);
+        $logger      = $this->createMock(LoggerInterface::class);
+        $container   = $this->createMock(ContainerInterface::class);
+
+        $container->expects($this->once())->method('has')->with('config')->willReturn(false);
+
         $container
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
-            ->with(Reloader::class)
-            ->willReturn($reloader);
+            ->will($this->returnValueMap([
+                [FileWatcherInterface::class, $fileWatcher],
+                [AccessLogInterface::class, $logger],
+            ]));
+
+        $factory = new HotCodeReloaderWorkerStartListenerFactory();
+        $this->assertIsObject($factory($container));
+    }
+
+    public function testProducesHotCodeReloaderListenerUsingIntervalFromConfiguration(): void
+    {
+        $fileWatcher = $this->createMock(FileWatcherInterface::class);
+        $logger      = $this->createMock(LoggerInterface::class);
+        $container   = $this->createMock(ContainerInterface::class);
+        $config      = [
+            'mezzio-swoole' => [
+                'hot-code-reload' => [
+                    'interval' => 1000,
+                ],
+            ],
+        ];
+
+        $container->expects($this->once())->method('has')->with('config')->willReturn(true);
+
+        $container
+            ->expects($this->exactly(3))
+            ->method('get')
+            ->will($this->returnValueMap([
+                [FileWatcherInterface::class, $fileWatcher],
+                [AccessLogInterface::class, $logger],
+                ['config', $config],
+            ]));
 
         $factory = new HotCodeReloaderWorkerStartListenerFactory();
         $this->assertIsObject($factory($container));

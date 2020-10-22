@@ -13,8 +13,6 @@ namespace Mezzio\Swoole;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
-use Mezzio\Swoole\HotCodeReload\Reloader;
-use Mezzio\Swoole\HotCodeReload\ReloaderFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
@@ -121,7 +119,6 @@ class ConfigProvider
                 SwooleHttpServer::class                         => HttpServerFactory::class,
                 Task\TaskEventDispatchListener::class           => Task\TaskEventDispatchListenerFactory::class,
                 Task\TaskInvokerListener::class                 => Task\TaskInvokerListenerFactory::class,
-                Reloader::class                                 => ReloaderFactory::class,
                 FileLocationRepository::class                   => FileLocationRepositoryFactory::class,
             ],
             'invokables' => [
