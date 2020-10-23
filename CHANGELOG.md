@@ -83,28 +83,6 @@ Feature release (minor)
 
  - [22: Add Mapped Document Roots functionality](https://github.com/mezzio/mezzio-swoole/pull/22) thanks to @jasonterando
 
-## 2.6.7 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
-
 ## 2.6.6 - 2020-06-17
 
 ### Added
@@ -542,7 +520,7 @@ Feature release (minor)
 ### Removed
 
 - [zendframework/zend-expressive-swoole#40](https://github.com/zendframework/zend-expressive-swoole/pull/40) removes the `Mezzio\Swoole\ServerFactory` and
-  `ServerFactoryFactory` classes, as well as the `Mezzio\Swoole\ServerFactory` 
+  `ServerFactoryFactory` classes, as well as the `Mezzio\Swoole\ServerFactory`
   service. Users should instead reference the `Swoole\Http\Server` service,
   which is now registered via the `Mezzio\Swoole\HttpServerFactory`
   factory, detailed in the "Added" section above.
