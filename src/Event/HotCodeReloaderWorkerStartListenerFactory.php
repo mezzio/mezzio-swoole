@@ -56,7 +56,7 @@ final class HotCodeReloaderWorkerStartListenerFactory
         }
 
         foreach ($paths as $path) {
-            /** @var InotifyFileWatcher $fileWatcher */
+            /** @psalm-var InotifyFileWatcher $fileWatcher */
             $fileWatcher->addFilePath($path);
         }
     }
