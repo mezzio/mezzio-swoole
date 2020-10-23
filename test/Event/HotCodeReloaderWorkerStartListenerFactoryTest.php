@@ -11,11 +11,14 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Event;
 
 use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListenerFactory;
+use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+
+use function getcwd;
 
 class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
 {
@@ -41,13 +44,17 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
 
     public function testProducesHotCodeReloaderListenerUsingIntervalFromConfiguration(): void
     {
-        $fileWatcher = $this->createMock(FileWatcherInterface::class);
+        $fileWatcher = $this->createMock(InotifyFileWatcher::class);
         $logger      = $this->createMock(LoggerInterface::class);
         $container   = $this->createMock(ContainerInterface::class);
         $config      = [
             'mezzio-swoole' => [
                 'hot-code-reload' => [
                     'interval' => 1000,
+                    'paths'    => [
+                        getcwd(),
+                        __DIR__,
+                    ],
                 ],
             ],
         ];
@@ -62,6 +69,14 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
                 [AccessLogInterface::class, $logger],
                 ['config', $config],
             ]));
+
+        $fileWatcher
+            ->expects($this->exactly(2))
+            ->method('addFilePath')
+            ->withConsecutive(
+                [getcwd()],
+                [__DIR__]
+            );
 
         $factory = new HotCodeReloaderWorkerStartListenerFactory();
         $this->assertIsObject($factory($container));

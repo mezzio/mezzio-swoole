@@ -41,6 +41,14 @@ class ConfigProvider
     {
         return [
             'application_root'   => getcwd(),
+            'hot-code-reload'    => [
+                // Interval, in ms, that the InotifyFileWatcher should use to
+                // check for changes.
+                'interval' => 500,
+                // Paths to watch for changes. These may be files or
+                // directories.
+                'paths' => [],
+            ],
             'swoole-http-server' => [
                 // A prefix for the process name of the master process and workers.
                 // By default the master process will be named `mezzio-master`,

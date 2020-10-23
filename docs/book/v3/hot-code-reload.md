@@ -28,6 +28,12 @@ return [
         'hot-code-reload' => [
             // Time in milliseconds between checks to changes in files.
             'interval' => 500,
+            'paths'    => [
+                // List of paths, either files or directories, to scan for changes.
+                // By default this is empty; you will need to configure it.
+                // A common value:
+                getcwd(),
+            ],
         ],
         'swoole-http-server' => [
             'listeners' => [

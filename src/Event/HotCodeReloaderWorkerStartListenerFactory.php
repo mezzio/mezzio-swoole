@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Event;
 
+use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Psr\Container\ContainerInterface;
@@ -36,6 +37,27 @@ final class HotCodeReloaderWorkerStartListenerFactory
         $interval = $config['interval'] ?? 500;
         Assert::integer($interval);
 
+        $paths = $config['paths'] ?? [];
+        Assert::isArray($paths);
+        Assert::allStringNotEmpty($paths);
+
+        $this->addWatchPaths($fileWatcher, $paths);
+
         return new HotCodeReloaderWorkerStartListener($fileWatcher, $logger, $interval);
+    }
+
+    /**
+     * @psalm-param array<array-key, non-empty-string> $paths
+     */
+    private function addWatchPaths(FileWatcherInterface $fileWatcher, array $paths): void
+    {
+        if (! $fileWatcher instanceof InotifyFileWatcher) {
+            return;
+        }
+
+        foreach ($paths as $path) {
+            /** @var InotifyFileWatcher $fileWatcher */
+            $fileWatcher->addFilePath($path);
+        }
     }
 }
