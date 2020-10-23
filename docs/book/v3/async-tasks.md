@@ -287,7 +287,7 @@ use App\Listener\UserCreationListener;
 // implementation, and defines a `listen()` method, and $container is a PSR-11
 // container implementation:
 $listenerProvider = $factory();
-$listener->listen(UserCreationEvent::class, $container->get(UserCreationListener::class));
+$listenerProvider->listen(UserCreationEvent::class, $container->get(UserCreationListener::class));
 ```
 
 Somewhere in your code, you might then dispatch the `UserCreationEvent`:
