@@ -19,13 +19,13 @@
     <rule ref="LaminasCodingStandard" />
 
     <rule ref="Generic.Files.LineLength.TooLong">
-        <exclude-pattern>test/Log/AccessLogFactoryTest.php</exclude-pattern>
-        <exclude-pattern>test/Log/AccessLogFormatterTest.php</exclude-pattern>
-        <exclude-pattern>test/Log/SwooleLoggerFactoryTest.php</exclude-pattern>
-        <exclude-pattern>test/StaticResourceHandler/IntegrationMappedTest.php</exclude-pattern>
-        <exclude-pattern>test/StaticResourceHandler/IntegrationTest.php</exclude-pattern>
-        <exclude-pattern>test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php</exclude-pattern>
-        <exclude-pattern>test/SwooleRequestHandlerRunnerFactoryTest.php</exclude-pattern>
+        <exclude-pattern>/test/Log/AccessLogFactoryTest.php</exclude-pattern>
+        <exclude-pattern>/test/Log/AccessLogFormatterTest.php</exclude-pattern>
+        <exclude-pattern>/test/Log/SwooleLoggerFactoryTest.php</exclude-pattern>
+        <exclude-pattern>/test/StaticResourceHandler/IntegrationMappedTest.php</exclude-pattern>
+        <exclude-pattern>/test/StaticResourceHandler/IntegrationTest.php</exclude-pattern>
+        <exclude-pattern>/test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php</exclude-pattern>
+        <exclude-pattern>/test/SwooleRequestHandlerRunnerFactoryTest.php</exclude-pattern>
     </rule>
 
     <rule ref="WebimpressCodingStandard.Functions.Param.InconsistentVariadic">
@@ -36,6 +36,7 @@
     </rule>
 
     <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>/src/ConfigProvider.php</exclude-pattern>
         <exclude-pattern>/test/Task/TaskEventDispatchListener*Test.php</exclude-pattern>
         <exclude-pattern>/test/Task/TaskInvokerListener*Test.php</exclude-pattern>
     </rule>
