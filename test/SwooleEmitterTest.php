@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
+use Laminas\Diactoros\CallbackStream;
 use Laminas\Diactoros\Response;
 use Mezzio\Swoole\SwooleEmitter;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -154,6 +155,34 @@ class SwooleEmitterTest extends TestCase
         $this->swooleResponse
             ->expects($this->once())
             ->method('end');
+
+        $this->assertTrue($this->emitter->emit($response));
+    }
+
+    public function testEmitCallbackStream(): void
+    {
+        $content  = 'content';
+        $callable = function () use ($content): string {
+            return $content;
+        };
+
+        $response = (new Response())
+            ->withBody(new CallbackStream($callable))
+            ->withStatus(200)
+            ->withAddedHeader('Content-Type', 'text/plain');
+
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('status')
+            ->with(200);
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('header')
+            ->with('Content-Type', 'text/plain');
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('end')
+            ->with($content);
 
         $this->assertTrue($this->emitter->emit($response));
     }

@@ -79,7 +79,15 @@ class SwooleEmitter implements EmitterInterface
     private function emitBody(ResponseInterface $response): void
     {
         $body = $response->getBody();
-        $body->rewind();
+
+        if ($body->isSeekable()) {
+            $body->rewind();
+        }
+
+        if (! $body->isReadable()) {
+            $this->swooleResponse->end((string) $body);
+            return;
+        }
 
         if ($body->getSize() <= static::CHUNK_SIZE) {
             $this->swooleResponse->end($body->getContents());
