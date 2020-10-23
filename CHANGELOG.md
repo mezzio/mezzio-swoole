@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#31](https://github.com/mezzio/mezzio-swoole/pull/31) provides a fix to the `SwooleEmitter to allow it to work properly with callback streams. It does so by only rewinding the stream if it is seekable, and calling `Swoole\Htp\Response::end()` with the discovered `$body` directly if it is not marked readable (forcing it into string representation).
 
 ## 2.8.0 - 2020-10-20
 
