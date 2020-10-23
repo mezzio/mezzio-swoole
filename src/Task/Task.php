@@ -92,7 +92,7 @@ final class Task implements TaskInterface
 
         $method = array_shift($handler);
         Assert::stringNotEmpty($method);
-    
+
         return sprintf('%s::%s', $this->serializeHandler($classOrObject), $method);
     }
 }
