@@ -85,7 +85,7 @@ class SwooleEmitter implements EmitterInterface
         }
 
         if (! $body->isReadable()) {
-            $this->swooleResponse->end($body);
+            $this->swooleResponse->end((string) $body);
             return;
         }
 

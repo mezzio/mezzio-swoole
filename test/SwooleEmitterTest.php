@@ -159,10 +159,10 @@ class SwooleEmitterTest extends TestCase
         $this->assertTrue($this->emitter->emit($response));
     }
 
-    public function testEmitCallbackStream()
+    public function testEmitCallbackStream(): void
     {
         $content  = 'content';
-        $callable = function () use ($content) {
+        $callable = function () use ($content): string {
             return $content;
         };
 
@@ -171,16 +171,19 @@ class SwooleEmitterTest extends TestCase
             ->withStatus(200)
             ->withAddedHeader('Content-Type', 'text/plain');
 
-        $this->assertTrue($this->emitter->emit($response));
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('status')
+            ->with(200);
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('header')
+            ->with('Content-Type', 'text/plain');
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('end')
+            ->with($content);
 
-        $this->swooleResponse
-            ->status(200)
-            ->shouldHaveBeenCalled();
-        $this->swooleResponse
-            ->header('Content-Type', 'text/plain')
-            ->shouldHaveBeenCalled();
-        $this->swooleResponse
-            ->end($content)
-            ->shouldHaveBeenCalled();
+        $this->assertTrue($this->emitter->emit($response));
     }
 }
