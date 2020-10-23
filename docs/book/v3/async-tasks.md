@@ -549,7 +549,7 @@ Next, we will create a listener for this event type:
 ```php
 namespace Example;
 
-class DeferrableTaskListener
+class SomeDeferrableTaskListener
 {
     public function __invoke(SomeDeferrableTask $event): void
     {
@@ -563,22 +563,22 @@ Next, we will configure listeners for the `TaskEvent` and our custom `SomeDeferr
 ```php
 // in config/autoload/swoole.global.php or similar:
 
-use Example\DeferrableTaskListener;
 use Example\SomeDeferrableTask;
+use Example\SomeDeferrableTaskListener;
 use Mezzio\Swoole\Event\TaskEvent;
 use Mezzio\Swoole\Event\TaskEventDispatchListener;
 
 return [
     'dependencies' => [
         'invokables' => [
-            DeferrableTaskListener::class => DeferrableTaskListener::class,
+            SomeDeferrableTaskListener::class => SomeDeferrableTaskListener::class,
         ],
     ],
     'mezzio-swoole' => [
         'swoole-http-server' => [
             'listeners' => [
                 SomeDeferrableTask::class => [
-                    DeferrableTaskListener::class,
+                    SomeDeferrableTaskListener::class,
                 ],
                 TaskEvent::class => [
                     TaskEventDispatchListener::class,
