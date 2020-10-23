@@ -130,7 +130,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
             };
 
         // The HTTP server should not yet be running
-        if ($httpServer->master_pid > 0 || $httpServer->manager_pid > 0) {
+        if ($httpServer->getMasterPid() > 0 || $httpServer->getManagerPid() > 0) {
             throw new Exception\InvalidArgumentException('The Swoole server has already been started');
         }
         $this->httpServer            = $httpServer;

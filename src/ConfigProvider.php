@@ -20,18 +20,6 @@ use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\Expressive\Swoole\Command\ReloadCommand as LegacyReloadCommand;
-use Zend\Expressive\Swoole\Command\StartCommand as LegacyStartCommand;
-use Zend\Expressive\Swoole\Command\StatusCommand as LegacyStatusCommand;
-use Zend\Expressive\Swoole\Command\StopCommand as LegacyStopCommand;
-use Zend\Expressive\Swoole\HotCodeReload\FileWatcherInterface as LegacyFileWatcherInterface;
-use Zend\Expressive\Swoole\HotCodeReload\Reloader as LegacyReloader;
-use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
-use zend\expressive\swoole\pidmanager as LegacyPidManager;
-use Zend\Expressive\Swoole\StaticResourceHandler as LegacyStaticResourceHandler;
-use Zend\Expressive\Swoole\StaticResourceHandlerInterface as LegacyStaticResourceHandlerInterface;
-use Zend\Expressive\Swoole\SwooleRequestHandlerRunner as LegacySwooleRequestHandlerRunner;
-use Zend\HttpHandlerRunner\RequestHandlerRunner as LegacyRequestHandlerRunner;
 
 use function extension_loaded;
 
@@ -102,20 +90,6 @@ class ConfigProvider
                 StaticResourceHandlerInterface::class  => StaticResourceHandler::class,
                 FileWatcherInterface::class            => InotifyFileWatcher::class,
                 FileLocationRepositoryInterface::class => FileLocationRepository::class,
-
-                // Legacy Zend Framework aliases
-                LegacyReloadCommand::class                  => Command\ReloadCommand::class,
-                LegacyStartCommand::class                   => Command\StartCommand::class,
-                LegacyStatusCommand::class                  => Command\StatusCommand::class,
-                LegacyStopCommand::class                    => Command\StopCommand::class,
-                LegacyAccessLogInterface::class             => Log\AccessLogInterface::class,
-                LegacyPidManager::class                     => PidManager::class,
-                LegacySwooleRequestHandlerRunner::class     => SwooleRequestHandlerRunner::class,
-                LegacyStaticResourceHandler::class          => StaticResourceHandler::class,
-                LegacyReloader::class                       => Reloader::class,
-                LegacyRequestHandlerRunner::class           => RequestHandlerRunner::class,
-                LegacyStaticResourceHandlerInterface::class => StaticResourceHandlerInterface::class,
-                LegacyFileWatcherInterface::class           => FileWatcherInterface::class,
             ],
             'delegators' => [
                 'Mezzio\WhoopsPageHandler' => [

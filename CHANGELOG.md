@@ -2,20 +2,41 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 3.0.0 - TBD
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Removes support for services named after legacy Zend Framework/Expressive classes.
+
+- Removes support for Swoole versions prior to 4.5.
+
+- Removes support for PHP versions prior to 7.4.
+
+### Fixed
+
+- Nothing.
+
 ## 2.8.1 - 2020-10-23
 
 ### Fixed
 
 - [#31](https://github.com/mezzio/mezzio-swoole/pull/31) provides a fix to the `SwooleEmitter to allow it to work properly with callback streams. It does so by only rewinding the stream if it is seekable, and calling `Swoole\Htp\Response::end()` with the discovered `$body` directly if it is not marked readable (forcing it into string representation).
 
-
 -----
 
 ### Release Notes for [2.8.1](https://github.com/mezzio/mezzio-swoole/milestone/8)
-
-2.8.x bugfix release (patch)
-
-### 2.8.1
 
 - Total issues resolved: **0**
 - Total pull requests resolved: **1**
@@ -37,14 +58,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#33](https://github.com/mezzio/mezzio-swoole/pull/33) removes support for PHP 7.2.
 
-
 -----
 
 ### Release Notes for [2.8.0](https://github.com/mezzio/mezzio-swoole/milestone/7)
-
-Feature release (minor)
-
-### 2.8.0
 
 - Total issues resolved: **1**
 - Total pull requests resolved: **2**

@@ -16,9 +16,6 @@ use Mezzio\Swoole\HotCodeReload\Reloader;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use Zend\Expressive\Swoole\HotCodeReload\Reloader as LegacyReloader;
-use Zend\Expressive\Swoole\Log\AccessLogInterface as LegacyAccessLogInterface;
-use Zend\Expressive\Swoole\StaticResourceHandlerInterface as LegacyStaticResourceHandlerInterface;
 
 class SwooleRequestHandlerRunnerFactory
 {
@@ -26,9 +23,7 @@ class SwooleRequestHandlerRunnerFactory
     {
         $logger = $container->has(Log\AccessLogInterface::class)
             ? $container->get(Log\AccessLogInterface::class)
-            : ($container->has(LegacyAccessLogInterface::class)
-                ? $container->get(LegacyAccessLogInterface::class)
-                : null);
+            : null;
 
         $mezzioSwooleConfig = $container->has('config')
             ? $container->get('config')['mezzio-swoole']
@@ -58,9 +53,7 @@ class SwooleRequestHandlerRunnerFactory
 
         return $enabled && $container->has(StaticResourceHandlerInterface::class)
             ? $container->get(StaticResourceHandlerInterface::class)
-            : ($enabled && $container->has(LegacyStaticResourceHandlerInterface::class)
-                ? $container->get(LegacyStaticResourceHandlerInterface::class)
-                : null);
+            : null;
     }
 
     private function retrieveHotCodeReloader(
@@ -72,8 +65,6 @@ class SwooleRequestHandlerRunnerFactory
 
         return $enabled && $container->has(Reloader::class)
             ? $container->get(Reloader::class)
-            : ($enabled && $container->has(LegacyReloader::class)
-                ? $container->get(LegacyReloader::class)
-                : null);
+            : null;
     }
 }
