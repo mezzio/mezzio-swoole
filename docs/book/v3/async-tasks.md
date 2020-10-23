@@ -695,7 +695,7 @@ class SomeDeferrableEventListener
 
     public function __invoke(SomeDeferrableEvent $event): void
     {
-        $this->log->info(sprintf('Message: %s', (string) $event));
+        $this->logger->info(sprintf('Message: %s', (string) $event));
     }
 }
 ```
