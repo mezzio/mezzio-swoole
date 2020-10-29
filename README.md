@@ -63,18 +63,16 @@ return array_merge((new ConfigProvider())(), [
 
 ## Execute
 
-Once you have performed the configuration steps as outlined above, you can run
-an Mezzio application with Swoole using the following command:
+Once you have performed the configuration steps as outlined above, you can run an Mezzio application with Swoole via the [laminas-cli](https://docs.laminas.dev/laminas-cli) integration:
 
 ```bash
-$ ./vendor/bin/mezzio-swoole start
+$ ./vendor/bin/laminas mezzio:swoole:start
 ```
 
-Call the command without arguments to get a list of available commands, and use
-the `help` meta-argument to get help on individual commands:
+Call the `laminas` command without arguments to get a list of available commands, looking for those that begin with `mezzio:swoole:`, and use the `help` meta-argument to get help on individual commands:
 
 ```bash
-$ ./vendor/bin/mezzio-swoole help start
+$ ./vendor/bin/laminas help mezzio:swoole:start
 ```
 
 ## Documentation

@@ -61,14 +61,6 @@ class StatusCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsPidManager
      */
-    public function testConstructorSetsDefaultName(StatusCommand $command): void
-    {
-        $this->assertSame('status', $command->getName());
-    }
-
-    /**
-     * @depends testConstructorAcceptsPidManager
-     */
     public function testStatusCommandIsASymfonyConsoleCommand(StatusCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);

@@ -61,14 +61,6 @@ class StopCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsPidManager
      */
-    public function testConstructorSetsDefaultName(StopCommand $command): void
-    {
-        $this->assertSame('stop', $command->getName());
-    }
-
-    /**
-     * @depends testConstructorAcceptsPidManager
-     */
     public function testStopCommandIsASymfonyConsoleCommand(StopCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);

@@ -3,7 +3,7 @@
 This document covers changes between version 2 and version 3, and how you may
 update your code to adapt to them.
 
-### SwooleRequestHandlerRunner
+## SwooleRequestHandlerRunner
 
 The internals of `Mezzio\Swoole\SwooleRequestHandlerRunner` have changed entirely.
 As a result, the constructor signature has also changed.
@@ -35,10 +35,29 @@ public function __construct(
 As such, if you were providing your own factory for the class, or instantiating it manually, you will need to update your code.
 See the [chapter on events](events.md) for more information on how the the [PSR-14 event dispatcher](https://www.php-fig.org/psr/psr-14/) is used internally, and what listeners are provided.
 
-### Reloader
+## Reloader
 
 The class `Mezzio\Swoole\HotCodeReload\Reloader` and its associated factory have been removed.
 Use the [HotCodeReloaderWorkerStartListener](hot-code-reload.md) instead.
 
 Additionally, with version 3, you will need to specify which paths you want to scan for changes via configuration.
 Please see the [hot code reloading section on Configuration](hot-code-reload.md#configuration) for details.
+
+## Command line usage
+
+In releases prior to version 3, the package shipped with its own binary, `mezzio-swoole`, and defined the commands `start`, `stop`, `status`, and `reload`.
+
+Starting with version 3, the package now leverages [laminas-cli](https://docs.laminas.dev/laminas-cli/), exposing the commands `mezzio:swoole:start`, `mezzio:swoole:stop`, `mezzio:swoole:status`, and `mezzio:swoole:reload`.
+As such, if you started the server as follows:
+
+```bash
+$ ./vendor/bin/mezzio-swoole start
+```
+
+you will now start it using:
+
+```bash
+$ ./vendor/bin/laminas mezzio:swoole:start
+```
+
+Usage of other commands will change similarly.

@@ -70,14 +70,6 @@ class ReloadCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsServerMode
      */
-    public function testConstructorSetsDefaultName(ReloadCommand $command): void
-    {
-        $this->assertSame('reload', $command->getName());
-    }
-
-    /**
-     * @depends testConstructorAcceptsServerMode
-     */
     public function testReloadCommandIsASymfonyConsoleCommand(ReloadCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);

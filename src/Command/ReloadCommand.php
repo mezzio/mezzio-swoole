@@ -31,13 +31,16 @@ This command is only relevant when the server was started using the
 configuration value is set to SWOOLE_PROCESS.
 EOH;
 
+    /** @var string Cannot be defined explicitly due to parent class */
+    public static $defaultName = 'mezzio:swoole:reload';
+
     /** @var int */
     private $serverMode;
 
-    public function __construct(int $serverMode, string $name = 'reload')
+    public function __construct(int $serverMode)
     {
         $this->serverMode = $serverMode;
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void

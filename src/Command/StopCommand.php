@@ -31,6 +31,9 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
+    /** @var string Cannot be defined explicitly due to parent class */
+    public static $defaultName = 'mezzio:swoole:stop';
+
     /**
      * @internal
      *
@@ -51,11 +54,11 @@ EOH;
     /** @var PidManager */
     private $pidManager;
 
-    public function __construct(PidManager $pidManager, string $name = 'stop')
+    public function __construct(PidManager $pidManager)
     {
         $this->killProcess = Closure::fromCallable([SwooleProcess::class, 'kill']);
         $this->pidManager  = $pidManager;
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void

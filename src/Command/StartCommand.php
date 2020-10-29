@@ -42,13 +42,16 @@ EOH;
         'config/routes.php',
     ];
 
+    /** @var string Cannot be defined explicitly due to parent class */
+    public static $defaultName = 'mezzio:swoole:start';
+
     /** @var ContainerInterface */
     private $container;
 
-    public function __construct(ContainerInterface $container, string $name = 'start')
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void

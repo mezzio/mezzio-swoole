@@ -96,14 +96,6 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
-    public function testConstructorSetsDefaultName(StartCommand $command): void
-    {
-        $this->assertSame('start', $command->getName());
-    }
-
-    /**
-     * @depends testConstructorAcceptsContainer
-     */
     public function testStartCommandIsASymfonyConsoleCommand(StartCommand $command): void
     {
         $this->assertInstanceOf(Command::class, $command);

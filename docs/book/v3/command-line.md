@@ -1,54 +1,40 @@
 # Command Line Tooling
 
-This package ships the vendor binary `mezzio-swoole`. It provides the
-following commands:
+This package provides integration with [laminas-cli](https://docs.laminas.dev/laminas-cli/), and provides the following commands:
 
-- `start` to start the server
-- `stop` to stop the server (when run in daemonized mode)
-- `reload` to reload the server (when run in daemonized mode)
-- `status` to determine the server status (running or not running)
+- `mezzio:swoole:start` to start the server
+- `mezzio:swoole:stop` to stop the server (when run in daemonized mode)
+- `mezzio:swoole:reload` to reload the server (when run in daemonized mode)
+- `mezzio:swoole:status` to determine the server status (running or not running)
 
 You may obtain help for each command using the `help` meta-command:
 
 ```bash
-$ ./vendor/bin/mezzio-swoole help start
+$ ./vendor/bin/laminas help mezzio:swoole:start
 ```
 
-The `stop`, `status`, and `reload` commands are sufficiently generic to work
-regardless of runtime or application, as they work directly with the Swoole
-process manager. The `start` command, however, may need customizations if you
-have customized your application bootstrap.
+The `mezzio:swoole:stop`, `mezzio:swoole:status`, and `mezzio:swoole:reload` commands are sufficiently generic to work regardless of runtime or application, as they work directly with the Swoole process manager.
+The `mezzio:swoole:start` command, however, may need customizations if you have customized your application bootstrap.
 
-## The start command
+## The mezzio:swoole:start command
 
-The `start` command will start the web server using the following steps:
+The `mezzio:swoole:start` command will start the web server using the following steps:
 
-- It pulls the `Swoole\Http\Server` service from the application dependency
-  injection container, and calls `set()` on it with options denoting the number
-  of workers to run (provided via the `--num-workers` or `-w` option), and
-  whether or not to daemonize the server (provided via the `--daemonize` or `-d`
-  option).
+- It pulls the `Swoole\Http\Server` service from the application dependency injection container, and calls `set()` on it with options denoting the number of workers to run (provided via the `--num-workers` or `-w` option), and whether or not to daemonize the server (provided via the `--daemonize` or `-d` option).
 
-- It pulls the `Mezzio\Application` and
-  `Mezzio\MiddlewareFactory` services from the container.
+- It pulls the `Mezzio\Application` and `Mezzio\MiddlewareFactory` services from the container.
 
-- It loads the `config/pipeline.php` and `config/routes.php` files, invoking
-  their return values with the application, middleware factory, and dependency
-  injection container instances.
+- It loads the `config/pipeline.php` and `config/routes.php` files, invoking their return values with the application, middleware factory, and dependency injection container instances.
 
 - It calls the `run()` method of the application instance.
 
-These are roughly the steps taken within the application bootstrap
-(`public/index.php`) of the Mezzio skeleton application.
+These are roughly the steps taken within the application bootstrap (`public/index.php`) of the Mezzio skeleton application.
 
-### Writing a custom start command
+### Writing a custom mezzio:swoole:start command
 
-If your application needs alternate bootstrapping (e.g., if you have modified
-the `public/index.php`, or if you are using this package with a different
-middleware runtime), we recommend writing a custom `start` command.
+If your application needs alternate bootstrapping (e.g., if you have modified the `public/index.php`, or if you are using this package with a different middleware runtime), we recommend writing a custom `mezzio:swoole:start` command.
 
-As an example, let's say you have altered your application such that you're
-defining your routes in multiple files, and instead of:
+As an example, let's say you have altered your application such that you're defining your routes in multiple files, and instead of:
 
 ```php
 (require 'config/routes.php')($app, $factory, $container);
@@ -149,8 +135,7 @@ class StartCommandFactory
 }
 ```
 
-If this is all you're changing, you can map this new command to the existing
-`Mezzio\Swoole\Command\StartCommand` service within your configuration:
+If this is all you're changing, you can map this new command to the existing `Mezzio\Swoole\Command\StartCommand` service within your configuration:
 
 ```php
 // in config/autoload/dependencies.global.php:
@@ -167,5 +152,4 @@ return [
 ];
 ```
 
-Since the `mezzio-swoole` binary uses your application configuration
-and container, this will substitute your command for the shipped command!
+Since the `laminas` binary uses your application configuration and container, this will substitute your command for the shipped command!

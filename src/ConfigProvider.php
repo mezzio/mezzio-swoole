@@ -33,6 +33,7 @@ class ConfigProvider
             : [];
 
         $config['mezzio-swoole'] = $this->getDefaultConfig();
+        $config['laminas-cli']   = $this->getConsoleConfig();
 
         return $config;
     }
@@ -145,5 +146,17 @@ class ConfigProvider
             ],
         ];
         // phpcs:enable
+    }
+
+    public function getConsoleConfig(): array
+    {
+        return [
+            'commands' => [
+                'mezzio:swoole:reload' => Command\ReloadCommand::class,
+                'mezzio:swoole:start'  => Command\StartCommand::class,
+                'mezzio:swoole:status' => Command\StatusCommand::class,
+                'mezzio:swoole:stop'   => Command\StopCommand::class,
+            ],
+        ];
     }
 }

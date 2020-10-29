@@ -34,7 +34,7 @@ application from the command line, **without requiring a web server**.
 You can run the application using the following command:
 
 ```bash
-$ ./vendor/bin/mezzio-swoole start
+$ ./vendor/bin/laminas mezzio:swoole:start
 ```
 
 This command will execute Swoole on `localhost` via port `8080`.
@@ -44,11 +44,12 @@ This command will execute Swoole on `localhost` via port `8080`.
 > To get a list of all available commands, run the command without arguments:
 >
 > ```bash
-> $ ./vendor/bin/mezzio-swoole
+> $ ./vendor/bin/laminas
 > ```
 >
-> If you add the argument `help` before any command name, the tooling will
-> provide you with more detailed information on that command.
+> and look for commands starting with `mezzio:swoole:`.
+>
+> If you add the argument `help` before any command name, the tooling will provide you with more detailed information on that command.
 
 > ### Mezzio skeleton versions prior to 3.1.0
 >

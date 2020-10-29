@@ -26,13 +26,16 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
+    /** @var string Cannot be defined explicitly due to parent class */
+    public static $defaultName = 'mezzio:swoole:status';
+
     /** @var PidManager */
     private $pidManager;
 
-    public function __construct(PidManager $pidManager, string $name = 'status')
+    public function __construct(PidManager $pidManager)
     {
         $this->pidManager = $pidManager;
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void
