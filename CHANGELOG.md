@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- [#41](https://github.com/mezzio/mezzio-swoole/pull/41) adds typehints to all properties that can safely add them. If you were extending classes from the package and overriding any properties, please check the canonical versions and update your definitions accordingly.
+
 - [#39](https://github.com/mezzio/mezzio-swoole/pull/39) switches the console tooling to remove the `mezzio-swoole` binary in favor of using [laminas-cli](https://docs.laminas.dev/laminas-cli/). The individual commands are renamed from `start`, `stop`, `status`, and `reload` to `mezzio:swoole:start`, `mezzio:swoole:stop`, `mezzio:swoole:status`, and `mezzio:swoole:reload`, respectively.
 
 - Rewrites the internals of `Mezzio\Swoole\SwooleRequestHandlerRunner` to trigger events via a [PSR-14](https://www.php-fig.org/psr/psr-14) event dispatcher. See the [events chapter of the documentation](https://docs.mezzio.dev/mezzio-swoole/v3/events/) for more details.
