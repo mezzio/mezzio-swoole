@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#40](https://github.com/mezzio/mezzio-swoole/pull/40) adds the `--num-task-workers|-t` option to each of the `mezzio:swoole:start` and `mezzio:swoole:reload` commands, allowing you to specify these at the command-line instead of in configuration.
+
 - Adds a variety of event types based on Swoole HTTP Server events, as well as default listeners, a [PSR-14](https://www.php-fig.org/psr/psr-14) listener provider to aggregate them, and a simple PSR-14 dispatcher implementation for triggering them. See the [events chapter of the documentation](https://docs.mezzio.dev/mezzio-swoole/v3/events/) for more details.
 
 ### Changed
