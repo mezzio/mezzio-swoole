@@ -12,6 +12,7 @@ namespace MezzioTest\Swoole\Event;
 
 use Mezzio\Swoole\Event\WorkerStartEvent;
 use Mezzio\Swoole\Event\WorkerStartListener;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
@@ -42,7 +43,7 @@ class WorkerStartListenerTest extends TestCase
         $cwd         = __DIR__;
         $processName = 'the-process-name';
 
-        /** @psalm-var SwooleHttpServer&\PHPUnit\Framework\MockObject\MockObject $server */
+        /** @psalm-var SwooleHttpServer&MockObject $server */
         $server = $this->createMock(SwooleHttpServer::class);
 
         /** @psalm-suppress MixedArrayAssignment */
@@ -75,7 +76,7 @@ class WorkerStartListenerTest extends TestCase
         $cwd         = __DIR__;
         $processName = 'the-process-name';
 
-        /** @psalm-var SwooleHttpServer&\PHPUnit\Framework\MockObject\MockObject $server */
+        /** @psalm-var SwooleHttpServer&MockObject $server */
         $server = $this->createMock(SwooleHttpServer::class);
 
         /** @psalm-suppress MixedArrayAssignment */

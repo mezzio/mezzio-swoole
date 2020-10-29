@@ -14,6 +14,7 @@ use Mezzio\Swoole\Event\RequestEvent;
 use Mezzio\Swoole\Event\RequestHandlerRequestListener;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\SwooleEmitter;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,29 +26,29 @@ use Throwable;
 
 class RequestHandlerRequestListenerTest extends TestCase
 {
-    /** @psalm-var SwooleEmitter&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var SwooleEmitter&MockObject */
     private SwooleEmitter $emitter;
 
-    /** @psalm-var ResponseInterface&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var ResponseInterface&MockObject */
     private ResponseInterface $errorResponse;
 
     private ?Throwable $exceptionToThrowOnRequestGeneration = null;
 
     private RequestHandlerRequestListener $listener;
 
-    /** @psalm-var AccessLogInterface&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var AccessLogInterface&MockObject */
     private AccessLogInterface $logger;
 
-    /** @psalm-var ServerRequestInterface&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var ServerRequestInterface&MockObject */
     private ServerRequestInterface $request;
 
-    /** @psalm-var RequestHandlerInterface&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var RequestHandlerInterface&MockObject */
     private RequestHandlerInterface $requestHandler;
 
-    /** @psalm-var SwooleHttpRequest&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var SwooleHttpRequest&MockObject */
     private SwooleHttpRequest $swooleRequest;
 
-    /** @psalm-var SwooleHttpResponse&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var SwooleHttpResponse&MockObject */
     private SwooleHttpResponse $swooleResponse;
 
     public function setUp(): void

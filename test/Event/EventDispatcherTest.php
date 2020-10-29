@@ -85,7 +85,7 @@ class EventDispatcherTest extends TestCase
         };
 
         $event = new class ($spy) implements StoppableEventInterface {
-            private $spy;
+            private object $spy;
 
             public function __construct(object $spy)
             {

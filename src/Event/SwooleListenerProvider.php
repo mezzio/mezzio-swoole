@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Event;
 
 use Psr\EventDispatcher\ListenerProviderInterface;
+use Traversable;
 
 use function in_array;
 
@@ -20,7 +21,7 @@ class SwooleListenerProvider implements ListenerProviderInterface
     private array $listeners = [];
 
     /**
-     * @psalm-return \Traversable
+     * @psalm-return Traversable
      */
     public function getListenersForEvent(object $event): iterable
     {

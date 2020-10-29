@@ -87,7 +87,7 @@ class StaticResourceHandlerTest extends TestCase
         $expectedResponse->expects($this->once())->method('sendSwooleResponse')->with($this->response, $filename);
 
         $middleware = new class ($expectedResponse) implements MiddlewareInterface {
-            private $response;
+            private StaticResourceResponse $response;
 
             public function __construct(StaticResourceResponse $response)
             {

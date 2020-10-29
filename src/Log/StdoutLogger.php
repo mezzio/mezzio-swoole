@@ -31,49 +31,83 @@ use const PHP_EOL;
  */
 class StdoutLogger implements LoggerInterface
 {
-    // phpcs:disable WebimpressCodingStandard.Functions.Param.MissingSpecification
-    // phpcs:disable WebimpressCodingStandard.Functions.ReturnType.ReturnValue
-
+    /**
+     * @param string $message
+     * @return void
+     */
     public function emergency($message, array $context = [])
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function alert($message, array $context = [])
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function critical($message, array $context = [])
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function error($message, array $context = [])
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function warning($message, array $context = [])
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function notice($message, array $context = [])
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function info($message, array $context = [])
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
 
+    /**
+     * @param string $message
+     * @return void
+     */
     public function debug($message, array $context = [])
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
 
+    /**
+     * @param mixed $level Generally a string from a LogLevel constant.
+     * @param string $message
+     * @return void
+     */
     public function log($level, $message, array $context = [])
     {
         foreach ($context as $key => $value) {

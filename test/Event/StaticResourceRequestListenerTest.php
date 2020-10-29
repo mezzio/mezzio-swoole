@@ -15,16 +15,17 @@ use Mezzio\Swoole\Event\StaticResourceRequestListener;
 use Mezzio\Swoole\Log\AccessLogInterface;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Mezzio\Swoole\StaticResourceHandlerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticResourceRequestListenerTest extends TestCase
 {
-    /** @psalm-var StaticResourceHandlerInterface&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var StaticResourceHandlerInterface&MockObject */
     private StaticResourceHandlerInterface $handler;
     private StaticResourceRequestListener $listener;
-    /** @psalm-var AccessLogInterface&\PHPUnit\Framework\MockObject\MockObject */
+    /** @psalm-var AccessLogInterface&MockObject */
     private AccessLogInterface $logger;
     private SwooleHttpRequest $swooleRequest;
     private SwooleHttpResponse $swooleResponse;

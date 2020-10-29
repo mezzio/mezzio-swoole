@@ -103,7 +103,7 @@ class StaticMappedResourceHandlerTest extends TestCase
             ->with($this->response, $this->fullPath);
 
         $middleware = new class ($expectedResponse) implements MiddlewareInterface {
-            private $response;
+            private StaticResourceResponse $response;
 
             public function __construct(StaticResourceResponse $response)
             {
@@ -138,7 +138,7 @@ class StaticMappedResourceHandlerTest extends TestCase
         $expectedResponse->method('isFailure')->willReturn(true);
 
         $middleware = new class ($expectedResponse) implements MiddlewareInterface {
-            private $response;
+            private StaticResourceResponse $response;
 
             public function __construct(StaticResourceResponse $response)
             {

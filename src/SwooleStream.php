@@ -48,16 +48,16 @@ final class SwooleStream implements StreamInterface
     /**
      * Swoole request containing the body contents.
      */
-    private $request;
+    private SwooleHttpRequest $request;
 
     public function __construct(SwooleHttpRequest $request)
     {
         $this->request = $request;
     }
 
-    // phpcs:disable WebimpressCodingStandard.Functions.Param.MissingSpecification
-    // phpcs:disable WebimpressCodingStandard.Functions.ReturnType.ReturnValue
-
+    /**
+     * @return string
+     */
     public function getContents()
     {
         // If we're at the end of the string, return an empty string.
@@ -89,12 +89,18 @@ final class SwooleStream implements StreamInterface
         return $this->body;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $this->body !== null || $this->initRawContent();
         return $this->body;
     }
 
+    /**
+     * @return int
+     */
     public function getSize()
     {
         if (null === $this->bodySize) {
@@ -104,21 +110,34 @@ final class SwooleStream implements StreamInterface
         return $this->bodySize;
     }
 
+    /**
+     * @return int
+     */
     public function tell()
     {
         return $this->index;
     }
 
+    /**
+     * @return bool
+     */
     public function eof()
     {
         return $this->index >= $this->getSize();
     }
 
+    /**
+     * @return bool Always returns true.
+     */
     public function isReadable()
     {
         return true;
     }
 
+    /**
+     * @param int $length
+     * @return string
+     */
     public function read($length)
     {
         $this->body !== null || $this->initRawContent();
@@ -133,12 +152,17 @@ final class SwooleStream implements StreamInterface
         return $result;
     }
 
+    /**
+     * @return bool Always returns true.
+     */
     public function isSeekable()
     {
         return true;
     }
 
     /**
+     * @param int $offset
+     * @param int $whence
      * @psalm-return void
      */
     public function seek($offset, $whence = SEEK_SET)
@@ -185,16 +209,32 @@ final class SwooleStream implements StreamInterface
         $this->index = 0;
     }
 
+    /**
+     * @return bool Always returns false.
+     */
     public function isWritable()
     {
         return false;
     }
 
+    // phpcs:disable Squiz.Commenting.FunctionComment.InvalidNoReturn
+
+    /**
+     * @param string $string
+     * @return int
+     * @throws RuntimeException Always throws, as not writable.
+     */
     public function write($string)
     {
         throw new RuntimeException('Stream is not writable');
     }
 
+    // phpcs:enable
+
+    /**
+     * @param string $key
+     * @return null|array
+     */
     public function getMetadata($key = null)
     {
         return $key ? null : [];
