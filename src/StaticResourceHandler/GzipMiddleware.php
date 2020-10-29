@@ -30,18 +30,15 @@ use const ZLIB_ENCODING_GZIP;
 
 class GzipMiddleware implements MiddlewareInterface
 {
-    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
     /**
-     * @var array<int, string>
+     * @psalm-var array<int, string>
      */
     public const COMPRESSION_CONTENT_ENCODING_MAP = [
         ZLIB_ENCODING_DEFLATE => 'deflate',
         ZLIB_ENCODING_GZIP    => 'gzip',
     ];
-    // phpcs:enable
 
-    /** @var int */
-    private $compressionLevel;
+    private int $compressionLevel;
 
     /**
      * @param int $compressionLevel Compression level to use. Values less than

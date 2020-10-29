@@ -44,15 +44,13 @@ EOH;
     public $killProcess;
 
     /**
-     * @internal
+     * How long to wait for the server process to end. Only change the value when testing.
      *
-     * @var int How long to wait for the server process to end. Only change
-     *     the value when testing.
+     * @internal
      */
-    public $waitThreshold = 60;
+    public int $waitThreshold = 60;
 
-    /** @var PidManager */
-    private $pidManager;
+    private PidManager $pidManager;
 
     public function __construct(PidManager $pidManager)
     {

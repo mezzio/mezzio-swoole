@@ -37,14 +37,13 @@ class CacheControlMiddleware implements MiddlewareInterface
         'private',
     ];
 
-    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
     /**
-     * @var array<string, list<string>> Key is a regexp; if a static resource path
-     *     matches the regexp, the array of values provided will be used as
-     *     the Cache-Control header value.
+     * Key is a regexp; if a static resource path matches the regexp, the array
+     * of values provided will be used as the Cache-Control header value.
+     *
+     * @psalm-var array<string, list<string>>
      */
-    private $cacheControlDirectives;
-    // phpcs:enable
+    private array $cacheControlDirectives;
 
     public function __construct(array $cacheControlDirectives = [])
     {

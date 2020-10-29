@@ -42,26 +42,20 @@ class AccessLogDataMap
 
     /**
      * Timestamp when created, indicating end of request processing.
-     *
-     * @var float
      */
-    private $endTime;
+    private float $endTime;
 
-    /** @var SwooleHttpRequest */
-    private $request;
+    private SwooleHttpRequest $request;
 
-    /** @var null|PsrResponse */
-    private $psrResponse;
+    /** @psalm-suppress PropertyNotSetInConstructor */
+    private ?PsrResponse $psrResponse;
 
     /**
      * Whether or not to do a hostname lookup when retrieving the remote host name
-     *
-     * @var bool
      */
-    private $useHostnameLookups;
+    private bool $useHostnameLookups;
 
-    /** @var StaticResourceResponse */
-    private $staticResource;
+    private StaticResourceResponse $staticResource;
 
     public static function createWithPsrResponse(
         SwooleHttpRequest $request,

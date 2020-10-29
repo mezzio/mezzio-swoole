@@ -29,8 +29,7 @@ EOH;
     /** @var string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:status';
 
-    /** @var PidManager */
-    private $pidManager;
+    private PidManager $pidManager;
 
     public function __construct(PidManager $pidManager)
     {

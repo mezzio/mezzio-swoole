@@ -23,7 +23,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
     use ValidateRegexTrait;
 
     /** @var string[] */
-    private $lastModifiedDirectives = [];
+    private array $lastModifiedDirectives = [];
 
     /**
      * @var string[] Array of regexex indicating paths/file types that should

@@ -31,21 +31,17 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     /**
      * @link https://anonscm.debian.org/cgit/pkg-apache/apache2.git/tree/debian/config-dir/apache2.conf.in#n212
      *
-     * @codingStandardsIgnoreStart
      * phpcs:disable
      */
     public const FORMAT_COMMON_DEBIAN = '%h %l %u %t “%r” %>s %O';
     public const FORMAT_COMBINED_DEBIAN = '%h %l %u %t “%r” %>s %O “%{Referer}i” “%{User-Agent}i”';
     public const FORMAT_VHOST_COMBINED_DEBIAN = '%v:%p %h %l %u %t “%r” %>s %O “%{Referer}i” “%{User-Agent}i"';
-    // @codingStandardsIgnoreEnd
     // phpcs:enable
 
     /**
      * Message format to use when generating a log message.
-     *
-     * @var string
      */
-    private $format;
+    private string $format;
 
     public function __construct(string $format = self::FORMAT_COMMON)
     {

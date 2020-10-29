@@ -20,15 +20,14 @@ class StaticResourceHandler implements StaticResourceHandlerInterface
 {
     use StaticResourceHandler\ValidateMiddlewareTrait;
 
-    /** @var string */
-    private $docRoot;
+    private string $docRoot;
 
     /**
      * Middleware to execute when serving a static resource.
      *
      * @var StaticResourceHandler\MiddlewareInterface[]
      */
-    private $middleware;
+    private array $middleware;
 
     /**
      * @throws Exception\InvalidStaticResourceMiddlewareException For any

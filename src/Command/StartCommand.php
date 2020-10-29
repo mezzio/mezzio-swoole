@@ -45,8 +45,7 @@ EOH;
     /** @var string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:start';
 
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {

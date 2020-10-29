@@ -31,8 +31,7 @@ class SwooleEmitter implements EmitterInterface
      */
     public const CHUNK_SIZE = 2097152; // 2 MB
 
-    /** @var SwooleHttpResponse */
-    private $swooleResponse;
+    private SwooleHttpResponse $swooleResponse;
 
     public function __construct(SwooleHttpResponse $response)
     {

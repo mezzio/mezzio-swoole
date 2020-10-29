@@ -34,8 +34,7 @@ EOH;
     /** @var string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:reload';
 
-    /** @var int */
-    private $serverMode;
+    private int $serverMode;
 
     public function __construct(int $serverMode)
     {

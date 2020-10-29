@@ -35,7 +35,7 @@ class InotifyFileWatcher implements FileWatcherInterface
     private $inotify;
 
     /** @var string[] */
-    private $filePathByWd = [];
+    private array $filePathByWd = [];
 
     public function __construct()
     {

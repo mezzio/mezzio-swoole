@@ -21,17 +21,13 @@ class ClearStatCacheMiddleware implements MiddlewareInterface
      * Interval at which to clear fileystem stat cache. Values below 1 indicate
      * the stat cache should ALWAYS be cleared. Otherwise, the value is the number
      * of seconds between clear operations.
-     *
-     * @var int
      */
-    private $interval;
+    private int $interval;
 
     /**
      * When the filesystem stat cache was last cleared.
-     *
-     * @var int
      */
-    private $lastCleared;
+    private int $lastCleared = 0;
 
     public function __construct(int $interval)
     {

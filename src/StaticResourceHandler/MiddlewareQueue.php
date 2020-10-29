@@ -20,7 +20,7 @@ use function array_shift;
 class MiddlewareQueue
 {
     /** @var MiddlewareInterface[] */
-    private $middleware;
+    private array $middleware;
 
     public function __construct(array $middleware)
     {

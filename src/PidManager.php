@@ -21,8 +21,7 @@ use function unlink;
 
 class PidManager
 {
-    /** @var string */
-    private $pidFile = '';
+    private string $pidFile = '';
 
     public function __construct(string $pidFile)
     {

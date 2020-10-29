@@ -100,28 +100,26 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
 
     /**
      * Cache the file extensions (type) for valid static file
-     *
-     * @var array
      */
-    private $cacheTypeFile = [];
+    private array $cacheTypeFile = [];
 
-    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
-    /** @var array<string, string> Extension => mimetype map */
-    private $typeMap;
-    // phpcs:enable
-
-    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidParamName
     /**
-     * @param null|array<string, string> $typeMap Map of extensions to Content-Type
-     *     values. If `null` is provided, the default list in TYPE_MAP_DEFAULT will
-     *     be used. Otherwise, the list provided is used verbatim.
+     * Extension => mimetype map
+     *
+     * @psalm-var array<string, string>
+     */
+    private array $typeMap;
+
+    /**
+     * @param null|array $typeMap Map of extensions to Content-Type values. If
+     *     `null` is provided, the default list in TYPE_MAP_DEFAULT will be
+     *     used. Otherwise, the list provided is used verbatim.
+     * @psalm-param null|array<string, string> $typeMap
      */
     public function __construct(?array $typeMap = null)
     {
         $this->typeMap = $typeMap ?? self::TYPE_MAP_DEFAULT;
     }
-
-    // phpcs:enable
 
     /**
      * {@inheritDoc}

@@ -34,7 +34,7 @@ class ETagMiddleware implements MiddlewareInterface
     public const ETAG_VALIDATION_WEAK   = 'weak';
 
     /** @var string[] */
-    private $allowedETagValidationTypes = [
+    private array $allowedETagValidationTypes = [
         self::ETAG_VALIDATION_STRONG,
         self::ETAG_VALIDATION_WEAK,
     ];
@@ -43,15 +43,13 @@ class ETagMiddleware implements MiddlewareInterface
      * @var string[] Array of regexp; if a path matches a regexp, an ETag will
      *     be emitted for the static file resource.
      */
-    private $etagDirectives;
+    private array $etagDirectives;
 
     /**
      * ETag validation type, 'weak' means Weak Validation, 'strong' means Strong Validation,
      * other value will not response ETag header.
-     *
-     * @var string
      */
-    private $etagValidationType;
+    private string $etagValidationType;
 
     public function __construct(array $etagDirectives = [], string $etagValidationType = self::ETAG_VALIDATION_WEAK)
     {

@@ -17,16 +17,12 @@ class HotCodeReloaderWorkerStartListener
 {
     /**
      * A file watcher to monitor changes in files.
-     *
-     * @var FileWatcherInterface
      */
-    private $fileWatcher;
+    private FileWatcherInterface $fileWatcher;
 
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
-    /** @var int */
-    private $interval;
+    private int $interval;
 
     public function __construct(FileWatcherInterface $fileWatcher, LoggerInterface $logger, int $interval)
     {

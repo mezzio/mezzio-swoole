@@ -23,14 +23,9 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
      *
      * @var StaticResourceHandler\MiddlewareInterface[]
      */
-    private $middleware;
+    private array $middleware;
 
-    /**
-     * Middleware to execute when serving a static resource.
-     *
-     * @var FileLocationRepositoryInterface[]
-     */
-    private $fileLocationRepo;
+    private FileLocationRepositoryInterface $fileLocationRepo;
 
     /**
      * @throws Exception\InvalidStaticResourceMiddlewareException For any
@@ -49,6 +44,7 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
     ): ?StaticResourceHandler\StaticResourceResponse {
+        /** @psalm-suppress MixedArgument */
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
         if (! $filename) {
             return null;

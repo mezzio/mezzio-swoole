@@ -26,24 +26,18 @@ final class SwooleStream implements StreamInterface
 {
     /**
      * Memoized body content, as pulled via SwooleHttpRequest::rawContent().
-     *
-     * @var string
      */
-    private $body;
+    private ?string $body = null;
 
     /**
      * Length of the request body content.
-     *
-     * @var int
      */
-    private $bodySize;
+    private ?int $bodySize = null;
 
     /**
      * Index to which we have seek'd or read within the request body.
-     *
-     * @var int
      */
-    private $index = 0;
+    private int $index = 0;
 
     /**
      * Swoole request containing the body contents.
@@ -78,15 +72,17 @@ final class SwooleStream implements StreamInterface
         // Set the internal index to the end of the string
         $this->index = $size;
 
-        if ($index) {
+        if ($index && null !== $this->body) {
             // Per PSR-7 spec, if we have seeked or read to a given position in
             // the string, we should only return the contents from that position
             // forward.
-            return substr($this->body, $index);
+            $remaining = substr($this->body, $index);
+
+            return $remaining ?: '';
         }
 
         // If we're at the start of the content, return all of it.
-        return $this->body;
+        return (string) $this->body;
     }
 
     /**

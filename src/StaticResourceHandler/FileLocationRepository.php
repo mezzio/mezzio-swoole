@@ -27,10 +27,9 @@ use function trim;
 class FileLocationRepository implements FileLocationRepositoryInterface
 {
     /**
-     * @var array
      * Associative array of URI prefixes and directories
      */
-    private $mappedDocRoots = [];
+    private array $mappedDocRoots = [];
 
     /**
      * Initialize repository with default mapped document roots

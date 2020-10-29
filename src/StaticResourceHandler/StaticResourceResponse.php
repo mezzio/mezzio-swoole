@@ -22,25 +22,21 @@ class StaticResourceResponse
     /** @var int */
     private $contentLength = 0;
 
-    // phpcs:disable WebimpressCodingStandard.Commenting.TagWithType.InvalidTypeFormat
-    /** @var array<string, string> */
-    private $headers = [];
-    // phpcs:enable
+    /** @psalm-var array<string, string> */
+    private array $headers = [];
 
     /**
-     * @var bool Does this response represent a failure to locate the requested
-     *     resource and/or that it cannot be requested?
+     * Does this response represent a failure to locate the requested resource
+     * and/or that it cannot be requested?
      */
-    private $isFailure = false;
+    private bool $isFailure = false;
 
     /** @var callable */
     private $responseContentCallback;
 
-    /** @var bool */
-    private $sendContent = true;
+    private bool $sendContent = true;
 
-    /** @var int */
-    private $status;
+    private int $status;
 
     /**
      * @param null|callable $responseContentCallback Callback to use when emitting
