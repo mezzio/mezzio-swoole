@@ -20,7 +20,7 @@ The `mezzio:swoole:start` command, however, may need customizations if you have 
 
 The `mezzio:swoole:start` command will start the web server using the following steps:
 
-- It pulls the `Swoole\Http\Server` service from the application dependency injection container, and calls `set()` on it with options denoting the number of workers to run (provided via the `--num-workers` or `-w` option), and whether or not to daemonize the server (provided via the `--daemonize` or `-d` option).
+- It pulls the `Swoole\Http\Server` service from the application dependency injection container, and calls `set()` on it with options denoting the number of workers to run (provided via the `--num-workers` or `-w` option), the number of task workers to spawn (provided via the `--num-task-workers` or `-t` option), and whether or not to daemonize the server (provided via the `--daemonize` or `-d` option).
 
 - It pulls the `Mezzio\Application` and `Mezzio\MiddlewareFactory` services from the container.
 

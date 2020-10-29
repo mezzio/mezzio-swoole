@@ -29,11 +29,12 @@ Tasks are queued in the order that they trigger, meaning that a `task_worker_num
 ];
 ```
 
-> ### No CLI option for task_worker_num
+> ### CLI options for worker_num and task_worker_num
 >
-> Unlike `worker_num`, there is no CLI option for `task_worker_num`.
-> This is because enabling the task worker also requires registering a task worker with the server.
-> To prevent accidental startup failures due to passing an option to specify the number of task workers without having registered a task worker, we omitted the CLI option.
+> Each of the `worker_num` and `task_worker_num` options have corresponding options in the `mezzio:swoole:start` and `mezzio:swoole:reload` console commands:
+>
+> - `--num-workers|-w` can be used to specify the number of HTTP Server Workers
+> - `--num-task-workers|-t` can be used to specify the number of Task Workers
 
 ## Task Events
 

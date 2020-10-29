@@ -100,6 +100,31 @@ class ReloadCommandTest extends TestCase
         $this->assertSame('w', $option->getShortcut());
     }
 
+    /**
+     * @depends testConstructorAcceptsServerMode
+     */
+    public function testCommandDefinesNumTaskWorkersOption(ReloadCommand $command): InputOption
+    {
+        $this->assertTrue($command->getDefinition()->hasOption('num-task-workers'));
+        return $command->getDefinition()->getOption('num-task-workers');
+    }
+
+    /**
+     * @depends testCommandDefinesNumTaskWorkersOption
+     */
+    public function testNumTaskWorkersOptionIsRequired(InputOption $option): void
+    {
+        $this->assertTrue($option->isValueRequired());
+    }
+
+    /**
+     * @depends testCommandDefinesNumTaskWorkersOption
+     */
+    public function testNumTaskWorkersOptionDefinesShortOption(InputOption $option): void
+    {
+        $this->assertSame('t', $option->getShortcut());
+    }
+
     public function testExecuteEndsWithErrorWhenServerModeIsNotProcessMode(): void
     {
         $command = new ReloadCommand(SWOOLE_BASE);
@@ -149,7 +174,17 @@ class ReloadCommandTest extends TestCase
     {
         $command = new ReloadCommand(SWOOLE_PROCESS);
 
-        $this->input->method('getOption')->with('num-workers')->willReturn(5);
+        $this->input
+            ->expects($this->exactly(2))
+            ->method('getOption')
+            ->withConsecutive(
+                ['num-workers'],
+                ['num-task-workers']
+            )
+            ->willReturnOnConsecutiveCalls(
+                5,
+                null
+            );
 
         $stopCommand = $this->createMock(Command::class);
         $stopCommand
@@ -218,7 +253,17 @@ class ReloadCommandTest extends TestCase
     {
         $command = new ReloadCommand(SWOOLE_PROCESS);
 
-        $this->input->method('getOption')->with('num-workers')->willReturn(5);
+        $this->input
+            ->expects($this->exactly(2))
+            ->method('getOption')
+            ->withConsecutive(
+                ['num-workers'],
+                ['num-task-workers']
+            )
+            ->willReturnOnConsecutiveCalls(
+                5,
+                2
+            );
 
         $stopCommand = $this->createMock(Command::class);
         $stopCommand
@@ -236,7 +281,7 @@ class ReloadCommandTest extends TestCase
             ->method('run')
             ->with(
                 $this->callback(static function (ArrayInput $arg) {
-                    return 'start --daemonize=1 --num-workers=5' === (string) $arg;
+                    return 'start --daemonize=1 --num-workers=5 --num-task-workers=2' === (string) $arg;
                 }),
                 $this->output
             )

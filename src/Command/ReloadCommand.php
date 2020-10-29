@@ -53,6 +53,12 @@ EOH;
             InputOption::VALUE_REQUIRED,
             'Number of worker processes to use after reloading.'
         );
+        $this->addOption(
+            'num-task-workers',
+            't',
+            InputOption::VALUE_REQUIRED,
+            'Number of task worker processes to use.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -87,12 +93,20 @@ EOH;
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 
-        $start  = $application->find('start');
-        $result = $start->run(new ArrayInput([
+        $start = $application->find('start');
+
+        $inputArguments = [
             'command'       => 'start',
             '--daemonize'   => true,
             '--num-workers' => $input->getOption('num-workers') ?? StartCommand::DEFAULT_NUM_WORKERS,
-        ]), $output);
+        ];
+
+        $numTaskWorkers = $input->getOption('num-task-workers');
+        if (null !== $numTaskWorkers) {
+            $inputArguments['--num-task-workers'] = $numTaskWorkers;
+        }
+
+        $result = $start->run(new ArrayInput($inputArguments), $output);
 
         if (0 !== $result) {
             $output->writeln('<error>Cannot reload server: unable to start server</error>');

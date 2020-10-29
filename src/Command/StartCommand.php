@@ -70,6 +70,12 @@ EOH;
             InputOption::VALUE_REQUIRED,
             'Number of worker processes to use.'
         );
+        $this->addOption(
+            'num-task-workers',
+            't',
+            InputOption::VALUE_REQUIRED,
+            'Number of task worker processes to use.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -80,14 +86,18 @@ EOH;
             return 1;
         }
 
-        $serverOptions = [];
-        $daemonize     = $input->getOption('daemonize');
-        $numWorkers    = $input->getOption('num-workers');
+        $serverOptions  = [];
+        $daemonize      = $input->getOption('daemonize');
+        $numWorkers     = $input->getOption('num-workers');
+        $numTaskWorkers = $input->getOption('num-task-workers');
         if ($daemonize) {
             $serverOptions['daemonize'] = $daemonize;
         }
         if (null !== $numWorkers) {
             $serverOptions['worker_num'] = $numWorkers;
+        }
+        if (null !== $numTaskWorkers) {
+            $serverOptions['task_worker_num'] = $numTaskWorkers;
         }
 
         if ([] !== $serverOptions) {

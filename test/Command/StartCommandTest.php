@@ -129,6 +129,31 @@ class StartCommandTest extends TestCase
     /**
      * @depends testConstructorAcceptsContainer
      */
+    public function testCommandDefinesNumTaskWorkersOption(StartCommand $command): InputOption
+    {
+        $this->assertTrue($command->getDefinition()->hasOption('num-task-workers'));
+        return $command->getDefinition()->getOption('num-task-workers');
+    }
+
+    /**
+     * @depends testCommandDefinesNumTaskWorkersOption
+     */
+    public function testNumTaskWorkersOptionIsRequired(InputOption $option): void
+    {
+        $this->assertTrue($option->isValueRequired());
+    }
+
+    /**
+     * @depends testCommandDefinesNumTaskWorkersOption
+     */
+    public function testNumTaskWorkersOptionDefinesShortOption(InputOption $option): void
+    {
+        $this->assertSame('t', $option->getShortcut());
+    }
+
+    /**
+     * @depends testConstructorAcceptsContainer
+     */
     public function testCommandDefinesDaemonizeOption(StartCommand $command): InputOption
     {
         $this->assertTrue($command->getDefinition()->hasOption('daemonize'));
@@ -205,6 +230,7 @@ class StartCommandTest extends TestCase
             ->will($this->returnValueMap([
                 ['daemonize', true],
                 ['num-workers', 6],
+                ['num-task-workers', 4],
             ]));
 
         $this->pidManager->method('read')->willReturn($pids);
@@ -215,8 +241,10 @@ class StartCommandTest extends TestCase
             ->with($this->callback(static function (array $options) {
                 return array_key_exists('daemonize', $options)
                     && array_key_exists('worker_num', $options)
+                    && array_key_exists('task_worker_num', $options)
                     && true === $options['daemonize']
-                    && 6 === $options['worker_num'];
+                    && 6 === $options['worker_num']
+                    && 4 === $options['task_worker_num'];
             }));
 
         $application->expects($this->once())->method('run');
@@ -252,6 +280,7 @@ class StartCommandTest extends TestCase
             ->will($this->returnValueMap([
                 ['daemonize', false],
                 ['num-workers', null],
+                ['num-task-workers', null],
             ]));
 
         [$command, $httpServer, $application] = $this->prepareSuccessfulStartCommand($pids);
