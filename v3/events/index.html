@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Swoole support for Mezzio">  
-    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v1/intro/">
+    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v3/events/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>Intro - mezzio-swoole - Laminas Docs</title>
+    <title>Swoole HTTP Server Events - mezzio-swoole - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -125,26 +125,10 @@
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Intro</a>
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -152,6 +136,12 @@
     <li class="subnavigation__list-item">
         <span class="subnavigation__headline">Reference</span>
         <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Swoole HTTP Server Events</a>
+    </li>
+
             
                 
     <li class="subnavigation__list-item ">
@@ -162,6 +152,30 @@
                 
     <li class="subnavigation__list-item ">
         <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
     </li>
 
             
@@ -180,6 +194,43 @@
         </ul>
     </li>
 
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cookbook</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             
@@ -228,13 +279,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v1
+                v3
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../../v3/intro/" class="dropdown-item">
+                    <a href="../intro/" class="dropdown-item active">
                         
                             v3 (latest)
                         
@@ -250,7 +301,7 @@
                 
             
                 
-                    <a href="./" class="dropdown-item active">
+                    <a href="../../v1/intro/" class="dropdown-item">
                         
                             v1
                         
@@ -290,15 +341,19 @@
             <ul class="toc__list">
                 
                     <li class="toc__entry">
-                        <a href="#install-swoole" class="toc__link nav-link">Install swoole</a>
+                        <a href="#event-classes" class="toc__link nav-link">Event classes</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#install-mezzio-swoole" class="toc__link nav-link">Install mezzio-swoole</a>
+                        <a href="#listeners" class="toc__link nav-link">Listeners</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#swoole-with-mezzio" class="toc__link nav-link">Swoole with Mezzio</a>
+                        <a href="#providing-a-dispatcher-and-listeners" class="toc__link nav-link">Providing a dispatcher and listeners</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#faq" class="toc__link nav-link">FAQ</a>
                     </li>
                 
             </ul>
@@ -323,8 +378,15 @@
                         
                     
                 
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Reference</li>
+                        
+                    
+                
 
-                <li class="breadcrumb-item active" aria-current="page">Intro</li>
+                <li class="breadcrumb-item active" aria-current="page">Swoole HTTP Server Events</li>
             
         
     </ol>
@@ -332,97 +394,243 @@
 
 
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
-            The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
-        </p>
-    </div>
-
 
 
 
     
     
+        <h2 class="chapter__headline">Reference</h2>
+    
 
-    <h1 id="swoole">Swoole</h1>
-<p><a href="https://www.swoole.co.uk/">Swoole</a> is a PECL extension for developing
-asynchronous applications in PHP. It enables PHP developers to write
-high-performance, scalable, concurrent TCP, UDP, Unix socket, HTTP, or Websocket
-services without requiring in-depth knowledge about non-blocking I/O programming
-or the low-level Linux kernel.</p>
-<h2 id="install-swoole">Install swoole</h2>
-<p>You can install the Swoole extension on Linux or Mac environments using the
-following commands:</p>
-<pre class="highlight"><code class="language-bash">$ pecl install swoole</code></pre>
-<p>For more information on the extension, <a href="https://pecl.php.net/package/swoole">visit its package details on PECL</a>.</p>
-<h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
-<p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
-<pre class="highlight"><code class="language-bash">$ composer require mezzio/mezzio-swoole</code></pre>
-<h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
-<p>mezzio-swoole enables an Mezzio application to be executed with
-the <a href="https://www.swoole.co.uk/">Swoole</a> extension. This means you can run the
-application from the command line, <strong>without requiring a web server</strong>.</p>
-<p>You can run the application using the following command:</p>
-<pre class="highlight"><code class="language-bash">$ php public/index.php</code></pre>
-<p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
+    <h1 id="swoole-http-server-events">Swoole HTTP Server Events</h1>
+<p>The <code>Swoole\Http\Server</code> <a href="https://www.swoole.co.uk/docs/modules/swoole-http-server-doc#events">emits a number of events</a> during its lifecycle.
+Each is listened to by calling the server's <code>on()</code> method with the event name and a callback for handling the event.
+In each case, Swoole only allows exactly one listener.
+In some cases, Swoole will raise an exception when you attempt to register more listeners; in others, it will silently replace the listener.</p>
+<p>To make the system more flexible, version 3 of this library now has the <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> class compose a <a href="https://www.php-fig.org/psr/psr-14/">PSR-14 EventDispatcherInterface</a> instance that is then triggered for each Swoole HTTP Server event.
+Additionally, the arguments passed to the Swoole listener are now aggregated into typed event classes, allowing access to the arguments by your PHP listener classes.</p>
+<h2 id="event-classes">Event classes</h2>
+<p>All event classes are in the <code>Mezzio\Swoole\Event</code> namespace.</p>
+<h3>Start Event</h3>
+<p>Describes the "start" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+/**
+ * Describes "start" event
+ */
+class ServerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
+<h3>Manager Start Event</h3>
+<p>Describes the "managerstart" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class ManagerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
+<h3>Manager Stop Event</h3>
+<p>Describes the "managerstop" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class ManagerStopEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
+<h3>Worker Start Event</h3>
+<p>Describes the "workerstart" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class WorkerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getWorkerId(): int;
+}</code></pre>
+<h3>Worker Stop Event</h3>
+<p>Describes the "workerstop" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class WorkerStopEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getWorkerId(): int;
+}</code></pre>
+<h3>Worker Error Event</h3>
+<p>Describes the "workererror" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class WorkerErrorEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getWorkerId(): int;
+    public function getExitCode(): int;
+    public function getSignal(): int;
+}</code></pre>
+<h3>Request Event</h3>
+<p>Describes the "request" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Psr\EventDispatcher\StoppableEventInterface;
+use Swoole\Http\Request as SwooleHttpRequest;
+use Swoole\Http\Response as SwooleHttpResponse;
+use Swoole\Http\Server as SwooleHttpServer;
+
+class RequestEvent implements StoppableEventInterface
+{
+    public function isPropagationStopped(): bool;
+    public function getRequest(): SwooleHttpRequest;
+    public function getResponse(): SwooleHttpResponse;
+    public function responseSent(): void;
+}</code></pre>
+<h3>Before Reload Event</h3>
+<p>Describes the "beforereload" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class BeforeReloadEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
+<h3>After Reload Event</h3>
+<p>Describes the "afterreload" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class AfterReloadEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
+<h3>Task Event</h3>
+<p>Describes the "task" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Psr\EventDispatcher\StoppableEventInterface;
+use Swoole\Http\Server as SwooleHttpServer;
+
+class TaskEvent implements StoppableEventInterface
+{
+    public function isPropagationStopped(): bool;
+    public function getServer(): SwooleHttpServer;
+    public function getTaskId(): int;
+    public function getWorkerId(): int;
+
+    /**
+     * Data passed to the task() method
+     */
+    public function getData(): mixed;
+
+    /**
+     * "Return value" of the task; what to pass to finish()
+     *
+     * @param mixed $returnValue
+     */
+    public function setReturnValue($returnValue): void;
+
+    /** @return mixed */
+    public function getReturnValue();
+
+    /**
+     * Call this to indicate processing is complete, and to stop processing
+     * further listeners.
+     */
+    public function taskProcessingComplete(): void;
+}</code></pre>
+<h3>Finish Event</h3>
+<p>Describes the "finish" event emitted by the Swoole HTTP Server, called when processing a task has been completed.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class TaskFinishEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getTaskId(): int;
+
+    /**
+     * Data passed to the finish() method
+     */
+    public function getData(): mixed;
+}</code></pre>
+<h3>Shutdown Event</h3>
+<p>Describes the "shutdown" event emitted by the Swoole HTTP Server.</p>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
+
+use Swoole\Http\Server as SwooleHttpServer;
+
+class ServerShutdownEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
+<h2 id="listeners">Listeners</h2>
+<p>We define the following listeners for the specified events.
+All events and listeners are in the <code>Mezzio\Swoole\Event</code> namespace.</p>
+<ul>
+<li><code>ServerStartEvent</code>:</li>
+<li><code>ServerStartListener</code>: initializes the master and manager PIDs, sets the working directory, sets the master process name, and logs that the server has started.</li>
+<li><code>WorkerStartEvent</code>:</li>
+<li><code>WorkerStartListener</code>: sets the working directory, sets the worker process name, and logs the worker has started.</li>
+<li><code>HotCodeReloaderWorkerStartListener</code>: initiates a hot code reload within the worker.</li>
+<li><code>RequestEvent</code></li>
+<li><code>RequestHandlerRequestListener</code>: marshals a PSR-7 request from the Swoole HTTP request, passes it to the application request handler to generate a PSR-7 response, marshals and sends the Swoole HTTP Response from the PSR-7 response, and logs the request.
+    If an error occurs marshaling the PSR-7 request, it will generate a PSR-7 error response, emit it, and log the request.
+    In both cases, it marks the <code>responseSent()</code> in the event, stopping propagation.</li>
+<li><code>StaticResourceRequestListener</code>: attempts to process a static resource request; if it was able, it sends the Swoole HTTP Response, logs the access, and marks the <code>responseSent()</code> in the event, stopping propagation.
+    Otherwise, it returns, allowing the next listener to handle the event.</li>
+<li><code>ServerShutdownEvent</code>:</li>
+<li><code>ServerShutdownListener</code>: destroys the master and manager PIDs, all worker processes, and logs the server shutdown.</li>
+</ul>
 <blockquote>
-<h3>Mezzio skeleton versions prior to 3.1.0</h3>
-<p>The above will work immediately after installing mezzio-swoole if you
-are using a version of <a href="https://github.com/mezzio/mezzio-skeleton">mezzio-skeleton</a>
-from 3.1.0 or later.</p>
-<p>For applications based on previous versions of the skeleton, you will need to
-create a configuration file such as <code>config/autoload/mezzio-swoole.global.php</code>
-or <code>config/autoload/mezzio-swoole.local.php</code> with the following
-contents:</p>
-<pre class="highlight"><code class="language-php">&lt;?php
-use Mezzio\Swoole\ConfigProvider;
-
-return (new ConfigProvider())();</code></pre>
+<h3>Short-circuiting</h3>
+<p>Only one event among those provided can be short-circuited: <code>Mezzio\Swoole\Event\RequestEvent</code>.
+All others will trigger every listener encountered.</p>
+<p>With regards to the <code>Mezzio\Swoole\Event\RequestEvent</code>, the <code>Mezzio\Swoole\Event\RequestHandlerRequestListener</code> <strong>always</strong> stops propagation.
+As such, if you want other listeners on that event, they <strong>must</strong> resolve before that listener.
+An example of such a listener is the <code>Mezzio\Swoole\Event\StaticResourceRequestListener</code>, which only stops propagation if it was able to resolve the request to a static resource.</p>
 </blockquote>
-<p>You can change the host address and/or host name as well as the port using a
-configuration file, as follows:</p>
-<pre class="highlight"><code class="language-php">// In config/autoload/swoole.local.php:
-return [
+<h2 id="providing-a-dispatcher-and-listeners">Providing a dispatcher and listeners</h2>
+<p>The shipped <a href="https://docs.laminas.dev/laminas-config-aggregator/config-providers/">ConfigProvider</a> uses a factory for the <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> class that consumes the following services:</p>
+<ul>
+<li><code>Swoole\Http\Server</code>, which represents the actual Swoole HTTP Server instance to run.</li>
+<li><code>Mezzio\Swoole\Event\EventDispatcherInterface</code></li>
+</ul>
+<p><code>SwooleRequestHandlerRunner</code> accepts any <a href="https://www.php-fig.org/psr/psr-14/">PSR-14</a> instance.
+The service referenced by its factory is a marker interface used only as a service name; this is done to allow you to use a different PSR-14 instance for the web server versus other services in your application.</p>
+<p>By default, the <code>Mezzio\Swoole\Event\EventDispatcherInterface</code> service points to <code>Mezzio\Swoole\Event\EventDispatcher</code>, which is a simple PSR-14 dispatcher implementation.
+That service in turn consumes <code>Mezzio\Swoole\Event\SwooleListenerProvider</code>.</p>
+<p>The factory for <code>SwooleListenerProvider</code>, <code>Mezzio\Swoole\Event\SwooleListenerProviderFactory</code>, consumes the <code>config</code> service, looking for the following configuration:</p>
+<pre class="highlight"><code class="language-php">[
     'mezzio-swoole' =&gt; [
         'swoole-http-server' =&gt; [
-            'host' =&gt; '192.168.0.1',
-            'port' =&gt; 9501,
-        ],
-    ],
-];</code></pre>
-<h3>Providing additional Swoole configuration</h3>
-<p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify
-any accepted Swoole settings. For instance, the following configuration
-demonstrates enabling SSL:</p>
-<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
-return [
-    'mezzio-swoole' =&gt; [
-        'swoole-http-server' =&gt; [
-            'host' =&gt; '192.168.0.1',
-            'port' =&gt; 9501,
-            'mode' =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;
-                                   // SWOOLE_BASE is the default
-            'protocol' =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server
-            'options' =&gt; [
-                // Set the SSL certificate and key paths for SSL support:
-                'ssl_cert_file' =&gt; 'path/to/ssl.crt',
-                'ssl_key_file' =&gt; 'path/to/ssl.key',
-                // Available in Swoole 4.1 and up; enables coroutine support
-                // for most I/O operations:
-                'enable_coroutine' =&gt; true,
+            'listeners' =&gt; [
+                'EventClassName' =&gt; [
+                    // service names of listeners
+                ],
             ],
         ],
     ],
-];</code></pre>
-<h3>Serving static files</h3>
-<p>We support serving static files. By default, we serve files with extensions in
-the whitelist defined in the constant <code>Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS</code>,
-which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">list of common web MIME types maintained by Mozilla</a>.
-Our static resource capabilities are fairly comprehensive; please see the
-<a href="../static-resources/">chapter on static resources</a> for full details on
-configuration.</p>
+]</code></pre>
+<p>Listeners for each event type are attached in the order they are discovered.</p>
+<p>We recommend using the <code>SwooleListenerProvider</code> service to aggregate the various listeners for Swoole server events, even if you do not use the shipped <code>EventDispatcher</code> implementation.
+Most PSR-14 libraries have functionality for aggregating multiple providers, and should allow you to compose the <code>SwooleListenerProvider</code> within them.</p>
+<h2 id="faq">FAQ</h2>
+<ul>
+<li><a href="../cookbook/static-resource-listener-removal/">Removing the StaticResourceRequestListener</a></li>
+</ul>
 
 
 
@@ -433,7 +641,7 @@ configuration.</p>
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../../v2/migration/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../intro/">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -456,7 +664,7 @@ configuration.</p>
     <div class="help-wanted">
         <p>
             Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v1/intro.md" target="_blank" class="help-wanted__link">
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v3/events.md" target="_blank" class="help-wanted__link">
                 Edit this page on GitHub!
             </a>
         </p>
@@ -495,26 +703,10 @@ configuration.</p>
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Intro</a>
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -522,6 +714,12 @@ configuration.</p>
     <li class="subnavigation__list-item">
         <span class="subnavigation__headline">Reference</span>
         <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Swoole HTTP Server Events</a>
+    </li>
+
             
                 
     <li class="subnavigation__list-item ">
@@ -532,6 +730,30 @@ configuration.</p>
                 
     <li class="subnavigation__list-item ">
         <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
     </li>
 
             
@@ -550,6 +772,43 @@ configuration.</p>
         </ul>
     </li>
 
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cookbook</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             

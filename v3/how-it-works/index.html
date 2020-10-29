@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Swoole support for Mezzio">  
-    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v1/intro/">
+    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v3/how-it-works/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>Intro - mezzio-swoole - Laminas Docs</title>
+    <title>How it works - mezzio-swoole - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -125,26 +125,10 @@
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Intro</a>
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -152,6 +136,12 @@
     <li class="subnavigation__list-item">
         <span class="subnavigation__headline">Reference</span>
         <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
+    </li>
+
             
                 
     <li class="subnavigation__list-item ">
@@ -167,7 +157,31 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">How it works</a>
     </li>
 
             
@@ -180,6 +194,43 @@
         </ul>
     </li>
 
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cookbook</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             
@@ -228,13 +279,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v1
+                v3
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../../v3/intro/" class="dropdown-item">
+                    <a href="../intro/" class="dropdown-item active">
                         
                             v3 (latest)
                         
@@ -250,7 +301,7 @@
                 
             
                 
-                    <a href="./" class="dropdown-item active">
+                    <a href="../../v1/intro/" class="dropdown-item">
                         
                             v1
                         
@@ -290,15 +341,7 @@
             <ul class="toc__list">
                 
                     <li class="toc__entry">
-                        <a href="#install-swoole" class="toc__link nav-link">Install swoole</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#install-mezzio-swoole" class="toc__link nav-link">Install mezzio-swoole</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#swoole-with-mezzio" class="toc__link nav-link">Swoole with Mezzio</a>
+                        <a href="#performance" class="toc__link nav-link">Performance</a>
                     </li>
                 
             </ul>
@@ -323,8 +366,15 @@
                         
                     
                 
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Reference</li>
+                        
+                    
+                
 
-                <li class="breadcrumb-item active" aria-current="page">Intro</li>
+                <li class="breadcrumb-item active" aria-current="page">How it works</li>
             
         
     </ol>
@@ -332,97 +382,84 @@
 
 
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
-            The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
-        </p>
-    </div>
-
 
 
 
     
     
+        <h2 class="chapter__headline">Reference</h2>
+    
 
-    <h1 id="swoole">Swoole</h1>
-<p><a href="https://www.swoole.co.uk/">Swoole</a> is a PECL extension for developing
-asynchronous applications in PHP. It enables PHP developers to write
-high-performance, scalable, concurrent TCP, UDP, Unix socket, HTTP, or Websocket
-services without requiring in-depth knowledge about non-blocking I/O programming
-or the low-level Linux kernel.</p>
-<h2 id="install-swoole">Install swoole</h2>
-<p>You can install the Swoole extension on Linux or Mac environments using the
-following commands:</p>
-<pre class="highlight"><code class="language-bash">$ pecl install swoole</code></pre>
-<p>For more information on the extension, <a href="https://pecl.php.net/package/swoole">visit its package details on PECL</a>.</p>
-<h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
-<p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
-<pre class="highlight"><code class="language-bash">$ composer require mezzio/mezzio-swoole</code></pre>
-<h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
-<p>mezzio-swoole enables an Mezzio application to be executed with
-the <a href="https://www.swoole.co.uk/">Swoole</a> extension. This means you can run the
-application from the command line, <strong>without requiring a web server</strong>.</p>
-<p>You can run the application using the following command:</p>
-<pre class="highlight"><code class="language-bash">$ php public/index.php</code></pre>
-<p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
-<blockquote>
-<h3>Mezzio skeleton versions prior to 3.1.0</h3>
-<p>The above will work immediately after installing mezzio-swoole if you
-are using a version of <a href="https://github.com/mezzio/mezzio-skeleton">mezzio-skeleton</a>
-from 3.1.0 or later.</p>
-<p>For applications based on previous versions of the skeleton, you will need to
-create a configuration file such as <code>config/autoload/mezzio-swoole.global.php</code>
-or <code>config/autoload/mezzio-swoole.local.php</code> with the following
-contents:</p>
-<pre class="highlight"><code class="language-php">&lt;?php
-use Mezzio\Swoole\ConfigProvider;
+    <h1 id="how-it-works">How it works</h1>
+<p>When you run an Mezzio application using Swoole, you will execute PHP from
+the command line interface, <strong>without using a web server</strong>.</p>
+<p>This sounds a bit strange in PHP, though it will be familiar to <a href="https://nodejs.org">Node.js</a>
+developers; the execution model under Swoole is similar to that technology.</p>
+<p>The HTTP server of Swoole is a PHP class that offers callbacks on a number of events,
+using the <code>on(string $name, callable $action)</code> method.</p>
+<p>The request handler implemented in mezzio-swoole is a runner that
+enables the execution of an Mezzio application inside the <code>on('request')</code>
+event of <code>Swoole\Http\Server</code>. This runner is implemented in the
+<code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> class.</p>
+<p>The basic implementation acts similar to the following:</p>
+<pre class="highlight"><code class="language-php">public function run() : void
+{
+    $this-&gt;swooleHttpServer-&gt;on('start', function ($server) {
+        printf("Swoole is running at %s:%s\n", $server-&gt;host, $server-&gt;port);
+    });
 
-return (new ConfigProvider())();</code></pre>
-</blockquote>
-<p>You can change the host address and/or host name as well as the port using a
-configuration file, as follows:</p>
-<pre class="highlight"><code class="language-php">// In config/autoload/swoole.local.php:
-return [
-    'mezzio-swoole' =&gt; [
-        'swoole-http-server' =&gt; [
-            'host' =&gt; '192.168.0.1',
-            'port' =&gt; 9501,
-        ],
-    ],
-];</code></pre>
-<h3>Providing additional Swoole configuration</h3>
-<p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify
-any accepted Swoole settings. For instance, the following configuration
-demonstrates enabling SSL:</p>
-<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
-return [
-    'mezzio-swoole' =&gt; [
-        'swoole-http-server' =&gt; [
-            'host' =&gt; '192.168.0.1',
-            'port' =&gt; 9501,
-            'mode' =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;
-                                   // SWOOLE_BASE is the default
-            'protocol' =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server
-            'options' =&gt; [
-                // Set the SSL certificate and key paths for SSL support:
-                'ssl_cert_file' =&gt; 'path/to/ssl.crt',
-                'ssl_key_file' =&gt; 'path/to/ssl.key',
-                // Available in Swoole 4.1 and up; enables coroutine support
-                // for most I/O operations:
-                'enable_coroutine' =&gt; true,
-            ],
-        ],
-    ],
-];</code></pre>
-<h3>Serving static files</h3>
-<p>We support serving static files. By default, we serve files with extensions in
-the whitelist defined in the constant <code>Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS</code>,
-which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">list of common web MIME types maintained by Mozilla</a>.
-Our static resource capabilities are fairly comprehensive; please see the
-<a href="../static-resources/">chapter on static resources</a> for full details on
-configuration.</p>
+    $this-&gt;swooleHttpServer-&gt;on('request', function ($request, $response) {
+        printf(
+            "%s - %s - %s %s\n",
+            date('Y-m-d H:i:sO', time()),
+            $request-&gt;server['remote_addr'],
+            $request-&gt;server['request_method'],
+            $request-&gt;server['request_uri']
+        );
+        $emitter = new SwooleEmitter($response);
+        try {
+            $psr7Request = ($this-&gt;serverRequestFactory)($request);
+        } catch (Throwable $e) {
+            // Error in generating the request
+            $this-&gt;emitMarshalServerRequestException($emitter, $e);
+            return;
+        }
+        $emitter-&gt;emit($this-&gt;handler-&gt;handle($psr7Request));
+    });
+
+    $this-&gt;swooleHttpServer-&gt;start();
+}</code></pre>
+<p>This package provides a bridge between <code>Swoole\Http\Request</code> (<code>$request</code>) and
+<a href="https://www.php-fig.org/psr/psr-7/">PSR-7</a> requests (<code>$psr7Request</code>;
+specifically as implemented by <a href="https://docs.laminas.dev/laminas-diactoros">laminas-diactoros</a>)
+via the class <code>Mezzio\Swoole\ServerRequestSwooleFactory</code>.</p>
+<p>It also provides a Swoole-specific emitter, <code>Mezzio\Swoole\SwooleEmitter</code>,
+that converts a PSR-7 response to a <code>Swoole\Http\Response</code> instance.</p>
+<p>When you run an Mezzio application using mezzio-swoole, you will
+notice a bunch of PHP processes running. By default, Swoole executes 4 <em>worker</em>
+(or <em>reactor</em>) processes and 1 <em>master</em> process, for a total of 5 PHP processes.</p>
+<p><img alt="Swoole processes" src="../../images/diagram_swoole.png" class="img-responsive"/></p>
+<p>The advantages of this architecture are many: it's very light and simple (just
+PHP processes running); it offers a service layer that is able to restart a
+worker automatically if it's not responding; and it allows executing multiple
+HTTP requests in parallel. The architecture is built for scaling.</p>
+<h2 id="performance">Performance</h2>
+<p>The Laminas developers performed a benchmark running the default <a href="https://github.com/mezzio/mezzio-skeleton">mezzio-skeleton</a>
+application with Swoole 4.0.1, nginx 1.12.1, and Apache 2.4.27 (with mod_php)
+using PHP 7.2.7.</p>
+<p>The results demonstrated that <strong>Mezzio with Swoole runs 4 to 5 times faster
+than nginx or Apache</strong>.</p>
+<p>This impressive result is primarily due to the shared memory approach of Swoole.
+Unlike traditional apache/php-fpm usage, the memory allocated in Swoole will not
+be freed after a request. This allows application configuration and artifacts
+(such as middleware and handlers) to persist between requests and processes.</p>
+<p>Under Swoole 4.1+, for even better performance, you can enable the option
+<code>mezzio-swoole.enable_coroutine</code>. When this
+is enabled, Swoole will run most I/O processes in coroutines. Doing so provides
+approximately <strong>10 times faster performance</strong> than without coroutines, meaning a
+Swoole-based application can be 40 to 50 times faster than running under nginx
+or Apache. Performance improves with the number of workers (which are restricted
+by the amount of memory); as such, performance can increase from these numbers.</p>
 
 
 
@@ -433,7 +470,7 @@ configuration.</p>
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../../v2/migration/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../command-line/">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -442,7 +479,7 @@ configuration.</p>
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="../static-resources/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../considerations/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -456,7 +493,7 @@ configuration.</p>
     <div class="help-wanted">
         <p>
             Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v1/intro.md" target="_blank" class="help-wanted__link">
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v3/how-it-works.md" target="_blank" class="help-wanted__link">
                 Edit this page on GitHub!
             </a>
         </p>
@@ -495,26 +532,10 @@ configuration.</p>
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Intro</a>
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -522,6 +543,12 @@ configuration.</p>
     <li class="subnavigation__list-item">
         <span class="subnavigation__headline">Reference</span>
         <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
+    </li>
+
             
                 
     <li class="subnavigation__list-item ">
@@ -537,7 +564,31 @@ configuration.</p>
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">How it works</a>
     </li>
 
             
@@ -550,6 +601,43 @@ configuration.</p>
         </ul>
     </li>
 
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cookbook</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Swoole support for Mezzio">  
-    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v1/static-resources/">
+    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v3/static-resources/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
     <title>Static Resources - mezzio-swoole - Laminas Docs</title>
@@ -125,26 +125,10 @@
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Intro</a>
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -152,6 +136,12 @@
     <li class="subnavigation__list-item">
         <span class="subnavigation__headline">Reference</span>
         <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
+    </li>
+
             
                 
     <li class="subnavigation__list-item subnavigation__list-item--active">
@@ -162,6 +152,30 @@
                 
     <li class="subnavigation__list-item ">
         <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
     </li>
 
             
@@ -180,6 +194,43 @@
         </ul>
     </li>
 
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cookbook</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             
@@ -228,13 +279,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v1
+                v3
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../../v3/intro/" class="dropdown-item">
+                    <a href="../intro/" class="dropdown-item active">
                         
                             v3 (latest)
                         
@@ -250,7 +301,7 @@
                 
             
                 
-                    <a href="../intro/" class="dropdown-item active">
+                    <a href="../../v1/intro/" class="dropdown-item">
                         
                             v1
                         
@@ -305,6 +356,10 @@
                         <a href="#alternative-static-resource-handlers" class="toc__link nav-link">Alternative static resource handlers</a>
                     </li>
                 
+                    <li class="toc__entry">
+                        <a href="#example-alternate-static-resource-handler-staticmappedresourcehandler" class="toc__link nav-link">Example alternate static resource handler: StaticMappedResourceHandler</a>
+                    </li>
+                
             </ul>
         </div>
     
@@ -343,14 +398,6 @@
 
 
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
-            The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
-        </p>
-    </div>
-
 
 
 
@@ -370,7 +417,7 @@ that performs two duties:</p>
 <li>If a static resource is matched, it serves that.</li>
 <li>Otherwise, it passes off handling to the composed application pipeline.</li>
 </ul>
-<p>Internally, the <code>SwooleRequestHandlerRunner</code> composes another class, a 
+<p>Internally, the <code>SwooleRequestHandlerRunner</code> composes another class, a
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> instance. This instance
 is passed the Swoole request and response, and returns a value indicating
 whether or not it was able to identify and serve a matching static resource.</p>
@@ -379,6 +426,49 @@ provides an approach that checks an incoming request path against a list of
 known extensions, and a configured document root. If the extension matches, it
 then checks to see if the file exists in the document root. If it does, it will
 serve it.</p>
+<blockquote>
+<h3>Disabling static resources</h3>
+<ul>
+<li>Since 2.1.0</li>
+</ul>
+<p>If you want to disable serving of static resources, you can do so in two ways.</p>
+<p>If you have a custom factory for the <code>SwooleRequestHandlerRunner</code>, or are
+instantiating it manually, pass a null value for the sixth argument of its
+constructor. As an example, within a factory:</p>
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Swoole\Http\Server as SwooleHttpServer;
+use Mezzio\ApplicationPipeline;
+use Mezzio\Swoole;
+
+function (ContainerInterface $container) : Swoole\SwooleRequestHandlerRunner
+{
+    return new SwooleRequestHandlerRunner(
+        $container-&gt;get(ApplicationPipeline::class),
+        $container-&gt;get(ServerRequestInterface::class),
+        $container-&gt;get(Swoole\ServerRequestErrorResponseGenerator::class),
+        $container-&gt;get(Swoole\PidManager::class),
+        $container-&gt;get(SwooleHttpServer::class),
+        null, // No static resource handler!
+        $container-&gt;has(Swoole\Log\AccessLogInterface::class
+            ? $container-&gt;get(Swool\Log\AccessLogInterface::class
+            : null
+    );
+}</code></pre>
+<p>If you are using the default factory provided (<code>Mezzio\Swoole\SwooleRequestHandlerRunnerFactory</code>),
+you can also disable the functionality via configuration. To do this, set the
+<code>mezzio-swoole.swoole-http-server.static-files.enable</code> flag to
+boolean <code>false</code>:</p>
+<pre class="highlight"><code class="language-php">return [
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'static-files' =&gt; [
+                'enable' =&gt; false,
+            ],
+        ],
+    ],
+];</code></pre>
+</blockquote>
 <h2 id="middleware">Middleware</h2>
 <p>The <code>StaticResourceHandler</code> implementation performs its work by composing a
 queue of middleware to execute when attempting to serve a matched file. Using
@@ -481,6 +571,10 @@ return [
     'mezzio-swoole' =&gt; [
         'swoole-http-server' =&gt; [
             'static-files' =&gt; [
+                // Since 2.1.0: Set to false to disable any serving of static
+                // files; all other configuration will then be ignored.
+                'enable' =&gt; true,
+
                 // Document root; defaults to "getcwd() . '/public'"
                 'document-root' =&gt; '/path/to/static/files/to/serve',
 
@@ -563,6 +657,7 @@ return [
     'mezzio-swoole' =&gt; [
         'swoole-http-server' =&gt; [
             'static-files' =&gt; [
+                'enable'        =&gt; true,
                 'document-root' =&gt; '/var/www/htdocs',
 
                 'type-map' =&gt; [
@@ -734,6 +829,92 @@ interface StaticResourceHandlerInterface
 <p>Once implemented, map the service
 <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to a factory that
 returns your custom implementation within your <code>dependencies</code> configuration.</p>
+<h2 id="example-alternate-static-resource-handler-staticmappedresourcehandler">Example alternate static resource handler: StaticMappedResourceHandler</h2>
+<ul>
+<li>Since 2.7.0</li>
+</ul>
+<p>The default static resource handler, <code>Mezzio\Swoole\StaticResourceHandler</code>, requires all files to be in the specified document root directory (by default, "public") when instantiating the handler.
+If you are using modules generating templates with associated file assets (JavaScript, CSS, etc.), those files must be copied to the "public" directory if you wish to allow access to them.
+This can be done via scripting, but is one more step to consider when testing or deploying a site.
+Ideally, a module should be able to contain both its template and any dependencies that template relies upon.</p>
+<p>For example, assume you have a module, AwesomeModule, with a handler called "HomeHandler", which renders the 'home' template.
+You designate the prefix, <code>/awesome-home</code> for rendering the assets.
+The structure of your module files looks like this:</p>
+<pre class="highlight"><code class="language-text">AwesomeModule
+├── src
+|   ├── Handler
+|   |   ├── HomeHandler.php
+|   |   ├── HomeHandlerFactory.php
+|   ├── ConfigProvider.php
+├── templates
+│   ├── home
+|   |   ├── home.html
+|   |   ├── style.css
+│   ├── layouts</code></pre>
+<p>In your <code>home.html</code> template, you can refer to the <code>style.css</code> file, using <code>/awesome-home</code> as follows:</p>
+<pre class="highlight"><code class="language-html">&lt;link href="/awesome-home/style.css" rel="stylesheet" type="text/css"&gt;</code></pre>
+<p>Currently, however, this will cause errors, as the stylesheet will not be available under the <code>public/</code> tree of the application.
+You would need to copy or symlink the files to the appropriate location to make that work.</p>
+<p>The <code>StaticMappedResourceHandler</code> solves this problem.</p>
+<h3>Using StaticMappedResourceHandler</h3>
+<p>To use <code>Mezzio\Swoole\StaticMappedResourceHandler</code> from an application or module:</p>
+<ol>
+<li>Define what your URI prefix will be (e.g., <code>/awesome-home</code>).</li>
+<li>Update references to linkable resources in your templates to use the desired prefix (e.g., <code>&lt;script src='/awesome-home/style.css'&gt;&lt;/script&gt;</code>).</li>
+<li>In your application/module configuration (or <code>ConfigProvider</code>), add the relationship between your prefix (<code>awesome-home</code>) and any directories containing the assets.</li>
+<li>In the application's configuration, set the alias of <code>Mezzio\Swoole\StaticResourceHandlerInterface</code> to use <code>Mezzio\Swoole\StaticMappedResourceHandler</code>.</li>
+</ol>
+<p>For step #3, in your module's ConfigProvider, you can add a configuration setting as follows:</p>
+<pre class="highlight"><code class="language-php">    public function __invoke() : array
+    {
+        return [
+            'config' =&gt; [
+                'mezzio-swoole' =&gt; [
+                    'swoole-http-server' =&gt; [
+                        'static-files' =&gt; [
+                            'mapped-document-roots' =&gt; [
+                                'awesome-home' =&gt; __DIR__ . '/../../templates/home'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }</code></pre>
+<p>Note that prefixes are always the first part after the host, and specifying the initial slash is optional (i.e. <code>awsesome-home</code> and <code>/awesome-home</code> both work and represent the same thing).</p>
+<p>In step #4, in your application's configuration (<code>autoload/dependencies.global.php</code> is a good place), override the default implementation of <code>StaticResourceHandlerInterface</code>:</p>
+<pre class="highlight"><code class="language-php">return [
+    'dependencies' =&gt; [
+        'aliases' =&gt; [
+            Mezzio\Swoole\StaticResourceHandlerInterface::class =&gt; Mezzio\Swoole\StaticMappedResourceHandler::class
+            // Fully\Qualified\ClassOrInterfaceName::class =&gt; Fully\Qualified\ClassName::class,
+        ],
+        // etc.</code></pre>
+<p>For step #3, an alternative to storing a configuration is dynamically associating <code>/awesome-home</code> to a directory in code (probably within a factory).
+This approach could be useful if the directory of the assets isn't know until runtime.</p>
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
+use Mezzio\Template\TemplateRendererInterface;
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+
+class AwesomeHomeHandlerFactory
+{
+    public function __invoke(ContainerInterface $container) : DocumentationViewHandler
+    {
+        // Establish location for the home template assets
+        $repo = $container-&gt;get(FileLocationRepositoryInterface::class);
+        $repo-&gt;addMappedDocumentRoot(
+            'awesome-home',
+            realpath(__DIR__ . '/../../templates/home')
+        );
+
+        return new AwesomeHomeHandler(
+            $container-&gt;get(TemplateRendererInterface::class)
+        );
+    }
+}</code></pre>
+<p>When the template renders, the client will request <code>/awesome-home/style.css</code>, which the <code>StaticMappedResourceHandler</code> will now retrieve from the <code>templates/home/</code> folder of the module.</p>
+<p><code>Mezzio\Swoole\StaticMappedResourceHandler</code> uses the <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepository</code> (which implements <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface</code>) to maintain an association of URI prefixes with file directories.
+If you require using a file location that requires authentication, decompression, etc. you can override the default functionality by creating your own implementation of <code>Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface</code>.</p>
 
 
 
@@ -744,7 +925,7 @@ returns your custom implementation within your <code>dependencies</code> configu
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../intro/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../events/">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -767,7 +948,7 @@ returns your custom implementation within your <code>dependencies</code> configu
     <div class="help-wanted">
         <p>
             Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v1/static-resources.md" target="_blank" class="help-wanted__link">
+            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v3/static-resources.md" target="_blank" class="help-wanted__link">
                 Edit this page on GitHub!
             </a>
         </p>
@@ -806,26 +987,10 @@ returns your custom implementation within your <code>dependencies</code> configu
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Intro</a>
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -833,6 +998,12 @@ returns your custom implementation within your <code>dependencies</code> configu
     <li class="subnavigation__list-item">
         <span class="subnavigation__headline">Reference</span>
         <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
+    </li>
+
             
                 
     <li class="subnavigation__list-item subnavigation__list-item--active">
@@ -843,6 +1014,30 @@ returns your custom implementation within your <code>dependencies</code> configu
                 
     <li class="subnavigation__list-item ">
         <a href="../logging/" class="subnavigation__link">Logging</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
     </li>
 
             
@@ -861,6 +1056,43 @@ returns your custom implementation within your <code>dependencies</code> configu
         </ul>
     </li>
 
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cookbook</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../migration/" class="subnavigation__link">Migration</a>
+    </li>
+
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             
