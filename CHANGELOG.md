@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.0.0 - TBD
+## 3.0.0 - 2020-10-29
 
 ### Added
 
@@ -18,10 +18,6 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Rewrites the internals of `Mezzio\Swoole\SwooleRequestHandlerRunner` to trigger events via a [PSR-14](https://www.php-fig.org/psr/psr-14) event dispatcher. See the [events chapter of the documentation](https://docs.mezzio.dev/mezzio-swoole/v3/events/) for more details.
 
-### Deprecated
-
-- Nothing.
-
 ### Removed
 
 - [#28](https://github.com/mezzio/mezzio-swoole/pull/28) removes the class `Mezzio\Swoole\HotCodeReload\Reloader` and its associated factory. Users should use `Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener` instead. In most cases, this will be a non-issue, as it was used internally only in the past.
@@ -32,9 +28,36 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Removes support for PHP versions prior to 7.4.
 
-### Fixed
 
-- Nothing.
+-----
+
+### Release Notes for [3.0.0](https://github.com/mezzio/mezzio-swoole/milestone/5)
+
+
+
+### 3.0.0
+
+- Total issues resolved: **4**
+- Total pull requests resolved: **5**
+- Total contributors: **2**
+
+#### BC Break,Enhancement
+
+ - [41: Add property typehints](https://github.com/mezzio/mezzio-swoole/pull/41) thanks to @weierophinney
+ - [39: Migrate console tooling to laminas-cli](https://github.com/mezzio/mezzio-swoole/pull/39) thanks to @weierophinney
+ - [28: Fully evented request handler implementation](https://github.com/mezzio/mezzio-swoole/pull/28) thanks to @weierophinney
+
+#### Enhancement
+
+ - [40: Allow the start and reload commands to specify the number of task workers to spawn](https://github.com/mezzio/mezzio-swoole/pull/40) thanks to @weierophinney
+
+#### BC Break,Feature Removal,Feature Request
+
+ - [32: Migrate commands to laminas-cli](https://github.com/mezzio/mezzio-swoole/issues/32) thanks to @weierophinney
+
+#### Awaiting Author Updates,Enhancement
+
+ - [24: add stub code to show implement event-dispatcher on swoole worker event](https://github.com/mezzio/mezzio-swoole/pull/24) thanks to @eranoitulover and @weierophinney
 
 ## 2.8.1 - 2020-10-23
 
