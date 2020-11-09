@@ -24,6 +24,24 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
+## 3.0.1 - 2020-11-09
+
+### Fixed
+
+- [#42](https://github.com/mezzio/mezzio-swoole/pull/42) fixes issues with the `AccessLogDataMap` whereby fatal errors would be raised for attempts to access uninitialized properties (e.g., the `$psrResponse` property, when the `Psr3AccessLogDecorator` created an `AccessLogDataMap` from a static resource response).
+
+-----
+
+### Release Notes for [3.0.1](https://github.com/mezzio/mezzio-swoole/milestone/11)
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Bug
+
+ - [42: Ensure AccessLogDataMap does not throw fatal error due to uninitialized typed properties](https://github.com/mezzio/mezzio-swoole/pull/42) thanks to @weierophinney
+
 ## 3.0.0 - 2020-10-29
 
 ### Added

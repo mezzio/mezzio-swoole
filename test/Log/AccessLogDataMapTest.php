@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Log;
 
 use Mezzio\Swoole\Log\AccessLogDataMap;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -83,5 +84,15 @@ class AccessLogDataMapTest extends TestCase
         $map                   = AccessLogDataMap::createWithPsrResponse($this->request, $this->response, false);
 
         $this->assertEquals($expectedIp, $map->getClientIp());
+    }
+
+    public function testDoesNotRaiseErrorWhenAccessingStatusViaStaticResource(): void
+    {
+        $staticResource = $this->createMock(StaticResourceResponse::class);
+        $staticResource->expects($this->once())->method('getStatus')->willReturn(200);
+
+        $map = AccessLogDataMap::createWithStaticResource($this->request, $staticResource);
+
+        $this->assertSame('200', $map->getStatus());
     }
 }

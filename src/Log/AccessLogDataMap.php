@@ -12,6 +12,7 @@ namespace Mezzio\Swoole\Log;
 
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
+use RuntimeException;
 use Swoole\Http\Request as SwooleHttpRequest;
 
 use function filter_var;
@@ -47,15 +48,14 @@ class AccessLogDataMap
 
     private SwooleHttpRequest $request;
 
-    /** @psalm-suppress PropertyNotSetInConstructor */
-    private ?PsrResponse $psrResponse;
+    private ?PsrResponse $psrResponse = null;
 
     /**
      * Whether or not to do a hostname lookup when retrieving the remote host name
      */
     private bool $useHostnameLookups;
 
-    private StaticResourceResponse $staticResource;
+    private ?StaticResourceResponse $staticResource = null;
 
     public static function createWithPsrResponse(
         SwooleHttpRequest $request,
@@ -114,7 +114,15 @@ class AccessLogDataMap
         if ($this->psrResponse) {
             return getcwd() . '/public/index.php';
         }
-        return getcwd() . '/public' . $this->getServerParam('PATH_INFO');
+
+        if ($this->staticResource) {
+            return getcwd() . '/public' . $this->getServerParam('PATH_INFO');
+        }
+
+        throw new RuntimeException(sprintf(
+            'Initialized without a PSR-7 response or a %s instance',
+            StaticResourceResponse::class
+        ));
     }
 
     /**
@@ -125,7 +133,15 @@ class AccessLogDataMap
         if ($this->psrResponse) {
             return (string) $this->psrResponse->getBody()->getSize() ?: $default;
         }
-        return (string) $this->staticResource->getContentLength() ?: $default;
+
+        if ($this->staticResource) {
+            return (string) $this->staticResource->getContentLength() ?: $default;
+        }
+
+        throw new RuntimeException(sprintf(
+            'Initialized without a PSR-7 response or a %s instance',
+            StaticResourceResponse::class
+        ));
     }
 
     /**
@@ -173,7 +189,15 @@ class AccessLogDataMap
         if ($this->psrResponse) {
             return $this->psrResponse->getHeaderLine($name) ?: '-';
         }
-        return $this->staticResource->getHeader($name) ?: '-';
+
+        if ($this->staticResource) {
+            return $this->staticResource->getHeader($name) ?: '-';
+        }
+
+        throw new RuntimeException(sprintf(
+            'Initialized without a PSR-7 response or a %s instance',
+            StaticResourceResponse::class
+        ));
     }
 
     /**
@@ -225,9 +249,18 @@ class AccessLogDataMap
      */
     public function getStatus(): string
     {
-        return $this->psrResponse
-            ? (string) $this->psrResponse->getStatusCode()
-            : (string) $this->staticResource->getStatus();
+        if ($this->psrResponse) {
+            return (string) $this->psrResponse->getStatusCode();
+        }
+
+        if ($this->staticResource) {
+            return (string) $this->staticResource->getStatus();
+        }
+
+        throw new RuntimeException(sprintf(
+            'Initialized without a PSR-7 response or a %s instance',
+            StaticResourceResponse::class
+        ));
     }
 
     /**
@@ -343,9 +376,18 @@ class AccessLogDataMap
      */
     public function getResponseMessageSize($default = null): ?int
     {
-        $bodySize = $this->psrResponse
-            ? $this->psrResponse->getBody()->getSize()
-            : $this->staticResource->getContentLength();
+        $bodySize = null;
+
+        if ($this->psrResponse) {
+            $bodySize = $this->psrResponse->getBody()->getSize();
+        } elseif ($this->staticResource) {
+            $bodySize = $this->staticResource->getContentLength();
+        } else {
+            throw new RuntimeException(sprintf(
+                'Initialized without a PSR-7 response or a %s instance',
+                StaticResourceResponse::class
+            ));
+        }
 
         if (null === $bodySize) {
             return $default;
