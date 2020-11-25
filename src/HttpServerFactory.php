@@ -36,7 +36,7 @@ class HttpServerFactory
     /**
      * Swoole server supported modes
      */
-    private const MODES = [
+    protected const MODES = [
         SWOOLE_BASE,
         SWOOLE_PROCESS,
     ];
@@ -44,7 +44,7 @@ class HttpServerFactory
     /**
      * Swoole server supported protocols
      */
-    private const PROTOCOLS = [
+    protected const PROTOCOLS = [
         SWOOLE_SOCK_TCP,
         SWOOLE_SOCK_TCP6,
         SWOOLE_SOCK_UDP,
