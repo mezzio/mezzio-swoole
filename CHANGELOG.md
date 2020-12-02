@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#47](https://github.com/mezzio/mezzio-swoole/pull/47) changes the visibility of the `$server` and `$dispatcher` properties of `Mezzio\Swoole\SwooleRequestHandlerRunner` to `protected`, to allow those extending the class the ability to work with the instances directly. This can be useful when using 3rd party Swoole listeners, such as the one provided by New Relic.
 
 ### Deprecated
 
