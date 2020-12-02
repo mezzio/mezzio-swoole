@@ -42,9 +42,9 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
      */
     public const DEFAULT_PROCESS_NAME = 'mezzio';
 
-    private EventDispatcherInterface $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
 
-    private SwooleHttpServer $httpServer;
+    protected SwooleHttpServer $httpServer;
 
     public function __construct(
         SwooleHttpServer $httpServer,
