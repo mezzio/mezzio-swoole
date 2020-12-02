@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.1.0 - TBD
-
-### Added
-
-- Nothing.
+## 3.1.0 - 2020-12-02
 
 ### Changed
 
 - [#47](https://github.com/mezzio/mezzio-swoole/pull/47) changes the visibility of the `$server` and `$dispatcher` properties of `Mezzio\Swoole\SwooleRequestHandlerRunner` to `protected`, to allow those extending the class the ability to work with the instances directly. This can be useful when using 3rd party Swoole listeners, such as the one provided by New Relic.
 
-### Deprecated
 
-- Nothing.
+-----
 
-### Removed
+### Release Notes for [3.1.0](https://github.com/mezzio/mezzio-swoole/milestone/12)
 
-- Nothing.
+Feature release (minor)
 
-### Fixed
+### 3.1.0
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **1**
+- Total contributors: **2**
+
+#### Enhancement
+
+ - [47: Allow access to dispatcher and Swoole HTTP Server instances in extending classes](https://github.com/mezzio/mezzio-swoole/pull/47) thanks to @weierophinney and @arku31
 
 ## 3.0.1 - 2020-11-09
 
