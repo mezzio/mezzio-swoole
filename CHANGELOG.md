@@ -2,10 +2,27 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 3.2.0 - TBD
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
 ## 3.1.1 - 2020-12-14
-
-
------
 
 ### Release Notes for [3.1.1](https://github.com/mezzio/mezzio-swoole/milestone/15)
 
