@@ -22,7 +22,21 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+## 3.1.1 - 2020-12-14
+
+### Release Notes for [3.1.1](https://github.com/mezzio/mezzio-swoole/milestone/15)
+
+3.1.x bugfix release (patch)
+
+### 3.1.1
+
+- Total issues resolved: **1**
+- Total pull requests resolved: **1**
+- Total contributors: **2**
+
+#### Bug
+
+ - [49: Update `ReloadCommand` to use full command names to stop/start the server](https://github.com/mezzio/mezzio-swoole/pull/49) thanks to @weierophinney and @demijohn
 
 ## 3.1.0 - 2020-12-02
 

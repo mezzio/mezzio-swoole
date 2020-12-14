@@ -74,7 +74,7 @@ EOH;
 
         $application = $this->getApplication();
 
-        $stop   = $application->find('stop');
+        $stop   = $application->find(StopCommand::$defaultName);
         $result = $stop->run(new ArrayInput([
             'command' => 'stop',
         ]), $output);
@@ -92,7 +92,7 @@ EOH;
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 
-        $start = $application->find('start');
+        $start = $application->find(StartCommand::$defaultName);
 
         $inputArguments = [
             'command'       => 'start',
