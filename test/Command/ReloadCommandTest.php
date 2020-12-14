@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\Command;
 
 use Mezzio\Swoole\Command\ReloadCommand;
+use Mezzio\Swoole\Command\StartCommand;
+use Mezzio\Swoole\Command\StopCommand;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -154,7 +156,7 @@ class ReloadCommandTest extends TestCase
             ->willReturn(1);
 
         $application = $this->mockApplication();
-        $application->method('find')->with('stop')->willReturn($stopCommand);
+        $application->method('find')->with(StopCommand::$defaultName)->willReturn($stopCommand);
 
         $command->setApplication($application);
 
@@ -213,8 +215,8 @@ class ReloadCommandTest extends TestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->withConsecutive(
-                ['stop'],
-                ['start']
+                [StopCommand::$defaultName],
+                [StartCommand::$defaultName]
             )
             ->willReturnOnConsecutiveCalls(
                 $stopCommand,
@@ -292,8 +294,8 @@ class ReloadCommandTest extends TestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->withConsecutive(
-                ['stop'],
-                ['start']
+                [StopCommand::$defaultName],
+                [StartCommand::$defaultName]
             )
             ->willReturnOnConsecutiveCalls(
                 $stopCommand,

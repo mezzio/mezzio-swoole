@@ -43,7 +43,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        $lastModified          = filemtime($filename) ?? 0;
+        $lastModified          = filemtime($filename) ?: 0;
         $formattedLastModified = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
 
         $response->addHeader('Last-Modified', $formattedLastModified);

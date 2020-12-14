@@ -10,12 +10,16 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use ArrayAccess;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 use Swoole\Runtime as SwooleRuntime;
+use Webmozart\Assert\Assert;
 
+use function assert;
 use function defined;
 use function in_array;
+use function is_array;
 use function method_exists;
 
 use const SWOOLE_BASE;
@@ -63,9 +67,14 @@ class HttpServerFactory
      */
     public function __invoke(ContainerInterface $container): SwooleHttpServer
     {
-        $config       = $container->get('config');
+        $config = $container->get('config');
+        assert(is_array($config) || $config instanceof ArrayAccess);
+
         $swooleConfig = $config['mezzio-swoole'] ?? [];
+        Assert::isMap($swooleConfig);
+
         $serverConfig = $swooleConfig['swoole-http-server'] ?? [];
+        Assert::isMap($serverConfig);
 
         $host     = $serverConfig['host'] ?? static::DEFAULT_HOST;
         $port     = $serverConfig['port'] ?? static::DEFAULT_PORT;
@@ -97,6 +106,9 @@ class HttpServerFactory
 
         $httpServer    = new SwooleHttpServer($host, $port, $mode, $protocol);
         $serverOptions = $serverConfig['options'] ?? [];
+
+        Assert::isArray($serverOptions);
+
         $httpServer->set($serverOptions);
 
         return $httpServer;
