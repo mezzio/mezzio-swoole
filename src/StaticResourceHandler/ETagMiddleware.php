@@ -96,10 +96,10 @@ class ETagMiddleware implements MiddlewareInterface
         StaticResourceResponse $response
     ): StaticResourceResponse {
         $etag         = '';
-        $lastModified = filemtime($filename) ?? 0;
+        $lastModified = filemtime($filename) ?: 0;
         switch ($this->etagValidationType) {
             case self::ETAG_VALIDATION_WEAK:
-                $filesize = filesize($filename) ?? 0;
+                $filesize = filesize($filename) ?: 0;
                 if (! $lastModified || ! $filesize) {
                     return $response;
                 }

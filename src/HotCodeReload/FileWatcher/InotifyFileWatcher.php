@@ -74,6 +74,7 @@ class InotifyFileWatcher implements FileWatcherInterface
         $paths  = [];
         if (is_array($events)) {
             foreach ($events as $event) {
+                Assert::isArray($event);
                 $wd = $event['wd'] ?? null;
                 if (null === $wd) {
                     throw new RuntimeException('Missing watch descriptor from inotify event');

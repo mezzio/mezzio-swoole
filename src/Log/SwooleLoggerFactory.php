@@ -12,6 +12,9 @@ namespace Mezzio\Swoole\Log;
 
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Webmozart\Assert\Assert;
+
+use function is_string;
 
 class SwooleLoggerFactory
 {
@@ -22,7 +25,9 @@ class SwooleLoggerFactory
         $config       = $container->has('config') ? $container->get('config') : [];
         $loggerConfig = $config['mezzio-swoole']['swoole-http-server']['logger'] ?? [];
 
-        if (isset($loggerConfig['logger-name'])) {
+        Assert::isMap($loggerConfig);
+
+        if (isset($loggerConfig['logger-name']) && is_string($loggerConfig['logger-name'])) {
             return $container->get($loggerConfig['logger-name']);
         }
 

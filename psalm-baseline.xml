@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.0.1@b1e2e30026936ef8d5bf6a354d1c3959b6231f44">
+<files psalm-version="4.3.1@2feba22a005a18bf31d4c7b9bdb9252c73897476">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArgument occurrences="3">
       <code>$compressionLevel</code>
@@ -39,10 +39,6 @@
     <MixedMethodCall occurrences="1">
       <code>read</code>
     </MixedMethodCall>
-    <RedundantCondition occurrences="2">
-      <code>$masterPid &amp;&amp; $managerPid</code>
-      <code>$masterPid &amp;&amp; $managerPid</code>
-    </RedundantCondition>
     <UndefinedThisPropertyFetch occurrences="1">
       <code>$this-&gt;pidManager</code>
     </UndefinedThisPropertyFetch>
@@ -56,6 +52,9 @@
     <MixedArgument occurrences="1">
       <code>$mode</code>
     </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$config['mezzio-swoole']</code>
+    </MixedArrayAccess>
     <MixedAssignment occurrences="2">
       <code>$config</code>
       <code>$mode</code>
@@ -90,13 +89,10 @@
       <code>$container-&gt;get(PidManager::class)</code>
     </MixedArgument>
   </file>
-  <file src="src/ConfigProvider.php">
-    <DuplicateArrayKey occurrences="1">
-      <code>LegacyRequestHandlerRunner::class           =&gt; RequestHandlerRunner::class</code>
-    </DuplicateArrayKey>
-    <UndefinedClass occurrences="1">
-      <code>LegacyPidManager</code>
-    </UndefinedClass>
+  <file src="src/Event/SwooleListenerProviderFactory.php">
+    <MixedArrayAccess occurrences="1">
+      <code>$config['mezzio-swoole']['swoole-http-server']['listeners']</code>
+    </MixedArrayAccess>
   </file>
   <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
     <MixedArgument occurrences="1">
@@ -105,28 +101,15 @@
     <MixedArrayOffset occurrences="1">
       <code>$this-&gt;filePathByWd[$wd]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="2">
-      <code>$event</code>
+    <MixedAssignment occurrences="1">
       <code>$wd</code>
     </MixedAssignment>
     <UndefinedConstant occurrences="1">
       <code>IN_MODIFY</code>
     </UndefinedConstant>
   </file>
-  <file src="src/HotCodeReload/ReloaderFactory.php">
-    <MixedArgument occurrences="2">
-      <code>$container-&gt;get(FileWatcherInterface::class)</code>
-      <code>$hotCodeReloadConfig['interval'] ?? 500</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="3">
-      <code>$config</code>
-      <code>$hotCodeReloadConfig</code>
-      <code>$swooleConfig</code>
-    </MixedAssignment>
-  </file>
   <file src="src/HttpServerFactory.php">
-    <MixedArgument occurrences="3">
-      <code>$serverOptions</code>
+    <MixedArgument occurrences="2">
       <code>$validProtocols</code>
       <code>static::MODES</code>
     </MixedArgument>
@@ -134,16 +117,10 @@
       <code>$validProtocols[]</code>
       <code>$validProtocols[]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="10">
-      <code>$config</code>
-      <code>$enableCoroutine</code>
+    <MixedAssignment occurrences="4">
       <code>$host</code>
       <code>$mode</code>
       <code>$port</code>
-      <code>$protocol</code>
-      <code>$serverConfig</code>
-      <code>$serverOptions</code>
-      <code>$swooleConfig</code>
       <code>$validProtocols</code>
     </MixedAssignment>
   </file>
@@ -160,8 +137,12 @@
       <code>$query</code>
       <code>$this-&gt;request-&gt;header['host'] ?? ''</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="1">
+    <MixedArrayAccess occurrences="5">
+      <code>$this-&gt;request-&gt;cookie[$name]</code>
       <code>$this-&gt;request-&gt;header[$header]</code>
+      <code>$this-&gt;request-&gt;header['host']</code>
+      <code>$this-&gt;request-&gt;header[strtolower($name)]</code>
+      <code>$this-&gt;request-&gt;server[strtolower($key)]</code>
     </MixedArrayAccess>
     <MixedAssignment occurrences="8">
       <code>$bodySize</code>
@@ -204,9 +185,6 @@
       <code>$this-&gt;getRequestMessageSize(0)</code>
       <code>$this-&gt;getResponseMessageSize(0)</code>
     </PossiblyNullOperand>
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$staticResource</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="src/Log/AccessLogFactory.php">
     <MixedArgument occurrences="3">
@@ -214,6 +192,9 @@
       <code>$config['format'] ?? AccessLogFormatter::FORMAT_COMMON</code>
       <code>$config['use-hostname-lookups'] ?? false</code>
     </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$config['mezzio-swoole']</code>
+    </MixedArrayAccess>
     <MixedAssignment occurrences="2">
       <code>$config</code>
       <code>$config</code>
@@ -221,9 +202,8 @@
     <MixedInferredReturnType occurrences="1">
       <code>AccessLogFormatterInterface</code>
     </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2">
+    <MixedReturnStatement occurrences="1">
       <code>$container-&gt;get(AccessLogFormatterInterface::class)</code>
-      <code>$container-&gt;get(LegacyAccessLogFormatterInterface::class)</code>
     </MixedReturnStatement>
   </file>
   <file src="src/Log/AccessLogFormatter.php">
@@ -246,11 +226,6 @@
       <code>LoggerInterface</code>
     </MixedInferredReturnType>
   </file>
-  <file src="src/Log/Psr3AccessLogDecorator.php">
-    <PropertyTypeCoercion occurrences="1">
-      <code>$formatter</code>
-    </PropertyTypeCoercion>
-  </file>
   <file src="src/Log/StdoutLogger.php">
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$value</code>
@@ -260,15 +235,11 @@
     </MixedAssignment>
   </file>
   <file src="src/Log/SwooleLoggerFactory.php">
-    <MixedArgument occurrences="1">
-      <code>$loggerConfig['logger-name']</code>
-    </MixedArgument>
     <MixedArrayAccess occurrences="1">
-      <code>$loggerConfig['logger-name']</code>
+      <code>$config['mezzio-swoole']</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
+    <MixedAssignment occurrences="1">
       <code>$config</code>
-      <code>$loggerConfig</code>
     </MixedAssignment>
     <MixedInferredReturnType occurrences="1">
       <code>LoggerInterface</code>
@@ -280,6 +251,9 @@
   </file>
   <file src="src/PidManagerFactory.php">
     <MixedArgument occurrences="1"/>
+    <MixedArrayAccess occurrences="1">
+      <code>$config['mezzio-swoole']</code>
+    </MixedArrayAccess>
     <MixedAssignment occurrences="1">
       <code>$config</code>
     </MixedAssignment>
@@ -303,21 +277,9 @@
     </MixedAssignment>
   </file>
   <file src="src/StaticMappedResourceHandler.php">
-    <InvalidMethodCall occurrences="1">
-      <code>findFile</code>
-    </InvalidMethodCall>
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$fileLocationRepo</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>$filename</code>
-    </MixedArgument>
     <MixedArrayAccess occurrences="1">
       <code>$request-&gt;server['request_uri']</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$filename</code>
-    </MixedAssignment>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
@@ -379,9 +341,6 @@
     <MixedReturnStatement occurrences="1">
       <code>$next($request, $filename)</code>
     </MixedReturnStatement>
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$lastCleared</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="src/StaticResourceHandler/ContentTypeFilterMiddleware.php">
     <MixedAssignment occurrences="1">
@@ -403,7 +362,9 @@
       <code>$request-&gt;server['request_uri']</code>
       <code>$response</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="1">
+    <MixedArrayAccess occurrences="3">
+      <code>$request-&gt;header['if-match']</code>
+      <code>$request-&gt;header['if-none-match']</code>
       <code>$request-&gt;server['request_uri']</code>
     </MixedArrayAccess>
     <MixedAssignment occurrences="3">
@@ -420,10 +381,6 @@
     <MixedReturnStatement occurrences="1">
       <code>$response</code>
     </MixedReturnStatement>
-    <TypeDoesNotContainType occurrences="2">
-      <code>filemtime($filename)</code>
-      <code>filesize($filename)</code>
-    </TypeDoesNotContainType>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
     <MixedArgument occurrences="3">
@@ -455,6 +412,10 @@
       <code>$configMappedDocRoots</code>
       <code>$configMappedDocRoots</code>
     </MixedArgument>
+    <MixedArrayAccess occurrences="2">
+      <code>$config['document-root']</code>
+      <code>$config['mapped-document-roots']</code>
+    </MixedArrayAccess>
     <MixedAssignment occurrences="3">
       <code>$config</code>
       <code>$configDocRoots</code>
@@ -516,7 +477,8 @@
       <code>$ifModifiedSince</code>
       <code>$request-&gt;server['request_uri']</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="1">
+    <MixedArrayAccess occurrences="2">
+      <code>$request-&gt;header['if-modified-since']</code>
       <code>$request-&gt;server['request_uri']</code>
     </MixedArrayAccess>
     <MixedAssignment occurrences="2">
@@ -538,9 +500,6 @@
       <code>$response</code>
       <code>$response</code>
     </MixedReturnStatement>
-    <TypeDoesNotContainType occurrences="1">
-      <code>filemtime($filename)</code>
-    </TypeDoesNotContainType>
   </file>
   <file src="src/StaticResourceHandler/MethodNotAllowedMiddleware.php">
     <MixedArrayAccess occurrences="1">
@@ -615,6 +574,9 @@
       <code>$config</code>
       <code>$config['document-root'] ?? getcwd() . '/public'</code>
     </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$config['document-root']</code>
+    </MixedArrayAccess>
     <MixedAssignment occurrences="1">
       <code>$config</code>
     </MixedAssignment>
@@ -641,91 +603,6 @@
     <TooManyArguments occurrences="1">
       <code>cookie</code>
     </TooManyArguments>
-  </file>
-  <file src="src/SwooleRequestHandlerRunner.php">
-    <MissingClosureParamType occurrences="1">
-      <code>$request</code>
-    </MissingClosureParamType>
-    <MixedArgument occurrences="4">
-      <code>$psr7Request</code>
-      <code>$psr7Response</code>
-      <code>$server-&gt;manager_pid</code>
-      <code>$server-&gt;master_pid</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$server-&gt;setting['worker_num']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$psr7Request</code>
-      <code>$psr7Response</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="2">
-      <code>ResponseInterface</code>
-      <code>ServerRequestInterface</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2">
-      <code>$serverRequestErrorResponseGenerator($exception)</code>
-      <code>$serverRequestFactory($request)</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/SwooleRequestHandlerRunnerFactory.php">
-    <MixedArgument occurrences="10">
-      <code>$container-&gt;get(ApplicationPipeline::class)</code>
-      <code>$container-&gt;get(PidManager::class)</code>
-      <code>$container-&gt;get(ServerRequestErrorResponseGenerator::class)</code>
-      <code>$container-&gt;get(ServerRequestInterface::class)</code>
-      <code>$container-&gt;get(SwooleHttpServer::class)</code>
-      <code>$logger</code>
-      <code>$mezzioSwooleConfig</code>
-      <code>$swooleHttpServerConfig</code>
-      <code>$swooleHttpServerConfig['process-name'] ?? SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME</code>
-      <code>ApplicationPipeline::class</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$container-&gt;get('config')['mezzio-swoole']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="5">
-      <code>$config</code>
-      <code>$config</code>
-      <code>$logger</code>
-      <code>$mezzioSwooleConfig</code>
-      <code>$swooleHttpServerConfig</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="2">
-      <code>?Reloader</code>
-      <code>?StaticResourceHandlerInterface</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2"/>
-    <UndefinedClass occurrences="1">
-      <code>ApplicationPipeline</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/SwooleStream.php">
-    <DocblockTypeContradiction occurrences="4">
-      <code>$this-&gt;body !== null</code>
-      <code>$this-&gt;body !== null</code>
-      <code>$this-&gt;body !== null</code>
-      <code>null === $this-&gt;bodySize</code>
-    </DocblockTypeContradiction>
-    <ImplementedReturnTypeMismatch occurrences="1">
-      <code>SwooleHttpRequest</code>
-    </ImplementedReturnTypeMismatch>
-    <PossiblyNullOperand occurrences="2">
-      <code>$size</code>
-      <code>$size</code>
-    </PossiblyNullOperand>
-    <PossiblyNullPropertyAssignmentValue occurrences="2">
-      <code>$size</code>
-    </PossiblyNullPropertyAssignmentValue>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>$body</code>
-      <code>$bodySize</code>
-    </PropertyNotSetInConstructor>
-    <RedundantConditionGivenDocblockType occurrences="3">
-      <code>$this-&gt;body !== null</code>
-      <code>$this-&gt;body !== null</code>
-      <code>$this-&gt;body !== null</code>
-    </RedundantConditionGivenDocblockType>
   </file>
   <file src="test/AssertResponseTrait.php">
     <MixedArgument occurrences="7">
@@ -754,22 +631,6 @@
       <code>$expected</code>
     </MixedArgument>
   </file>
-  <file src="test/Command/ReloadCommandFactoryTest.php">
-    <RedundantCondition occurrences="2">
-      <code>assertInstanceOf</code>
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
-  </file>
-  <file src="test/Command/ReloadCommandTest.php">
-    <RedundantCondition occurrences="1">
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
-  </file>
-  <file src="test/Command/StartCommandFactoryTest.php">
-    <RedundantCondition occurrences="1">
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
-  </file>
   <file src="test/Command/StartCommandTest.php">
     <MixedArgument occurrences="2">
       <code>$command</code>
@@ -784,14 +645,6 @@
       <code>method</code>
       <code>method</code>
     </MixedMethodCall>
-    <RedundantCondition occurrences="1">
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
-  </file>
-  <file src="test/Command/StatusCommandTest.php">
-    <RedundantCondition occurrences="1">
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
   </file>
   <file src="test/Command/StopCommandTest.php">
     <InternalProperty occurrences="3">
@@ -799,30 +652,11 @@
       <code>$command-&gt;killProcess</code>
       <code>$command-&gt;waitThreshold</code>
     </InternalProperty>
-    <RedundantCondition occurrences="1">
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
   </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
     <InvalidPropertyAssignmentValue occurrences="1">
       <code>$this-&gt;file</code>
     </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="test/HotCodeReload/ReloaderFactoryTest.php">
-    <InternalClass occurrences="1">
-      <code>new StdoutLogger()</code>
-    </InternalClass>
-  </file>
-  <file src="test/HotCodeReload/ReloaderTest.php">
-    <MissingPropertyType occurrences="1">
-      <code>$values</code>
-    </MissingPropertyType>
-    <MixedArrayAssignment occurrences="1">
-      <code>$this-&gt;values[$other]</code>
-    </MixedArrayAssignment>
-    <MoreSpecificImplementedParamType occurrences="1">
-      <code>$other</code>
-    </MoreSpecificImplementedParamType>
   </file>
   <file src="test/HttpServerFactoryTest.php">
     <InvalidScalarArgument occurrences="2">
