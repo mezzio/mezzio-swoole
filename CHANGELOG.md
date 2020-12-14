@@ -2,27 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.1.1 - TBD
+## 3.1.1 - 2020-12-14
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.1.1](https://github.com/mezzio/mezzio-swoole/milestone/15)
 
-- Nothing.
+3.1.x bugfix release (patch)
 
-### Deprecated
+### 3.1.1
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **1**
+- Total contributors: **2**
 
-### Removed
+#### Bug
 
-- Nothing.
-
-### Fixed
-
-- Nothing.
+ - [49: Update `ReloadCommand` to use full command names to stop/start the server](https://github.com/mezzio/mezzio-swoole/pull/49) thanks to @weierophinney and @demijohn
 
 ## 3.1.0 - 2020-12-02
 
