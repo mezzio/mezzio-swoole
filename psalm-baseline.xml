@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.3.1@2feba22a005a18bf31d4c7b9bdb9252c73897476">
+<files psalm-version="4.3.2@57b53ff26237074fdf5cbcb034f7da5172be4524">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArgument occurrences="3">
       <code>$compressionLevel</code>
@@ -24,6 +24,10 @@
     </MixedAssignment>
   </file>
   <file src="src/Command/IsRunningTrait.php">
+    <InvalidArgument occurrences="2">
+      <code>0</code>
+      <code>0</code>
+    </InvalidArgument>
     <MixedArrayAccess occurrences="2">
       <code>$managerPid</code>
       <code>$masterPid</code>
@@ -32,16 +36,9 @@
       <code>$pids</code>
       <code>[$masterPid, $managerPid]</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>bool</code>
-    </MixedInferredReturnType>
     <MixedMethodCall occurrences="1">
       <code>read</code>
     </MixedMethodCall>
-    <UndefinedClass occurrences="2">
-      <code>SwooleProcess</code>
-      <code>SwooleProcess</code>
-    </UndefinedClass>
     <UndefinedThisPropertyFetch occurrences="1">
       <code>$this-&gt;pidManager</code>
     </UndefinedThisPropertyFetch>
@@ -50,9 +47,6 @@
     <PossiblyNullReference occurrences="1">
       <code>find</code>
     </PossiblyNullReference>
-    <UndefinedConstant occurrences="1">
-      <code>SWOOLE_PROCESS</code>
-    </UndefinedConstant>
   </file>
   <file src="src/Command/ReloadCommandFactory.php">
     <MixedArgument occurrences="1">
@@ -65,23 +59,14 @@
       <code>$config</code>
       <code>$mode</code>
     </MixedAssignment>
-    <UndefinedConstant occurrences="1">
-      <code>SWOOLE_BASE</code>
-    </UndefinedConstant>
   </file>
   <file src="src/Command/StartCommand.php">
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
     <MixedAssignment occurrences="1">
       <code>$server</code>
     </MixedAssignment>
     <MixedMethodCall occurrences="1">
       <code>set</code>
     </MixedMethodCall>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
     <UndefinedThisPropertyAssignment occurrences="1">
       <code>$this-&gt;pidManager</code>
     </UndefinedThisPropertyAssignment>
@@ -98,173 +83,26 @@
     <RedundantCondition occurrences="1">
       <code>$result</code>
     </RedundantCondition>
-    <UndefinedClass occurrences="2">
-      <code>SwooleProcess</code>
-      <code>[SwooleProcess::class, 'kill']</code>
-    </UndefinedClass>
   </file>
   <file src="src/Command/StopCommandFactory.php">
     <MixedArgument occurrences="1">
       <code>$container-&gt;get(PidManager::class)</code>
     </MixedArgument>
   </file>
-  <file src="src/ConfigProvider.php">
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/AbstractServerAwareEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$server</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="3">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/AbstractSwooleWorkerEvent.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>$workerId</code>
-      <code>AbstractSwooleWorkerEvent</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/AfterReloadEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>AfterReloadEvent</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="src/Event/BeforeReloadEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>BeforeReloadEvent</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="src/Event/HotCodeReloaderWorkerStartListener.php">
-    <UndefinedClass occurrences="2">
-      <code>$server</code>
-      <code>$server</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/ManagerStartEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>ManagerStartEvent</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="src/Event/ManagerStopEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>ManagerStopEvent</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="src/Event/RequestEvent.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>$request</code>
-      <code>$response</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="6">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/RequestHandlerRequestListener.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>SwooleEmitter</code>
-    </MixedInferredReturnType>
-    <UndefinedClass occurrences="3">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>callable(SwooleHttpRequest):ServerRequestInterface</code>
-      <code>null|callable(SwooleHttpResponse):SwooleEmitter</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="src/Event/ServerShutdownEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$server</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="3">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/ServerStartEvent.php">
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$server</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="3">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/ServerStartListener.php">
-    <UndefinedClass occurrences="4">
-      <code>$server</code>
-      <code>$server</code>
-      <code>$server-&gt;host</code>
-      <code>$server-&gt;port</code>
-    </UndefinedClass>
+  <file src="src/Event/ServerStartListenerFactory.php">
+    <MixedAssignment occurrences="1">
+      <code>$config</code>
+    </MixedAssignment>
   </file>
   <file src="src/Event/SwooleListenerProviderFactory.php">
     <MixedArrayAccess occurrences="1">
       <code>$config['mezzio-swoole']['swoole-http-server']['listeners']</code>
     </MixedArrayAccess>
   </file>
-  <file src="src/Event/TaskEvent.php">
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$workerId</code>
-      <code>TaskEvent</code>
-      <code>TaskEvent</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/TaskFinishEvent.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>TaskFinishEvent</code>
-      <code>TaskFinishEvent</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/WorkerErrorEvent.php">
-    <PropertyNotSetInConstructor occurrences="4">
-      <code>$exitCode</code>
-      <code>$signal</code>
-      <code>WorkerErrorEvent</code>
-      <code>WorkerErrorEvent</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/WorkerStartEvent.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>WorkerStartEvent</code>
-      <code>WorkerStartEvent</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="src/Event/WorkerStartListener.php">
-    <UndefinedClass occurrences="1">
-      <code>$server-&gt;setting</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Event/WorkerStopEvent.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>WorkerStopEvent</code>
-      <code>WorkerStopEvent</code>
-    </PropertyNotSetInConstructor>
+  <file src="src/Event/WorkerStartListenerFactory.php">
+    <MixedAssignment occurrences="1">
+      <code>$config</code>
+    </MixedAssignment>
   </file>
   <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
     <MixedArgument occurrences="1">
@@ -281,44 +119,21 @@
     </UndefinedConstant>
   </file>
   <file src="src/HttpServerFactory.php">
-    <MixedArgument occurrences="3">
+    <MixedArgument occurrences="2">
       <code>$validProtocols</code>
-      <code>SwooleRuntime::class</code>
       <code>static::MODES</code>
     </MixedArgument>
     <MixedArrayAssignment occurrences="2">
       <code>$validProtocols[]</code>
       <code>$validProtocols[]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="7">
+    <MixedAssignment occurrences="5">
+      <code>$enableCoroutine</code>
       <code>$host</code>
       <code>$mode</code>
       <code>$port</code>
-      <code>$protocol</code>
       <code>$validProtocols</code>
-      <code>$validProtocols[]</code>
-      <code>$validProtocols[]</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>SwooleHttpServer</code>
-    </MixedInferredReturnType>
-    <UndefinedClass occurrences="3">
-      <code>SwooleHttpServer</code>
-      <code>SwooleRuntime</code>
-      <code>SwooleRuntime</code>
-    </UndefinedClass>
-    <UndefinedConstant occurrences="10">
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_SOCK_TCP</code>
-      <code>SWOOLE_SOCK_TCP</code>
-      <code>SWOOLE_SOCK_TCP6</code>
-      <code>SWOOLE_SOCK_UDP</code>
-      <code>SWOOLE_SOCK_UDP6</code>
-      <code>SWOOLE_UNIX_DGRAM</code>
-      <code>SWOOLE_UNIX_STREAM</code>
-    </UndefinedConstant>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
     <InvalidOperand occurrences="3">
@@ -350,12 +165,10 @@
       <code>$value</code>
       <code>$value</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="8">
+    <MixedInferredReturnType occurrences="6">
       <code>?int</code>
       <code>?int</code>
       <code>int</code>
-      <code>self</code>
-      <code>self</code>
       <code>string</code>
       <code>string</code>
       <code>string</code>
@@ -383,25 +196,6 @@
       <code>$this-&gt;getRequestMessageSize(0)</code>
       <code>$this-&gt;getResponseMessageSize(0)</code>
     </PossiblyNullOperand>
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$endTime</code>
-      <code>$request</code>
-      <code>$useHostnameLookups</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="12">
-      <code>$this-&gt;request</code>
-      <code>$this-&gt;request-&gt;cookie</code>
-      <code>$this-&gt;request-&gt;get</code>
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
   </file>
   <file src="src/Log/AccessLogFactory.php">
     <MixedArgument occurrences="3">
@@ -438,22 +232,10 @@
       <code>$matches[1]</code>
     </MixedArgument>
   </file>
-  <file src="src/Log/AccessLogInterface.php">
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-  </file>
   <file src="src/Log/LoggerResolvingTrait.php">
     <MixedInferredReturnType occurrences="1">
       <code>LoggerInterface</code>
     </MixedInferredReturnType>
-  </file>
-  <file src="src/Log/Psr3AccessLogDecorator.php">
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
   </file>
   <file src="src/Log/StdoutLogger.php">
     <MixedArgumentTypeCoercion occurrences="1">
@@ -488,21 +270,30 @@
     </MixedAssignment>
   </file>
   <file src="src/ServerRequestSwooleFactory.php">
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
+    <MixedArgument occurrences="6">
+      <code>$cookie</code>
+      <code>$files</code>
+      <code>$get</code>
+      <code>$headers</code>
+      <code>$post</code>
+      <code>$server</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="6">
+      <code>$cookie</code>
+      <code>$files</code>
+      <code>$get</code>
+      <code>$headers</code>
+      <code>$post</code>
+      <code>$server</code>
+    </MixedAssignment>
   </file>
   <file src="src/StaticMappedResourceHandler.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>?StaticResourceHandler\StaticResourceResponse</code>
-    </MixedInferredReturnType>
+    <MixedArrayAccess occurrences="1">
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArrayAccess>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
   </file>
   <file src="src/StaticMappedResourceHandlerFactory.php">
     <MixedArgument occurrences="2">
@@ -514,63 +305,93 @@
     </MixedAssignment>
   </file>
   <file src="src/StaticResourceHandler.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>?StaticResourceHandler\StaticResourceResponse</code>
-    </MixedInferredReturnType>
+    <MixedArrayAccess occurrences="1">
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArrayAccess>
+    <MixedOperand occurrences="1">
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedOperand>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
     <MissingClosureParamType occurrences="1">
       <code>$directive</code>
     </MissingClosureParamType>
+    <MixedArgument occurrences="1">
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArgument>
     <MixedArgumentTypeCoercion occurrences="2">
       <code>$regex</code>
       <code>$regex</code>
     </MixedArgumentTypeCoercion>
+    <MixedArrayAccess occurrences="1">
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="1">
+      <code>$response</code>
+    </MixedAssignment>
     <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
+    <MixedMethodCall occurrences="1">
+      <code>addHeader</code>
+    </MixedMethodCall>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$cacheControlDirectives</code>
     </MixedPropertyTypeCoercion>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedReturnStatement occurrences="1">
+      <code>$response</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/ClearStatCacheMiddleware.php">
     <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedReturnStatement occurrences="1">
+      <code>$next($request, $filename)</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/ContentTypeFilterMiddleware.php">
+    <MixedAssignment occurrences="1">
+      <code>$response</code>
+    </MixedAssignment>
     <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedMethodCall occurrences="1">
+      <code>addHeader</code>
+    </MixedMethodCall>
+    <MixedReturnStatement occurrences="1">
+      <code>$response</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
-    <MixedInferredReturnType occurrences="2">
-      <code>StaticResourceResponse</code>
+    <MixedArgument occurrences="3">
+      <code>$ifMatch ?: $ifNoneMatch</code>
+      <code>$request-&gt;server['request_uri']</code>
+      <code>$response</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="3">
+      <code>$request-&gt;header['if-match']</code>
+      <code>$request-&gt;header['if-none-match']</code>
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="3">
+      <code>$ifMatch</code>
+      <code>$ifNoneMatch</code>
+      <code>$response</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$etagDirectives</code>
     </MixedPropertyTypeCoercion>
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedReturnStatement occurrences="1">
+      <code>$response</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
     <MixedArgument occurrences="3">
@@ -613,71 +434,131 @@
     </MixedAssignment>
   </file>
   <file src="src/StaticResourceHandler/GzipMiddleware.php">
-    <MixedInferredReturnType occurrences="3">
-      <code>?int</code>
-      <code>StaticResourceResponse</code>
-      <code>bool</code>
-    </MixedInferredReturnType>
-    <UndefinedClass occurrences="3">
-      <code>Request</code>
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/StaticResourceHandler/HeadMiddleware.php">
+    <InvalidScalarArgument occurrences="3">
+      <code>true</code>
+      <code>true</code>
+      <code>true</code>
+    </InvalidScalarArgument>
+    <MixedArgument occurrences="1">
+      <code>$request-&gt;header['accept-encoding']</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$request-&gt;header['accept-encoding']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="1">
+      <code>$response</code>
+    </MixedAssignment>
     <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedMethodCall occurrences="2">
+      <code>setContentLength</code>
+      <code>setResponseContentCallback</code>
+    </MixedMethodCall>
+    <MixedOperand occurrences="1">
+      <code>$countBytes($line)</code>
+    </MixedOperand>
+    <MixedReturnStatement occurrences="3">
+      <code>$response</code>
+      <code>$response</code>
+      <code>$response</code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/StaticResourceHandler/HeadMiddleware.php">
+    <MixedArrayAccess occurrences="1">
+      <code>$server['request_method']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="2">
+      <code>$response</code>
+      <code>$server</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>StaticResourceResponse</code>
+    </MixedInferredReturnType>
+    <MixedMethodCall occurrences="1">
+      <code>disableContent</code>
+    </MixedMethodCall>
+    <MixedReturnStatement occurrences="2">
+      <code>$response</code>
+      <code>$response</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/LastModifiedMiddleware.php">
-    <MixedInferredReturnType occurrences="2">
+    <MixedArgument occurrences="2">
+      <code>$ifModifiedSince</code>
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="2">
+      <code>$request-&gt;header['if-modified-since']</code>
+      <code>$request-&gt;server['request_uri']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="2">
+      <code>$ifModifiedSince</code>
+      <code>$response</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
-      <code>bool</code>
     </MixedInferredReturnType>
+    <MixedMethodCall occurrences="3">
+      <code>addHeader</code>
+      <code>disableContent</code>
+      <code>setStatus</code>
+    </MixedMethodCall>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$lastModifiedDirectives</code>
     </MixedPropertyTypeCoercion>
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedReturnStatement occurrences="2">
+      <code>$response</code>
+      <code>$response</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/MethodNotAllowedMiddleware.php">
+    <MixedArrayAccess occurrences="1">
+      <code>$server['request_method']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="1">
+      <code>$server</code>
+    </MixedAssignment>
     <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/StaticResourceHandler/MiddlewareInterface.php">
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedReturnStatement occurrences="1">
+      <code>$next($request, $filename)</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/MiddlewareQueue.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
   </file>
   <file src="src/StaticResourceHandler/OptionsMiddleware.php">
+    <MixedArrayAccess occurrences="1">
+      <code>$server['request_method']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="2">
+      <code>$response</code>
+      <code>$server</code>
+    </MixedAssignment>
     <MixedInferredReturnType occurrences="1">
       <code>StaticResourceResponse</code>
     </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
+    <MixedMethodCall occurrences="2">
+      <code>addHeader</code>
+      <code>disableContent</code>
+    </MixedMethodCall>
+    <MixedReturnStatement occurrences="2">
+      <code>$response</code>
+      <code>$response</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/StaticResourceResponse.php">
+    <InvalidArgument occurrences="2">
+      <code>$this-&gt;status</code>
+      <code>true</code>
+    </InvalidArgument>
+    <InvalidScalarArgument occurrences="1">
+      <code>true</code>
+    </InvalidScalarArgument>
     <MixedInferredReturnType occurrences="1">
       <code>int</code>
     </MixedInferredReturnType>
@@ -687,10 +568,6 @@
     <MixedReturnStatement occurrences="1">
       <code>$strlen(implode("\r\n", $headers))</code>
     </MixedReturnStatement>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
   </file>
   <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
     <MissingClosureParamType occurrences="1">
@@ -715,158 +592,28 @@
       <code>$config</code>
     </MixedAssignment>
   </file>
-  <file src="src/StaticResourceHandlerInterface.php">
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-  </file>
   <file src="src/SwooleEmitter.php">
+    <InvalidArgument occurrences="4">
+      <code>$cookie-&gt;getExpires()</code>
+      <code>$cookie-&gt;getHttpOnly()</code>
+      <code>$cookie-&gt;getSecure()</code>
+      <code>$response-&gt;getStatusCode()</code>
+    </InvalidArgument>
     <MixedArgument occurrences="1">
       <code>static::CHUNK_SIZE</code>
     </MixedArgument>
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$name</code>
     </MixedArgumentTypeCoercion>
+    <PossiblyNullArgument occurrences="1">
+      <code>$cookie-&gt;getValue()</code>
+    </PossiblyNullArgument>
     <PossiblyNullReference occurrences="1">
       <code>asString</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$swooleResponse</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="9">
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/SwooleRequestHandlerRunner.php">
-    <MixedInferredReturnType occurrences="2">
-      <code>TaskEvent</code>
-      <code>TaskEvent</code>
-    </MixedInferredReturnType>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>$dispatcher</code>
-      <code>$httpServer</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="31">
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer-&gt;mode</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-    <UndefinedConstant occurrences="1">
-      <code>SWOOLE_PROCESS</code>
-    </UndefinedConstant>
-  </file>
-  <file src="src/SwooleRequestHandlerRunnerFactory.php">
-    <InvalidArgument occurrences="1">
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/SwooleStream.php">
-    <MixedAssignment occurrences="1">
-      <code>$this-&gt;body</code>
-    </MixedAssignment>
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$request</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="4">
-      <code>$this-&gt;request</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Task/DeferredListener.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>$listener</code>
-      <code>$server</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="3">
-      <code>$this-&gt;server</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Task/DeferredListenerDelegator.php">
-    <InvalidArgument occurrences="1">
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Task/DeferredServiceListener.php">
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$listener</code>
-      <code>$server</code>
-      <code>$serviceName</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="3">
-      <code>$this-&gt;server</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="src/Task/DeferredServiceListenerDelegator.php">
-    <InvalidArgument occurrences="1">
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
+    <TooManyArguments occurrences="1">
+      <code>cookie</code>
+    </TooManyArguments>
   </file>
   <file src="test/AssertResponseTrait.php">
     <MixedArgument occurrences="7">
@@ -895,31 +642,6 @@
       <code>$expected</code>
     </MixedArgument>
   </file>
-  <file src="test/Command/ReloadCommandFactoryTest.php">
-    <MoreSpecificReturnType occurrences="1"/>
-    <UndefinedConstant occurrences="3">
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-    </UndefinedConstant>
-  </file>
-  <file src="test/Command/ReloadCommandTest.php">
-    <MixedArgument occurrences="5">
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-    </MixedArgument>
-    <UndefinedConstant occurrences="6">
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-    </UndefinedConstant>
-  </file>
   <file src="test/Command/StartCommandTest.php">
     <MixedArgument occurrences="2">
       <code>$command</code>
@@ -934,10 +656,6 @@
       <code>method</code>
       <code>method</code>
     </MixedMethodCall>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
   </file>
   <file src="test/Command/StopCommandTest.php">
     <InternalProperty occurrences="3">
@@ -946,853 +664,31 @@
       <code>$command-&gt;waitThreshold</code>
     </InternalProperty>
   </file>
-  <file src="test/Event/HotCodeReloaderWorkerStartListenerTest.php">
-    <InvalidArgument occurrences="2">
-      <code>$server</code>
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>Server::class</code>
-      <code>Server::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>Server</code>
-      <code>Server</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Event/RequestHandlerRequestListenerFactoryTest.php">
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Event/RequestHandlerRequestListenerTest.php">
-    <InvalidPropertyAssignmentValue occurrences="2">
-      <code>$this-&gt;createMock(SwooleHttpRequest::class)</code>
-      <code>$this-&gt;createMock(SwooleHttpResponse::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="4">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/Event/ServerShutdownListenerTest.php">
-    <InvalidArgument occurrences="1">
-      <code>$this-&gt;createMock(SwooleHttpServer::class)</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Event/ServerStartListenerTest.php">
-    <InvalidArgument occurrences="1">
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Event/StaticResourceRequestListenerTest.php">
-    <InvalidPropertyAssignmentValue occurrences="2">
-      <code>$this-&gt;createMock(SwooleHttpRequest::class)</code>
-      <code>$this-&gt;createMock(SwooleHttpResponse::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="4">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Event/WorkerStartListenerTest.php">
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="4">
-      <code>$server-&gt;setting</code>
-      <code>$server-&gt;setting</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="4">
-      <code>$server</code>
-      <code>$server</code>
-      <code>$server-&gt;setting</code>
-      <code>$server-&gt;setting</code>
-    </UndefinedDocblockClass>
-  </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
     <InvalidPropertyAssignmentValue occurrences="1">
       <code>$this-&gt;file</code>
     </InvalidPropertyAssignmentValue>
   </file>
   <file src="test/HttpServerFactoryTest.php">
-    <LessSpecificReturnStatement occurrences="1">
-      <code>$validTypes</code>
-    </LessSpecificReturnStatement>
-    <MixedArgument occurrences="2">
-      <code>$process-&gt;read()</code>
-      <code>SwooleRuntime::class</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="7">
+    <InvalidScalarArgument occurrences="2">
+      <code>0</code>
+      <code>0</code>
+    </InvalidScalarArgument>
+    <MissingClosureParamType occurrences="4">
+      <code>$clientInfo</code>
       <code>$data</code>
-      <code>$output</code>
-      <code>$process</code>
-      <code>$process</code>
-      <code>$process</code>
-      <code>$process</code>
-      <code>$setOptions</code>
+      <code>$rep</code>
+      <code>$req</code>
+    </MissingClosureParamType>
+  </file>
+  <file src="test/Log/LoggerFactoryHelperTrait.php">
+    <MixedAssignment occurrences="1">
+      <code>$value</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="8">
-      <code>read</code>
-      <code>read</code>
-      <code>read</code>
-      <code>read</code>
-      <code>start</code>
-      <code>start</code>
-      <code>start</code>
-      <code>start</code>
-    </MixedMethodCall>
-    <MoreSpecificReturnType occurrences="1"/>
-    <UndefinedClass occurrences="14">
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>Process</code>
-      <code>SwooleEvent</code>
-      <code>SwooleRuntime</code>
-    </UndefinedClass>
-    <UndefinedConstant occurrences="11">
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_PROCESS</code>
-      <code>SWOOLE_SOCK_TCP</code>
-      <code>SWOOLE_SOCK_TCP</code>
-      <code>SWOOLE_SOCK_TCP6</code>
-      <code>SWOOLE_SOCK_TCP6</code>
-      <code>SWOOLE_SOCK_UDP</code>
-      <code>SWOOLE_SOCK_UDP6</code>
-      <code>SWOOLE_UNIX_DGRAM</code>
-      <code>SWOOLE_UNIX_STREAM</code>
-    </UndefinedConstant>
-    <UndefinedFunction occurrences="3"/>
-  </file>
-  <file src="test/Log/AccessLogDataMapTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(SwooleHttpRequest::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpRequest::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="2">
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;SwooleHttpRequest</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/Log/Psr3AccessLogDecoratorTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="1">
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/ServerRequestSwooleFactoryTest.php">
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpRequest::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="6">
-      <code>$swooleRequest-&gt;cookie</code>
-      <code>$swooleRequest-&gt;files</code>
-      <code>$swooleRequest-&gt;get</code>
-      <code>$swooleRequest-&gt;header</code>
-      <code>$swooleRequest-&gt;post</code>
-      <code>$swooleRequest-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/StaticMappedResourceHandlerTest.php">
-    <InvalidPropertyAssignmentValue occurrences="2">
-      <code>$this-&gt;createMock(SwooleHttpRequest::class)</code>
-      <code>$this-&gt;createMock(SwooleHttpResponse::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <MixedInferredReturnType occurrences="3">
-      <code>StaticResourceResponse</code>
-      <code>StaticResourceResponse</code>
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <NoInterfaceProperties occurrences="4">
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="5">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>MockObject&amp;SwooleHttpRequest</code>
-      <code>MockObject&amp;SwooleHttpResponse</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/CacheControlMiddlewareTest.php">
-    <InvalidArgument occurrences="2">
-      <code>$request</code>
-      <code>$request</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>Request::class</code>
-      <code>Request::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="2">
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="4">
-      <code>Request</code>
-      <code>Request</code>
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/StaticResourceHandler/ContentTypeFilterMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="3">
-      <code>Request</code>
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="test/StaticResourceHandler/ETagMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
     <MixedInferredReturnType occurrences="1">
       <code>iterable</code>
     </MixedInferredReturnType>
-    <NoInterfaceProperties occurrences="4">
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/GzipMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(SwooleHttpRequest::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="9">
-      <code>$this-&gt;swooleRequest-&gt;header</code>
-      <code>$this-&gt;swooleRequest-&gt;header</code>
-      <code>$this-&gt;swooleRequest-&gt;header</code>
-      <code>$this-&gt;swooleRequest-&gt;header</code>
-      <code>$this-&gt;swooleRequest-&gt;header</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>SwooleHttpRequest&amp;MockObject</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/HeadMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="2">
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/IntegrationMappedTest.php">
-    <InvalidArgument occurrences="24">
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="24">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="22">
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="24">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/StaticResourceHandler/IntegrationTest.php">
-    <InvalidArgument occurrences="24">
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="24">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="22">
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;header</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-      <code>$request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="24">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/StaticResourceHandler/LastModifiedMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="4">
-      <code>$this-&gt;request-&gt;header</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="2">
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="3">
-      <code>Request</code>
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/MiddlewareQueueTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/OptionsMiddlewareTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(Request::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>Request::class</code>
-    </MixedArgument>
-    <NoInterfaceProperties occurrences="2">
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="3">
-      <code>Request</code>
-      <code>Request</code>
-      <code>Request</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>MockObject&amp;Request</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/StaticResourceHandler/StaticResourceResponseTest.php">
-    <InvalidArgument occurrences="2">
-      <code>$swooleResponse</code>
-      <code>$swooleResponse</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>SwooleResponse::class</code>
-      <code>SwooleResponse::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="3">
-      <code>SwooleResponse</code>
-      <code>SwooleResponse</code>
-      <code>SwooleResponse</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/StaticResourceHandlerTest.php">
-    <InvalidPropertyAssignmentValue occurrences="2">
-      <code>$this-&gt;createMock(SwooleHttpRequest::class)</code>
-      <code>$this-&gt;createMock(SwooleHttpResponse::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <MixedInferredReturnType occurrences="2">
-      <code>StaticResourceResponse</code>
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <NoInterfaceProperties occurrences="2">
-      <code>$this-&gt;request-&gt;server</code>
-      <code>$this-&gt;request-&gt;server</code>
-    </NoInterfaceProperties>
-    <UndefinedClass occurrences="4">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>MockObject&amp;SwooleHttpRequest</code>
-      <code>MockObject&amp;SwooleHttpResponse</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/SwooleEmitterTest.php">
-    <InvalidArgument occurrences="1">
-      <code>$this-&gt;swooleResponse</code>
-    </InvalidArgument>
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(SwooleHttpResponse::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpResponse::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpResponse</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="16">
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>$this-&gt;swooleResponse</code>
-      <code>MockObject&amp;SwooleHttpResponse</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/SwooleRequestHandlerRunnerFactoryTest.php">
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/SwooleRequestHandlerRunnerTest.php">
-    <InvalidArgument occurrences="7">
-      <code>$httpServer</code>
-      <code>$httpServer</code>
-      <code>$request</code>
-      <code>$request</code>
-      <code>$response</code>
-      <code>$response</code>
-      <code>$this-&gt;httpServer</code>
-    </InvalidArgument>
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;createMock(SwooleHttpServer::class)</code>
-    </InvalidPropertyAssignmentValue>
-    <MixedArgument occurrences="5">
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpResponse::class</code>
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <MixedMethodCall occurrences="10">
-      <code>method</code>
-      <code>method</code>
-      <code>method</code>
-      <code>method</code>
-      <code>method</code>
-      <code>method</code>
-      <code>will</code>
-      <code>will</code>
-      <code>with</code>
-      <code>with</code>
-    </MixedMethodCall>
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>$server</code>
-    </PropertyNotSetInConstructor>
-    <UndefinedClass occurrences="10">
-      <code>$this-&gt;httpServer-&gt;mode</code>
-      <code>$this-&gt;httpServer-&gt;mode</code>
-      <code>$this-&gt;server</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpResponse</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-    <UndefinedConstant occurrences="2">
-      <code>SWOOLE_BASE</code>
-      <code>SWOOLE_PROCESS</code>
-    </UndefinedConstant>
-    <UndefinedDocblockClass occurrences="7">
-      <code>$server</code>
-      <code>$server</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>$this-&gt;httpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/SwooleStreamTest.php">
-    <InvalidArgument occurrences="3">
-      <code>$request</code>
-      <code>$request</code>
-      <code>$request</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="4">
-      <code>$this-&gt;request</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-      <code>SwooleHttpRequest::class</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$this-&gt;request</code>
-    </MixedAssignment>
-    <UndefinedClass occurrences="4">
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-      <code>SwooleHttpRequest</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>SwooleHttpRequest&amp;MockObject</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="test/Task/DeferredListenerDelegatorTest.php">
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Task/DeferredListenerTest.php">
-    <InvalidArgument occurrences="1">
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Task/DeferredServiceListenerDelegatorTest.php">
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Task/DeferredServiceListenerTest.php">
-    <InvalidArgument occurrences="2">
-      <code>$server</code>
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="2">
-      <code>SwooleHttpServer::class</code>
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="2">
-      <code>SwooleHttpServer</code>
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Task/ServiceBasedTaskTest.php">
-    <InvalidArgument occurrences="1">
-      <code>$server</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="1">
-      <code>SwooleHttpServer::class</code>
-    </MixedArgument>
-    <UndefinedClass occurrences="1">
-      <code>SwooleHttpServer</code>
-    </UndefinedClass>
   </file>
 </files>
