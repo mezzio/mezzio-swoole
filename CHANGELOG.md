@@ -22,6 +22,22 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- Nothing.
+
+## 3.1.2 - 2021-01-05
+
+### Release Notes for [3.1.2](https://github.com/mezzio/mezzio-swoole/milestone/17)
+
+3.1.x bugfix release (patch)
+
+- Total issues resolved: **1**
+- Total pull requests resolved: **1**
+- Total contributors: **2**
+
+#### Bug
+
+- [52: Remove &quot;bin&quot; configuration from package](https://github.com/mezzio/mezzio-swoole/pull/52) thanks to @weierophinney and @demijohn
+
 ## 3.1.1 - 2020-12-14
 
 ### Release Notes for [3.1.1](https://github.com/mezzio/mezzio-swoole/milestone/15)

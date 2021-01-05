@@ -66,9 +66,6 @@
             "MezzioTest\\Swoole\\": "test/"
         }
     },
-    "bin": [
-        "bin/mezzio-swoole"
-    ],
     "scripts": {
         "check": [
             "@cs-check",
