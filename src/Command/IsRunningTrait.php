@@ -21,6 +21,7 @@ trait IsRunningTrait
      */
     public function isRunning(): bool
     {
+        /** @psalm-var list<string> */
         $pids = $this->pidManager->read();
 
         if ([] === $pids) {
