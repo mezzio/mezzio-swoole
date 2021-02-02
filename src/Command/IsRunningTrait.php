@@ -12,6 +12,8 @@ namespace Mezzio\Swoole\Command;
 
 use Swoole\Process as SwooleProcess;
 
+use function array_pad;
+
 trait IsRunningTrait
 {
     /**
@@ -25,7 +27,7 @@ trait IsRunningTrait
             return false;
         }
 
-        [$masterPid, $managerPid] = $pids;
+        [$masterPid, $managerPid] = array_pad($pids, 2, null);
 
         if ($managerPid) {
             // Swoole process mode
