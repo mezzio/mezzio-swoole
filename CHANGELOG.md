@@ -2,10 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 3.3.0 - TBD
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 3.2.1 - 2021-02-15
-
-
------
 
 ### Release Notes for [3.2.1](https://github.com/mezzio/mezzio-swoole/milestone/19)
 
@@ -22,9 +41,6 @@ All notable changes to this project will be documented in this file, in reverse 
  - [56: Ensured unpacked array has at least 2 elements to avoid undefined index warning](https://github.com/mezzio/mezzio-swoole/pull/56) thanks to @acelaya
 
 ## 3.2.0 - 2021-01-22
-
-
------
 
 ### Release Notes for [3.2.0](https://github.com/mezzio/mezzio-swoole/milestone/16)
 
