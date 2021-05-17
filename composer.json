@@ -1,7 +1,6 @@
 {
     "name": "mezzio/mezzio-swoole",
     "description": "Swoole support for Mezzio",
-    "license": "BSD-3-Clause",
     "keywords": [
         "laminas",
         "mezzio",
@@ -13,19 +12,7 @@
         "psr-17"
     ],
     "homepage": "https://mezzio.dev",
-    "support": {
-        "docs": "https://docs.mezzio.dev/mezzio-swoole/",
-        "issues": "https://github.com/mezzio/mezzio-swoole/issues",
-        "source": "https://github.com/mezzio/mezzio-swoole",
-        "rss": "https://github.com/mezzio/mezzio-swoole/releases.atom",
-        "chat": "https://laminas.dev/chat",
-        "forum": "https://discourse.laminas.dev"
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-    },
+    "license": "BSD-3-Clause",
     "require": {
         "php": "^7.4 || ~8.0.0",
         "ext-swoole": "^4.5.5",
@@ -44,6 +31,9 @@
         "symfony/console": "^4.1 || ^5.0",
         "webmozart/assert": "^1.9"
     },
+    "replace": {
+        "zendframework/zend-expressive-swoole": "^2.5.0"
+    },
     "require-dev": {
         "filp/whoops": "^2.1",
         "laminas/laminas-coding-standard": "~2.1.0",
@@ -56,6 +46,10 @@
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading."
     },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {},
     "autoload": {
         "psr-4": {
             "Mezzio\\Swoole\\": "src/"
@@ -77,7 +71,12 @@
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },
-    "replace": {
-        "zendframework/zend-expressive-swoole": "^2.5.0"
+    "support": {
+        "issues": "https://github.com/mezzio/mezzio-swoole/issues",
+        "forum": "https://discourse.laminas.dev",
+        "chat": "https://laminas.dev/chat",
+        "source": "https://github.com/mezzio/mezzio-swoole",
+        "docs": "https://docs.mezzio.dev/mezzio-swoole/",
+        "rss": "https://github.com/mezzio/mezzio-swoole/releases.atom"
     }
 }
