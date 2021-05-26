@@ -35,9 +35,9 @@ class ServiceBasedTaskTest extends TestCase
 
     public function testInvokesDeferredListenerPulledFromContainerWithTaskPayload(): void
     {
-        $server    = $this->createMock(SwooleHttpServer::class);
-        $listener  = new CallableObject();
-        $deferred  = new DeferredServiceListener($server, $listener, CallableObject::class);
+        $server   = $this->createMock(SwooleHttpServer::class);
+        $listener = new CallableObject();
+        new DeferredServiceListener($server, $listener, CallableObject::class);
         $task      = new ServiceBasedTask(CallableObject::class, 'one', 'two', 'three');
         $container = $this->createMock(ContainerInterface::class);
 

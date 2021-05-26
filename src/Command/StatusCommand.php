@@ -26,7 +26,7 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
-    /** @var string Cannot be defined explicitly due to parent class */
+    /** @var null|string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:status';
 
     private PidManager $pidManager;

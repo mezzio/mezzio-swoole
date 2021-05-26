@@ -134,7 +134,6 @@ class SwooleStreamTest extends TestCase
 
     public function testTellIndicatesIndexInString(): void
     {
-        $tot = strlen(self::DEFAULT_CONTENT);
         for ($i = 0; $i < strlen(self::DEFAULT_CONTENT); $i++) {
             $this->stream->seek($i);
             $this->assertEquals($i, $this->stream->tell());

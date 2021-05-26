@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.3.2@57b53ff26237074fdf5cbcb034f7da5172be4524">
+<files psalm-version="4.7.3@38c452ae584467e939d55377aaf83b5a26f19dd1">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArgument occurrences="3">
       <code>$compressionLevel</code>
@@ -28,14 +28,6 @@
       <code>0</code>
       <code>0</code>
     </InvalidArgument>
-    <MixedArrayAccess occurrences="2">
-      <code>$managerPid</code>
-      <code>$masterPid</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$pids</code>
-      <code>[$masterPid, $managerPid]</code>
-    </MixedAssignment>
     <MixedMethodCall occurrences="1">
       <code>read</code>
     </MixedMethodCall>
@@ -44,6 +36,10 @@
     </UndefinedThisPropertyFetch>
   </file>
   <file src="src/Command/ReloadCommand.php">
+    <PossiblyNullArgument occurrences="2">
+      <code>StartCommand::$defaultName</code>
+      <code>StopCommand::$defaultName</code>
+    </PossiblyNullArgument>
     <PossiblyNullReference occurrences="1">
       <code>find</code>
     </PossiblyNullReference>
@@ -127,12 +123,15 @@
       <code>$validProtocols[]</code>
       <code>$validProtocols[]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="5">
+    <MixedAssignment occurrences="8">
       <code>$enableCoroutine</code>
       <code>$host</code>
       <code>$mode</code>
       <code>$port</code>
+      <code>$protocol</code>
       <code>$validProtocols</code>
+      <code>$validProtocols[]</code>
+      <code>$validProtocols[]</code>
     </MixedAssignment>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
@@ -196,6 +195,9 @@
       <code>$this-&gt;getRequestMessageSize(0)</code>
       <code>$this-&gt;getResponseMessageSize(0)</code>
     </PossiblyNullOperand>
+    <PossiblyNullReference occurrences="1">
+      <code>getHeaderSize</code>
+    </PossiblyNullReference>
   </file>
   <file src="src/Log/AccessLogFactory.php">
     <MixedArgument occurrences="3">
@@ -463,6 +465,9 @@
       <code>$response</code>
       <code>$response</code>
     </MixedReturnStatement>
+    <UnusedFunctionCall occurrences="1">
+      <code>stream_filter_append</code>
+    </UnusedFunctionCall>
   </file>
   <file src="src/StaticResourceHandler/HeadMiddleware.php">
     <MixedArrayAccess occurrences="1">
@@ -615,6 +620,33 @@
       <code>cookie</code>
     </TooManyArguments>
   </file>
+  <file src="src/SwooleStream.php">
+    <InvalidToString occurrences="1">
+      <code>string</code>
+    </InvalidToString>
+    <NullableReturnStatement occurrences="1">
+      <code>$this-&gt;body</code>
+    </NullableReturnStatement>
+    <PossiblyNullArgument occurrences="2">
+      <code>$this-&gt;body</code>
+      <code>$this-&gt;body</code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="src/Task/DeferredListener.php">
+    <InvalidCast occurrences="1">
+      <code>new Task($this-&gt;listener, $event)</code>
+    </InvalidCast>
+  </file>
+  <file src="src/Task/DeferredServiceListener.php">
+    <InvalidCast occurrences="1">
+      <code>new ServiceBasedTask($this-&gt;serviceName, $event)</code>
+    </InvalidCast>
+  </file>
+  <file src="src/Task/Task.php">
+    <MixedPropertyTypeCoercion occurrences="1">
+      <code>$payload</code>
+    </MixedPropertyTypeCoercion>
+  </file>
   <file src="test/AssertResponseTrait.php">
     <MixedArgument occurrences="7">
       <code>$actual</code>
@@ -656,6 +688,11 @@
       <code>method</code>
       <code>method</code>
     </MixedMethodCall>
+    <UnusedFunctionCall occurrences="3">
+      <code>set_include_path</code>
+      <code>set_include_path</code>
+      <code>set_include_path</code>
+    </UnusedFunctionCall>
   </file>
   <file src="test/Command/StopCommandTest.php">
     <InternalProperty occurrences="3">
@@ -663,6 +700,50 @@
       <code>$command-&gt;killProcess</code>
       <code>$command-&gt;waitThreshold</code>
     </InternalProperty>
+  </file>
+  <file src="test/Command/TestAsset/config/pipeline.php">
+    <UnusedClosureParam occurrences="3">
+      <code>$app</code>
+      <code>$container</code>
+      <code>$factory</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/Command/TestAsset/config/routes.php">
+    <UnusedClosureParam occurrences="3">
+      <code>$app</code>
+      <code>$container</code>
+      <code>$factory</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/Event/EventDispatcherTest.php">
+    <UnusedClosureParam occurrences="2">
+      <code>$event</code>
+      <code>$event</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/Event/RequestHandlerRequestListenerFactoryTest.php">
+    <UnusedClosureParam occurrences="2">
+      <code>$e</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/Event/RequestHandlerRequestListenerTest.php">
+    <UnusedClosureParam occurrences="2">
+      <code>$response</code>
+      <code>$swooleRequest</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/Event/SwooleListenerProviderFactoryTest.php">
+    <UnusedClosureParam occurrences="1">
+      <code>$event</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/Event/SwooleListenerProviderTest.php">
+    <UnusedClosureParam occurrences="3">
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
+    </UnusedClosureParam>
   </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
     <InvalidPropertyAssignmentValue occurrences="1">
@@ -674,21 +755,104 @@
       <code>0</code>
       <code>0</code>
     </InvalidScalarArgument>
+    <LessSpecificReturnStatement occurrences="1">
+      <code>$validTypes</code>
+    </LessSpecificReturnStatement>
     <MissingClosureParamType occurrences="4">
       <code>$clientInfo</code>
       <code>$data</code>
       <code>$rep</code>
       <code>$req</code>
     </MissingClosureParamType>
+    <MoreSpecificReturnType occurrences="1"/>
+    <UnusedClosureParam occurrences="5">
+      <code>$clientInfo</code>
+      <code>$data</code>
+      <code>$rep</code>
+      <code>$req</code>
+      <code>$server</code>
+    </UnusedClosureParam>
+    <UnusedFunctionCall occurrences="3">
+      <code>go</code>
+      <code>go</code>
+      <code>go</code>
+    </UnusedFunctionCall>
   </file>
   <file src="test/Log/LoggerFactoryHelperTrait.php">
     <MixedAssignment occurrences="1">
       <code>$value</code>
     </MixedAssignment>
   </file>
+  <file src="test/StaticResourceHandler/CacheControlMiddlewareTest.php">
+    <UnusedClosureParam occurrences="4">
+      <code>$filename</code>
+      <code>$filename</code>
+      <code>$request</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/ContentTypeFilterMiddlewareTest.php">
+    <UnusedClosureParam occurrences="4">
+      <code>$filename</code>
+      <code>$filename</code>
+      <code>$request</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
   <file src="test/StaticResourceHandler/ETagMiddlewareTest.php">
     <MixedInferredReturnType occurrences="1">
       <code>iterable</code>
     </MixedInferredReturnType>
+    <UnusedClosureParam occurrences="2">
+      <code>$filename</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/GzipMiddlewareTest.php">
+    <UnusedClosureParam occurrences="4">
+      <code>$filename</code>
+      <code>$filename</code>
+      <code>$request</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/HeadMiddlewareTest.php">
+    <UnusedClosureParam occurrences="2">
+      <code>$filename</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/LastModifiedMiddlewareTest.php">
+    <UnusedClosureParam occurrences="2">
+      <code>$filename</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php">
+    <UnusedClosureParam occurrences="4">
+      <code>$filename</code>
+      <code>$filename</code>
+      <code>$request</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/OptionsMiddlewareTest.php">
+    <UnusedClosureParam occurrences="4">
+      <code>$filename</code>
+      <code>$filename</code>
+      <code>$request</code>
+      <code>$request</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/StaticResourceHandler/StaticResourceResponseTest.php">
+    <UnusedClosureParam occurrences="1">
+      <code>$response</code>
+    </UnusedClosureParam>
+  </file>
+  <file src="test/TestAsset/CallableObject.php">
+    <MixedReturnTypeCoercion occurrences="2">
+      <code>$params</code>
+      <code>list&lt;mixed&gt;</code>
+    </MixedReturnTypeCoercion>
   </file>
 </files>
