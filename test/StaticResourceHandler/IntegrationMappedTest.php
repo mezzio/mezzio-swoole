@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -255,7 +253,6 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));

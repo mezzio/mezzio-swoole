@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -114,7 +112,7 @@ class FileLocationRepositoryTest extends TestCase
     public function testValidatePrefixPrependsSlash(): void
     {
         // validatePrefix called from addMappDocumentRoot
-        $dir = getcwd() . '/';
+        getcwd() . '/';
         $this->fileLocRepo->addMappedDocumentRoot('foo/', $this->testDir);
         $this->assertEquals(
             [
@@ -128,7 +126,7 @@ class FileLocationRepositoryTest extends TestCase
     public function testValidatePrefixAppendsSlash(): void
     {
         // validatePrefix called from addMappDocumentRoot
-        $dir = getcwd() . '/';
+        getcwd() . '/';
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
             [
@@ -142,7 +140,7 @@ class FileLocationRepositoryTest extends TestCase
     public function testValidateDirectoryReturnsIfDirectoryExists(): void
     {
         // validateDirectory called from addMappDocumentRoot
-        $dir = getcwd();
+        getcwd();
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
             [
@@ -165,7 +163,7 @@ class FileLocationRepositoryTest extends TestCase
     public function testValidatePDirctoryAppendsSlash(): void
     {
         // validatePrefix called from addMappDocumentRoot
-        $dir = getcwd();
+        getcwd();
         $this->fileLocRepo->addMappedDocumentRoot('/foo', $this->testDir);
         $this->assertEquals(
             ['/' => [$this->testValDir], '/foo/' => [$this->testValDir]],

@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -47,10 +45,8 @@ class MiddlewareQueueTest extends TestCase
 
     public function testReturnsResponseGeneratedByMiddleware(): void
     {
-        /** @psalm-var MockObject&StaticResourceResponse $response */
         $response = $this->createMock(StaticResourceResponse::class);
 
-        /** @psalm-var MockObject&MiddlewareInterface $middleware */
         $middleware = $this->createMock(MiddlewareInterface::class);
         $middleware
             ->method('__invoke')
@@ -67,10 +63,8 @@ class MiddlewareQueueTest extends TestCase
 
     public function testEachMiddlewareReceivesSameQueueInstance(): void
     {
-        /** @psalm-var MockObject&MiddlewareInterface $second */
         $second = $this->createMock(MiddlewareInterface::class);
 
-        /** @psalm-var MockObject&MiddlewareInterface $first */
         $first = $this->createMock(MiddlewareInterface::class);
         $first
             ->method('__invoke')

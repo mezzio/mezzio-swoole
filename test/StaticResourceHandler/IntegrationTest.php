@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -118,7 +116,6 @@ class IntegrationTest extends TestCase
     public function testSendStaticResourceEmitsContentAndHeadersMatchingDirectivesForPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
@@ -166,7 +163,6 @@ class IntegrationTest extends TestCase
     public function testSendStaticResourceEmitsHeadersOnlyWhenMatchingDirectivesForHeadRequestToKnownPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
@@ -216,7 +212,6 @@ class IntegrationTest extends TestCase
     public function testSendStaticResourceEmitsAllowHeaderWithHeadersAndNoBodyWhenMatchingOptionsRequestToKnownPath(): void
     {
         $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
@@ -267,7 +262,6 @@ class IntegrationTest extends TestCase
     public function testSendStaticResourceViaGetSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
@@ -316,7 +310,6 @@ class IntegrationTest extends TestCase
     public function testSendStaticResourceViaHeadSkipsClientSideCacheMatchingIfNoETagOrLastModifiedHeadersConfigured(): void
     {
         $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
@@ -363,11 +356,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfMatchValue(): void
     {
-        $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
-        $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $file         = $this->docRoot . '/content.txt';
+        $lastModified = filemtime($file);
+        $etag         = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
@@ -411,11 +402,9 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfETagMatchesIfNoneMatchValue(): void
     {
-        $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
-        $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
-        $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
+        $file         = $this->docRoot . '/content.txt';
+        $lastModified = filemtime($file);
+        $etag         = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
@@ -459,9 +448,8 @@ class IntegrationTest extends TestCase
 
     public function testSendStaticResourceCanGenerateStrongETagValue(): void
     {
-        $file        = $this->docRoot . '/content.txt';
-        $contentType = 'text/plain';
-        $etag        = md5_file($file);
+        $file = $this->docRoot . '/content.txt';
+        $etag = md5_file($file);
 
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [];
@@ -505,7 +493,6 @@ class IntegrationTest extends TestCase
     public function testSendStaticResourceViaGetHitsClientSideCacheMatchingIfLastModifiedMatchesIfModifiedSince(): void
     {
         $file                  = $this->docRoot . '/content.txt';
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
 
@@ -549,7 +536,6 @@ class IntegrationTest extends TestCase
     public function testGetDoesNotHitClientSideCacheMatchingIfLastModifiedDoesNotMatchIfModifiedSince(): void
     {
         $file                     = $this->docRoot . '/content.txt';
-        $contentType              = 'text/plain';
         $lastModified             = filemtime($file);
         $lastModifiedFormatted    = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $ifModifiedSince          = $lastModified - 3600;
