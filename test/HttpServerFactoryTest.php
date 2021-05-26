@@ -245,7 +245,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, array{
      *     0: int,
-     *     1: array<string, string>,
+     *     1: array<empty, empty>|array<string, non-empty-string>,
      * }>
      */
     public function validSocketTypes(): array
