@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -245,7 +243,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, array{
      *     0: int,
-     *     1: array<string, string>,
+     *     1: array<empty, empty>|array<string, non-empty-string>,
      * }>
      */
     public function validSocketTypes(): array

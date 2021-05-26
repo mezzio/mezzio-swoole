@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -56,7 +54,6 @@ final class HotCodeReloaderWorkerStartListenerFactory
         }
 
         foreach ($paths as $path) {
-            /** @psalm-var InotifyFileWatcher $fileWatcher */
             $fileWatcher->addFilePath($path);
         }
     }

@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -31,7 +29,7 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
-    /** @var string Cannot be defined explicitly due to parent class */
+    /** @var null|string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:stop';
 
     /**

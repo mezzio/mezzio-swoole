@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -35,9 +33,9 @@ class ServiceBasedTaskTest extends TestCase
 
     public function testInvokesDeferredListenerPulledFromContainerWithTaskPayload(): void
     {
-        $server    = $this->createMock(SwooleHttpServer::class);
-        $listener  = new CallableObject();
-        $deferred  = new DeferredServiceListener($server, $listener, CallableObject::class);
+        $server   = $this->createMock(SwooleHttpServer::class);
+        $listener = new CallableObject();
+        new DeferredServiceListener($server, $listener, CallableObject::class);
         $task      = new ServiceBasedTask(CallableObject::class, 'one', 'two', 'three');
         $container = $this->createMock(ContainerInterface::class);
 

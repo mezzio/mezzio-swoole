@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-swoole/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -134,7 +132,6 @@ class SwooleStreamTest extends TestCase
 
     public function testTellIndicatesIndexInString(): void
     {
-        $tot = strlen(self::DEFAULT_CONTENT);
         for ($i = 0; $i < strlen(self::DEFAULT_CONTENT); $i++) {
             $this->stream->seek($i);
             $this->assertEquals($i, $this->stream->tell());
