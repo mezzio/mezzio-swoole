@@ -95,7 +95,6 @@ class ETagMiddleware implements MiddlewareInterface
         string $filename,
         StaticResourceResponse $response
     ): StaticResourceResponse {
-        $etag         = '';
         $lastModified = filemtime($filename) ?: 0;
         switch ($this->etagValidationType) {
             case self::ETAG_VALIDATION_WEAK:

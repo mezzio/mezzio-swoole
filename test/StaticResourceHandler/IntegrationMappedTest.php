@@ -255,7 +255,6 @@ class IntegrationMappedTest extends TestCase
         $file = $this->assetPath . '/content.txt';
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
-        $contentType           = 'text/plain';
         $lastModified          = filemtime($file);
         $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));

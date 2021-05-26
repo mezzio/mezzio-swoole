@@ -376,8 +376,6 @@ class AccessLogDataMap
      */
     public function getResponseMessageSize($default = null): ?int
     {
-        $bodySize = null;
-
         if ($this->psrResponse) {
             $bodySize = $this->psrResponse->getBody()->getSize();
         } elseif ($this->staticResource) {
