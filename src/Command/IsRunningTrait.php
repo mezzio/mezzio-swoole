@@ -8,18 +8,20 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Command;
 
+use Mezzio\Swoole\PidManager;
 use Swoole\Process as SwooleProcess;
 
 use function array_pad;
 
 trait IsRunningTrait
 {
+    private PidManager $pidManager;
+
     /**
      * Is the swoole HTTP server running?
      */
     public function isRunning(): bool
     {
-        /** @psalm-var list<string> */
         $pids = $this->pidManager->read();
 
         if ([] === $pids) {

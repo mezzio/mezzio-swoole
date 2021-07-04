@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\Assert\Assert;
 
 use function file_exists;
 
@@ -48,6 +49,9 @@ EOH;
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $pidManager      = $container->get(PidManager::class);
+        Assert::isInstanceOf($pidManager, PidManager::class);
+        $this->pidManager = $pidManager;
         parent::__construct();
     }
 
@@ -77,7 +81,6 @@ EOH;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->pidManager = $this->container->get(PidManager::class);
         if ($this->isRunning()) {
             $output->writeln('<error>Server is already running!</error>');
             return 1;

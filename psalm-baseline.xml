@@ -28,12 +28,6 @@
       <code>0</code>
       <code>0</code>
     </InvalidArgument>
-    <MixedMethodCall occurrences="1">
-      <code>read</code>
-    </MixedMethodCall>
-    <UndefinedThisPropertyFetch occurrences="1">
-      <code>$this-&gt;pidManager</code>
-    </UndefinedThisPropertyFetch>
   </file>
   <file src="src/Command/ReloadCommand.php">
     <PossiblyNullArgument occurrences="2">
@@ -63,9 +57,6 @@
     <MixedMethodCall occurrences="1">
       <code>set</code>
     </MixedMethodCall>
-    <UndefinedThisPropertyAssignment occurrences="1">
-      <code>$this-&gt;pidManager</code>
-    </UndefinedThisPropertyAssignment>
   </file>
   <file src="src/Command/StatusCommandFactory.php">
     <MixedArgument occurrences="1">
