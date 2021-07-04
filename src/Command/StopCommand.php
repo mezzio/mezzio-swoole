@@ -48,8 +48,6 @@ EOH;
      */
     public int $waitThreshold = 60;
 
-    private PidManager $pidManager;
-
     public function __construct(PidManager $pidManager)
     {
         $this->killProcess = Closure::fromCallable([SwooleProcess::class, 'kill']);
