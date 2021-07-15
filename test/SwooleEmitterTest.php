@@ -160,19 +160,15 @@ class SwooleEmitterTest extends TestCase
 
     public function testEmitWithUnknownSizeContentBody(): void
     {
-        $content  = 'unknown length';
+        $content = 'unknown length';
 
-        $stream = fopen('php://memory','r+');
-        fwrite($stream, $content);
-        rewind($stream);
-
-        $streamWithSimulatedUnknownSize = new class($stream) extends Stream
+        /** @psalm-suppress PropertyNotSetInConstructor */
+        $streamWithSimulatedUnknownSize = new class ($content) extends Stream
         {
             public function getSize(): ?int
             {
                 return null;
             }
-
         };
 
         $response = (new Response($streamWithSimulatedUnknownSize))
