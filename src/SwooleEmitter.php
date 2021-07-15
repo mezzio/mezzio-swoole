@@ -86,7 +86,7 @@ class SwooleEmitter implements EmitterInterface
             return;
         }
 
-        if ($body->getSize() <= static::CHUNK_SIZE) {
+        if ($body->getSize() !== null && $body->getSize() <= static::CHUNK_SIZE) {
             $this->swooleResponse->end($body->getContents());
             return;
         }
