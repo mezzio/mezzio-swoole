@@ -17,7 +17,11 @@ use PHPUnit\Framework\TestCase;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 use function base64_encode;
+use function fclose;
+use function fopen;
+use function fwrite;
 use function random_bytes;
+use function rewind;
 use function substr;
 
 class SwooleEmitterTest extends TestCase
@@ -162,8 +166,12 @@ class SwooleEmitterTest extends TestCase
     {
         $content = 'unknown length';
 
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, $content);
+        rewind($stream);
+
         /** @psalm-suppress PropertyNotSetInConstructor */
-        $streamWithSimulatedUnknownSize = new class ($content) extends Stream
+        $streamWithSimulatedUnknownSize = new class ($stream) extends Stream
         {
             public function getSize(): ?int
             {
@@ -195,6 +203,8 @@ class SwooleEmitterTest extends TestCase
             ->method('end');
 
         $this->assertTrue($this->emitter->emit($response));
+
+        fclose($stream);
     }
 
     public function testEmitCallbackStream(): void
