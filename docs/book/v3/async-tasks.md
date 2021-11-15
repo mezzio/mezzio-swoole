@@ -405,7 +405,6 @@ return [
 ];
 ```
 
-
 ### Logging TaskEvent listener
 
 The following listener will listen to a `TaskEvent`, and log the information using the syslog.
@@ -886,4 +885,3 @@ At this point, we are done.
 When the handler dispatches the event, our listener is notified.
 However, the listener is decoreated via the `DeferredServiceListenerDelegator`, which will itself enqueue a `ServiceBasedTask` in the Swoole HTTP server, using the listener's service name and the event passed to the listener.
 The `TaskInvokerListener` then passes the container to the task, which pulls our listener and executes it with the event.
-

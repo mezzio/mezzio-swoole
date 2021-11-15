@@ -71,4 +71,3 @@ $ ./vendor/bin/laminas mezzio:swoole:start
 ```
 
 Usage of other commands will change similarly.
-

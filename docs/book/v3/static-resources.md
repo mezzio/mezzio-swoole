@@ -22,6 +22,7 @@ known extensions, and a configured document root. If the extension matches, it
 then checks to see if the file exists in the document root. If it does, it will
 serve it.
 
+<!-- markdownlint-disable-next-line header-increment-->
 > ### Disabling static resources
 >
 > - Since 2.1.0

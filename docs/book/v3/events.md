@@ -302,4 +302,3 @@ Most PSR-14 libraries have functionality for aggregating multiple providers, and
 ## FAQ
 
 - [Removing the StaticResourceRequestListener](cookbook/static-resource-listener-removal.md)
-
