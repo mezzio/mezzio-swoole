@@ -19,7 +19,10 @@ trait IsRunningTrait
      */
     public function isRunning(): bool
     {
-        /** @psalm-var list<string> */
+        /**
+         * @psalm-suppress UnnecessaryVarAnnotation
+         * @psalm-var list<string>
+         */
         $pids = $this->pidManager->read();
 
         if ([] === $pids) {

@@ -33,7 +33,7 @@ class MiddlewareQueueTest extends TestCase
 
     public function testEmptyMiddlewareQueueReturnsSuccessfulResponseValue(): void
     {
-        /** @psalm-suppress InternalClass */
+        /** @psalm-suppress InternalClass,InternalMethod */
         $queue = new MiddlewareQueue([]);
 
         $response = $queue($this->request, 'some/filename.txt');
@@ -53,7 +53,7 @@ class MiddlewareQueueTest extends TestCase
             ->with($this->request, 'some/filename.txt', $this->isInstanceOf(MiddlewareQueue::class))
             ->willReturn($response);
 
-        /** @psalm-suppress InternalClass */
+        /** @psalm-suppress InternalClass,InternalMethod */
         $queue = new MiddlewareQueue([$middleware]);
 
         $result = $queue($this->request, 'some/filename.txt');
@@ -96,7 +96,7 @@ class MiddlewareQueueTest extends TestCase
                 }
             ));
 
-        /** @psalm-suppress InternalClass */
+        /** @psalm-suppress InternalClass,InternalMethod */
         $queue = new MiddlewareQueue([$first, $second]);
 
         $response = $queue($this->request, 'some/filename.txt');

@@ -24,8 +24,8 @@ class LastModifiedMiddleware implements MiddlewareInterface
     private array $lastModifiedDirectives = [];
 
     /**
-     * @var string[] Array of regexex indicating paths/file types that should
-     *     emit a Last-Modified header.
+     * @param string[] $lastModifiedDirectives Array of regexex indicating
+     *     paths/file types that should emit a Last-Modified header.
      */
     public function __construct(array $lastModifiedDirectives = [])
     {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.7.3@38c452ae584467e939d55377aaf83b5a26f19dd1">
+<files psalm-version="4.12.0@e42bc4a23f67acba28a23bb09c348e2ff38a1d87">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArgument occurrences="3">
       <code>$compressionLevel</code>
@@ -12,14 +12,12 @@
     <MixedArrayOffset occurrences="1">
       <code>$cacheControlDirectives[$regex]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="8">
+    <MixedAssignment occurrences="6">
       <code>$cacheControlDirectives[$regex]</code>
       <code>$clearStatCacheInterval</code>
       <code>$compressionLevel</code>
       <code>$directiveList</code>
       <code>$directives</code>
-      <code>$etagDirectives[]</code>
-      <code>$lastModifiedDirectives[]</code>
       <code>$regex</code>
     </MixedAssignment>
   </file>
@@ -71,14 +69,6 @@
     <MixedArgument occurrences="1">
       <code>$container-&gt;get(PidManager::class)</code>
     </MixedArgument>
-  </file>
-  <file src="src/Command/StopCommand.php">
-    <MixedAssignment occurrences="1">
-      <code>$result</code>
-    </MixedAssignment>
-    <RedundantCondition occurrences="1">
-      <code>$result</code>
-    </RedundantCondition>
   </file>
   <file src="src/Command/StopCommandFactory.php">
     <MixedArgument occurrences="1">
@@ -509,9 +499,6 @@
       <code>disableContent</code>
       <code>setStatus</code>
     </MixedMethodCall>
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$lastModifiedDirectives</code>
-    </MixedPropertyTypeCoercion>
     <MixedReturnStatement occurrences="2">
       <code>$response</code>
       <code>$response</code>
@@ -688,11 +675,6 @@
       <code>method</code>
       <code>method</code>
     </MixedMethodCall>
-    <UnusedFunctionCall occurrences="3">
-      <code>set_include_path</code>
-      <code>set_include_path</code>
-      <code>set_include_path</code>
-    </UnusedFunctionCall>
   </file>
   <file src="test/Command/StopCommandTest.php">
     <InternalProperty occurrences="3">

@@ -98,9 +98,10 @@ EOH;
             '--num-workers' => $input->getOption('num-workers') ?? StartCommand::DEFAULT_NUM_WORKERS,
         ];
 
+        /** @psalm-suppress MixedAssignment */
         $numTaskWorkers = $input->getOption('num-task-workers');
         if (null !== $numTaskWorkers) {
-            $inputArguments['--num-task-workers'] = $numTaskWorkers;
+            $inputArguments['--num-task-workers'] = (int) $numTaskWorkers;
         }
 
         $result = $start->run(new ArrayInput($inputArguments), $output);

@@ -98,6 +98,12 @@ EOH;
             usleep(10000);
         }
 
+        /**
+         * Not a redundant condition, because we can set $result false and break
+         * out of the loop.
+         *
+         * @psalm-suppress RedundantCondition
+         */
         if (! $result) {
             return false;
         }
