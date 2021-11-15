@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
@@ -26,7 +27,13 @@ class ConfigProvider
 {
     public function __invoke(): array
     {
-        $config = PHP_SAPI === 'cli' && extension_loaded('swoole')
+        if (! extension_loaded('swoole') && ! extension_loaded('openswoole')) {
+            throw new ExtensionNotLoadedException(
+                'One of either the swoole or openswoole extensions must be loaded to use mezzio/mezzio-swoole'
+            );
+        }
+
+        $config = PHP_SAPI === 'cli'
             ? ['dependencies' => $this->getDependencies()]
             : [];
 
