@@ -6,6 +6,7 @@
         "laminas",
         "mezzio",
         "components",
+        "openswoole",
         "swoole",
         "psr-7",
         "psr-14",
