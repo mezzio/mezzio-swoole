@@ -11,7 +11,7 @@ that performs two duties:
 - If a static resource is matched, it serves that.
 - Otherwise, it passes off handling to the composed application pipeline.
 
-Internally, the `SwooleRequestHandlerRunner` composes another class, a 
+Internally, the `SwooleRequestHandlerRunner` composes another class, a
 `Mezzio\Swoole\StaticResourceHandlerInterface` instance. This instance
 is passed the Swoole request and response, and returns a value indicating
 whether or not it was able to identify and serve a matching static resource.
@@ -92,7 +92,7 @@ request should also expose `Cache-Control`, `Last-Modified`, and `ETag`
 headers).
 
 > ### Providing your own middleware
-> 
+>
 > If you want to disable middleware, or to provide an alternate list of middleware
 > (including your own!), you will need to provide an alternate
 > `StaticResourceHandler` factory. In most cases, you can extend
@@ -357,14 +357,14 @@ Middleware that restricts access or filters out specific files will also use
 `markAsFailure()`.
 
 > ### Providing an alternative mechanism for sending response content
-> 
+>
 > In some cases, you may want to alter how the `Swoole\Http\Response` receives the
 > body content. By default, we use `Swoole\Http\Response::sendfile()`. However,
 > this may not work well when performing tasks such as compression, appending a
 > watermark, etc. As an example, the `GzipMiddleware` adds a compression filter to
 > a filehandle representing the file to send, and then calls
 > `Swoole\Http\Response::write()` in a loop until all content is sent.
-> 
+>
 > To perform work like this, you can call the
 > `StaticResourceResponse::setResponseContentCallback()` method as detailed in the
 > section above within your middleware.

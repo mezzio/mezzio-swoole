@@ -10,6 +10,8 @@ namespace Mezzio\Swoole;
 
 use Psr\Container\ContainerInterface;
 
+use function is_string;
+
 abstract class AbstractStaticResourceHandlerFactory
 {
     /** @return StaticResourceHandlerInterface */
@@ -72,10 +74,10 @@ abstract class AbstractStaticResourceHandlerFactory
             if (isset($directives['cache-control'])) {
                 $cacheControlDirectives[$regex] = $directives['cache-control'];
             }
-            if (isset($directives['last-modified'])) {
+            if (isset($directives['last-modified']) && is_string($regex)) {
                 $lastModifiedDirectives[] = $regex;
             }
-            if (isset($directives['etag'])) {
+            if (isset($directives['etag']) && is_string($regex)) {
                 $etagDirectives[] = $regex;
             }
         }

@@ -9,12 +9,12 @@ For reasons that will become clear presently, we recommend creating memory
 tables by extending the `Swoole\Table` class, defining the appropriate columns
 and table size inside of the constructor.
 
+<!-- markdownlint-disable-next-line header-increment-->
 > ### Initialize the Table Within the Constructor
 >
 > You **must** call your table's `create()` method, and this **must** be done
 > prior to initializing any worker processes; if you fail to do so, your table
 > will not work. We recommend doing this in your table class's constructor.
-
 
 ## Creating a Table
 
@@ -49,7 +49,7 @@ it.
 Tables **must** be created inside of your main process, in order to ensure each
 worker process has access to them. Since we define the columns and table size in
 the constructor, we can accomplish this by mapping the service name to a
-concrete instance, using the `services` dependency configuration key in a 
+concrete instance, using the `services` dependency configuration key in a
 config provider class, e.g. `src/App/ConfigProvider.php`:
 
 ```php

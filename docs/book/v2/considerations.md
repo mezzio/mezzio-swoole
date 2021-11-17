@@ -4,7 +4,7 @@ Because Swoole uses an event loop, and because it is able to load your
 application exactly once, you must take several precautions when using it to
 serve your application.
 
-## Long-running processes 
+## Long-running processes
 
 When using the Swoole HTTP server, your application runs within an [event
 loop](https://en.wikipedia.org/wiki/Event_loop). One benefit of this is that you
@@ -25,7 +25,7 @@ cases is the same as for general PHP applications: add a message queue to your
 systems infrastructure, and delegate such work to the message queue instead.**
 
 > ### PDO Coroutine Support
-> 
+>
 > Please be aware that enabling coroutine support with `Swoole\Runtime::enableCoroutine()`
 > only decorates MySql PDO connections with coroutines; other drivers (e.g.,
 > pdo_pgsql) remain blocking as of Swoole 4.1.2. For more details,
@@ -84,7 +84,7 @@ discovered in the request to later handlers](https://docs.mezzio.dev/mezzio/v3/c
 This practice accumulates _state_ in the renderer that can cause problems later:
 
 - Flash messages discovered in one request might then be pushed to templates
-  renderered in subsequent requests &mdash; when they are no longer in scope. 
+  renderered in subsequent requests &mdash; when they are no longer in scope.
 
 - User details from one request might persist to a template rendered for an
   unauthenticated user in another request, exposing information.
@@ -317,7 +317,7 @@ goes out of scope (i.e., when the method ends).
 
 > ### Handling the template data problem
 >
-> If we want our services to be stateless, how do we handle problems such as the 
+> If we want our services to be stateless, how do we handle problems such as the
 > [documented `addDefaultParam()` issue referenced earlier](https://docs.mezzio.dev/mezzio/v3/cookbook/access-common-data-in-templates/)?
 >
 > In this case, the original problem was "how do we get common request data into
@@ -331,7 +331,7 @@ goes out of scope (i.e., when the method ends).
 >
 > ```php
 > namespace App\Middleware;
-> 
+>
 > use Psr\Http\Message\ResponseInterface;
 > use Psr\Http\Message\ServerRequestInterface;
 > use Psr\Http\Server\MiddlewareInterface;
@@ -339,26 +339,26 @@ goes out of scope (i.e., when the method ends).
 > use Mezzio\Router\RouteResult;
 > use Mezzio\Session\Authentication\UserInterface;
 > use Mezzio\Session\Flash\FlashMessagesInterface;
-> 
+>
 > class TemplateDefaultsMiddleware implements MiddlewareInterface
 > {
 >     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
 >     {
 >         $routeResult = $request->getAttribute(RouteResult::class);
 >         $flashMessages = $request->getAttribute(FlashMessagesInterface::class);
-> 
+>
 >         $defaults = [
 >             // Inject the current user, or null if there isn't one.
 >             // This is named security so it will not interfere with your user admin pages
 >             'security' => $request->getAttribute(UserInterface::class),
-> 
+>
 >             // Inject the currently matched route name.
 >             'matchedRouteName' => $routeResult ? $routeResult->getMatchedRouteName() : null,
-> 
+>
 >             // Inject all flash messages
 >             'notifications' => $flashMessages ? $flashMessages->getFlashes() : [],
 >         ];
-> 
+>
 >         return $handler->handle($request->withAttribute(__CLASS__, $defaults));
 >     }
 > }

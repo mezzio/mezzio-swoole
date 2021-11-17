@@ -83,18 +83,23 @@ EOH;
             return 1;
         }
 
-        $serverOptions  = [];
-        $daemonize      = $input->getOption('daemonize');
-        $numWorkers     = $input->getOption('num-workers');
+        $serverOptions = [];
+        $daemonize     = (bool) $input->getOption('daemonize');
+
+        /** @psalm-suppress MixedAssignment */
+        $numWorkers = $input->getOption('num-workers');
+
+        /** @psalm-suppress MixedAssignment */
         $numTaskWorkers = $input->getOption('num-task-workers');
+
         if ($daemonize) {
             $serverOptions['daemonize'] = $daemonize;
         }
         if (null !== $numWorkers) {
-            $serverOptions['worker_num'] = $numWorkers;
+            $serverOptions['worker_num'] = (int) $numWorkers;
         }
         if (null !== $numTaskWorkers) {
-            $serverOptions['task_worker_num'] = $numTaskWorkers;
+            $serverOptions['task_worker_num'] = (int) $numTaskWorkers;
         }
 
         if ([] !== $serverOptions) {

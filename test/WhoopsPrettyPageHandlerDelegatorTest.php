@@ -25,7 +25,9 @@ class WhoopsPrettyPageHandlerDelegatorTest extends TestCase
         $dependencies = (new ConfigProvider())()['dependencies'];
         // @see https://github.com/mezzio/mezzio-skeleton/blob/master/src/MezzioInstaller/Resources/config/error-handler-whoops.php
         $dependencies['factories']['Mezzio\WhoopsPageHandler'] = WhoopsPageHandlerFactory::class;
-        $this->container                                       = new ServiceManager($dependencies);
+
+        /** @psalm-suppress InvalidArgument */
+        $this->container = new ServiceManager($dependencies);
     }
 
     public function testDefaultConfigurationDecoratesPageHandler(): void

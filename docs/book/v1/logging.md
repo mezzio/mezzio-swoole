@@ -181,7 +181,7 @@ Additionally, we recommend using the `PsrLogMessageProcessor` with any Monolog
 handler to ensure that any templated parameters are expanded by the logger.
 
 As an example, the following is a factory that wires a `StreamHandler` to a
-`Monolog\Logger` instance. 
+`Monolog\Logger` instance.
 
 ```php
 use Psr\Container\ContainerInterface;

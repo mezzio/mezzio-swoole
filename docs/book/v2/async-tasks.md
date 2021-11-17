@@ -33,7 +33,7 @@ no concurrency and tasks will execute one after the other.
         'options' => [
             'worker_num'      => 4, // The number of HTTP Server Workers
             'task_worker_num' => 4, // The number of Task Workers
-            'task_enable_coroutine' => true, // optional to turn on task coroutine support 
+            'task_enable_coroutine' => true, // optional to turn on task coroutine support
         ],
     ],
 ];
@@ -70,6 +70,7 @@ function (
     $dataForWorker
 ) : void
 ```
+
 where:
 
 - `$server` is the main HTTP server process
@@ -88,6 +89,7 @@ function (
     \Swoole\Server\Task $task
 ) : void
 ```
+
 where:
 
 - `$server` is the main HTTP server process
@@ -120,7 +122,7 @@ function (
 
 The first two parameters are identical to the `task` event handler. The
 `$userData` parameter will contain the return value of the `task` event
-handler. 
+handler.
 
 Registering your callable for the `finish` event is accomplished like this:
 
@@ -283,7 +285,7 @@ class TaskTriggeringHandler implements RequestHandlerInterface
     private $responseFactory;
     private $server;
     private $template;
-    
+
     public function __construct(
         HttpServer $server,
         TemplateRendererInterface $template,
@@ -293,7 +295,7 @@ class TaskTriggeringHandler implements RequestHandlerInterface
         $this->template        = $template;
         $this->responseFactory = $responseFactory;
     }
-    
+
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
         // Gather data from request
