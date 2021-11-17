@@ -15,7 +15,7 @@ For more information on the extension, [visit its package details on PECL](https
 
 > ### Legacy Swoole compatibility
 >
-> Since version 3.4.0, mezzio-swoole can work with either the original [Swoole](https://github.com/swoole/swoole-src) extension or the new community openswoole extension, as each defines the same classes, interfaces, and constants consumed by mezzio-swoole.
+> Since version 3.4.0, mezzio-swoole can work with either the original [Swoole](https://github.com/swoole/swoole-src) extension or the new community Open Swoole extension, as each defines the same classes, interfaces, and constants consumed by mezzio-swoole.
 
 ## Install mezzio-swoole
 

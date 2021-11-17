@@ -55,8 +55,8 @@
     },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading.",
-        "ext-openswoole": "The package requires at least one of OpenSwoole or Swoole",
-        "ext-swoole": "The package requires at least one of OpenSwoole or Swoole"
+        "ext-openswoole": "The package requires at least one of Open Swoole or Swoole",
+        "ext-swoole": "The package requires at least one of Open Swoole or Swoole"
     },
     "autoload": {
         "psr-4": {

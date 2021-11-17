@@ -29,7 +29,9 @@ class ConfigProvider
     {
         if (! extension_loaded('swoole') && ! extension_loaded('openswoole')) {
             throw new ExtensionNotLoadedException(
-                'One of either the swoole or openswoole extensions must be loaded to use mezzio/mezzio-swoole'
+                'One of either the Swoole (https://github.com/swoole/swoole-srce) or'
+                . ' Open Swoole (https://www.swoole.co.uk) extensions must be loaded'
+                . ' to use mezzio/mezzio-swoole'
             );
         }
 
