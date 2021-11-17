@@ -10,13 +10,18 @@ namespace MezzioTest\Swoole;
 
 use Laminas\Diactoros\CallbackStream;
 use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Stream;
 use Mezzio\Swoole\SwooleEmitter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 use function base64_encode;
+use function fclose;
+use function fopen;
+use function fwrite;
 use function random_bytes;
+use function rewind;
 use function substr;
 
 class SwooleEmitterTest extends TestCase
@@ -155,6 +160,51 @@ class SwooleEmitterTest extends TestCase
             ->method('end');
 
         $this->assertTrue($this->emitter->emit($response));
+    }
+
+    public function testEmitWithUnknownSizeContentBody(): void
+    {
+        $content = 'unknown length';
+
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, $content);
+        rewind($stream);
+
+        /** @psalm-suppress PropertyNotSetInConstructor */
+        $streamWithSimulatedUnknownSize = new class ($stream) extends Stream
+        {
+            public function getSize(): ?int
+            {
+                return null;
+            }
+        };
+
+        $response = (new Response($streamWithSimulatedUnknownSize))
+            ->withStatus(200)
+            ->withAddedHeader('Content-Type', 'text/plain');
+
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('status')
+            ->with(200);
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('header')
+            ->with('Content-Type', 'text/plain');
+        $this->swooleResponse
+            ->expects($this->exactly(1))
+            ->method('write')
+            ->withConsecutive(
+                [substr($content, 0, SwooleEmitter::CHUNK_SIZE)],
+                [substr($content, SwooleEmitter::CHUNK_SIZE)]
+            );
+        $this->swooleResponse
+            ->expects($this->once())
+            ->method('end');
+
+        $this->assertTrue($this->emitter->emit($response));
+
+        fclose($stream);
     }
 
     public function testEmitCallbackStream(): void
