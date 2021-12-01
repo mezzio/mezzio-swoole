@@ -20,6 +20,7 @@ use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use MezzioTest\Swoole\FormatTimestampTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -27,16 +28,16 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 use function filemtime;
 use function filesize;
-use function gmstrftime;
 use function md5_file;
 use function sprintf;
-use function trim;
 
 /**
  * Integraiton tests for StaticMappedResourceHandler
  */
 class IntegrationMappedTest extends TestCase
 {
+    use FormatTimestampTrait;
+
     /**
      * @var FileLocationRepositoryInterface|MockObject
      * @psalm-var MockObject&FileLocationRepositoryInterface
@@ -148,7 +149,7 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted = $this->formatTimestamp($lastModified);
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -200,7 +201,7 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted = $this->formatTimestamp($lastModified);
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -254,7 +255,7 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted = $this->formatTimestamp($lastModified);
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -309,7 +310,7 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted = $this->formatTimestamp($lastModified);
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -362,7 +363,7 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted = $this->formatTimestamp($lastModified);
         $etag                  = sprintf('W/"%x-%x"', $lastModified, filesize($file));
 
         $request         = $this->createMock(SwooleHttpRequest::class);
@@ -565,7 +566,7 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified          = filemtime($file);
-        $lastModifiedFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted = $this->formatTimestamp($lastModified);
 
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [
@@ -613,9 +614,9 @@ class IntegrationMappedTest extends TestCase
         $this->mockFileLocRepo->method('findFile')->with('/content.txt')->willReturn($file);
 
         $lastModified             = filemtime($file);
-        $lastModifiedFormatted    = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModifiedFormatted    = $this->formatTimestamp($lastModified);
         $ifModifiedSince          = $lastModified - 3600;
-        $ifModifiedSinceFormatted = trim(gmstrftime('%A %d-%b-%y %T %Z', $ifModifiedSince));
+        $ifModifiedSinceFormatted = $this->formatTimestamp($ifModifiedSince);
 
         $request         = $this->createMock(SwooleHttpRequest::class);
         $request->header = [

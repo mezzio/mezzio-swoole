@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Task;
 
 use Psr\Container\ContainerInterface;
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
+use ReturnTypeWillChange;
 use Webmozart\Assert\Assert;
 
 /**
@@ -59,6 +61,7 @@ final class ServiceBasedTask implements TaskInterface
      *
      * @return array
      */
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [
