@@ -12,17 +12,17 @@ use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
+use MezzioTest\Swoole\FormatTimestampTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
-use function gmstrftime;
 use function time;
-use function trim;
 
 class LastModifiedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
+    use FormatTimestampTrait;
 
     /** @var callable */
     private $next;
@@ -82,7 +82,7 @@ class LastModifiedMiddlewareTest extends TestCase
     public function testMiddlewareDisablesContentWhenLastModifiedIsGreaterThanClientExpectation(): void
     {
         $ifModifiedSince = time() + 3600;
-        $ifModifiedSince = trim(gmstrftime('%A %d-%b-%y %T %Z', $ifModifiedSince));
+        $ifModifiedSince = $this->formatTimestamp($ifModifiedSince);
 
         $this->request->server = [
             'request_uri' => '/images/image.png',

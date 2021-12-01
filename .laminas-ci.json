@@ -2,5 +2,8 @@
     "extensions": [
         "inotify",
         "swoole"
-    ]
+    ],
+    "ignore_php_platform_requirements": {
+        "8.1": true
+    }
 }

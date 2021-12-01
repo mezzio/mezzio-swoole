@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\StaticResourceHandler;
 
 use DateTimeImmutable;
+use DateTimeZone;
+use IntlDateFormatter;
 use Swoole\Http\Request;
 
 use function filemtime;
-use function gmstrftime;
 use function preg_match;
-use function trim;
 
 class LastModifiedMiddleware implements MiddlewareInterface
 {
@@ -42,7 +42,11 @@ class LastModifiedMiddleware implements MiddlewareInterface
         }
 
         $lastModified          = filemtime($filename) ?: 0;
-        $formattedLastModified = trim(gmstrftime('%A %d-%b-%y %T %Z', $lastModified));
+        $lastModified          = new DateTimeImmutable('@' . $lastModified, new DateTimeZone('GMT'));
+        $formattedLastModified = IntlDateFormatter::formatObject(
+            $lastModified,
+            'EEEE dd-MMM-yy HH:mm:ss z'
+        );
 
         $response->addHeader('Last-Modified', $formattedLastModified);
 
