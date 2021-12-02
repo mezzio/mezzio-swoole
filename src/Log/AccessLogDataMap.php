@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Log;
 
+use DateTimeImmutable;
+use IntlDateFormatter;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use RuntimeException;
@@ -26,7 +28,6 @@ use function microtime;
 use function preg_match;
 use function round;
 use function sprintf;
-use function strftime;
 use function strpos;
 use function strtolower;
 use function substr;
@@ -422,7 +423,14 @@ class AccessLogDataMap
             case 'usec':
                 return sprintf('[%s]', round($time * 1E6));
             default:
-                return sprintf('[%s]', strftime($format, (int) $time));
+                $time = (int) $time;
+                return sprintf(
+                    '[%s]',
+                    IntlDateFormatter::formatObject(
+                        new DateTimeImmutable('@' . $time),
+                        StrftimeToICUFormatMap::mapStrftimeToICU($format)
+                    )
+                );
         }
     }
 
