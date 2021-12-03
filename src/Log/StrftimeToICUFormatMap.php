@@ -17,6 +17,8 @@ use function time;
  * This will translate all but %X, %x, and %c, for which there are no ICU
  * equivalents.
  *
+ * @internal
+ *
  * @see https://www.php.net/strftime for PHP strftime format strings
  * @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/ for ICU Date/Time format strings
  */
