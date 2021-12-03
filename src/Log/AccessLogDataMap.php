@@ -424,10 +424,10 @@ class AccessLogDataMap
                 return sprintf('[%s]', round($time * 1E6));
             default:
                 // Cast to int first, as it may be a float
-                $time = (int) $time;
+                $requestTime = new DateTimeImmutable('@' . (int) $time);
                 return IntlDateFormatter::formatObject(
-                    new DateTimeImmutable('@' . $time),
-                    '[' . StrftimeToICUFormatMap::mapStrftimeToICU($format) . ']'
+                    $requestTime,
+                    '[' . StrftimeToICUFormatMap::mapStrftimeToICU($format, $requestTime) . ']'
                 );
         }
     }
