@@ -8,12 +8,16 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Log;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Mezzio\Swoole\Log\AccessLogDataMap;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
+
+use function date_default_timezone_get;
 
 class AccessLogDataMapTest extends TestCase
 {
@@ -86,11 +90,23 @@ class AccessLogDataMapTest extends TestCase
 
     public function testDoesNotRaiseErrorWhenAccessingStatusViaStaticResource(): void
     {
+        /** @var StaticResourceResponse&MockObject $staticResource */
         $staticResource = $this->createMock(StaticResourceResponse::class);
         $staticResource->expects($this->once())->method('getStatus')->willReturn(200);
 
         $map = AccessLogDataMap::createWithStaticResource($this->request, $staticResource);
 
         $this->assertSame('200', $map->getStatus());
+    }
+
+    public function testGetRequestTimeAsRequestedByFormatterReturnsFormattedString(): void
+    {
+        $tz                    = new DateTimeZone(date_default_timezone_get());
+        $date                  = new DateTimeImmutable('2021-12-02T02:21:12.4242', $tz);
+        $this->request->server = ['request_time_float' => (float) $date->getTimestamp()];
+        $map                   = AccessLogDataMap::createWithPsrResponse($this->request, $this->response, false);
+        $requestTime           = $map->getRequestTime('begin:%d/%b/%Y:%H:%M:%S %z');
+
+        $this->assertSame('[02/Dec/2021:02:21:12 ' . $date->format('O') . ']', $requestTime);
     }
 }
