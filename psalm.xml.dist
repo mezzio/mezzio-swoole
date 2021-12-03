@@ -15,7 +15,17 @@
     </projectFiles>
 
     <issueHandlers>
+        <InternalClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Mezzio\Swoole\Log\StrftimeToICUFormatMap"/>
+            </errorLevel>
+        </InternalClass>
+
         <InternalMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Mezzio\Swoole\Log\StrftimeToICUFormatMap::mapStrftimeToICU"/>
+            </errorLevel>
+
             <errorLevel type="suppress">
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::method"/>
             </errorLevel>
