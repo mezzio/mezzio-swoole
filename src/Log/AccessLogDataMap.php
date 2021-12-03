@@ -423,13 +423,11 @@ class AccessLogDataMap
             case 'usec':
                 return sprintf('[%s]', round($time * 1E6));
             default:
+                // Cast to int first, as it may be a float
                 $time = (int) $time;
-                return sprintf(
-                    '[%s]',
-                    IntlDateFormatter::formatObject(
-                        new DateTimeImmutable('@' . $time),
-                        StrftimeToICUFormatMap::mapStrftimeToICU($format)
-                    )
+                return IntlDateFormatter::formatObject(
+                    new DateTimeImmutable('@' . $time),
+                    '[' . StrftimeToICUFormatMap::mapStrftimeToICU($format) . ']'
                 );
         }
     }
