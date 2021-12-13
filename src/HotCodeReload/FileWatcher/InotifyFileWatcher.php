@@ -115,7 +115,6 @@ class InotifyFileWatcher implements FileWatcherInterface
             $paths = array_merge($paths, $this->listSubdirectoriesRecursively($filename));
         }
 
-        $paths = array_values($paths);
         Assert::allStringNotEmpty($paths);
 
         return $paths;
