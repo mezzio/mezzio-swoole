@@ -117,9 +117,9 @@ class StopCommandTest extends TestCase
         $this->pidManager->method('read')->willReturn($pids);
         $this->pidManager->expects($this->never())->method('delete');
 
-        $masterPid              = $pids[0];
-        $spy                    = (object) ['called' => false];
-        $killProcess            = static function (int $pid, ?int $signal = null) use ($masterPid, $spy): bool {
+        $masterPid   = $pids[0];
+        $spy         = (object) ['called' => false];
+        $killProcess = static function (int $pid, ?int $signal = null) use ($masterPid, $spy): bool {
             TestCase::assertSame($masterPid, $pid);
             $spy->called = true;
             return $signal === 0;
