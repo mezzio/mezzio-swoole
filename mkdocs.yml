@@ -23,6 +23,7 @@ nav:
         - "Considerations when using Swoole": v3/considerations.md
       - Cookbook:
           - "Removing the StaticResourceRequestListener": v3/cookbook/static-resource-listener-removal.md
+          - "Swoole-based server always returns home page": v3/cookbook/swoole-not-starting.md
       - Migration: v3/migration.md
     - v2:
       - Introduction: v2/intro.md
