@@ -25,51 +25,32 @@ serve it.
 <!-- markdownlint-disable-next-line header-increment-->
 > ### Disabling static resources
 >
-> - Since 2.1.0
+> By default, we ship with static resource handling enabled.
+> This is done by having the `Mezzio\Swoole\Event\StaticResourceRequestListener` in the list of listeners provided for the `Mezzio\Swoole\Event\RequestEvent`.
 >
-> If you want to disable serving of static resources, you can do so in two ways.
->
-> If you have a custom factory for the `SwooleRequestHandlerRunner`, or are
-> instantiating it manually, pass a null value for the sixth argument of its
-> constructor. As an example, within a factory:
+> To disable that listener, you will need to **replace** the set of listeners for that event, to include only the `Mezzio\Swoole\Event\RequestHandlerRequestListener`.
+> You can do that in your application configuration as follows:
 >
 > ```php
-> use Psr\Container\ContainerInterface;
-> use Psr\Http\Message\ServerRequestInterface;
-> use Swoole\Http\Server as SwooleHttpServer;
-> use Mezzio\ApplicationPipeline;
-> use Mezzio\Swoole;
+> // in config/autoload/dependencies.global.php:
 >
-> function (ContainerInterface $container) : Swoole\SwooleRequestHandlerRunner
-> {
->     return new SwooleRequestHandlerRunner(
->         $container->get(ApplicationPipeline::class),
->         $container->get(ServerRequestInterface::class),
->         $container->get(Swoole\ServerRequestErrorResponseGenerator::class),
->         $container->get(Swoole\PidManager::class),
->         $container->get(SwooleHttpServer::class),
->         null, // No static resource handler!
->         $container->has(Swoole\Log\AccessLogInterface::class
->             ? $container->get(Swool\Log\AccessLogInterface::class
->             : null
->     );
-> }
-> ```
+> use Laminas\Stdlib\ArrayUtils\MergeReplaceKey;
+> use Mezzio\Swoole\Event;
 >
-> If you are using the default factory provided (`Mezzio\Swoole\SwooleRequestHandlerRunnerFactory`),
-> you can also disable the functionality via configuration. To do this, set the
-> `mezzio-swoole.swoole-http-server.static-files.enable` flag to
-> boolean `false`:
->
-> ```php
 > return [
+>     // ...
 >     'mezzio-swoole' => [
+>         // ...
 >         'swoole-http-server' => [
->             'static-files' => [
->                 'enable' => false,
+>             // ...
+>             'listeners' => [
+>                 Event\RequestEvent::class => new MergeReplaceKey([
+>                     Event\RequestHandlerRequestListener::class,
+>                 ]),
 >             ],
 >         ],
 >     ],
+>     // ...
 > ];
 > ```
 

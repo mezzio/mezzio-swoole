@@ -72,9 +72,6 @@ class ConfigProvider
                     // and set a production value to match.
                     'max_conn' => 1024,
                 ],
-                'static-files' => [
-                    'enable' => true,
-                ],
                 'listeners'    => [
                     Event\ServerStartEvent::class => [
                         Event\ServerStartListener::class,
