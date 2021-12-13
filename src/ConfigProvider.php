@@ -23,13 +23,20 @@ use function getcwd;
 
 use const PHP_SAPI;
 
+/**
+ * Provide component configuration to the application.
+ *
+ * NOTE: this provider should be aggregated AFTER the laminas/laminas-httphandlerrunner
+ * config provider (class Laminas\HttpHandlerRunner\ConfigProvider) to ensure
+ * that its SwooleRequestHandlerRunner is used as the application request handler runner.
+ */
 class ConfigProvider
 {
     public function __invoke(): array
     {
         if (! extension_loaded('swoole') && ! extension_loaded('openswoole')) {
             throw new ExtensionNotLoadedException(
-                'One of either the Swoole (https://github.com/swoole/swoole-srce) or'
+                'One of either the Swoole (https://github.com/swoole/swoole-src) or'
                 . ' Open Swoole (https://www.swoole.co.uk) extensions must be loaded'
                 . ' to use mezzio/mezzio-swoole'
             );
