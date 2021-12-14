@@ -5,13 +5,13 @@ filesystem. mezzio-swoole provides that capability as well.
 
 To enable this, the package provides an alternate
 [`RequestHandlerRunner`](https://docs.laminas.dev/laminas-httphandlerrunner/runner/)
-implementation via the class `Mezzio\Swoole\SwooleRequestHandlerRunner`
+implementation via the class `Mezzio\Swoole\SwooleRequestHandlerRunner` service
 that performs two duties:
 
 - If a static resource is matched, it serves that.
 - Otherwise, it passes off handling to the composed application pipeline.
 
-Internally, the `SwooleRequestHandlerRunner` composes another class, a
+Internally, the `SwooleRequestHandlerRunner` service composes another class, a
 `Mezzio\Swoole\StaticResourceHandlerInterface` instance. This instance
 is passed the Swoole request and response, and returns a value indicating
 whether or not it was able to identify and serve a matching static resource.
@@ -407,7 +407,7 @@ Middleware that restricts access or filters out specific files will also use
 
 ## Alternative static resource handlers
 
-As noted at the beginning of this chapter, the `SwooleRequestHandlerRunner`
+As noted at the beginning of this chapter, the `SwooleRequestHandlerRunner` service
 composes a `StaticResourceHandlerInterface` instance in order to determine if a
 resource was matched by the request, and then to serve it.
 

@@ -5,7 +5,7 @@ Each is listened to by calling the server's `on()` method with the event name an
 In each case, Swoole only allows exactly one listener.
 In some cases, Swoole will raise an exception when you attempt to register more listeners; in others, it will silently replace the listener.
 
-To make the system more flexible, version 3 of this library now has the `Mezzio\Swoole\SwooleRequestHandlerRunner` class compose a [PSR-14 EventDispatcherInterface](https://www.php-fig.org/psr/psr-14/) instance that is then triggered for each Swoole HTTP Server event.
+To make the system more flexible, version 3 of this library now has the `Mezzio\Swoole\SwooleRequestHandlerRunner` service compose a [PSR-14 EventDispatcherInterface](https://www.php-fig.org/psr/psr-14/) instance that is then triggered for each Swoole HTTP Server event.
 Additionally, the arguments passed to the Swoole listener are now aggregated into typed event classes, allowing access to the arguments by your PHP listener classes.
 
 ## Event classes
@@ -267,13 +267,13 @@ All events and listeners are in the `Mezzio\Swoole\Event` namespace.
 
 ## Providing a dispatcher and listeners
 
-The shipped [ConfigProvider](https://docs.laminas.dev/laminas-config-aggregator/config-providers/) uses a factory for the `Mezzio\Swoole\SwooleRequestHandlerRunner` class that consumes the following services:
+The shipped [ConfigProvider](https://docs.laminas.dev/laminas-config-aggregator/config-providers/) uses a factory for the `Mezzio\Swoole\SwooleRequestHandlerRunner` service that consumes the following services:
 
 - `Swoole\Http\Server`, which represents the actual Swoole HTTP Server instance to run.
 - `Mezzio\Swoole\Event\EventDispatcherInterface`
 
-`SwooleRequestHandlerRunner` accepts any [PSR-14](https://www.php-fig.org/psr/psr-14/) instance.
-The service referenced by its factory is a marker interface used only as a service name; this is done to allow you to use a different PSR-14 instance for the web server versus other services in your application.
+The `SwooleRequestHandlerRunner` service accepts any [PSR-14](https://www.php-fig.org/psr/psr-14/) instance.
+The `Mezzio\Swoole\Event\EventDispatcherInterface` service referenced by its factory is a marker interface used only as a service name; this is done to allow you to use a different PSR-14 instance for the web server versus other services in your application.
 
 By default, the `Mezzio\Swoole\Event\EventDispatcherInterface` service points to `Mezzio\Swoole\Event\EventDispatcher`, which is a simple PSR-14 dispatcher implementation.
 That service in turn consumes `Mezzio\Swoole\Event\SwooleListenerProvider`.
