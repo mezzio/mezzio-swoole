@@ -14,6 +14,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 use Webmozart\Assert\Assert;
 
+use function interface_exists;
+
 final class SwooleRequestHandlerRunnerFactory
 {
     /** @return SwooleRequestHandlerRunner|RequestHandlerRunner\V2RequestHandlerRunner */
