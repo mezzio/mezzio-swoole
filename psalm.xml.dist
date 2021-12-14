@@ -15,6 +15,18 @@
     </projectFiles>
 
     <issueHandlers>
+        <ConstructorSignatureMismatch>
+            <errorLevel type="suppress">
+                <file name="src/SwooleRequestHandlerRunner.php"/>
+            </errorLevel>
+        </ConstructorSignatureMismatch>
+
+        <ImplementedParamTypeMismatch>
+            <errorLevel type="suppress">
+                <file name="src/SwooleRequestHandlerRunner.php"/>
+            </errorLevel>
+        </ImplementedParamTypeMismatch>
+
         <InternalClass>
             <errorLevel type="suppress">
                 <referencedClass name="Mezzio\Swoole\Log\StrftimeToICUFormatMap"/>
@@ -38,6 +50,18 @@
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with"/>
             </errorLevel>
         </InternalMethod>
+
+        <InvalidExtendClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Mezzio\Swoole\SwooleRequestHandlerRunner"/>
+            </errorLevel>
+        </InvalidExtendClass>
+
+        <MethodSignatureMismatch>
+            <errorLevel type="suppress">
+                <file name="src/RequestHandlerRunner/RequestHandlerRunnerTrait.php"/>
+            </errorLevel>
+        </MethodSignatureMismatch>
     </issueHandlers>
 
     <plugins>

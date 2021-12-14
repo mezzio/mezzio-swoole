@@ -607,6 +607,22 @@
       <code>cookie</code>
     </TooManyArguments>
   </file>
+  <file src="src/SwooleRequestHandlerRunner.php">
+    <MethodSignatureMismatch occurrences="1">
+      <code>public function __construct(</code>
+    </MethodSignatureMismatch>
+  </file>
+  <file src="src/SwooleRequestHandlerRunnerFactory.php">
+    <LessSpecificReturnStatement occurrences="1">
+      <code>new $class($server, $dispatcher)</code>
+    </LessSpecificReturnStatement>
+    <MixedMethodCall occurrences="1">
+      <code>new $class($server, $dispatcher)</code>
+    </MixedMethodCall>
+    <MoreSpecificReturnType occurrences="1">
+      <code>SwooleRequestHandlerRunner|RequestHandlerRunner\V2RequestHandlerRunner</code>
+    </MoreSpecificReturnType>
+  </file>
   <file src="src/SwooleStream.php">
     <InvalidToString occurrences="1">
       <code>string</code>
@@ -764,6 +780,16 @@
     <MixedAssignment occurrences="1">
       <code>$value</code>
     </MixedAssignment>
+  </file>
+  <file src="test/RequestHandlerRunner/AbstractRequestHandlerRunnerTest.php">
+    <MixedMethodCall occurrences="3">
+      <code>new $requestHandlerRunnerClass($httpServer, $this-&gt;dispatcher)</code>
+      <code>new $requestHandlerRunnerClass($httpServer, $this-&gt;dispatcher)</code>
+      <code>new $requestHandlerRunnerClass($this-&gt;httpServer, $this-&gt;dispatcher)</code>
+    </MixedMethodCall>
+    <PropertyTypeCoercion occurrences="1">
+      <code>new $requestHandlerRunnerClass($this-&gt;httpServer, $this-&gt;dispatcher)</code>
+    </PropertyTypeCoercion>
   </file>
   <file src="test/StaticResourceHandler/CacheControlMiddlewareTest.php">
     <UnusedClosureParam occurrences="4">

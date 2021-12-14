@@ -26,11 +26,15 @@ final class SwooleRequestHandlerRunnerFactory
         Assert::isInstanceOf($dispatcher, EventDispatcherInterface::class);
 
         $class = $this->getRequestHandlerRunnerClass();
+        Assert::inArray($class, [
+            SwooleRequestHandlerRunner::class,
+            RequestHandlerRunner\V2RequestHandlerRunner::class,
+        ]);
 
         return new $class($server, $dispatcher);
     }
 
-    /** @psalm-return class-string<SwooleRequestHandlerRunner|RequestHandlerRunner\V2RequestHandlerRunner> */
+    /** @psalm-return class-string */
     private function getRequestHandlerRunnerClass(): string
     {
         if (interface_exists(RequestHandlerRunnerInterface::class)) {

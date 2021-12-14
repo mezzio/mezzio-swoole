@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\RequestHandlerRunner;
 
-use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
 use Mezzio\Swoole\Event\AfterReloadEvent;
 use Mezzio\Swoole\Event\BeforeReloadEvent;
 use Mezzio\Swoole\Event\ManagerStartEvent;
@@ -19,12 +17,15 @@ use Mezzio\Swoole\Event\WorkerErrorEvent;
 use Mezzio\Swoole\Event\WorkerStartEvent;
 use Mezzio\Swoole\Event\WorkerStopEvent;
 use Mezzio\Swoole\Exception\InvalidArgumentException;
+use Mezzio\Swoole\RequestHandlerRunner\V2RequestHandlerRunner;
+use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
+use Webmozart\Assert\Assert;
 
 use function random_int;
 
@@ -45,10 +46,10 @@ abstract class AbstractRequestHandlerRunnerTest extends TestCase
      */
     private SwooleHttpServer $httpServer;
 
-    /** @var RequestHandlerRunner|RequestHandlerRunnerInterface */
+    /** @var SwooleRequestHandlerRunner|V2RequestHandlerRunner */
     private $runner;
 
-    /** @psalm-return class-string<RequestHandlerRunner|RequestHandlerRunnerInterface> */
+    /** @psalm-return class-string */
     abstract public function getRequestHandlerRunnerClass(): string;
 
     /**
@@ -70,7 +71,9 @@ abstract class AbstractRequestHandlerRunnerTest extends TestCase
         $this->httpServer->expects($this->atLeastOnce())->method('getManagerPid')->willReturn(0);
 
         $requestHandlerRunnerClass = $this->getRequestHandlerRunnerClass();
-        $this->runner              = new $requestHandlerRunnerClass($this->httpServer, $this->dispatcher);
+        Assert::inArray($requestHandlerRunnerClass, [SwooleRequestHandlerRunner::class, V2RequestHandlerRunner::class]);
+
+        $this->runner = new $requestHandlerRunnerClass($this->httpServer, $this->dispatcher);
     }
 
     public function testConstructorRaisesExceptionWhenMasterPidIsNotZero(): void

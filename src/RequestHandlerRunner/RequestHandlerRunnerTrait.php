@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\RequestHandlerRunner;
 
 use Mezzio\Swoole\Event;
-use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -24,17 +23,8 @@ use const SWOOLE_PROCESS;
 
 trait RequestHandlerRunnerTrait
 {
-    public function __construct(
-        SwooleHttpServer $httpServer,
-        EventDispatcherInterface $dispatcher
-    ) {
-        // The HTTP server should not yet be running
-        if ($httpServer->getMasterPid() > 0 || $httpServer->getManagerPid() > 0) {
-            throw new InvalidArgumentException('The Swoole server has already been started');
-        }
-        $this->httpServer = $httpServer;
-        $this->dispatcher = $dispatcher;
-    }
+    protected SwooleHttpServer $httpServer;
+    protected EventDispatcherInterface $dispatcher;
 
     /**
      * Run the application

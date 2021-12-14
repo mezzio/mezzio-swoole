@@ -38,7 +38,7 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $this->assertInstanceOf($this->getExpectedClassType(), $factory($container));
     }
 
-    /** @psalm-return class-string<SwooleRequestHandlerRunner|RequestHandlerRunner\V2RequestHandlerRunner> */
+    /** @psalm-return class-string */
     private function getExpectedClassType(): string
     {
         if (interface_exists(RequestHandlerRunnerInterface::class)) {

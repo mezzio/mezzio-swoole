@@ -19,7 +19,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ReflectionProperty;
 use Webmozart\Assert\Assert;
-use Zend\Expressive\Swoole\Log\AccessLogFormatterInterface as LegacyAccessLogFormatterInterface;
 
 class AccessLogFactoryTest extends TestCase
 {
@@ -49,8 +48,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger([
             'has' => [
-                AccessLogFormatterInterface::class       => false,
-                LegacyAccessLogFormatterInterface::class => false,
+                AccessLogFormatterInterface::class => false,
             ],
         ]));
 
@@ -64,8 +62,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithConfigAndPsrLogger([
             'has' => [
-                AccessLogFormatterInterface::class       => false,
-                LegacyAccessLogFormatterInterface::class => false,
+                AccessLogFormatterInterface::class => false,
             ],
         ]));
 
@@ -79,8 +76,7 @@ class AccessLogFactoryTest extends TestCase
         $factory = new AccessLogFactory();
         $logger  = $factory($this->createContainerMockWithNamedLogger([
             'has' => [
-                AccessLogFormatterInterface::class       => false,
-                LegacyAccessLogFormatterInterface::class => false,
+                AccessLogFormatterInterface::class => false,
             ],
         ]));
 
@@ -108,8 +104,7 @@ class AccessLogFactoryTest extends TestCase
         $logger  = $factory($this->createContainerMockWithConfigAndNotPsrLogger(
             [
                 'has' => [
-                    AccessLogFormatterInterface::class       => false,
-                    LegacyAccessLogFormatterInterface::class => false,
+                    AccessLogFormatterInterface::class => false,
                 ],
             ],
             [
