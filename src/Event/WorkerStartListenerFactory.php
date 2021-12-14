@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\Log\AccessLogInterface;
-use Mezzio\Swoole\SwooleRequestHandlerRunner;
+use Mezzio\Swoole\RequestHandlerRunner\RequestHandlerConstantsInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
@@ -33,7 +33,7 @@ final class WorkerStartListenerFactory
         Assert::string($appRoot);
 
         $processName = $config['swoole-http-server']['process-name']
-            ?? SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME;
+            ?? RequestHandlerConstantsInterface::DEFAULT_PROCESS_NAME;
         Assert::stringNotEmpty($processName);
 
         return new WorkerStartListener($accessLog, $appRoot, $processName);

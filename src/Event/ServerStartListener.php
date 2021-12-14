@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\PidManager;
-use Mezzio\Swoole\SwooleRequestHandlerRunner;
+use Mezzio\Swoole\RequestHandlerRunner\RequestHandlerConstantsInterface;
 use Psr\Log\LoggerInterface;
 
 use function chdir;
@@ -37,7 +37,7 @@ class ServerStartListener
         PidManager $pidManager,
         LoggerInterface $logger,
         string $cwd,
-        string $processName = SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME
+        string $processName = RequestHandlerConstantsInterface::DEFAULT_PROCESS_NAME
     ) {
         $this->pidManager  = $pidManager;
         $this->logger      = $logger;

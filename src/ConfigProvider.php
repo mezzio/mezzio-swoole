@@ -12,6 +12,7 @@ use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use Mezzio\Swoole\RequestHandlerRunner\RequestHandlerConstantsInterface;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
@@ -69,7 +70,7 @@ class ConfigProvider
                 // By default the master process will be named `mezzio-master`,
                 // each http worker `mezzio-worker-n` and each task worker
                 // `mezzio-task-worker-n` where n is the id of the worker
-                'process-name' => SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME,
+                'process-name' => RequestHandlerConstantsInterface::DEFAULT_PROCESS_NAME,
                 'options'      => [
                     // We set a default for this. Without one, Swoole\Http\Server
                     // defaults to the value of `ulimit -n`. Unfortunately, in
