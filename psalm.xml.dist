@@ -21,6 +21,12 @@
             </errorLevel>
         </ConstructorSignatureMismatch>
 
+        <DeprecatedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Mezzio\Swoole\RequestHandlerRunner\V2RequestHandlerRunner"/>
+            </errorLevel>
+        </DeprecatedClass>
+
         <ImplementedParamTypeMismatch>
             <errorLevel type="suppress">
                 <file name="src/SwooleRequestHandlerRunner.php"/>

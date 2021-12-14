@@ -17,6 +17,10 @@ use Swoole\Http\Server as SwooleHttpServer;
  * Registers callbacks on each server event that marshal a typed event with the
  * arguments provided to the callback, and then dispatches the event using a
  * PSR-14 dispatcher.
+ *
+ * This version will be marked final in version 4.0, and updated to implement
+ * the laminas-httphandlerrunner RequstHandlerRunnerInterface at that time.
+ * As such EXTENSION IS DEPRECATED.
  */
 class SwooleRequestHandlerRunner extends RequestHandlerRunner implements RequestHandlerConstantsInterface
 {
