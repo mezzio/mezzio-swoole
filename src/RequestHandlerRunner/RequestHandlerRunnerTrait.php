@@ -139,7 +139,7 @@ trait RequestHandlerRunnerTrait
     /**
      * Handle a "task" event (process a task)
      *
-     * @param mixed[] $args
+     * @param list<mixed> $args
      * @psalm-param array{0: object}|array{0: int, 1: int, 2: mixed} $args
      * @return mixed Return value from task event
      */

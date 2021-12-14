@@ -19,7 +19,6 @@ use Mezzio\Swoole\Event\WorkerErrorEvent;
 use Mezzio\Swoole\Event\WorkerStartEvent;
 use Mezzio\Swoole\Event\WorkerStopEvent;
 use Mezzio\Swoole\Exception\InvalidArgumentException;
-use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;

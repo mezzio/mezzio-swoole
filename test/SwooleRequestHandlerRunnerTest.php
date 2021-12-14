@@ -7,6 +7,8 @@ namespace MezzioTest\Swoole;
 use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 
+use function interface_exists;
+
 class SwooleRequestHandlerRunnerTest extends RequestHandlerRunner\AbstractRequestHandlerRunnerTest
 {
     public function getRequestHandlerRunnerClass(): string

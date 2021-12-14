@@ -18,6 +18,8 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
+use function interface_exists;
+
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
     public function testFactoryCreatesRunnerFromContainerServices(): void
