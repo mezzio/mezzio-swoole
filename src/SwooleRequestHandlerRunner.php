@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
-use Mezzio\Swoole\Event;
 use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
