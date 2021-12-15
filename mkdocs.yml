@@ -2,13 +2,30 @@ docs_dir: docs/book
 site_dir: docs/html
 extra:
   project: Mezzio
-  current_version: v3
+  current_version: v4
   versions:
+    - v4
     - v3
     - v2
     - v1
 nav:
     - Home: index.md
+    - v4:
+      - Introduction: v4/intro.md
+      - Reference:
+        - "Swoole HTTP Server Events": v4/events.md
+        - "Static Resources": v4/static-resources.md
+        - Logging: v4/logging.md
+        - "Async Tasks": v4/async-tasks.md
+        - "Using Swoole Tables": v4/table.md
+        - "Hot Code Reloading": v4/hot-code-reload.md
+        - "Command Line Tooling": v4/command-line.md
+        - "How it works": v4/how-it-works.md
+        - "Considerations when using Swoole": v4/considerations.md
+      - Cookbook:
+          - "Removing the StaticResourceRequestListener": v4/cookbook/static-resource-listener-removal.md
+          - "Swoole-based server always returns home page": v4/cookbook/swoole-not-starting.md
+      - Migration: v4/migration.md
     - v3:
       - Introduction: v3/intro.md
       - Reference:
