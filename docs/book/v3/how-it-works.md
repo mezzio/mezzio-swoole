@@ -12,7 +12,7 @@ using the `on(string $name, callable $action)` method.
 The request handler implemented in mezzio-swoole is a runner that
 enables the execution of an Mezzio application inside the `on('request')`
 event of `Swoole\Http\Server`. This runner is implemented in the
-`Mezzio\Swoole\SwooleRequestHandlerRunner` service.
+`Mezzio\Swoole\SwooleRequestHandlerRunner` class.
 
 The basic implementation acts similar to the following:
 
@@ -45,21 +45,6 @@ public function run() : void
     $this->swooleHttpServer->start();
 }
 ```
-
-> INFO: **SwooleRequestHandlerRunner Service**
->
-> Since version 3.6.0, mezzio/mezzio-swoole now supports both the 1.5+ and 2.1+ series of [laminas/laminas-httphandlerrunner](https://docs.laminas.dev/laminas-httphandlerrunner/).
-> Since there are some minor incompatibilities between the two versions, we now ship with two `Laminas\HttpHandlerRunner\RequestHandlerRunner` variants:
->
-> - `Mezzio\Swoole\SwooleRequestHandlerRunner` targets the laminas-httphandlerrunner version 1 series, and extends `Laminas\HttpHandlerRunner\RequestHandlerRunner`.
-> - `Mezzio\Swoole\RequestHandlerRunner\V2RequestHandlerRunner` targets the laminas-httphandlerrunner version 2 series, and implements `Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface`.
->
-> Internally, both classes accomplish their work by implementing a new interface, `Mezzio\Swoole\RequestHandlerRunner\RequestHandlerConstantsInterface` (which provides constants used by both implementations), and composing a new trait, `Mezzio\Swoole\RequestHandlerRunner\RequestHandlerRunnerTrait` (which provides all methods and properties for each implementation).
->
-> The `Mezzio\Swoole\SwooleRequestHandlerRunnerFactory` now varies what it returns based on which version of laminas-httphandlerrunner is installed.
->
-> This change will only affect you if you were extending `SwooleRequestHandlerRunner` previously, as doing so means you MUST lock to the v1 series of laminas-httphandlerrunner.
-> Otherwise, usage remains exactly the same as it was previously.
 
 This package provides a bridge between `Swoole\Http\Request` (`$request`) and
 [PSR-7](https://www.php-fig.org/psr/psr-7/) requests (`$psr7Request`;

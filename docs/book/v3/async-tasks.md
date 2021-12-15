@@ -38,8 +38,8 @@ Tasks are queued in the order that they trigger, meaning that a `task_worker_num
 
 ## Task Events
 
-The `Mezzio\Swoole\SwooleRequestHandlerRunner` service registers listeners on the `Swoole\Http\Server` "task" and "finish" events.  "task" is triggered when `$server->task()` is called, and "finish" is triggered when a task worker calls `$trigger->finish()`.
-Each of the listeners that the `SwooleRequestHandlerRunner` service registers in turn dispatch an [event via its composed PSR-14 event dispatcher](events.md):
+`Mezzio\Swoole\SwooleRequestHandlerRunner` registers listeners on the `Swoole\Http\Server` "task" and "finish" events.  "task" is triggered when `$server->task()` is called, and "finish" is triggered when a task worker calls `$trigger->finish()`.
+Each of the listeners that `SwooleRequestHandlerRunner` registers in turn dispatch an [event via its composed PSR-14 event dispatcher](events.md):
 
 - `Mezzio\Swoole\Event\TaskEvent` is dispatched via the "task" listener.
 - `Mezzio\Swoole\Event\TaskFinishEvent` is dispatched via the "finish" listener.
@@ -526,7 +526,7 @@ return [
 ];
 ```
 
-Unlike the previous example, however, you do not need to trigger this event yourself; it gets triggered by the `SwooleRequestHandlerRunner` service.
+Unlike the previous example, however, you do not need to trigger this event yourself; it gets triggered by the `SwooleRequestHandlerRunner`.
 
 ### Queueing task data for the TaskEventDispatchListener
 
@@ -779,7 +779,7 @@ We will use the same event and listener.
 However, instead of queueing the task via the Swoole HTTP server, we will queue it via a PSR-14 event dispatcher.
 To make that possible, we will add a delegator factory for our listener that will do the work of queueing the task for us.
 
-This example will make the assumption that you are using the same PSR-14 event dispatcher with both the `SwooleRequestHandlerRunner` service and the rest of your application, and will re-purpose the `Mezzio\Swoole\Event\SwooleListenerProvider` to also handle listeners for our `Example\SomeDeferrableEvent`.
+This example will make the assumption that you are using the same PSR-14 event dispatcher with both the `SwooleRequestHandlerRunner` and the rest of your application, and will re-purpose the `Mezzio\Swoole\Event\SwooleListenerProvider` to also handle listeners for our `Example\SomeDeferrableEvent`.
 
 First, we will define a handler that triggers this event:
 
