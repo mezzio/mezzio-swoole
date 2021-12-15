@@ -8,17 +8,13 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
 use Mezzio\Swoole\Event\EventDispatcherInterface;
-use Mezzio\Swoole\RequestHandlerRunner\V2RequestHandlerRunner;
 use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-
-use function interface_exists;
 
 class SwooleRequestHandlerRunnerFactoryTest extends TestCase
 {
@@ -35,15 +31,6 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
             ->withConsecutive([SwooleHttpServer::class], [EventDispatcherInterface::class])
             ->willReturnOnConsecutiveCalls($httpServer, $dispatcher);
 
-        $this->assertInstanceOf($this->getExpectedClassType(), $factory($container));
-    }
-
-    /** @psalm-return class-string */
-    private function getExpectedClassType(): string
-    {
-        if (interface_exists(RequestHandlerRunnerInterface::class)) {
-            return V2RequestHandlerRunner::class;
-        }
-        return SwooleRequestHandlerRunner::class;
+        $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $factory($container));
     }
 }
