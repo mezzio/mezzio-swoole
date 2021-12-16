@@ -133,6 +133,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -264,9 +272,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../v3/intro/" class="dropdown-item">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -377,7 +393,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
+            <a href="../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -411,19 +427,20 @@ based implementation of <code>Mezzio\Swoole\HotCodeReload\FileWatcherInterface</
 In order to use it, the <code>inotify</code> extension must be loaded.</p>
 <h2 id="configuration">Configuration</h2>
 <p>The following demonstrates all currently available configuration options:</p>
-<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
+<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
 
-return [
-    'mezzio-swoole' =&gt; [
-        'hot-code-reload' =&gt; [
-            // Set to true to enable hot code reload; the default is false.
-            'enable' =&gt; true,
+<span class="x">return [</span>
+<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class="x">        &#39;hot-code-reload&#39; =&gt; [</span>
+<span class="x">            // Set to true to enable hot code reload; the default is false.</span>
+<span class="x">            &#39;enable&#39; =&gt; true,</span>
 
-            // Time in milliseconds between checks to changes in files.
-            'interval' =&gt; 500,
-        ],
-    ],
-];</code></pre>
+<span class="x">            // Time in milliseconds between checks to changes in files.</span>
+<span class="x">            &#39;interval&#39; =&gt; 500,</span>
+<span class="x">        ],</span>
+<span class="x">    ],</span>
+<span class="x">];</span>
+</code></pre></div>
 <h2 id="logging">Logging</h2>
 <p>When a file is reloaded, a <em>notice</em> line will be logged with the message
 <code>Reloading due to file change: {path}</code>.</p>
@@ -470,16 +487,6 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
 
 
 
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/hot-code-reload.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
                 
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
@@ -509,6 +516,14 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 

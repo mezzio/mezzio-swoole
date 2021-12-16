@@ -141,6 +141,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -234,9 +242,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../v3/intro/" class="dropdown-item">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -335,7 +351,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
+            <a href="../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -359,33 +375,34 @@ enables the execution of an Mezzio application inside the <code>on('request')</c
 event of <code>Swoole\Http\Server</code>. This runner is implemented in the
 <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> class.</p>
 <p>The basic implementation looks similar to the following:</p>
-<pre class="highlight"><code class="language-php">public function run() : void
-{
-    $this-&gt;swooleHttpServer-&gt;on('start', function ($server) {
-        printf("Swoole is running at %s:%s\n", $server-&gt;host, $server-&gt;port);
-    });
+<div class="highlight"><pre><span></span><code><span class="x">public function run() : void</span>
+<span class="x">{</span>
+<span class="x">    $this-&gt;swooleHttpServer-&gt;on(&#39;start&#39;, function ($server) {</span>
+<span class="x">        printf(&quot;Swoole is running at %s:%s\n&quot;, $server-&gt;host, $server-&gt;port);</span>
+<span class="x">    });</span>
 
-    $this-&gt;swooleHttpServer-&gt;on('request', function ($request, $response) {
-        printf(
-            "%s - %s - %s %s\n",
-            date('Y-m-d H:i:sO', time()),
-            $request-&gt;server['remote_addr'],
-            $request-&gt;server['request_method'],
-            $request-&gt;server['request_uri']
-        );
-        $emitter = new SwooleEmitter($response);
-        try {
-            $psr7Request = ($this-&gt;serverRequestFactory)($request);
-        } catch (Throwable $e) {
-            // Error in generating the request
-            $this-&gt;emitMarshalServerRequestException($emitter, $e);
-            return;
-        }
-        $emitter-&gt;emit($this-&gt;handler-&gt;handle($psr7Request));
-    });
+<span class="x">    $this-&gt;swooleHttpServer-&gt;on(&#39;request&#39;, function ($request, $response) {</span>
+<span class="x">        printf(</span>
+<span class="x">            &quot;%s - %s - %s %s\n&quot;,</span>
+<span class="x">            date(&#39;Y-m-d H:i:sO&#39;, time()),</span>
+<span class="x">            $request-&gt;server[&#39;remote_addr&#39;],</span>
+<span class="x">            $request-&gt;server[&#39;request_method&#39;],</span>
+<span class="x">            $request-&gt;server[&#39;request_uri&#39;]</span>
+<span class="x">        );</span>
+<span class="x">        $emitter = new SwooleEmitter($response);</span>
+<span class="x">        try {</span>
+<span class="x">            $psr7Request = ($this-&gt;serverRequestFactory)($request);</span>
+<span class="x">        } catch (Throwable $e) {</span>
+<span class="x">            // Error in generating the request</span>
+<span class="x">            $this-&gt;emitMarshalServerRequestException($emitter, $e);</span>
+<span class="x">            return;</span>
+<span class="x">        }</span>
+<span class="x">        $emitter-&gt;emit($this-&gt;handler-&gt;handle($psr7Request));</span>
+<span class="x">    });</span>
 
-    $this-&gt;swooleHttpServer-&gt;start();
-}</code></pre>
+<span class="x">    $this-&gt;swooleHttpServer-&gt;start();</span>
+<span class="x">}</span>
+</code></pre></div>
 <p>This package provides a bridge between <code>Swoole\Http\Request</code> (<code>$request</code>) and
 <a href="https://www.php-fig.org/psr/psr-7/">PSR-7</a> requests (<code>$psr7Request</code>;
 specifically as implemented by <a href="https://docs.laminas.dev/laminas-diactoros">laminas-diactoros</a>)
@@ -446,16 +463,6 @@ by the amount of memory); as such, performance can increase from these numbers.<
 
 
 
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v1/how-it-works.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
                 
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
@@ -485,6 +492,14 @@ by the amount of memory); as such, performance can increase from these numbers.<
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 

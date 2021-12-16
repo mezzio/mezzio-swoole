@@ -133,6 +133,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -264,9 +272,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../v3/intro/" class="dropdown-item">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -373,7 +389,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
+            <a href="../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -390,15 +406,17 @@
 update your code to adapt to them.</p>
 <h2 id="controlling-the-server">Controlling the server</h2>
 <p>In version 1, you would execute the web server via the entry script, e.g.:</p>
-<pre class="highlight"><code class="language-bash">$ php public/index.php start</code></pre>
+<div class="highlight"><pre><span></span><code>$ php public/index.php start
+</code></pre></div>
 <p>With version 2, we ship the command line tools for controlling your server via
 the binary <code>mezzio-swoole</code>:</p>
-<pre class="highlight"><code class="language-bash"># Start the server:
+<div class="highlight"><pre><span></span><code><span class="c1"># Start the server:</span>
 $ ./vendor/bin/mezzio-swoole start -d
-# Reload the server:
+<span class="c1"># Reload the server:</span>
 $ ./vendor/bin/mezzio-swoole reload
-# Stop the server:
-$ ./vendor/bin/mezzio-swoole stop</code></pre>
+<span class="c1"># Stop the server:</span>
+$ ./vendor/bin/mezzio-swoole stop
+</code></pre></div>
 <p>While you can still call <code>php public/index.php</code>, you cannot daemonize the server
 using that command, nor reload or stop it (other than using <code>Ctrl-C</code>). You will
 need to change any deployment commands you currently use to consume the new
@@ -410,16 +428,17 @@ boolean true value to the
 <p>That flag now controls specifically the HTTP server coroutine support, and
 defaults to <code>true</code>. To set system-wide coroutine support, toggle the
 <code>mezzio-swoole.enable_coroutine</code> flag, which defaults to boolean false:</p>
-<pre class="highlight"><code class="language-php">return [
-    'mezzio-swoole' =&gt; [
-        'enable_coroutine' =&gt; false, // system-wide support
-        'swoole-http-server' =&gt; [
-            'options' =&gt; [
-                'enable_coroutine' =&gt; true, // HTTP server coroutine support
-            ],
-        ],
-    ]
-];</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">return [</span>
+<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class="x">        &#39;enable_coroutine&#39; =&gt; false, // system-wide support</span>
+<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class="x">            &#39;options&#39; =&gt; [</span>
+<span class="x">                &#39;enable_coroutine&#39; =&gt; true, // HTTP server coroutine support</span>
+<span class="x">            ],</span>
+<span class="x">        ],</span>
+<span class="x">    ]</span>
+<span class="x">];</span>
+</code></pre></div>
 <h2 id="serverfactory">ServerFactory</h2>
 <p>Version 2 refactors the architecture slightly to allow providing the HTTP server
 as a service, which allows us to <a href="../async-tasks/">enable async task workers</a>.</p>
@@ -466,16 +485,6 @@ or extending the affected classes.</p>
 
 
 
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/migration.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
                 
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
@@ -505,6 +514,14 @@ or extending the affected classes.</p>
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 

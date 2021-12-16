@@ -133,6 +133,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -264,9 +272,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../v3/intro/" class="dropdown-item">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -377,7 +393,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
+            <a href="../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -397,8 +413,9 @@ automatically synchronized.</p>
 <p>For reasons that will become clear presently, we recommend creating memory
 tables by extending the <code>Swoole\Table</code> class, defining the appropriate columns
 and table size inside of the constructor.</p>
+<!-- markdownlint-disable-next-line header-increment -->
 <blockquote>
-<h3>Initialize the Table Within the Constructor</h3>
+<h3 id="initialize-the-table-within-the-constructor">Initialize the Table Within the Constructor</h3>
 <p>You <strong>must</strong> call your table's <code>create()</code> method, and this <strong>must</strong> be done
 prior to initializing any worker processes; if you fail to do so, your table
 will not work. We recommend doing this in your table class's constructor.</p>
@@ -408,38 +425,40 @@ will not work. We recommend doing this in your table class's constructor.</p>
 defines a table that can contain up to 1024 rows, each with three columns
 accepting <code>float</code> values to define a 3-dimensional vector, e.g.
 <code>src/App/Table/Vector3dTable.php</code>:</p>
-<pre class="highlight"><code class="language-php">namespace App\Table;
+<div class="highlight"><pre><span></span><code><span class="x">namespace App\Table;</span>
 
-use Swoole\Table;
+<span class="x">use Swoole\Table;</span>
 
-final class Vector3dTable extends Table
-{
-    public function __construct()
-    {
-        parent::__construct(1024); // Table size
-        $this-&gt;column('x', self::TYPE_FLOAT);
-        $this-&gt;column('y', self::TYPE_FLOAT);
-        $this-&gt;column('z', self::TYPE_FLOAT);
-        $this-&gt;create();
-    }
-}</code></pre>
+<span class="x">final class Vector3dTable extends Table</span>
+<span class="x">{</span>
+<span class="x">    public function __construct()</span>
+<span class="x">    {</span>
+<span class="x">        parent::__construct(1024); // Table size</span>
+<span class="x">        $this-&gt;column(&#39;x&#39;, self::TYPE_FLOAT);</span>
+<span class="x">        $this-&gt;column(&#39;y&#39;, self::TYPE_FLOAT);</span>
+<span class="x">        $this-&gt;column(&#39;z&#39;, self::TYPE_FLOAT);</span>
+<span class="x">        $this-&gt;create();</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</code></pre></div>
 <h2 id="creating-your-table">Creating Your Table</h2>
 <p>Now that we have defined a table class, we need to wire the application to use
 it.</p>
 <p>Tables <strong>must</strong> be created inside of your main process, in order to ensure each
 worker process has access to them. Since we define the columns and table size in
 the constructor, we can accomplish this by mapping the service name to a
-concrete instance, using the <code>services</code> dependency configuration key in a 
+concrete instance, using the <code>services</code> dependency configuration key in a
 config provider class, e.g. <code>src/App/ConfigProvider.php</code>:</p>
-<pre class="highlight"><code class="language-php">private function getDependencies() : array
-{
-    return [
-        'services'  =&gt; [
-            // ...
-            Vector3dTable::class =&gt; new Vector3dTable(),
-        ],
-    ];
-}</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">private function getDependencies() : array</span>
+<span class="x">{</span>
+<span class="x">    return [</span>
+<span class="x">        &#39;services&#39;  =&gt; [</span>
+<span class="x">            // ...</span>
+<span class="x">            Vector3dTable::class =&gt; new Vector3dTable(),</span>
+<span class="x">        ],</span>
+<span class="x">    ];</span>
+<span class="x">}</span>
+</code></pre></div>
 <h2 id="using-the-table">Using the Table</h2>
 <p>Classes that will push values to or pull values from the table can compose an
 instance of your custom class just as they normally would. Factories will then
@@ -478,16 +497,6 @@ table object does not exist</code>, then chances are you are not calling
 
 
 
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/table.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
                 
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
@@ -517,6 +526,14 @@ table object does not exist</code>, then chances are you are not calling
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 

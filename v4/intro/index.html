@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Swoole support for Mezzio">  
-    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v3/hot-code-reload/">
+    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v4/intro/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>Hot Code Reloading - mezzio-swoole - Laminas Docs</title>
+    <title>Introduction - mezzio-swoole - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -125,18 +125,10 @@
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
-    <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -176,8 +168,8 @@
 
             
                 
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Hot Code Reloading</a>
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
     </li>
 
             
@@ -229,6 +221,14 @@
         <a href="../migration/" class="subnavigation__link">Migration</a>
     </li>
 
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             
@@ -293,13 +293,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v3
+                v4
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../../v4/intro/" class="dropdown-item">
+                    <a href="./" class="dropdown-item active">
                         
                             v4 (latest)
                         
@@ -307,7 +307,7 @@
                 
             
                 
-                    <a href="../intro/" class="dropdown-item active">
+                    <a href="../../v3/intro/" class="dropdown-item">
                         
                             v3
                         
@@ -363,19 +363,15 @@
             <ul class="toc__list">
                 
                     <li class="toc__entry">
-                        <a href="#requirements" class="toc__link nav-link">Requirements</a>
+                        <a href="#install-swoole" class="toc__link nav-link">Install swoole</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#configuration" class="toc__link nav-link">Configuration</a>
+                        <a href="#install-mezzio-swoole" class="toc__link nav-link">Install mezzio-swoole</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#logging" class="toc__link nav-link">Logging</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#limitations" class="toc__link nav-link">Limitations</a>
+                        <a href="#swoole-with-mezzio" class="toc__link nav-link">Swoole with Mezzio</a>
                     </li>
                 
             </ul>
@@ -400,15 +396,8 @@
                         
                     
                 
-                    
-                        
-                        
-                            <li class="breadcrumb-item">Reference</li>
-                        
-                    
-                
 
-                <li class="breadcrumb-item active" aria-current="page">Hot Code Reloading</li>
+                <li class="breadcrumb-item active" aria-current="page">Introduction</li>
             
         
     </ol>
@@ -416,79 +405,109 @@
 
 
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
-            The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v4) version.</a>
-        </p>
-    </div>
-
 
 
 
     
     
-        <h2 class="chapter__headline">Reference</h2>
-    
 
-    <h1 id="hot-code-reload">Hot Code Reload</h1>
-<p>To ease development against a running Swoole HTTP server, hot code reloading can be enabled.</p>
-<p>With this feature enabled, a Swoole worker will monitor included PHP files using <code>inotify</code>, and will restart all workers if a file is changed, thus mitigating the need to manually restart the server to test changes.</p>
-<p><strong>This feature should only be used in your local development environment, and should not be used in production!</strong></p>
-<h2 id="requirements">Requirements</h2>
-<ul>
-<li><code>ext-inotify</code></li>
-</ul>
-<p>This library ships with an <a href="http://php.net/manual/en/book.inotify.php">inotify</a> based implementation of <code>Mezzio\Swoole\HotCodeReload\FileWatcherInterface</code>.
-In order to use it, the <code>inotify</code> extension must be loaded.</p>
-<h2 id="configuration">Configuration</h2>
-<p>The following demonstrates all currently available configuration options:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
+    <h1 id="swoole">Swoole</h1>
+<p><a href="https://www.swoole.co.uk/">Open Swoole</a> is a PECL extension for developing asynchronous applications in PHP.
+It enables PHP developers to write high-performance, scalable, concurrent TCP, UDP, Unix socket, HTTP, or Websocket services without requiring in-depth knowledge about non-blocking I/O programming or the low-level Linux kernel.</p>
+<h2 id="install-swoole">Install swoole</h2>
+<p>You can install the Open Swoole extension on Linux or Mac environments using the following commands:</p>
+<div class="highlight"><pre><span></span><code>$ pecl install openswoole
+</code></pre></div>
+<p>For more information on the extension, <a href="https://pecl.php.net/package/openswoole">visit its package details on PECL</a>.</p>
+<blockquote>
+<h3 id="legacy-swoole-compatibility">Legacy Swoole compatibility</h3>
+<p>Since version 3.4.0, mezzio-swoole can work with either the original <a href="https://github.com/swoole/swoole-src">Swoole</a> extension or the new community Open Swoole extension, as each defines the same classes, interfaces, and constants consumed by mezzio-swoole.</p>
+</blockquote>
+<h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
+<p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
+<div class="highlight"><pre><span></span><code>$ composer require mezzio/mezzio-swoole
+</code></pre></div>
+<h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
+<p>mezzio-swoole enables an Mezzio application to be executed with the <a href="https://www.swoole.co.uk/">Open Swoole</a> or original <a href="https://github.com/swoole/swoole-src">Swoole</a> extensions.
+This means you can run the application from the command line, <strong>without requiring a web server</strong>.</p>
+<p>You can run the application using the following command:</p>
+<div class="highlight"><pre><span></span><code>$ ./vendor/bin/laminas mezzio:swoole:start
+</code></pre></div>
+<p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
+<blockquote>
+<h3 id="other-commands">Other commands</h3>
+<p>To get a list of all available commands, run the command without arguments:</p>
+<div class="highlight"><pre><span></span><code>$ ./vendor/bin/laminas
+</code></pre></div>
+<p>and look for commands starting with <code>mezzio:swoole:</code>.</p>
+<p>If you add the argument <code>help</code> before any command name, the tooling will provide you with more detailed information on that command.</p>
+<h3 id="mezzio-skeleton-versions-prior-to-310">Mezzio skeleton versions prior to 3.1.0</h3>
+<p>The above will work immediately after installing mezzio-swoole if you are using a version of <a href="https://github.com/mezzio/mezzio-skeleton">mezzio-skeleton</a> from 3.1.0 or later.</p>
+<p>For applications based on previous versions of the skeleton, you will need to create a configuration file such as <code>config/autoload/mezzio-swoole.global.php</code> or <code>config/autoload/mezzio-swoole.local.php</code> with the following contents:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="k">use</span> <span class="nx">Mezzio\Swoole\ConfigProvider</span><span class="p">;</span>
 
-<span class="x">use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;</span>
-<span class="x">use Mezzio\Swoole\Event\WorkerStartEvent;</span>
-
+<span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nx">ConfigProvider</span><span class="p">())();</span>
+</code></pre></div>
+</blockquote>
+<p>You can change the host address and/or host name as well as the port using a configuration file, as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="x">// In config/autoload/swoole.local.php:</span>
 <span class="x">return [</span>
 <span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;hot-code-reload&#39; =&gt; [</span>
-<span class="x">            // Time in milliseconds between checks to changes in files.</span>
-<span class="x">            &#39;interval&#39; =&gt; 500,</span>
-<span class="x">            &#39;paths&#39;    =&gt; [</span>
-<span class="x">                // List of paths, either files or directories, to scan for changes.</span>
-<span class="x">                // By default this is empty; you will need to configure it.</span>
-<span class="x">                // A common value:</span>
-<span class="x">                getcwd(),</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
 <span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                // Register the hot code reloader listener with the WorkerStartEvent</span>
-<span class="x">                WorkerStartEvent::class =&gt; [</span>
-<span class="x">                    HotCodeReloaderWorkerStartListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
+<span class="x">            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
+<span class="x">            &#39;port&#39; =&gt; 9501,</span>
 <span class="x">        ],</span>
 <span class="x">    ],</span>
 <span class="x">];</span>
 </code></pre></div>
-<h2 id="logging">Logging</h2>
-<p>When a file is reloaded, a <em>notice</em> line will be logged with the message
-<code>Reloading due to file change: {path}</code>.</p>
-<p>The logger used to log these lines is the same used for access logging, which
-is described in the <a href="../logging/#container-usage">logging section</a> of this documentation.</p>
-<h2 id="limitations">Limitations</h2>
-<p>Only files included by PHP after <code>onWorkerStart</code> will be reloaded. This means
-that Swoole will not reload any of the following:</p>
-<ul>
-<li>New routes</li>
-<li>New pipeline middleware</li>
-<li>The <code>Application</code> instance, <em>or any delegators used to modify it</em>.</li>
-<li>The Swoole HTTP server itself.</li>
-</ul>
-<p>This limitation exists because the hot code reload features use the
-<code>Swoole\Server::reload()</code> method to notify Swoole to reload
-PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-methods#public-boolean-swoole-server-reload-void">the Swoole reload() documentation for more details</a>).</p>
+<h3 id="providing-additional-swoole-configuration">Providing additional Swoole configuration</h3>
+<p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify any accepted Swoole settings.
+For instance, the following configuration demonstrates enabling SSL:</p>
+<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
+<span class="x">return [</span>
+<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class="x">        // Available in Swoole 4.1 and up; enables coroutine support</span>
+<span class="x">        // for most I/O operations:</span>
+<span class="x">        &#39;enable_coroutine&#39; =&gt; true,</span>
+
+<span class="x">        // Configure Swoole HTTP Server:</span>
+<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class="x">            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
+<span class="x">            &#39;port&#39; =&gt; 9501,</span>
+<span class="x">            &#39;mode&#39; =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;</span>
+<span class="x">                                   // SWOOLE_BASE is the default</span>
+<span class="x">            &#39;protocol&#39; =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server</span>
+<span class="x">            &#39;options&#39; =&gt; [</span>
+<span class="x">                // Set the SSL certificate and key paths for SSL support:</span>
+<span class="x">                &#39;ssl_cert_file&#39; =&gt; &#39;path/to/ssl.crt&#39;,</span>
+<span class="x">                &#39;ssl_key_file&#39; =&gt; &#39;path/to/ssl.key&#39;,</span>
+<span class="x">                // Whether or not the HTTP server should use coroutines;</span>
+<span class="x">                // enabled by default, and generally should not be disabled:</span>
+<span class="x">                &#39;enable_coroutine&#39; =&gt; true,</span>
+
+<span class="x">                // Overwrite the default location of the pid file;</span>
+<span class="x">                // required when you want to run multiple instances of your service in different ports:</span>
+<span class="x">                &#39;pid_file&#39; =&gt; &#39;path/to/pid_file.pid&#39;,</span>
+<span class="x">            ],</span>
+
+<span class="x">            // Since 2.1.0: Set the process name prefix.</span>
+<span class="x">            // The master process will be named `{prefix}-master`,</span>
+<span class="x">            // worker processes will be named `{prefix}-worker-{id}`,</span>
+<span class="x">            // and task worker processes will be named `{prefix}-task-worker-{id}`</span>
+<span class="x">            &#39;process-name&#39; =&gt; &#39;your-app&#39;,</span>
+<span class="x">        ],</span>
+<span class="x">    ],</span>
+<span class="x">];</span>
+</code></pre></div>
+<blockquote>
+<h3 id="ssl-support">SSL support</h3>
+<p>By default, Swoole is not compiled with SSL support.
+To enable SSL in Swoole, it must be configured with the <code>--enable-openssl</code> or <code>--with-openssl-dir=/path/to/openssl</code> option.</p>
+</blockquote>
+<h3 id="serving-static-files">Serving static files</h3>
+<p>We support serving static files. By default, we serve files with extensions in the whitelist defined in the constant <code>Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS</code>, which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">list of common web MIME types maintained by Mozilla</a>.
+Our static resource capabilities are fairly comprehensive; please see the <a href="../static-resources/">chapter on static resources</a> for full details on configuration.</p>
 
 
 
@@ -499,7 +518,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../table/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../..">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -508,7 +527,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="../command-line/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../events/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -551,18 +570,10 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
 
                 
                 
-
-                    
-                    
-                
-            
-
-                
-                
                     
                         
-    <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -602,8 +613,8 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
 
             
                 
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Hot Code Reloading</a>
+    <li class="subnavigation__list-item ">
+        <a href="../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
     </li>
 
             
@@ -655,6 +666,14 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
         <a href="../migration/" class="subnavigation__link">Migration</a>
     </li>
 
+                    
+                
+            
+
+                
+                
+
+                    
                     
                 
             

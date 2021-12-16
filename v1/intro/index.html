@@ -141,6 +141,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item subnavigation__list-item--active">
@@ -234,9 +242,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../v3/intro/" class="dropdown-item">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -336,7 +352,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
+            <a href="../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -355,20 +371,23 @@ or the low-level Linux kernel.</p>
 <h2 id="install-swoole">Install swoole</h2>
 <p>You can install the Swoole extension on Linux or Mac environments using the
 following commands:</p>
-<pre class="highlight"><code class="language-bash">$ pecl install swoole</code></pre>
+<div class="highlight"><pre><span></span><code>$ pecl install swoole
+</code></pre></div>
 <p>For more information on the extension, <a href="https://pecl.php.net/package/swoole">visit its package details on PECL</a>.</p>
 <h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
 <p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
-<pre class="highlight"><code class="language-bash">$ composer require mezzio/mezzio-swoole</code></pre>
+<div class="highlight"><pre><span></span><code>$ composer require mezzio/mezzio-swoole
+</code></pre></div>
 <h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
 <p>mezzio-swoole enables an Mezzio application to be executed with
 the <a href="https://www.swoole.co.uk/">Swoole</a> extension. This means you can run the
 application from the command line, <strong>without requiring a web server</strong>.</p>
 <p>You can run the application using the following command:</p>
-<pre class="highlight"><code class="language-bash">$ php public/index.php</code></pre>
+<div class="highlight"><pre><span></span><code>$ php public/index.php
+</code></pre></div>
 <p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
 <blockquote>
-<h3>Mezzio skeleton versions prior to 3.1.0</h3>
+<h3 id="mezzio-skeleton-versions-prior-to-310">Mezzio skeleton versions prior to 3.1.0</h3>
 <p>The above will work immediately after installing mezzio-swoole if you
 are using a version of <a href="https://github.com/mezzio/mezzio-skeleton">mezzio-skeleton</a>
 from 3.1.0 or later.</p>
@@ -376,47 +395,50 @@ from 3.1.0 or later.</p>
 create a configuration file such as <code>config/autoload/mezzio-swoole.global.php</code>
 or <code>config/autoload/mezzio-swoole.local.php</code> with the following
 contents:</p>
-<pre class="highlight"><code class="language-php">&lt;?php
-use Mezzio\Swoole\ConfigProvider;
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="k">use</span> <span class="nx">Mezzio\Swoole\ConfigProvider</span><span class="p">;</span>
 
-return (new ConfigProvider())();</code></pre>
+<span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nx">ConfigProvider</span><span class="p">())();</span>
+</code></pre></div>
 </blockquote>
 <p>You can change the host address and/or host name as well as the port using a
 configuration file, as follows:</p>
-<pre class="highlight"><code class="language-php">// In config/autoload/swoole.local.php:
-return [
-    'mezzio-swoole' =&gt; [
-        'swoole-http-server' =&gt; [
-            'host' =&gt; '192.168.0.1',
-            'port' =&gt; 9501,
-        ],
-    ],
-];</code></pre>
-<h3>Providing additional Swoole configuration</h3>
+<div class="highlight"><pre><span></span><code><span class="x">// In config/autoload/swoole.local.php:</span>
+<span class="x">return [</span>
+<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class="x">            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
+<span class="x">            &#39;port&#39; =&gt; 9501,</span>
+<span class="x">        ],</span>
+<span class="x">    ],</span>
+<span class="x">];</span>
+</code></pre></div>
+<h3 id="providing-additional-swoole-configuration">Providing additional Swoole configuration</h3>
 <p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify
 any accepted Swoole settings. For instance, the following configuration
 demonstrates enabling SSL:</p>
-<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
-return [
-    'mezzio-swoole' =&gt; [
-        'swoole-http-server' =&gt; [
-            'host' =&gt; '192.168.0.1',
-            'port' =&gt; 9501,
-            'mode' =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;
-                                   // SWOOLE_BASE is the default
-            'protocol' =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server
-            'options' =&gt; [
-                // Set the SSL certificate and key paths for SSL support:
-                'ssl_cert_file' =&gt; 'path/to/ssl.crt',
-                'ssl_key_file' =&gt; 'path/to/ssl.key',
-                // Available in Swoole 4.1 and up; enables coroutine support
-                // for most I/O operations:
-                'enable_coroutine' =&gt; true,
-            ],
-        ],
-    ],
-];</code></pre>
-<h3>Serving static files</h3>
+<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
+<span class="x">return [</span>
+<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class="x">            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
+<span class="x">            &#39;port&#39; =&gt; 9501,</span>
+<span class="x">            &#39;mode&#39; =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;</span>
+<span class="x">                                   // SWOOLE_BASE is the default</span>
+<span class="x">            &#39;protocol&#39; =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server</span>
+<span class="x">            &#39;options&#39; =&gt; [</span>
+<span class="x">                // Set the SSL certificate and key paths for SSL support:</span>
+<span class="x">                &#39;ssl_cert_file&#39; =&gt; &#39;path/to/ssl.crt&#39;,</span>
+<span class="x">                &#39;ssl_key_file&#39; =&gt; &#39;path/to/ssl.key&#39;,</span>
+<span class="x">                // Available in Swoole 4.1 and up; enables coroutine support</span>
+<span class="x">                // for most I/O operations:</span>
+<span class="x">                &#39;enable_coroutine&#39; =&gt; true,</span>
+<span class="x">            ],</span>
+<span class="x">        ],</span>
+<span class="x">    ],</span>
+<span class="x">];</span>
+</code></pre></div>
+<h3 id="serving-static-files">Serving static files</h3>
 <p>We support serving static files. By default, we serve files with extensions in
 the whitelist defined in the constant <code>Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware::DEFAULT_STATIC_EXTS</code>,
 which is derived from a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">list of common web MIME types maintained by Mozilla</a>.
@@ -452,16 +474,6 @@ configuration.</p>
 
 
 
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v1/intro.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
                 
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
@@ -491,6 +503,14 @@ configuration.</p>
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 

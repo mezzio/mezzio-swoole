@@ -125,6 +125,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -203,6 +211,12 @@
                 
     <li class="subnavigation__list-item ">
         <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/swoole-not-starting/" class="subnavigation__link">Swoole-based server always returns home page</a>
     </li>
 
             
@@ -285,9 +299,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../intro/" class="dropdown-item active">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -387,6 +409,14 @@
 
 
 
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../..">Switch to the latest (v4) version.</a>
+        </p>
+    </div>
+
 
 
 
@@ -400,22 +430,24 @@ update your code to adapt to them.</p>
 <p>The internals of <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> have changed entirely.
 As a result, the constructor signature has also changed.
 Before, it read:</p>
-<pre class="highlight"><code class="language-php">public function __construct(
-    Psr\Http\Server\RequestHandlerInterface $handler,
-    callable $serverRequestFactory,
-    callable $serverRequestErrorResponseGenerator,
-    Mezzio\Swoole\PidManager $pidManager,
-    Swoole\Http\Server $httpServer,
-    Mezzio\Swoole\StaticResourceHandlerInterface $staticResourceHandler = null,
-    Mezzio\Swoole\Log\AccessLogInterface $logger = null,
-    string $processName = self::DEFAULT_PROCESS_NAME,
-    ?Mezzio\Swoole\HotCodeReload\Reloader $hotCodeReloader = null
-)</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">public function __construct(</span>
+<span class="x">    Psr\Http\Server\RequestHandlerInterface $handler,</span>
+<span class="x">    callable $serverRequestFactory,</span>
+<span class="x">    callable $serverRequestErrorResponseGenerator,</span>
+<span class="x">    Mezzio\Swoole\PidManager $pidManager,</span>
+<span class="x">    Swoole\Http\Server $httpServer,</span>
+<span class="x">    Mezzio\Swoole\StaticResourceHandlerInterface $staticResourceHandler = null,</span>
+<span class="x">    Mezzio\Swoole\Log\AccessLogInterface $logger = null,</span>
+<span class="x">    string $processName = self::DEFAULT_PROCESS_NAME,</span>
+<span class="x">    ?Mezzio\Swoole\HotCodeReload\Reloader $hotCodeReloader = null</span>
+<span class="x">)</span>
+</code></pre></div>
 <p>It now reads:</p>
-<pre class="highlight"><code class="language-php">public function __construct(
-    Swoole\Http\Server $httpServer,
-    Psr\EventDispatcher\EventDispatcherInterface $dispatcher
-)</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">public function __construct(</span>
+<span class="x">    Swoole\Http\Server $httpServer,</span>
+<span class="x">    Psr\EventDispatcher\EventDispatcherInterface $dispatcher</span>
+<span class="x">)</span>
+</code></pre></div>
 <p>As such, if you were providing your own factory for the class, or instantiating it manually, you will need to update your code.
 See the <a href="../events/">chapter on events</a> for more information on how the the <a href="https://www.php-fig.org/psr/psr-14/">PSR-14 event dispatcher</a> is used internally, and what listeners are provided.</p>
 <h2 id="reloader">Reloader</h2>
@@ -435,9 +467,11 @@ Alternately, you can pass the <code>--num-task-workers|-t</code> option with a n
 <p>In releases prior to version 3, the package shipped with its own binary, <code>mezzio-swoole</code>, and defined the commands <code>start</code>, <code>stop</code>, <code>status</code>, and <code>reload</code>.</p>
 <p>Starting with version 3, the package now leverages <a href="https://docs.laminas.dev/laminas-cli/">laminas-cli</a>, exposing the commands <code>mezzio:swoole:start</code>, <code>mezzio:swoole:stop</code>, <code>mezzio:swoole:status</code>, and <code>mezzio:swoole:reload</code>.
 As such, if you started the server as follows:</p>
-<pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole start</code></pre>
+<div class="highlight"><pre><span></span><code>$ ./vendor/bin/mezzio-swoole start
+</code></pre></div>
 <p>you will now start it using:</p>
-<pre class="highlight"><code class="language-bash">$ ./vendor/bin/laminas mezzio:swoole:start</code></pre>
+<div class="highlight"><pre><span></span><code>$ ./vendor/bin/laminas mezzio:swoole:start
+</code></pre></div>
 <p>Usage of other commands will change similarly.</p>
 
 
@@ -449,7 +483,7 @@ As such, if you started the server as follows:</p>
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../cookbook/static-resource-listener-removal/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../cookbook/swoole-not-starting/">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -467,16 +501,6 @@ As such, if you started the server as follows:</p>
 </nav>
 
 
-
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v3/migration.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
 
                 
             </div>
@@ -507,6 +531,14 @@ As such, if you started the server as follows:</p>
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 
@@ -589,6 +621,12 @@ As such, if you started the server as follows:</p>
                 
     <li class="subnavigation__list-item ">
         <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/swoole-not-starting/" class="subnavigation__link">Swoole-based server always returns home page</a>
     </li>
 
             

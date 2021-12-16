@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Swoole support for Mezzio">  
-    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v3/hot-code-reload/">
+    <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v3/cookbook/swoole-not-starting/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>Hot Code Reloading - mezzio-swoole - Laminas Docs</title>
+    <title>Swoole-based server always returns home page - mezzio-swoole - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -115,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../..">mezzio-swoole</a>
+            <a href="../../..">mezzio-swoole</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -136,7 +136,7 @@
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Introduction</a>
+        <a href="../../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -147,55 +147,55 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
+        <a href="../../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+        <a href="../../static-resources/" class="subnavigation__link">Static Resources</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../logging/" class="subnavigation__link">Logging</a>
+        <a href="../../logging/" class="subnavigation__link">Logging</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+        <a href="../../async-tasks/" class="subnavigation__link">Async Tasks</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
-    </li>
-
-            
-                
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Hot Code Reloading</a>
+        <a href="../../table/" class="subnavigation__link">Using Swoole Tables</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+        <a href="../../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+        <a href="../../command-line/" class="subnavigation__link">Command Line Tooling</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+        <a href="../../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
     </li>
 
             
@@ -210,13 +210,13 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+        <a href="../static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
     </li>
 
             
                 
-    <li class="subnavigation__list-item ">
-        <a href="../cookbook/swoole-not-starting/" class="subnavigation__link">Swoole-based server always returns home page</a>
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Swoole-based server always returns home page</a>
     </li>
 
             
@@ -226,7 +226,7 @@
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="../migration/" class="subnavigation__link">Migration</a>
+        <a href="../../migration/" class="subnavigation__link">Migration</a>
     </li>
 
                     
@@ -299,7 +299,7 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../../v4/intro/" class="dropdown-item">
+                    <a href="../../../v4/intro/" class="dropdown-item">
                         
                             v4 (latest)
                         
@@ -307,7 +307,7 @@
                 
             
                 
-                    <a href="../intro/" class="dropdown-item active">
+                    <a href="../../intro/" class="dropdown-item active">
                         
                             v3
                         
@@ -315,7 +315,7 @@
                 
             
                 
-                    <a href="../../v2/intro/" class="dropdown-item">
+                    <a href="../../../v2/intro/" class="dropdown-item">
                         
                             v2
                         
@@ -323,7 +323,7 @@
                 
             
                 
-                    <a href="../../v1/intro/" class="dropdown-item">
+                    <a href="../../../v1/intro/" class="dropdown-item">
                         
                             v1
                         
@@ -363,19 +363,11 @@
             <ul class="toc__list">
                 
                     <li class="toc__entry">
-                        <a href="#requirements" class="toc__link nav-link">Requirements</a>
+                        <a href="#the-problem" class="toc__link nav-link">The problem</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#configuration" class="toc__link nav-link">Configuration</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#logging" class="toc__link nav-link">Logging</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#limitations" class="toc__link nav-link">Limitations</a>
+                        <a href="#the-solution" class="toc__link nav-link">The solution</a>
                     </li>
                 
             </ul>
@@ -392,7 +384,7 @@
             <li class="breadcrumb-item"><a href="https://docs.mezzio.dev/">Mezzio</a></li>
 
             
-                <li class="breadcrumb-item"><a href="../..">mezzio-swoole</a></li>
+                <li class="breadcrumb-item"><a href="../../..">mezzio-swoole</a></li>
 
                 
                     
@@ -403,12 +395,12 @@
                     
                         
                         
-                            <li class="breadcrumb-item">Reference</li>
+                            <li class="breadcrumb-item">Cookbook</li>
                         
                     
                 
 
-                <li class="breadcrumb-item active" aria-current="page">Hot Code Reloading</li>
+                <li class="breadcrumb-item active" aria-current="page">Swoole-based server always returns home page</li>
             
         
     </ol>
@@ -420,7 +412,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v4) version.</a>
+            <a href="../../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -429,66 +421,70 @@
 
     
     
-        <h2 class="chapter__headline">Reference</h2>
+        <h2 class="chapter__headline">Cookbook</h2>
     
 
-    <h1 id="hot-code-reload">Hot Code Reload</h1>
-<p>To ease development against a running Swoole HTTP server, hot code reloading can be enabled.</p>
-<p>With this feature enabled, a Swoole worker will monitor included PHP files using <code>inotify</code>, and will restart all workers if a file is changed, thus mitigating the need to manually restart the server to test changes.</p>
-<p><strong>This feature should only be used in your local development environment, and should not be used in production!</strong></p>
-<h2 id="requirements">Requirements</h2>
-<ul>
-<li><code>ext-inotify</code></li>
-</ul>
-<p>This library ships with an <a href="http://php.net/manual/en/book.inotify.php">inotify</a> based implementation of <code>Mezzio\Swoole\HotCodeReload\FileWatcherInterface</code>.
-In order to use it, the <code>inotify</code> extension must be loaded.</p>
-<h2 id="configuration">Configuration</h2>
-<p>The following demonstrates all currently available configuration options:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
-
-<span class="x">use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;</span>
-<span class="x">use Mezzio\Swoole\Event\WorkerStartEvent;</span>
-
-<span class="x">return [</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;hot-code-reload&#39; =&gt; [</span>
-<span class="x">            // Time in milliseconds between checks to changes in files.</span>
-<span class="x">            &#39;interval&#39; =&gt; 500,</span>
-<span class="x">            &#39;paths&#39;    =&gt; [</span>
-<span class="x">                // List of paths, either files or directories, to scan for changes.</span>
-<span class="x">                // By default this is empty; you will need to configure it.</span>
-<span class="x">                // A common value:</span>
-<span class="x">                getcwd(),</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                // Register the hot code reloader listener with the WorkerStartEvent</span>
-<span class="x">                WorkerStartEvent::class =&gt; [</span>
-<span class="x">                    HotCodeReloaderWorkerStartListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
+    <h1 id="swoole-based-server-always-returns-home-page">Swoole-based server always returns home page</h1>
+<h2 id="the-problem">The problem</h2>
+<p>You have started your Swoole-based web-server using <code>./vendor/bin/laminas mezzio:swoole:start</code>, but every request is returned with a status 200 response and the contents of the home page.</p>
+<h2 id="the-solution">The solution</h2>
+<p>This is generally caused by having the mezzio-swoole configuration provider too early in your application configuration, which then causes the default Mezzio configuration to overwrite the mezzio-swoole application runner.</p>
+<p>As an example, if the definition of the <code>ConfigAggregator</code> in your <code>config/config.php</code> file  looks something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="x">$aggregator = new ConfigAggregator([</span>
+<span class="x">    \Mezzio\Swoole\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Plates\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,</span>
+<span class="x">    \Laminas\HttpHandlerRunner\ConfigProvider::class,</span>
+<span class="x">    // Include cache configuration</span>
+<span class="x">    new \Laminas\ConfigAggregator\ArrayProvider($cacheConfig),</span>
+<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Router\ConfigProvider::class,</span>
+<span class="x">    \Laminas\Diactoros\ConfigProvider::class,</span>
+<span class="x">    // Default App module config</span>
+<span class="x">    \App\ConfigProvider::class,</span>
+<span class="x">    // Load application config in a pre-defined order in such a way that local settings</span>
+<span class="x">    // overwrite global settings. (Loaded as first to last):</span>
+<span class="x">    //   - `global.php`</span>
+<span class="x">    //   - `*.global.php`</span>
+<span class="x">    //   - `local.php`</span>
+<span class="x">    //   - `*.local.php`</span>
+<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/autoload/{{,*.}global,{,*.}local}.php&#39;),</span>
+<span class="x">    // Load development config if it exists</span>
+<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/development.config.php&#39;),</span>
+<span class="x">], $cacheConfig[&#39;config_cache_path&#39;]);</span>
 </code></pre></div>
-<h2 id="logging">Logging</h2>
-<p>When a file is reloaded, a <em>notice</em> line will be logged with the message
-<code>Reloading due to file change: {path}</code>.</p>
-<p>The logger used to log these lines is the same used for access logging, which
-is described in the <a href="../logging/#container-usage">logging section</a> of this documentation.</p>
-<h2 id="limitations">Limitations</h2>
-<p>Only files included by PHP after <code>onWorkerStart</code> will be reloaded. This means
-that Swoole will not reload any of the following:</p>
-<ul>
-<li>New routes</li>
-<li>New pipeline middleware</li>
-<li>The <code>Application</code> instance, <em>or any delegators used to modify it</em>.</li>
-<li>The Swoole HTTP server itself.</li>
-</ul>
-<p>This limitation exists because the hot code reload features use the
-<code>Swoole\Server::reload()</code> method to notify Swoole to reload
-PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-methods#public-boolean-swoole-server-reload-void">the Swoole reload() documentation for more details</a>).</p>
+<p>Note the position of the <code>Mezzio\Swoole\ConfigProvider::class</code> entry at the top.
+This can happen if you have previously removed the original entry from the <code>config/config.php</code> as provided by the skeleton project, or if you hand-crafted your <code>config/config.php</code> file<code>, and then later used</code>composer require mezzio/mezzio-swoole`, as the <a href="https://docs.laminas.dev/laminas-component-installer/">component installer</a> injects at the start of the aggregator definition.</p>
+<p>The mezzio-swoole package provides a custom implementation of an <a href="https://docs.laminas.dev/laminas-httphandlerrunner/">HTTP Handler Runner</a>.
+Because it defines the <em>same service name</em> as the one provided by laminas/laminas-httphandlerrunner, the mezzio-swoole <code>ConfigProvider</code> must appear <em>later</em> during aggregation to ensure it takes precedence:</p>
+<div class="highlight"><pre><span></span><code><span class="x">$aggregator = new ConfigAggregator([</span>
+<span class="x">    \Mezzio\Plates\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,</span>
+<span class="x">    \Laminas\HttpHandlerRunner\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Swoole\ConfigProvider::class, // &lt;-- Here or later!</span>
+<span class="x">    // Include cache configuration</span>
+<span class="x">    new \Laminas\ConfigAggregator\ArrayProvider($cacheConfig),</span>
+<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\ConfigProvider::class,</span>
+<span class="x">    \Mezzio\Router\ConfigProvider::class,</span>
+<span class="x">    \Laminas\Diactoros\ConfigProvider::class,</span>
+<span class="x">    // Default App module config</span>
+<span class="x">    \App\ConfigProvider::class,</span>
+<span class="x">    // Load application config in a pre-defined order in such a way that local settings</span>
+<span class="x">    // overwrite global settings. (Loaded as first to last):</span>
+<span class="x">    //   - `global.php`</span>
+<span class="x">    //   - `*.global.php`</span>
+<span class="x">    //   - `local.php`</span>
+<span class="x">    //   - `*.local.php`</span>
+<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/autoload/{{,*.}global,{,*.}local}.php&#39;),</span>
+<span class="x">    // Load development config if it exists</span>
+<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/development.config.php&#39;),</span>
+<span class="x">], $cacheConfig[&#39;config_cache_path&#39;]);</span>
+</code></pre></div>
+<p>Note the change in position for the <code>Mezzio\Swoole\ConfigProvider:class</code> entry in the above example.</p>
 
 
 
@@ -499,7 +495,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../table/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../static-resource-listener-removal/">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -508,7 +504,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="../command-line/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../../migration/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -541,7 +537,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../..">mezzio-swoole</a>
+            <a href="../../..">mezzio-swoole</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -562,7 +558,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Introduction</a>
+        <a href="../../intro/" class="subnavigation__link">Introduction</a>
     </li>
 
                     
@@ -573,55 +569,55 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
+        <a href="../../events/" class="subnavigation__link">Swoole HTTP Server Events</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../static-resources/" class="subnavigation__link">Static Resources</a>
+        <a href="../../static-resources/" class="subnavigation__link">Static Resources</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../logging/" class="subnavigation__link">Logging</a>
+        <a href="../../logging/" class="subnavigation__link">Logging</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../async-tasks/" class="subnavigation__link">Async Tasks</a>
+        <a href="../../async-tasks/" class="subnavigation__link">Async Tasks</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../table/" class="subnavigation__link">Using Swoole Tables</a>
-    </li>
-
-            
-                
-    <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Hot Code Reloading</a>
+        <a href="../../table/" class="subnavigation__link">Using Swoole Tables</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../command-line/" class="subnavigation__link">Command Line Tooling</a>
+        <a href="../../hot-code-reload/" class="subnavigation__link">Hot Code Reloading</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../how-it-works/" class="subnavigation__link">How it works</a>
+        <a href="../../command-line/" class="subnavigation__link">Command Line Tooling</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
+        <a href="../../how-it-works/" class="subnavigation__link">How it works</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../considerations/" class="subnavigation__link">Considerations when using Swoole</a>
     </li>
 
             
@@ -636,13 +632,13 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../cookbook/static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+        <a href="../static-resource-listener-removal/" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
     </li>
 
             
                 
-    <li class="subnavigation__list-item ">
-        <a href="../cookbook/swoole-not-starting/" class="subnavigation__link">Swoole-based server always returns home page</a>
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Swoole-based server always returns home page</a>
     </li>
 
             
@@ -652,7 +648,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="../migration/" class="subnavigation__link">Migration</a>
+        <a href="../../migration/" class="subnavigation__link">Migration</a>
     </li>
 
                     
@@ -760,13 +756,13 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
 </footer>
 
     <script>
-        let base_url = '../..',
+        let base_url = '../../..',
             project  = "mezzio",
             siteName = 'mezzio-swoole';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="../../search/main.js"></script>
+        <script src="../../../search/main.js"></script>
     
 
     

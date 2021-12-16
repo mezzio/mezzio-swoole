@@ -125,6 +125,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -203,6 +211,12 @@
                 
     <li class="subnavigation__list-item subnavigation__list-item--active">
         <a href="./" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../swoole-not-starting/" class="subnavigation__link">Swoole-based server always returns home page</a>
     </li>
 
             
@@ -285,9 +299,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../intro/" class="dropdown-item active">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -371,6 +393,14 @@
 
 
 
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../../..">Switch to the latest (v4) version.</a>
+        </p>
+    </div>
+
 
 
 
@@ -383,26 +413,27 @@
 <p>By default, we ship with static resource handling enabled.
 This is done by having the <code>Mezzio\Swoole\Event\StaticResourceRequestListener</code> in the list of listeners provided for the <code>Mezzio\Swoole\Event\RequestEvent</code>.</p>
 <p>To disable that listener, you will need to <strong>replace</strong> the set of listeners for that event, to include only the <code>Mezzio\Swoole\Event\RequestHandlerRequestListener</code>. You can do that in your application configuration as follows:</p>
-<pre class="highlight"><code class="language-php">// in config/autoload/dependencies.global.php:
+<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/dependencies.global.php:</span>
 
-use Laminas\Stdlib\ArrayUtils\MergeReplaceKey;
-use Mezzio\Swoole\Event;
+<span class="x">use Laminas\Stdlib\ArrayUtils\MergeReplaceKey;</span>
+<span class="x">use Mezzio\Swoole\Event;</span>
 
-return [
-    // ...
-    'mezzio-swoole' =&gt; [
-        // ...
-        'swoole-http-server' =&gt; [
-            // ...
-            'listeners' =&gt; [
-                Event\RequestEvent::class =&gt; new MergeReplaceKey([
-                    Event\RequestHandlerRequestListener::class,
-                ]),
-            ],
-        ],
-    ],
-    // ...
-];</code></pre>
+<span class="x">return [</span>
+<span class="x">    // ...</span>
+<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
+<span class="x">        // ...</span>
+<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
+<span class="x">            // ...</span>
+<span class="x">            &#39;listeners&#39; =&gt; [</span>
+<span class="x">                Event\RequestEvent::class =&gt; new MergeReplaceKey([</span>
+<span class="x">                    Event\RequestHandlerRequestListener::class,</span>
+<span class="x">                ]),</span>
+<span class="x">            ],</span>
+<span class="x">        ],</span>
+<span class="x">    ],</span>
+<span class="x">    // ...</span>
+<span class="x">];</span>
+</code></pre></div>
 
 
 
@@ -422,7 +453,7 @@ return [
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="../../migration/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../swoole-not-starting/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -431,16 +462,6 @@ return [
 </nav>
 
 
-
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v3/cookbook/static-resource-listener-removal.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
 
                 
             </div>
@@ -471,6 +492,14 @@ return [
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 
@@ -553,6 +582,12 @@ return [
                 
     <li class="subnavigation__list-item subnavigation__list-item--active">
         <a href="./" class="subnavigation__link">Removing the StaticResourceRequestListener</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../swoole-not-starting/" class="subnavigation__link">Swoole-based server always returns home page</a>
     </li>
 
             

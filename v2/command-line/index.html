@@ -133,6 +133,14 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
@@ -264,9 +272,17 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
+                    <a href="../../v4/intro/" class="dropdown-item">
+                        
+                            v4 (latest)
+                        
+                    </a>
+                
+            
+                
                     <a href="../../v3/intro/" class="dropdown-item">
                         
-                            v3 (latest)
+                            v3
                         
                     </a>
                 
@@ -365,7 +381,7 @@
         <h4>Caution</h4>
         <p>
             The documentation you are viewing is for an older version of this component.<br>
-            <a href="../..">Switch to the latest (v3) version.</a>
+            <a href="../..">Switch to the latest (v4) version.</a>
         </p>
     </div>
 
@@ -387,7 +403,8 @@ following commands:</p>
 <li><code>status</code> to determine the server status (running or not running)</li>
 </ul>
 <p>You may obtain help for each command using the <code>help</code> meta-command:</p>
-<pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole help start</code></pre>
+<div class="highlight"><pre><span></span><code>$ ./vendor/bin/mezzio-swoole <span class="nb">help</span> start
+</code></pre></div>
 <p>The <code>stop</code>, <code>status</code>, and <code>reload</code> commands are sufficiently generic to work
 regardless of runtime or application, as they work directly with the Swoole
 process manager. The <code>start</code> command, however, may need customizations if you
@@ -417,110 +434,115 @@ have customized your application bootstrap.</p>
 </ul>
 <p>These are roughly the steps taken within the application bootstrap
 (<code>public/index.php</code>) of the Mezzio skeleton application.</p>
-<h3>Writing a custom start command</h3>
+<h3 id="writing-a-custom-start-command">Writing a custom start command</h3>
 <p>If your application needs alternate bootstrapping (e.g., if you have modified
 the <code>public/index.php</code>, or if you are using this package with a different
 middleware runtime), we recommend writing a custom <code>start</code> command.</p>
 <p>As an example, let's say you have altered your application such that you're
 defining your routes in multiple files, and instead of:</p>
-<pre class="highlight"><code class="language-php">(require 'config/routes.php')($app, $factory, $container);</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">(require &#39;config/routes.php&#39;)($app, $factory, $container);</span>
+</code></pre></div>
 <p>you instead have something like:</p>
-<pre class="highlight"><code class="language-php">$handle = opendir('config/routes/');
-while (false !== ($entry = readdir($handle))) {
-    if (false === strrpos($entry, '.php')) {
-        continue;
-    }
-    (require $entry)($app, $factory, $container);
-}</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">$handle = opendir(&#39;config/routes/&#39;);</span>
+<span class="x">while (false !== ($entry = readdir($handle))) {</span>
+<span class="x">    if (false === strrpos($entry, &#39;.php&#39;)) {</span>
+<span class="x">        continue;</span>
+<span class="x">    }</span>
+<span class="x">    (require $entry)($app, $factory, $container);</span>
+<span class="x">}</span>
+</code></pre></div>
 <p>You could write a command such as the following:</p>
-<pre class="highlight"><code class="language-php">// In src/App/Command/StartCommand.php:
+<div class="highlight"><pre><span></span><code><span class="x">// In src/App/Command/StartCommand.php:</span>
 
-namespace App\Command;
+<span class="x">namespace App\Command;</span>
 
-use Psr\Container\ContainerInterface;
-use Swoole\Http\Server as SwooleHttpServer;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Mezzio\Application;
-use Mezzio\MiddlewareFactory;
-use Mezzio\Swoole\Command\StartCommand as BaseStartCommand;
-use Mezzio\Swoole\PidManager;
+<span class="x">use Psr\Container\ContainerInterface;</span>
+<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+<span class="x">use Symfony\Component\Console\Input\InputInterface;</span>
+<span class="x">use Symfony\Component\Console\Output\OutputInterface;</span>
+<span class="x">use Mezzio\Application;</span>
+<span class="x">use Mezzio\MiddlewareFactory;</span>
+<span class="x">use Mezzio\Swoole\Command\StartCommand as BaseStartCommand;</span>
+<span class="x">use Mezzio\Swoole\PidManager;</span>
 
-class StartCommand extends BaseStartCommand
-{
-    protected function execute(InputInterface $input, OutputInterface $output) : int
-    {
-        // This functionality is identical to the base start command, and should
-        // be copy and pasted to your implementation:
-        $this-&gt;pidManager = $this-&gt;container-&gt;get(PidManager::class);
-        if ($this-&gt;isRunning()) {
-            $output-&gt;writeln('&lt;error&gt;Server is already running!&lt;/error&gt;');
-            return 1;
-        }
+<span class="x">class StartCommand extends BaseStartCommand</span>
+<span class="x">{</span>
+<span class="x">    protected function execute(InputInterface $input, OutputInterface $output) : int</span>
+<span class="x">    {</span>
+<span class="x">        // This functionality is identical to the base start command, and should</span>
+<span class="x">        // be copy and pasted to your implementation:</span>
+<span class="x">        $this-&gt;pidManager = $this-&gt;container-&gt;get(PidManager::class);</span>
+<span class="x">        if ($this-&gt;isRunning()) {</span>
+<span class="x">            $output-&gt;writeln(&#39;&lt;error&gt;Server is already running!&lt;/error&gt;&#39;);</span>
+<span class="x">            return 1;</span>
+<span class="x">        }</span>
 
-        $server = $this-&gt;container-&gt;get(SwooleHttpServer::class);
-        $server-&gt;set([
-            'daemonize' =&gt; $input-&gt;getOption('daemonize'),
-            'worker_num' =&gt; $input-&gt;getOption('num-workers') ?? self::DEFAULT_NUM_WORKERS,
-        ]);
+<span class="x">        $server = $this-&gt;container-&gt;get(SwooleHttpServer::class);</span>
+<span class="x">        $server-&gt;set([</span>
+<span class="x">            &#39;daemonize&#39; =&gt; $input-&gt;getOption(&#39;daemonize&#39;),</span>
+<span class="x">            &#39;worker_num&#39; =&gt; $input-&gt;getOption(&#39;num-workers&#39;) ?? self::DEFAULT_NUM_WORKERS,</span>
+<span class="x">        ]);</span>
 
-        /** @var \Mezzio\Application $app */
-        $app = $this-&gt;container-&gt;get(Application::class);
+<span class="x">        /** @var \Mezzio\Application $app */</span>
+<span class="x">        $app = $this-&gt;container-&gt;get(Application::class);</span>
 
-        /** @var \Mezzio\MiddlewareFactory $factory */
-        $factory = $this-&gt;container-&gt;get(MiddlewareFactory::class);
+<span class="x">        /** @var \Mezzio\MiddlewareFactory $factory */</span>
+<span class="x">        $factory = $this-&gt;container-&gt;get(MiddlewareFactory::class);</span>
 
-        // Execute programmatic/declarative middleware pipeline and routing
-        // configuration statements
-        (require 'config/pipeline.php')($app, $factory, $this-&gt;container);
+<span class="x">        // Execute programmatic/declarative middleware pipeline and routing</span>
+<span class="x">        // configuration statements</span>
+<span class="x">        (require &#39;config/pipeline.php&#39;)($app, $factory, $this-&gt;container);</span>
 
-        //
-        // This is the new code from above:
-        //
-        $handle = opendir(getcwd() . '/config/routes/');
-        while (false !== ($entry = readdir($handle))) {
-            if (false === strrpos($entry, '.php')) {
-                continue;
-            }
-            (require $entry)($app, $factory, $container);
-        }
+<span class="x">        //</span>
+<span class="x">        // This is the new code from above:</span>
+<span class="x">        //</span>
+<span class="x">        $handle = opendir(getcwd() . &#39;/config/routes/&#39;);</span>
+<span class="x">        while (false !== ($entry = readdir($handle))) {</span>
+<span class="x">            if (false === strrpos($entry, &#39;.php&#39;)) {</span>
+<span class="x">                continue;</span>
+<span class="x">            }</span>
+<span class="x">            (require $entry)($app, $factory, $container);</span>
+<span class="x">        }</span>
 
-        // And now we return to the original code:
+<span class="x">        // And now we return to the original code:</span>
 
-        // Run the application
-        $app-&gt;run();
+<span class="x">        // Run the application</span>
+<span class="x">        $app-&gt;run();</span>
 
-        return 0;
-    }
-}</code></pre>
+<span class="x">        return 0;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</code></pre></div>
 <p>You will also need to write a factory for the class:</p>
-<pre class="highlight"><code class="language-php">// In src/App/Command/StartCommandFactory.php:
+<div class="highlight"><pre><span></span><code><span class="x">// In src/App/Command/StartCommandFactory.php:</span>
 
-namespace App\Command;
+<span class="x">namespace App\Command;</span>
 
-use Psr\Container\ContainerInterface;
+<span class="x">use Psr\Container\ContainerInterface;</span>
 
-class StartCommandFactory
-{
-    public function __invoke(ContainerInterface $container) : StartCommand
-    {
-        return new StartCommand($container);
-    }
-}</code></pre>
+<span class="x">class StartCommandFactory</span>
+<span class="x">{</span>
+<span class="x">    public function __invoke(ContainerInterface $container) : StartCommand</span>
+<span class="x">    {</span>
+<span class="x">        return new StartCommand($container);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</code></pre></div>
 <p>If this is all you're changing, you can map this new command to the existing
 <code>Mezzio\Swoole\Command\StartCommand</code> service within your configuration:</p>
-<pre class="highlight"><code class="language-php">// in config/autoload/dependencies.global.php:
+<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/dependencies.global.php:</span>
 
-use App\Command\StartCommandFactory;
-use Mezzio\Swoole\Command\StartCommand;
+<span class="x">use App\Command\StartCommandFactory;</span>
+<span class="x">use Mezzio\Swoole\Command\StartCommand;</span>
 
-return [
-    'dependencies' =&gt; [
-        'factories' =&gt; [
-            StartCommand::class =&gt; StartCommandFactory::class,
-        ],
-    ],
-];</code></pre>
+<span class="x">return [</span>
+<span class="x">    &#39;dependencies&#39; =&gt; [</span>
+<span class="x">        &#39;factories&#39; =&gt; [</span>
+<span class="x">            StartCommand::class =&gt; StartCommandFactory::class,</span>
+<span class="x">        ],</span>
+<span class="x">    ],</span>
+<span class="x">];</span>
+</code></pre></div>
 <p>Since the <code>mezzio-swoole</code> binary uses your application configuration
 and container, this will substitute your command for the shipped command!</p>
 
@@ -552,16 +574,6 @@ and container, this will substitute your command for the shipped command!</p>
 
 
 
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/mezzio/mezzio-swoole/edit/master/docs/book/v2/command-line.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
                 
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
@@ -591,6 +603,14 @@ and container, this will substitute your command for the shipped command!</p>
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                
             
 
                 
