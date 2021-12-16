@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- */
-
 declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
@@ -36,16 +32,10 @@ use const SWOOLE_PROCESS;
 
 class SwooleRequestHandlerRunnerTest extends TestCase
 {
-    /**
-     * @var EventDispatcherInterface|MockObject
-     * @psalm-var EventDispatcherInterface&MockObject
-     */
+    /** @var EventDispatcherInterface&MockObject */
     private EventDispatcherInterface $dispatcher;
 
-    /**
-     * @var SwooleHttpServer|MockObject
-     * @psalm-var SwooleHttpServer&MockObject
-     */
+    /** @var SwooleHttpServer&MockObject */
     private SwooleHttpServer $httpServer;
 
     private SwooleRequestHandlerRunner $runner;
@@ -63,17 +53,20 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testConstructorRaisesExceptionWhenMasterPidIsNotZero(): void
     {
+        /** @var SwooleHttpServer&MockObject $httpServer */
         $httpServer = $this->createMock(SwooleHttpServer::class);
         $httpServer->expects($this->once())->method('getMasterPid')->willReturn(1);
         $httpServer->expects($this->never())->method('getManagerPid');
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('already been started');
+
         new SwooleRequestHandlerRunner($httpServer, $this->dispatcher);
     }
 
     public function testConstructorRaisesExceptionWhenManagerPidIsNotZero(): void
     {
+        /** @var SwooleHttpServer&MockObject $httpServer */
         $httpServer = $this->createMock(SwooleHttpServer::class);
         $httpServer->expects($this->once())->method('getMasterPid')->willReturn(0);
         $httpServer->expects($this->once())->method('getManagerPid')->willReturn(1);

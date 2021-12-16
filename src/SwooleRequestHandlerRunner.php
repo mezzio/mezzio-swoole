@@ -1,15 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- */
-
 declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
-use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Mezzio\Swoole\Event\TaskEvent;
+use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -33,7 +29,7 @@ use const SWOOLE_PROCESS;
  * arguments provided to the callback, and then dispatches the event using a
  * PSR-14 dispatcher.
  */
-class SwooleRequestHandlerRunner extends RequestHandlerRunner
+final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
 {
     /**
      * Default Process Name
@@ -41,7 +37,6 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     public const DEFAULT_PROCESS_NAME = 'mezzio';
 
     protected EventDispatcherInterface $dispatcher;
-
     protected SwooleHttpServer $httpServer;
 
     public function __construct(
@@ -50,7 +45,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     ) {
         // The HTTP server should not yet be running
         if ($httpServer->getMasterPid() > 0 || $httpServer->getManagerPid() > 0) {
-            throw new Exception\InvalidArgumentException('The Swoole server has already been started');
+            throw new InvalidArgumentException('The Swoole server has already been started');
         }
         $this->httpServer = $httpServer;
         $this->dispatcher = $dispatcher;
@@ -159,7 +154,7 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
     /**
      * Handle a "task" event (process a task)
      *
-     * @param mixed[] $args
+     * @param list<mixed> $args
      * @psalm-param array{0: object}|array{0: int, 1: int, 2: mixed} $args
      * @return mixed Return value from task event
      */
@@ -234,11 +229,11 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         int $taskId,
         int $workerId,
         $data
-    ): TaskEvent {
-        return new TaskEvent($server, $taskId, $workerId, $data);
+    ): Event\TaskEvent {
+        return new Event\TaskEvent($server, $taskId, $workerId, $data);
     }
 
-    private function createTaskEventFromTaskObject(SwooleHttpServer $server, object $task): TaskEvent
+    private function createTaskEventFromTaskObject(SwooleHttpServer $server, object $task): Event\TaskEvent
     {
         Assert::propertyExists($task, 'id');
         Assert::integer($task->id);
@@ -246,6 +241,6 @@ class SwooleRequestHandlerRunner extends RequestHandlerRunner
         Assert::integer($task->worker_id);
         Assert::propertyExists($task, 'data');
 
-        return new TaskEvent($server, $task->id, $task->worker_id, $task->data);
+        return new Event\TaskEvent($server, $task->id, $task->worker_id, $task->data);
     }
 }
