@@ -25,6 +25,7 @@ nav:
       - Cookbook:
           - "Removing the StaticResourceRequestListener": v4/cookbook/static-resource-listener-removal.md
           - "Swoole-based server always returns home page": v4/cookbook/swoole-not-starting.md
+          - "Provide a unique ID in your request": v4/cookbook/provide-a-request-id.md
       - Migration: v4/migration.md
     - v3:
       - Introduction: v3/intro.md
