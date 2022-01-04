@@ -5,8 +5,6 @@
 You want a request-specific identifier via an HTTP request header for purposes of logging, tracking, etc.
 If you add it via middleware, however, it is not present in your access logs.
 
-## The solution
-
 Request identifiers are usually generated at the web-server level.
 When you use a dedicated web servers such as Apache or nginx, a load balancer, or a reverse proxy, these can be configured to create and inject a request ID before it reaches your application.
 However, when using mezzio-swoole, the request handler runner we create is your web server.
@@ -15,7 +13,9 @@ It has listeners that take care of logging, which means that the request generat
 This poses a problem: normally you will use middleware to propagate changes to the request.
 How can you do it at the Swoole web server level?
 
-The answer is deceptively simple: you can provide a [delegator factory](https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/) for decorator on the service that converts the Swoole HTTP request instance into the equivalent [PSR-7](https://www.php-fig.org/psr/psr-7/) HTTP request instance that is then passed to your application.
+## The solution
+
+The answer is to provide a [delegator factory](https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/) for decorator on the service that converts the Swoole HTTP request instance into the equivalent [PSR-7](https://www.php-fig.org/psr/psr-7/) HTTP request instance that is then passed to your application.
 
 mezzio-swoole maps the `Psr\Http\Message\ServerRequestInterface` service to its `Mezzio\Swoole\ServerRequestSwooleFactory`.
 That factory returns a _callable_ that accepts a `Swoole\HTTP\Request` instance and returns a `Psr\Http\Message\ServerRequestInterface` instance.
