@@ -608,7 +608,7 @@ First, we will configure the `TaskInvokerListener` for the `TaskEvent`:
 // in config/autoload/swoole.global.php or similar:
 
 use Mezzio\Swoole\Event\TaskEvent;
-use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListener;
 
 return [
     'mezzio-swoole' => [
@@ -729,7 +729,7 @@ We will also add configuration to bind the `TaskInvokerListener` to the `TaskEve
 use Example\SomeDeferrableEventListener;
 use Example\SomeDeferrableEventListenerFactory;
 use Mezzio\Swoole\Event\TaskEvent;
-use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListener;
 
 return [
     'dependencies' => [
@@ -850,7 +850,7 @@ use Example\SomeDeferrableEvent;
 use Example\SomeDeferrableEventListener;
 use Example\SomeDeferrableEventListenerFactory;
 use Mezzio\Swoole\Event\TaskEvent;
-use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListener;
 use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 
 return [
