@@ -425,22 +425,21 @@ will not work. We recommend doing this in your table class's constructor.</p>
 defines a table that can contain up to 1024 rows, each with three columns
 accepting <code>float</code> values to define a 3-dimensional vector, e.g.
 <code>src/App/Table/Vector3dTable.php</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace App\Table;</span>
+<pre class="highlight"><code class="language-php">namespace App\Table;
 
-<span class="x">use Swoole\Table;</span>
+use Swoole\Table;
 
-<span class="x">final class Vector3dTable extends Table</span>
-<span class="x">{</span>
-<span class="x">    public function __construct()</span>
-<span class="x">    {</span>
-<span class="x">        parent::__construct(1024); // Table size</span>
-<span class="x">        $this-&gt;column(&#39;x&#39;, self::TYPE_FLOAT);</span>
-<span class="x">        $this-&gt;column(&#39;y&#39;, self::TYPE_FLOAT);</span>
-<span class="x">        $this-&gt;column(&#39;z&#39;, self::TYPE_FLOAT);</span>
-<span class="x">        $this-&gt;create();</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+final class Vector3dTable extends Table
+{
+    public function __construct()
+    {
+        parent::__construct(1024); // Table size
+        $this-&gt;column('x', self::TYPE_FLOAT);
+        $this-&gt;column('y', self::TYPE_FLOAT);
+        $this-&gt;column('z', self::TYPE_FLOAT);
+        $this-&gt;create();
+    }
+}</code></pre>
 <h2 id="creating-your-table">Creating Your Table</h2>
 <p>Now that we have defined a table class, we need to wire the application to use
 it.</p>
@@ -449,16 +448,15 @@ worker process has access to them. Since we define the columns and table size in
 the constructor, we can accomplish this by mapping the service name to a
 concrete instance, using the <code>services</code> dependency configuration key in a
 config provider class, e.g. <code>src/App/ConfigProvider.php</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">private function getDependencies() : array</span>
-<span class="x">{</span>
-<span class="x">    return [</span>
-<span class="x">        &#39;services&#39;  =&gt; [</span>
-<span class="x">            // ...</span>
-<span class="x">            Vector3dTable::class =&gt; new Vector3dTable(),</span>
-<span class="x">        ],</span>
-<span class="x">    ];</span>
-<span class="x">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">private function getDependencies() : array
+{
+    return [
+        'services'  =&gt; [
+            // ...
+            Vector3dTable::class =&gt; new Vector3dTable(),
+        ],
+    ];
+}</code></pre>
 <h2 id="using-the-table">Using the Table</h2>
 <p>Classes that will push values to or pull values from the table can compose an
 instance of your custom class just as they normally would. Factories will then
@@ -702,7 +700,7 @@ table object does not exist</code>, then chances are you are not calling
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

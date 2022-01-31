@@ -212,6 +212,12 @@
     </li>
 
             
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/provide-a-request-id/" class="subnavigation__link">Provide a unique ID in your request</a>
+    </li>
+
+            
         </ul>
     </li>
 
@@ -436,34 +442,33 @@
 In order to use it, the <code>inotify</code> extension must be loaded.</p>
 <h2 id="configuration">Configuration</h2>
 <p>The following demonstrates all currently available configuration options:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
+<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
 
-<span class="x">use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;</span>
-<span class="x">use Mezzio\Swoole\Event\WorkerStartEvent;</span>
+use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;
+use Mezzio\Swoole\Event\WorkerStartEvent;
 
-<span class="x">return [</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;hot-code-reload&#39; =&gt; [</span>
-<span class="x">            // Time in milliseconds between checks to changes in files.</span>
-<span class="x">            &#39;interval&#39; =&gt; 500,</span>
-<span class="x">            &#39;paths&#39;    =&gt; [</span>
-<span class="x">                // List of paths, either files or directories, to scan for changes.</span>
-<span class="x">                // By default this is empty; you will need to configure it.</span>
-<span class="x">                // A common value:</span>
-<span class="x">                getcwd(),</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                // Register the hot code reloader listener with the WorkerStartEvent</span>
-<span class="x">                WorkerStartEvent::class =&gt; [</span>
-<span class="x">                    HotCodeReloaderWorkerStartListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'mezzio-swoole' =&gt; [
+        'hot-code-reload' =&gt; [
+            // Time in milliseconds between checks to changes in files.
+            'interval' =&gt; 500,
+            'paths'    =&gt; [
+                // List of paths, either files or directories, to scan for changes.
+                // By default this is empty; you will need to configure it.
+                // A common value:
+                getcwd(),
+            ],
+        ],
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                // Register the hot code reloader listener with the WorkerStartEvent
+                WorkerStartEvent::class =&gt; [
+                    HotCodeReloaderWorkerStartListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <h2 id="logging">Logging</h2>
 <p>When a file is reloaded, a <em>notice</em> line will be logged with the message
 <code>Reloading due to file change: {path}</code>.</p>
@@ -630,6 +635,12 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
     </li>
 
             
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/provide-a-request-id/" class="subnavigation__link">Provide a unique ID in your request</a>
+    </li>
+
+            
         </ul>
     </li>
 
@@ -742,7 +753,7 @@ PHP files (see <a href="https://www.swoole.co.uk/docs/modules/swoole-server-meth
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

@@ -421,24 +421,23 @@ equal to 400).</p>
 <p>Technically, the <code>SwooleRequestHandlerRunner</code> doesn't use PSR-3 loggers
 directly, but, rather, instances of <code>Mezzio\Swoole\Log\AccessLogInterface</code>.
 This package-specific interface extends the PSR-3 interface to add two methods:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Psr\Http\Message\ResponseInterface;</span>
-<span class="x">use Psr\Log\LoggerInterface;</span>
-<span class="x">use Swoole\Http\Request;</span>
-<span class="x">use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;</span>
+<pre class="highlight"><code class="language-php">use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use Swoole\Http\Request;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 
-<span class="x">interface AccessLogInterface extends LoggerInterface</span>
-<span class="x">{</span>
-<span class="x">    public function logAccessForStaticResource(</span>
-<span class="x">        Request $request,</span>
-<span class="x">        StaticResourceResponse $response</span>
-<span class="x">    ) : void;</span>
+interface AccessLogInterface extends LoggerInterface
+{
+    public function logAccessForStaticResource(
+        Request $request,
+        StaticResourceResponse $response
+    ) : void;
 
-<span class="x">    public function logAccessForPsr7Resource(</span>
-<span class="x">        Request $request,</span>
-<span class="x">        ResponseInterface $response</span>
-<span class="x">    ) : void;</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function logAccessForPsr7Resource(
+        Request $request,
+        ResponseInterface $response
+    ) : void;
+}</code></pre>
 <p>To allow usage of a standard PSR-3 logger, we also provide a decorator,
 <code>Mezzio\Swoole\Log\Psr3AccessLogDecorator</code>, which decorates the PSR-3
 logger and provides a standard implementation for the two methods listed above.
@@ -453,11 +452,10 @@ implementation. However, we allow you to plug in your own system as needed.</p>
 in order to understand the available placeholders available for format strings.</p>
 <p>Formatting is provided to the <code>Psr3AccessLogDecorator</code> via instances of the
 interface <code>Mezzio\Swoole\Log\AccessLogFormatterInterface</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">interface AccessLogFormatterInterface</span>
-<span class="x">{</span>
-<span class="x">    public function format(AccessLogDataMap $map) : string;</span>
-<span class="x">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">interface AccessLogFormatterInterface
+{
+    public function format(AccessLogDataMap $map) : string;
+}</code></pre>
 <p><code>AccessLogDataMap</code> is a class used internally by the <code>Psr3AccessLogDecorator</code> in
 order to map Apache log placeholders to request/response values.</p>
 <p>Our default <code>AccessLogFormatterInterface</code> implementation, <code>AccessLogFormatter</code>,
@@ -481,18 +479,17 @@ runner.</p>
 <h3 id="manual-usage">Manual usage</h3>
 <p>If you are manually instantiating a <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code>
 instance, you may provide it as the seventh argument to the constructor:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Mezzio\Swoole\SwooleRequestHandlerRunner;</span>
+<pre class="highlight"><code class="language-php">use Mezzio\Swoole\SwooleRequestHandlerRunner;
 
-<span class="x">$runner = new SwooleRequestHandlerRunner(</span>
-<span class="x">    $application,</span>
-<span class="x">    $serverRequestFactory,</span>
-<span class="x">    $serverRequestErrorResponseGenerator,</span>
-<span class="x">    $pidManager,</span>
-<span class="x">    $serverFactory,</span>
-<span class="x">    $staticResourceHandler,</span>
-<span class="x">    $logger // &lt;-- AccessLoggerInterface instance</span>
-<span class="x">);</span>
-</code></pre></div>
+$runner = new SwooleRequestHandlerRunner(
+    $application,
+    $serverRequestFactory,
+    $serverRequestErrorResponseGenerator,
+    $pidManager,
+    $serverFactory,
+    $staticResourceHandler,
+    $logger // &lt;-- AccessLoggerInterface instance
+);</code></pre>
 <h3 id="container-usage">Container usage</h3>
 <p>If you are using a <a href="https://www.php-fig.org/psr/psr-11/">PSR-11</a> container, the
 <code>SwooleRequestHandlerRunnerFactory</code> will retrieve a log instance using the
@@ -500,14 +497,13 @@ instance, you may provide it as the seventh argument to the constructor:</p>
 <p>You have two options for substituting your own logger from there.</p>
 <p>First, if you already have a service which resolves to a <code>Psr\Log\LoggerInterface</code> instance,
 you can configure it by providing its name:</p>
-<div class="highlight"><pre><span></span><code><span class="x">&#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">    &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">        &#39;logger&#39; =&gt; [</span>
-<span class="x">            &#39;logger-name&#39; =&gt; &#39;my_logger&#39;, // define the logger service name here</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">],</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
+    'swoole-http-server' =&gt; [
+        'logger' =&gt; [
+            'logger-name' =&gt; 'my_logger', // define the logger service name here
+        ],
+    ],
+],</code></pre>
 <p>If you don't want to manually provide the service name but you are okay with re-using your
 existing PSR-3 logger, the provided <code>Mezzio\Swoole\Log\AccessLogFactory</code> will use
 the <code>Psr\Log\LoggerInterface</code> service to create a <code>Psr3AccessLogDecorator</code> instance.</p>
@@ -520,16 +516,15 @@ instance if you want. It will look up a service by the fully-qualified interface
 name, and use it if present. Otherwise, it creates an <code>AccessLogFormatter</code>
 instance for you.</p>
 <p>In both cases the factory will also look at the following configuration values:</p>
-<div class="highlight"><pre><span></span><code><span class="x">&#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">    &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">        &#39;logger&#39; =&gt; [</span>
-<span class="x">            &#39;format&#39; =&gt; string, // one of the AccessLogFormatter::FORMAT_*</span>
-<span class="x">                                // constants, or a custom format string</span>
-<span class="x">            &#39;use-hostname-lookups&#39; =&gt; bool, // Set to true to enable hostname lookups</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">],</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
+    'swoole-http-server' =&gt; [
+        'logger' =&gt; [
+            'format' =&gt; string, // one of the AccessLogFormatter::FORMAT_*
+                                // constants, or a custom format string
+            'use-hostname-lookups' =&gt; bool, // Set to true to enable hostname lookups
+        ],
+    ],
+],</code></pre>
 <h3 id="using-monolog-as-a-psr-3-logger">Using Monolog as a PSR-3 logger</h3>
 <p>When using <a href="https://seldaek.github.io/monolog/">Monolog</a> with a <code>StreamHandler</code>,
 you must supply a file or a stream resource descriptor. We recommend using one
@@ -563,28 +558,27 @@ either <code>/dev/stderr</code> or, if on Docker, <code>/proc/1/fd/2</code>.</p>
 handler to ensure that any templated parameters are expanded by the logger.</p>
 <p>As an example, the following is a factory that wires a <code>StreamHandler</code> to a
 <code>Monolog\Logger</code> instance.</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Psr\Container\ContainerInterface;</span>
-<span class="x">use Psr\Log\LoggerInterface;</span>
-<span class="x">use Monolog\Handler\StreamHandler;</span>
-<span class="x">use Monolog\Logger;</span>
-<span class="x">use Monolog\Processor\PsrLogMessageProcessor;</span>
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
 
-<span class="x">class LoggerFactory</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(ContainerInterface $container) : LoggerInterface</span>
-<span class="x">    {</span>
-<span class="x">        $logger = new Logger(&#39;swoole-http-server&#39;);</span>
-<span class="x">        $logger-&gt;pushHandler(new StreamHandler(</span>
-<span class="x">            &#39;php://stdout&#39;,</span>
-<span class="x">            Logger::INFO,</span>
-<span class="x">            $bubble = true,</span>
-<span class="x">            $expandNewLines = true</span>
-<span class="x">        ));</span>
-<span class="x">        $logger-&gt;pushProcessor(new PsrLogMessageProcessor());</span>
-<span class="x">        return $logger;</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class LoggerFactory
+{
+    public function __invoke(ContainerInterface $container) : LoggerInterface
+    {
+        $logger = new Logger('swoole-http-server');
+        $logger-&gt;pushHandler(new StreamHandler(
+            'php://stdout',
+            Logger::INFO,
+            $bubble = true,
+            $expandNewLines = true
+        ));
+        $logger-&gt;pushProcessor(new PsrLogMessageProcessor());
+        return $logger;
+    }
+}</code></pre>
 <p>If you then wire this to the <code>Psr\Log\LoggerInterface</code> service, it will be used
 by Swoole for the purposes of access logs as well.</p>
 
@@ -821,7 +815,7 @@ by Swoole for the purposes of access logs as well.</p>
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

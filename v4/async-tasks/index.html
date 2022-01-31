@@ -212,6 +212,12 @@
     </li>
 
             
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/provide-a-request-id/" class="subnavigation__link">Provide a unique ID in your request</a>
+    </li>
+
+            
         </ul>
     </li>
 
@@ -438,19 +444,18 @@ In order to prevent these processes from impacting user experience, particularly
 In your local configuration for the server, you'll need to add <code>task_worker_num</code>.
 The number of workers you configure define the number of concurrent tasks that can be executed at once.
 Tasks are queued in the order that they trigger, meaning that a <code>task_worker_num</code> of 1 will offer no concurrency and tasks will execute in the order they are queued.</p>
-<div class="highlight"><pre><span></span><code><span class="x">&#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">    &#39;enable_coroutine&#39; =&gt; true, //optional to enable coroutines and useful for tasks coroutines</span>
-<span class="x">    &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">        &#39;host&#39; =&gt; &#39;127.0.0.1&#39;,</span>
-<span class="x">        &#39;port&#39; =&gt; 8080,</span>
-<span class="x">        &#39;options&#39; =&gt; [</span>
-<span class="x">            &#39;worker_num&#39;      =&gt; 4,          // The number of HTTP Server Workers</span>
-<span class="x">            &#39;task_worker_num&#39; =&gt; 4,          // The number of Task Workers</span>
-<span class="x">            &#39;task_enable_coroutine&#39; =&gt; true, // optional to turn on task coroutine support</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">'mezzio-swoole' =&gt; [
+    'enable_coroutine' =&gt; true, //optional to enable coroutines and useful for tasks coroutines
+    'swoole-http-server' =&gt; [
+        'host' =&gt; '127.0.0.1',
+        'port' =&gt; 8080,
+        'options' =&gt; [
+            'worker_num'      =&gt; 4,          // The number of HTTP Server Workers
+            'task_worker_num' =&gt; 4,          // The number of Task Workers
+            'task_enable_coroutine' =&gt; true, // optional to turn on task coroutine support
+        ],
+    ],
+];</code></pre>
 <blockquote>
 <h3 id="cli-options-for-worker_num-and-task_worker_num">CLI options for worker_num and task_worker_num</h3>
 <p>Each of the <code>worker_num</code> and <code>task_worker_num</code> options have corresponding options in the <code>mezzio:swoole:start</code> and <code>mezzio:swoole:reload</code> console commands:</p>
@@ -468,26 +473,25 @@ Each of the listeners that the <code>SwooleRequestHandlerRunner</code> class reg
 </ul>
 <h2 id="registering-task-listeners">Registering Task Listeners</h2>
 <p>Registering listeners is the same as for other events: you will specify one or more of the above event types, pointing to a list of listeners that are defined as services in your container:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/mezzio.global.php:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/mezzio.global.php:
 
-<span class="x">use Mezzio\Swoole\Event;</span>
+use Mezzio\Swoole\Event;
 
-<span class="x">return [</span>
-<span class="x">    // ...</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        // ...</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            // ...</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                Event\TaskEvent::class =&gt; [</span>
-<span class="x">                    Your\TaskLoggerListener::class,</span>
-<span class="x">                    Your\TaskEventListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    // ...
+    'mezzio-swoole' =&gt; [
+        // ...
+        'swoole-http-server' =&gt; [
+            // ...
+            'listeners' =&gt; [
+                Event\TaskEvent::class =&gt; [
+                    Your\TaskLoggerListener::class,
+                    Your\TaskEventListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <blockquote>
 <h3 id="taskfinishevent-listener-not-required">TaskFinishEvent listener not required</h3>
 <p>The "finish" event primarily exists to allow you to know when a given task has completed processing.
@@ -502,26 +506,25 @@ If that data is not an object, it does nothing.
 Otherwise, it treats it as an event, passing it to the composed event dispatcher, and setting the <code>TaskEvent</code>'s return value to the event returned by the dispatcher.
 Once complete, it marks task processing as complete on the event.</p>
 <p>To register this listener, use the following configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/mezzio.global.php:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/mezzio.global.php:
 
-<span class="x">use Mezzio\Swoole\Event;</span>
-<span class="x">use Mezzio\Swoole\Task\TaskEventDispatchListener;</span>
+use Mezzio\Swoole\Event;
+use Mezzio\Swoole\Task\TaskEventDispatchListener;
 
-<span class="x">return [</span>
-<span class="x">    // ...</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        // ...</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            // ...</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                Event\TaskEvent::class =&gt; [</span>
-<span class="x">                    TaskEventDispatchListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    // ...
+    'mezzio-swoole' =&gt; [
+        // ...
+        'swoole-http-server' =&gt; [
+            // ...
+            'listeners' =&gt; [
+                Event\TaskEvent::class =&gt; [
+                    TaskEventDispatchListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <h3 id="taskinvokerlistener">TaskInvokerListener</h3>
 <p><code>Mezzio\Swoole\Task\TaskInvokerListener</code> works with a suite of other classes to allow processing task data.
 It composes a <a href="https://www.php-fig.org/psr/psr-11/">PSR-11 container</a> and a <a href="https://www.php-fig.org/psr/psr-3/">PSR-3 logger</a> instance.
@@ -529,158 +532,150 @@ When invoked, it pulls the data from the <code>TaskEvent</code> (via <code>TaskE
 Otherwise, it invokes the task instance, passing it the PSR-11 container as the sole argument.
 When done, it marks task processing complete in the <code>TaskEvent</code>.</p>
 <p>The <code>TaskInterface</code> has the following definition:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Task;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Task;
 
-<span class="x">use JsonSerializable;</span>
-<span class="x">use Psr\Container\ContainerInterface;</span>
+use JsonSerializable;
+use Psr\Container\ContainerInterface;
 
-<span class="x">interface TaskInterface extends JsonSerializable</span>
-<span class="x">{</span>
-<span class="x">    /**</span>
-<span class="x">     * @return mixed</span>
-<span class="x">     */</span>
-<span class="x">    public function __invoke(ContainerInterface $container);</span>
-<span class="x">}</span>
-</code></pre></div>
+interface TaskInterface extends JsonSerializable
+{
+    /**
+     * @return mixed
+     */
+    public function __invoke(ContainerInterface $container);
+}</code></pre>
 <p>The idea is that you can initialize a task as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$server-&gt;task(new Task(</span>
-<span class="x">    function ($data) {</span>
-<span class="x">        // process the data</span>
-<span class="x">    },</span>
-<span class="x">    $data</span>
-<span class="x">));</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$server-&gt;task(new Task(
+    function ($data) {
+        // process the data
+    },
+    $data
+));</code></pre>
 <p>And then the <code>TaskInvokerListener</code> will intercept it, identify a task instance, and invoke it in order to process it.</p>
 <p>To make this work, the package ships two <code>TaskInterface</code> implementations.
 The first is <code>Mezzio\Swoole\Task\Task</code>, which composes the code that will process the task data, and the task data itself (as the "payload"):</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Task;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Task;
 
-<span class="x">use Psr\Container\ContainerInterface;</span>
+use Psr\Container\ContainerInterface;
 
-<span class="x">final class Task implements TaskInterface</span>
-<span class="x">{</span>
-<span class="x">    /** @var callable */</span>
-<span class="x">    private $handler;</span>
+final class Task implements TaskInterface
+{
+    /** @var callable */
+    private $handler;
 
-<span class="x">    private array $payload;</span>
+    private array $payload;
 
-<span class="x">    public function __construct(callable $handler, ...$payload)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;handler = $handler;</span>
-<span class="x">        $this-&gt;payload = $payload;</span>
-<span class="x">    }</span>
+    public function __construct(callable $handler, ...$payload)
+    {
+        $this-&gt;handler = $handler;
+        $this-&gt;payload = $payload;
+    }
 
-<span class="x">    /**</span>
-<span class="x">     * Container argument ignored in this implementation.</span>
-<span class="x">     */</span>
-<span class="x">    public function __invoke(ContainerInterface $container)</span>
-<span class="x">    {</span>
-<span class="x">        return ($this-&gt;handler)(...$this-&gt;payload);</span>
-<span class="x">    }</span>
+    /**
+     * Container argument ignored in this implementation.
+     */
+    public function __invoke(ContainerInterface $container)
+    {
+        return ($this-&gt;handler)(...$this-&gt;payload);
+    }
 
-<span class="x">    // serialization details intentionally left out of listing</span>
-<span class="x">}</span>
-</code></pre></div>
+    // serialization details intentionally left out of listing
+}</code></pre>
 <p>This works exactly like the prior example: instantiate the <code>Task</code> with the handler and any data it should process.
 However, this task implementation has one caveat: the <code>$handler</code> MUST be serializable, and NOT contain references to other objects or resources (such as a database connection).
 The reason is because the <code>Task</code> instance is serialized and sent to another process completely, where it is then deserialized.</p>
 <p>To solve this limitation, the second implementation, <code>Mezzio\Swoole\Task\ServiceBasedTask</code>, composes a <em>service name</em> and the task data to process.
 During invocation, it pulls the service from the supplied container instance, and then uses the service to process the task:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Task;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Task;
 
-<span class="x">use Psr\Container\ContainerInterface;</span>
+use Psr\Container\ContainerInterface;
 
-<span class="x">final class ServiceBasedTask implements TaskInterface</span>
-<span class="x">{</span>
-<span class="x">    private array $payload;</span>
+final class ServiceBasedTask implements TaskInterface
+{
+    private array $payload;
 
-<span class="x">    private string $serviceName;</span>
+    private string $serviceName;
 
-<span class="x">    public function __construct(string $serviceName, ...$payload)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;serviceName = $serviceName;</span>
-<span class="x">        $this-&gt;payload     = $payload;</span>
-<span class="x">    }</span>
+    public function __construct(string $serviceName, ...$payload)
+    {
+        $this-&gt;serviceName = $serviceName;
+        $this-&gt;payload     = $payload;
+    }
 
-<span class="x">    public function __invoke(ContainerInterface $container) : void</span>
-<span class="x">    {</span>
-<span class="x">        $deferred = $container-&gt;get($this-&gt;serviceName);</span>
-<span class="x">        $listener = $deferred instanceof DeferredServiceListener</span>
-<span class="x">            ? $deferred-&gt;getListener()</span>
-<span class="x">            : $deferred;</span>
-<span class="x">        $listener(...$this-&gt;payload);</span>
-<span class="x">    }</span>
+    public function __invoke(ContainerInterface $container) : void
+    {
+        $deferred = $container-&gt;get($this-&gt;serviceName);
+        $listener = $deferred instanceof DeferredServiceListener
+            ? $deferred-&gt;getListener()
+            : $deferred;
+        $listener(...$this-&gt;payload);
+    }
 
-<span class="x">    // serialization details intentionally left out of listing</span>
-<span class="x">}</span>
-</code></pre></div>
+    // serialization details intentionally left out of listing
+}</code></pre>
 <p>What is the <code>DeferredServiceListener</code>? It's a decorator for an invokable handler, generally a PSR-14 event listener.
 The idea behind the class is to allow dispatching events normally via a PSR-14 event dispatcher in your code, but having the listener queue a task that it then processes itself.</p>
 <p>To better understand the idea, let's look at the <code>DeferredServiceListener</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Task;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Task;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">final class DeferredServiceListener</span>
-<span class="x">{</span>
-<span class="x">    private SwooleHttpServer $server;</span>
+final class DeferredServiceListener
+{
+    private SwooleHttpServer $server;
 
-<span class="x">    /** @var callable */</span>
-<span class="x">    private $listener;</span>
+    /** @var callable */
+    private $listener;
 
-<span class="x">    private string $serviceName;</span>
+    private string $serviceName;
 
-<span class="x">    public function __construct(SwooleHttpServer $server, callable $listener, string $serviceName)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;server      = $server;</span>
-<span class="x">        $this-&gt;listener    = $listener;</span>
-<span class="x">        $this-&gt;serviceName = $serviceName;</span>
-<span class="x">    }</span>
+    public function __construct(SwooleHttpServer $server, callable $listener, string $serviceName)
+    {
+        $this-&gt;server      = $server;
+        $this-&gt;listener    = $listener;
+        $this-&gt;serviceName = $serviceName;
+    }
 
-<span class="x">    public function __invoke(object $event) : void</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;server-&gt;task(new ServiceBasedTask($this-&gt;serviceName, $event));</span>
-<span class="x">    }</span>
+    public function __invoke(object $event) : void
+    {
+        $this-&gt;server-&gt;task(new ServiceBasedTask($this-&gt;serviceName, $event));
+    }
 
-<span class="x">    public function getListener(): callable</span>
-<span class="x">    {</span>
-<span class="x">        return $this-&gt;listener;</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function getListener(): callable
+    {
+        return $this-&gt;listener;
+    }
+}</code></pre>
 <p>In your configuration, you will use the <code>Mezzio\Swoole\Task\DeferredServiceListenerDelegator</code> to decorate your event listener using the above class:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// In config/autoload/dependencies.global.php:</span>
+<pre class="highlight"><code class="language-php">// In config/autoload/dependencies.global.php:
 
-<span class="x">use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;</span>
+use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependences&#39; =&gt; [</span>
-<span class="x">        &#39;factories&#39; =&gt; [</span>
-<span class="x">            App\Listener\UserCreationListener::class =&gt; App\Listener\UserCreationListenerFactory::class,</span>
-<span class="x">        ],</span>
-<span class="x">        &#39;delegators&#39; =&gt; [</span>
-<span class="x">            App\Listener\UserCreationListener::class =&gt; [</span>
-<span class="x">                DeferredServiceListenerDelegator::class,</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependences' =&gt; [
+        'factories' =&gt; [
+            App\Listener\UserCreationListener::class =&gt; App\Listener\UserCreationListenerFactory::class,
+        ],
+        'delegators' =&gt; [
+            App\Listener\UserCreationListener::class =&gt; [
+                DeferredServiceListenerDelegator::class,
+            ],
+        ],
+    ],
+];</code></pre>
 <p>You would attach your listener as needed for your listener provider implementation, pulling the listener from the container:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use App\Event\UserCreationEvent;</span>
-<span class="x">use App\Listener\UserCreationListener;</span>
+<pre class="highlight"><code class="language-php">use App\Event\UserCreationEvent;
+use App\Listener\UserCreationListener;
 
-<span class="x">// Example where $listenerProvider is a Psr\EventDispatcher\ListenerProviderInterface</span>
-<span class="x">// implementation, and defines a `listen()` method, and $container is a PSR-11</span>
-<span class="x">// container implementation:</span>
-<span class="x">$listenerProvider = $factory();</span>
-<span class="x">$listenerProvider-&gt;listen(UserCreationEvent::class, $container-&gt;get(UserCreationListener::class));</span>
-</code></pre></div>
+// Example where $listenerProvider is a Psr\EventDispatcher\ListenerProviderInterface
+// implementation, and defines a `listen()` method, and $container is a PSR-11
+// container implementation:
+$listenerProvider = $factory();
+$listenerProvider-&gt;listen(UserCreationEvent::class, $container-&gt;get(UserCreationListener::class));</code></pre>
 <p>Somewhere in your code, you might then dispatch the <code>UserCreationEvent</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use App\Event\UserCreationEvent;</span>
+<pre class="highlight"><code class="language-php">use App\Event\UserCreationEvent;
 
-<span class="x">$dispatcher-&gt;dispatch(new UserCreationEvent($someData));</span>
-</code></pre></div>
+$dispatcher-&gt;dispatch(new UserCreationEvent($someData));</code></pre>
 <p>At this point, since the listener is decorated in a <code>DeferredServiceListener</code> instance, it queues a <code>ServiceBasedTask</code>.
 When the task worker goes to invoke the <code>ServiceBasedTask</code>, it pulls the service from the container... which ends up decorating it as a <code>DeferredServiceListener</code> again.
 To prevent infinite recursion, where the listener keeps queueing tasks for itself, the <code>ServiceBasedTask</code> checks to see if we have a <code>DeferredServiceListener</code>, and, if so, retrieves the actual listener it decorates from it.</p>
@@ -699,239 +694,227 @@ It can also make testing your application more difficult.</p>
 <li>Call that instance's <code>task()</code> method with the data representing the task.</li>
 </ul>
 <p>As an example, we will create a request handler that composes the HTTP server instance.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Psr\Http\Message\ResponseFactoryInterface;</span>
-<span class="x">use Psr\Http\Message\ResponseInterface;</span>
-<span class="x">use Psr\Http\Message\ServerRequestInterface;</span>
-<span class="x">use Psr\Http\Server\RequestHandlerInterface;</span>
-<span class="x">use Swoole\Http\Server as HttpServer;</span>
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Swoole\Http\Server as HttpServer;
 
-<span class="x">class TaskTriggeringHandler implements RequestHandlerInterface</span>
-<span class="x">{</span>
-<span class="x">    /** @var ResponseFactoryInterface */</span>
-<span class="x">    private $responseFactory;</span>
+class TaskTriggeringHandler implements RequestHandlerInterface
+{
+    /** @var ResponseFactoryInterface */
+    private $responseFactory;
 
-<span class="x">    /** @var HttpServer */</span>
-<span class="x">    private $server;</span>
+    /** @var HttpServer */
+    private $server;
 
-<span class="x">    public function __construct(</span>
-<span class="x">        HttpServer $server,</span>
-<span class="x">        ResponseFactoryInterface $responseFactory</span>
-<span class="x">    ) {</span>
-<span class="x">        $this-&gt;server          = $server;</span>
-<span class="x">        $this-&gt;responseFactory = $responseFactory;</span>
-<span class="x">    }</span>
+    public function __construct(
+        HttpServer $server,
+        ResponseFactoryInterface $responseFactory
+    ) {
+        $this-&gt;server          = $server;
+        $this-&gt;responseFactory = $responseFactory;
+    }
 
-<span class="x">    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
-<span class="x">    {</span>
-<span class="x">        // Gather data from request</span>
-<span class="x">        $data = $request-&gt;getParsedBody();</span>
+    public function handle(ServerRequestInterface $request) : ResponseInterface
+    {
+        // Gather data from request
+        $data = $request-&gt;getParsedBody();
 
-<span class="x">        // task() returns a task identifier, if you want to use it; otherwise,</span>
-<span class="x">        // you can ignore the return value.</span>
-<span class="x">        $taskIdentifier = $this-&gt;server-&gt;task([</span>
-<span class="x">            &#39;to&#39;      =&gt; $data[&#39;email&#39;],</span>
-<span class="x">            &#39;subject&#39; =&gt; $data[&#39;subject&#39;],</span>
-<span class="x">            &#39;message&#39; =&gt; $data[&#39;message&#39;],</span>
-<span class="x">        ]);</span>
+        // task() returns a task identifier, if you want to use it; otherwise,
+        // you can ignore the return value.
+        $taskIdentifier = $this-&gt;server-&gt;task([
+            'to'      =&gt; $data['email'],
+            'subject' =&gt; $data['subject'],
+            'message' =&gt; $data['message'],
+        ]);
 
-<span class="x">        // The task() method is asynchronous, so execution continues immediately.</span>
-<span class="x">        return $this-&gt;responseFactory()-&gt;createResponse();</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+        // The task() method is asynchronous, so execution continues immediately.
+        return $this-&gt;responseFactory()-&gt;createResponse();
+    }
+}</code></pre>
 <p>Your handler will require a factory:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Psr\Container\ContainerInterface;</span>
-<span class="x">use Psr\Http\Message\ResponseFactoryInterface;</span>
-<span class="x">use Swoole\Http\Server as HttpServer;</span>
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Swoole\Http\Server as HttpServer;
 
-<span class="x">class TaskTriggeringHandlerFactory</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(ContainerInterface $container): TaskTriggeringHandler</span>
-<span class="x">    {</span>
-<span class="x">        return new TaskTriggeringHandler(</span>
-<span class="x">            $container-&gt;get(HttpServer::class),</span>
-<span class="x">            $container-&gt;get(ResponseFactoryInterface::class)</span>
-<span class="x">        );</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class TaskTriggeringHandlerFactory
+{
+    public function __invoke(ContainerInterface $container): TaskTriggeringHandler
+    {
+        return new TaskTriggeringHandler(
+            $container-&gt;get(HttpServer::class),
+            $container-&gt;get(ResponseFactoryInterface::class)
+        );
+    }
+}</code></pre>
 <p>And you will then need to notify the container configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/global.php or similar:
 
-<span class="x">use Example\TaskTriggeringHandler;</span>
-<span class="x">use Example\TaskTriggeringHandlerFactory;</span>
+use Example\TaskTriggeringHandler;
+use Example\TaskTriggeringHandlerFactory;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;factories&#39; =&gt; [</span>
-<span class="x">            TaskTriggeringHandler::class =&gt; TaskTriggeringHandlerFactory::class,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'factories' =&gt; [
+            TaskTriggeringHandler::class =&gt; TaskTriggeringHandlerFactory::class,
+        ],
+    ],
+];</code></pre>
 <h3 id="logging-taskevent-listener">Logging TaskEvent listener</h3>
 <p>The following listener will listen to a <code>TaskEvent</code>, and log the information using the syslog.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Mezzio\Swoole\Event\TaskEvent;</span>
+use Mezzio\Swoole\Event\TaskEvent;
 
-<span class="x">use function date;</span>
-<span class="x">use function sprintf;</span>
-<span class="x">use function syslog;</span>
-<span class="x">use function var_dump;</span>
+use function date;
+use function sprintf;
+use function syslog;
+use function var_dump;
 
-<span class="x">use const LOG_INFO;</span>
+use const LOG_INFO;
 
-<span class="x">class LoggingListener</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(TaskEvent $event): void</span>
-<span class="x">    {</span>
-<span class="x">        syslog(LOG_INFO, sprintf(</span>
-<span class="x">            &#39;[%s] [%d] %s&#39;,</span>
-<span class="x">            date(&#39;c&#39;),</span>
-<span class="x">            $event-&gt;getTaskId(),</span>
-<span class="x">            var_dump($event-&gt;getData())</span>
-<span class="x">        ));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class LoggingListener
+{
+    public function __invoke(TaskEvent $event): void
+    {
+        syslog(LOG_INFO, sprintf(
+            '[%s] [%d] %s',
+            date('c'),
+            $event-&gt;getTaskId(),
+            var_dump($event-&gt;getData())
+        ));
+    }
+}</code></pre>
 <p>You would configure the application to use the listener as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/swoole.global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
-<span class="x">use Example\LoggingListener;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskEvent;</span>
+use Example\LoggingListener;
+use Mezzio\Swoole\Event\TaskEvent;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;invokables&#39; =&gt; [</span>
-<span class="x">            LoggingListener::class =&gt; LoggingListener::class,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                TaskEvent::class =&gt; [</span>
-<span class="x">                    LoggingListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'invokables' =&gt; [
+            LoggingListener::class =&gt; LoggingListener::class,
+        ],
+    ],
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                TaskEvent::class =&gt; [
+                    LoggingListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <p>To trigger the event, you will create a task using a <code>Swoole\Http\Server</code> instance:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$server-&gt;task($data);</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$server-&gt;task($data);</code></pre>
 <blockquote>
 <p>See the <a href="#manually-triggering-tasks-in-handlers">"Manually Triggering Tasks in Handlers"</a> example for details on injecting the Swoole HTTP server in a request handler.</p>
 </blockquote>
 <h3 id="logging-taskfinishevent-listener">Logging TaskFinishEvent listener</h3>
 <p>The following listener will listen to a <code>TaskFinishEvent</code>, and log the return value using the syslog.
 It looks almost identical to the previous example.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Mezzio\Swoole\Event\TaskFinishEvent;</span>
+use Mezzio\Swoole\Event\TaskFinishEvent;
 
-<span class="x">use function date;</span>
-<span class="x">use function sprintf;</span>
-<span class="x">use function syslog;</span>
-<span class="x">use function var_dump;</span>
+use function date;
+use function sprintf;
+use function syslog;
+use function var_dump;
 
-<span class="x">use const LOG_INFO;</span>
+use const LOG_INFO;
 
-<span class="x">class TaskCompletionLoggingListener</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(TaskFinishEvent $event): void</span>
-<span class="x">    {</span>
-<span class="x">        syslog(LOG_INFO, sprintf(</span>
-<span class="x">            &#39;[%s] [%d] %s&#39;,</span>
-<span class="x">            date(&#39;c&#39;),</span>
-<span class="x">            $event-&gt;getTaskId(),</span>
-<span class="x">            var_dump($event-&gt;getReturnValue())</span>
-<span class="x">        ));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class TaskCompletionLoggingListener
+{
+    public function __invoke(TaskFinishEvent $event): void
+    {
+        syslog(LOG_INFO, sprintf(
+            '[%s] [%d] %s',
+            date('c'),
+            $event-&gt;getTaskId(),
+            var_dump($event-&gt;getReturnValue())
+        ));
+    }
+}</code></pre>
 <p>Similar to the previous example, you would configure the application to use the listener as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/swoole.global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
-<span class="x">use Example\TaskCompletionLoggingListener;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskFinishEvent;</span>
+use Example\TaskCompletionLoggingListener;
+use Mezzio\Swoole\Event\TaskFinishEvent;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;invokables&#39; =&gt; [</span>
-<span class="x">            TaskCompletionLoggingListener::class =&gt; TaskCompletionLoggingListener::class,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                TaskFinishEvent::class =&gt; [</span>
-<span class="x">                    TaskCompletionLoggingListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'invokables' =&gt; [
+            TaskCompletionLoggingListener::class =&gt; TaskCompletionLoggingListener::class,
+        ],
+    ],
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                TaskFinishEvent::class =&gt; [
+                    TaskCompletionLoggingListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <p>Unlike the previous example, however, you do not need to trigger this event yourself; it gets triggered by the <code>SwooleRequestHandlerRunner</code>.</p>
 <h3 id="queueing-task-data-for-the-taskeventdispatchlistener">Queueing task data for the TaskEventDispatchListener</h3>
 <p>In this example, we will configure the <code>TaskEventDispatchListener</code> as a <code>TaskEvent</code> listener.
 The <code>TaskEventDispatchListener</code> will in turn have a listener attached for a custom event, <code>SomeDeferrableTask</code>.
 We will queue a <code>SomeDeferrableTask</code> instance via the Swoole HTTP server <code>task()</code> method to defer its execution to the custom listener we create.</p>
 <p>First, we will create the custom task type:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">class SomeDeferrableTask</span>
-<span class="x">{</span>
-<span class="x">}</span>
-</code></pre></div>
+class SomeDeferrableTask
+{
+}</code></pre>
 <p>Next, we will create a listener for this event type:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">class SomeDeferrableTaskListener</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(SomeDeferrableTask $event): void</span>
-<span class="x">    {</span>
-<span class="x">        // process the task here</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class SomeDeferrableTaskListener
+{
+    public function __invoke(SomeDeferrableTask $event): void
+    {
+        // process the task here
+    }
+}</code></pre>
 <p>Next, we will configure listeners for the <code>TaskEvent</code> and our custom <code>SomeDeferrableTask</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/swoole.global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
-<span class="x">use Example\SomeDeferrableTask;</span>
-<span class="x">use Example\SomeDeferrableTaskListener;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskEvent;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskEventDispatchListener;</span>
+use Example\SomeDeferrableTask;
+use Example\SomeDeferrableTaskListener;
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Event\TaskEventDispatchListener;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;invokables&#39; =&gt; [</span>
-<span class="x">            SomeDeferrableTaskListener::class =&gt; SomeDeferrableTaskListener::class,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                SomeDeferrableTask::class =&gt; [</span>
-<span class="x">                    SomeDeferrableTaskListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">                TaskEvent::class =&gt; [</span>
-<span class="x">                    TaskEventDispatchListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'invokables' =&gt; [
+            SomeDeferrableTaskListener::class =&gt; SomeDeferrableTaskListener::class,
+        ],
+    ],
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                SomeDeferrableTask::class =&gt; [
+                    SomeDeferrableTaskListener::class,
+                ],
+                TaskEvent::class =&gt; [
+                    TaskEventDispatchListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <p>To trigger the event, you will create a task using a <code>Swoole\Http\Server</code> instance:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$server-&gt;task(new SomeDeferrableTask());</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$server-&gt;task(new SomeDeferrableTask());</code></pre>
 <blockquote>
 <p>See the <a href="#manually-triggering-tasks-in-handlers">"Manually Triggering Tasks in Handlers"</a> example for details on injecting the Swoole HTTP server in a request handler.</p>
 </blockquote>
@@ -939,39 +922,36 @@ We will queue a <code>SomeDeferrableTask</code> instance via the Swoole HTTP ser
 <p>In this example, we register the <code>TaskInvokerListener</code> with the <code>TaskEvent</code>.
 We then create a <code>Mezzio\Swoole\Task\Task</code> instance and use the Swoole HTTP server to queue the task.</p>
 <p>First, we will configure the <code>TaskInvokerListener</code> for the <code>TaskEvent</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/swoole.global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
-<span class="x">use Mezzio\Swoole\Event\TaskEvent;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskInvokerListener;</span>
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Event\TaskInvokerListener;
 
-<span class="x">return [</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                TaskEvent::class =&gt; [</span>
-<span class="x">                    TaskInvokerListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                TaskEvent::class =&gt; [
+                    TaskInvokerListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <p>Next, we will create a <code>Task</code> instance.
 The constructor for <code>Mezzio\Swoole\Task\Task</code> expects a callable listener as the first argument, and then zero or more additional arguments representing the arguments to pass to the listener.</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Mezzio\Swoole\Task\Task;</span>
+<pre class="highlight"><code class="language-php">use Mezzio\Swoole\Task\Task;
 
-<span class="x">$task = new Task(</span>
-<span class="x">    static function(object $event): void {</span>
-<span class="x">        // Process the $event object</span>
-<span class="x">    },</span>
-<span class="x">    (object) [</span>
-<span class="x">        &#39;message&#39; =&gt; &#39;hello world&#39;,</span>
-<span class="x">    ]</span>
-<span class="x">);</span>
-</code></pre></div>
+$task = new Task(
+    static function(object $event): void {
+        // Process the $event object
+    },
+    (object) [
+        'message' =&gt; 'hello world',
+    ]
+);</code></pre>
 <p>Finally, we will enqueue the task using a <code>Swoole\Http\Server</code> instance:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$server-&gt;task($task);</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$server-&gt;task($task);</code></pre>
 <blockquote>
 <p>See the <a href="#manually-triggering-tasks-in-handlers">"Manually Triggering Tasks in Handlers"</a> example for details on injecting the Swoole HTTP server in a request handler.</p>
 </blockquote>
@@ -981,103 +961,97 @@ We will create a factory for the listener, and register it in the DI container.
 We will also register the <code>TaskInvokerListener</code> with the <code>TaskEvent</code>.
 Finally, we will then create a <code>Mezzio\Swoole\Task\ServiceBasedTask</code> instance using the service name for our listener and an instance of the event type it expects,  and use the Swoole HTTP server to queue the task.</p>
 <p>First, let's define an event type:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">class SomeDeferrableEvent</span>
-<span class="x">{</span>
-<span class="x">    /** @var string */</span>
-<span class="x">    private $message;</span>
+class SomeDeferrableEvent
+{
+    /** @var string */
+    private $message;
 
-<span class="x">    public function __construct(string $message)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;message = $message;</span>
-<span class="x">    }</span>
+    public function __construct(string $message)
+    {
+        $this-&gt;message = $message;
+    }
 
-<span class="x">    public function __toString(): string</span>
-<span class="x">    {</span>
-<span class="x">        return $this-&gt;message;</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function __toString(): string
+    {
+        return $this-&gt;message;
+    }
+}</code></pre>
 <p>Next, we will create a listener for this event type:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Psr\Log\LoggerInterface;</span>
+use Psr\Log\LoggerInterface;
 
-<span class="x">class SomeDeferrableEventListener</span>
-<span class="x">{</span>
-<span class="x">    /** @var LoggerInterface */</span>
-<span class="x">    private $logger;</span>
+class SomeDeferrableEventListener
+{
+    /** @var LoggerInterface */
+    private $logger;
 
-<span class="x">    public function __construct(LoggerInterface $logger)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;logger = $logger;</span>
-<span class="x">    }</span>
+    public function __construct(LoggerInterface $logger)
+    {
+        $this-&gt;logger = $logger;
+    }
 
-<span class="x">    public function __invoke(SomeDeferrableEvent $event): void</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;logger-&gt;info(sprintf(&#39;Message: %s&#39;, (string) $event));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function __invoke(SomeDeferrableEvent $event): void
+    {
+        $this-&gt;logger-&gt;info(sprintf('Message: %s', (string) $event));
+    }
+}</code></pre>
 <p>The listener will require a factory:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Psr\Container\ContainerInterface;</span>
-<span class="x">use Psr\Log\LoggerInterface;</span>
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
-<span class="x">class SomeDeferrableEventListenerFactory</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(ContainerInterface $container): SomeDeferrableEventListener</span>
-<span class="x">    {</span>
-<span class="x">        return new SomeDeferrableEventListener(</span>
-<span class="x">            $container-&gt;get(LoggerInterface::class)</span>
-<span class="x">        );</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class SomeDeferrableEventListenerFactory
+{
+    public function __invoke(ContainerInterface $container): SomeDeferrableEventListener
+    {
+        return new SomeDeferrableEventListener(
+            $container-&gt;get(LoggerInterface::class)
+        );
+    }
+}</code></pre>
 <p>At this point, we turn to configuration.
 We will add dependency configuration for our listener (omitting the configuration for the logger service; we will assume you have done so already, or can figure out how to do so).
 We will also add configuration to bind the <code>TaskInvokerListener</code> to the <code>TaskEvent</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/swoole.global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
-<span class="x">use Example\SomeDeferrableEventListener;</span>
-<span class="x">use Example\SomeDeferrableEventListenerFactory;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskEvent;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskInvokerListener;</span>
+use Example\SomeDeferrableEventListener;
+use Example\SomeDeferrableEventListenerFactory;
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Event\TaskInvokerListener;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;factories&#39; =&gt; [</span>
-<span class="x">            SomeDeferrableEventListener::class =&gt; SomeDeferrableEventListenerFactory::class,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                TaskEvent::class =&gt; [</span>
-<span class="x">                    TaskInvokerListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'factories' =&gt; [
+            SomeDeferrableEventListener::class =&gt; SomeDeferrableEventListenerFactory::class,
+        ],
+    ],
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                TaskEvent::class =&gt; [
+                    TaskInvokerListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <p>Next, we will create a <code>ServiceBasedTask</code> instance.
 The constructor for <code>Mezzio\Swoole\Task\Task</code> expects the name of a service that can be pulled from the application DI container as the first argument, and then zero or more additional arguments representing the arguments to pass to the listener.
 The service is expected to be invokable (i.e., it MUST define the method <code>__invoke()</code>).</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Example\SomeDeferrableEvent;</span>
-<span class="x">use Example\SomeDeferrableEventListener;</span>
-<span class="x">use Mezzio\Swoole\Task\ServiceBasedTask;</span>
+<pre class="highlight"><code class="language-php">use Example\SomeDeferrableEvent;
+use Example\SomeDeferrableEventListener;
+use Mezzio\Swoole\Task\ServiceBasedTask;
 
-<span class="x">$task = new ServiceBasedTask(</span>
-<span class="x">    SomeDeferrableEventListener::class,</span>
-<span class="x">    new SomeDeferrableEvent(&#39;hello world&#39;)</span>
-<span class="x">);</span>
-</code></pre></div>
+$task = new ServiceBasedTask(
+    SomeDeferrableEventListener::class,
+    new SomeDeferrableEvent('hello world')
+);</code></pre>
 <p>Finally, we will enqueue the task using a <code>Swoole\Http\Server</code> instance:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$server-&gt;task($task);</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$server-&gt;task($task);</code></pre>
 <blockquote>
 <p>See the <a href="#manually-triggering-tasks-in-handlers">"Manually Triggering Tasks in Handlers"</a> example for details on injecting the Swoole HTTP server in a request handler.</p>
 </blockquote>
@@ -1088,95 +1062,92 @@ However, instead of queueing the task via the Swoole HTTP server, we will queue 
 To make that possible, we will add a delegator factory for our listener that will do the work of queueing the task for us.</p>
 <p>This example will make the assumption that you are using the same PSR-14 event dispatcher with both the <code>SwooleRequestHandlerRunner</code> and the rest of your application, and will re-purpose the <code>Mezzio\Swoole\Event\SwooleListenerProvider</code> to also handle listeners for our <code>Example\SomeDeferrableEvent</code>.</p>
 <p>First, we will define a handler that triggers this event:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Psr\EventDispatcher\EventDispatcherInterface;</span>
-<span class="x">use Psr\Http\Message\ServerRequestInterface;</span>
-<span class="x">use Psr\Http\Message\ResponseFactoryInterface;</span>
-<span class="x">use Psr\Http\Message\ResponseInterface;</span>
-<span class="x">use Psr\Http\Server\RequestHandlerInterface;</span>
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-<span class="x">class MessageHandler implements RequestHandlerInterface</span>
-<span class="x">{</span>
-<span class="x">    /** @var EventDispatcherInterface */</span>
-<span class="x">    private $dispatcher;</span>
+class MessageHandler implements RequestHandlerInterface
+{
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
 
-<span class="x">    /** @var ResponseFactoryInterface */</span>
-<span class="x">    private $responseFactory;</span>
+    /** @var ResponseFactoryInterface */
+    private $responseFactory;
 
-<span class="x">    public function __construct(</span>
-<span class="x">        EventDispatcherInterface $dispatcher,</span>
-<span class="x">        ResponseFactoryInterface $responseFactory</span>
-<span class="x">    ) {</span>
-<span class="x">        $this-&gt;dispatcher      = $dispatcher;</span>
-<span class="x">        $this-&gt;responseFactory = $responseFactory;</span>
-<span class="x">    }</span>
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        ResponseFactoryInterface $responseFactory
+    ) {
+        $this-&gt;dispatcher      = $dispatcher;
+        $this-&gt;responseFactory = $responseFactory;
+    }
 
-<span class="x">    public function handle(ServerRequestInterface $request): ResponseInterface</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;dispatcher-&gt;dispatch(new SomeDeferrableEvent(&#39;hello world&#39;));</span>
-<span class="x">        return $this-&gt;responseFactory-&gt;createResponse();</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        $this-&gt;dispatcher-&gt;dispatch(new SomeDeferrableEvent('hello world'));
+        return $this-&gt;responseFactory-&gt;createResponse();
+    }
+}</code></pre>
 <p>This handler will need a factory.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Example;</span>
+<pre class="highlight"><code class="language-php">namespace Example;
 
-<span class="x">use Psr\Container\ContaienrInterface;</span>
-<span class="x">use Psr\EventDispatcher\EventDispatcherInterface;</span>
-<span class="x">use Psr\Http\Message\ResponseFactoryInterface;</span>
+use Psr\Container\ContaienrInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
-<span class="x">class MessageHandlerFactory</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(ContainerInterface $container): MessageHandler</span>
-<span class="x">    {</span>
-<span class="x">        return new MessageHandler(</span>
-<span class="x">            $container-&gt;get(EventDispatcherInterface::class),</span>
-<span class="x">            $container-&gt;get(ResponseFactoryInterface::class)</span>
-<span class="x">        );</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class MessageHandlerFactory
+{
+    public function __invoke(ContainerInterface $container): MessageHandler
+    {
+        return new MessageHandler(
+            $container-&gt;get(EventDispatcherInterface::class),
+            $container-&gt;get(ResponseFactoryInterface::class)
+        );
+    }
+}</code></pre>
 <p>The next step is changing configuration.
 We need to configure our container to tell it about our handler, as well as to add the <code>Mezzio\Swoole\Task\DeferredServiceListenerDelegator</code> as a delegator factory for our <code>Example\SomeDeferrableEventListener</code>.
 We will also add configuration to map our listener to our custom event.</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/swoole.global.php or similar:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
-<span class="x">use Example\MessageHandler;</span>
-<span class="x">use Example\MessageHandlerFactory;</span>
-<span class="x">use Example\SomeDeferrableEvent;</span>
-<span class="x">use Example\SomeDeferrableEventListener;</span>
-<span class="x">use Example\SomeDeferrableEventListenerFactory;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskEvent;</span>
-<span class="x">use Mezzio\Swoole\Event\TaskInvokerListener;</span>
-<span class="x">use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;</span>
+use Example\MessageHandler;
+use Example\MessageHandlerFactory;
+use Example\SomeDeferrableEvent;
+use Example\SomeDeferrableEventListener;
+use Example\SomeDeferrableEventListenerFactory;
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;factories&#39; =&gt; [</span>
-<span class="x">            MessageHandler::class              =&gt; MessageHandlerFactory::class,</span>
-<span class="x">            SomeDeferrableEventListener::class =&gt; SomeDeferrableEventListenerFactory::class,</span>
-<span class="x">        ],</span>
-<span class="x">        &#39;delegators&#39; =&gt; [</span>
-<span class="x">            SomeDeferrableEventListener::class =&gt; [</span>
-<span class="x">                DeferredServiceListenerDelegator::class,</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                SomeDeferrableEvent::class =&gt; [</span>
-<span class="x">                    SomeDeferrableEventListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">                TaskEvent::class =&gt; [</span>
-<span class="x">                    TaskInvokerListener::class,</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'factories' =&gt; [
+            MessageHandler::class              =&gt; MessageHandlerFactory::class,
+            SomeDeferrableEventListener::class =&gt; SomeDeferrableEventListenerFactory::class,
+        ],
+        'delegators' =&gt; [
+            SomeDeferrableEventListener::class =&gt; [
+                DeferredServiceListenerDelegator::class,
+            ],
+        ],
+    ],
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                SomeDeferrableEvent::class =&gt; [
+                    SomeDeferrableEventListener::class,
+                ],
+                TaskEvent::class =&gt; [
+                    TaskInvokerListener::class,
+                ],
+            ],
+        ],
+    ],
+];</code></pre>
 <p>At this point, we are done.</p>
 <p>When the handler dispatches the event, our listener is notified.
 However, the listener is decoreated via the <code>DeferredServiceListenerDelegator</code>, which will itself enqueue a <code>ServiceBasedTask</code> in the Swoole HTTP server, using the listener's service name and the event passed to the listener.
@@ -1330,6 +1301,12 @@ The <code>TaskInvokerListener</code> then passes the container to the task, whic
     </li>
 
             
+                
+    <li class="subnavigation__list-item ">
+        <a href="../cookbook/provide-a-request-id/" class="subnavigation__link">Provide a unique ID in your request</a>
+    </li>
+
+            
         </ul>
     </li>
 
@@ -1442,7 +1419,7 @@ The <code>TaskInvokerListener</code> then passes the container to the task, whic
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

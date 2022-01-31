@@ -413,27 +413,26 @@
 <p>By default, we ship with static resource handling enabled.
 This is done by having the <code>Mezzio\Swoole\Event\StaticResourceRequestListener</code> in the list of listeners provided for the <code>Mezzio\Swoole\Event\RequestEvent</code>.</p>
 <p>To disable that listener, you will need to <strong>replace</strong> the set of listeners for that event, to include only the <code>Mezzio\Swoole\Event\RequestHandlerRequestListener</code>. You can do that in your application configuration as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/dependencies.global.php:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/dependencies.global.php:
 
-<span class="x">use Laminas\Stdlib\ArrayUtils\MergeReplaceKey;</span>
-<span class="x">use Mezzio\Swoole\Event;</span>
+use Laminas\Stdlib\ArrayUtils\MergeReplaceKey;
+use Mezzio\Swoole\Event;
 
-<span class="x">return [</span>
-<span class="x">    // ...</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        // ...</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            // ...</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                Event\RequestEvent::class =&gt; new MergeReplaceKey([</span>
-<span class="x">                    Event\RequestHandlerRequestListener::class,</span>
-<span class="x">                ]),</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">    // ...</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    // ...
+    'mezzio-swoole' =&gt; [
+        // ...
+        'swoole-http-server' =&gt; [
+            // ...
+            'listeners' =&gt; [
+                Event\RequestEvent::class =&gt; new MergeReplaceKey([
+                    Event\RequestHandlerRequestListener::class,
+                ]),
+            ],
+        ],
+    ],
+    // ...
+];</code></pre>
 
 
 
@@ -695,7 +694,7 @@ This is done by having the <code>Mezzio\Swoole\Event\StaticResourceRequestListen
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

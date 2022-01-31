@@ -430,60 +430,58 @@
 <h2 id="the-solution">The solution</h2>
 <p>This is generally caused by having the mezzio-swoole configuration provider too early in your application configuration, which then causes the default Mezzio configuration to overwrite the mezzio-swoole application runner.</p>
 <p>As an example, if the definition of the <code>ConfigAggregator</code> in your <code>config/config.php</code> file  looks something like this:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$aggregator = new ConfigAggregator([</span>
-<span class="x">    \Mezzio\Swoole\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Plates\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,</span>
-<span class="x">    \Laminas\HttpHandlerRunner\ConfigProvider::class,</span>
-<span class="x">    // Include cache configuration</span>
-<span class="x">    new \Laminas\ConfigAggregator\ArrayProvider($cacheConfig),</span>
-<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Router\ConfigProvider::class,</span>
-<span class="x">    \Laminas\Diactoros\ConfigProvider::class,</span>
-<span class="x">    // Default App module config</span>
-<span class="x">    \App\ConfigProvider::class,</span>
-<span class="x">    // Load application config in a pre-defined order in such a way that local settings</span>
-<span class="x">    // overwrite global settings. (Loaded as first to last):</span>
-<span class="x">    //   - `global.php`</span>
-<span class="x">    //   - `*.global.php`</span>
-<span class="x">    //   - `local.php`</span>
-<span class="x">    //   - `*.local.php`</span>
-<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/autoload/{{,*.}global,{,*.}local}.php&#39;),</span>
-<span class="x">    // Load development config if it exists</span>
-<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/development.config.php&#39;),</span>
-<span class="x">], $cacheConfig[&#39;config_cache_path&#39;]);</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$aggregator = new ConfigAggregator([
+    \Mezzio\Swoole\ConfigProvider::class,
+    \Mezzio\Plates\ConfigProvider::class,
+    \Mezzio\Helper\ConfigProvider::class,
+    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,
+    \Laminas\HttpHandlerRunner\ConfigProvider::class,
+    // Include cache configuration
+    new \Laminas\ConfigAggregator\ArrayProvider($cacheConfig),
+    \Mezzio\Helper\ConfigProvider::class,
+    \Mezzio\ConfigProvider::class,
+    \Mezzio\Router\ConfigProvider::class,
+    \Laminas\Diactoros\ConfigProvider::class,
+    // Default App module config
+    \App\ConfigProvider::class,
+    // Load application config in a pre-defined order in such a way that local settings
+    // overwrite global settings. (Loaded as first to last):
+    //   - `global.php`
+    //   - `*.global.php`
+    //   - `local.php`
+    //   - `*.local.php`
+    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php'),
+    // Load development config if it exists
+    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . '/development.config.php'),
+], $cacheConfig['config_cache_path']);</code></pre>
 <p>Note the position of the <code>Mezzio\Swoole\ConfigProvider::class</code> entry at the top.
 This can happen if you have previously removed the original entry from the <code>config/config.php</code> as provided by the skeleton project, or if you hand-crafted your <code>config/config.php</code> file<code>, and then later used</code>composer require mezzio/mezzio-swoole`, as the <a href="https://docs.laminas.dev/laminas-component-installer/">component installer</a> injects at the start of the aggregator definition.</p>
 <p>The mezzio-swoole package provides a custom implementation of an <a href="https://docs.laminas.dev/laminas-httphandlerrunner/">HTTP Handler Runner</a>.
 Because it defines the <em>same service name</em> as the one provided by laminas/laminas-httphandlerrunner, the mezzio-swoole <code>ConfigProvider</code> must appear <em>later</em> during aggregation to ensure it takes precedence:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$aggregator = new ConfigAggregator([</span>
-<span class="x">    \Mezzio\Plates\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,</span>
-<span class="x">    \Laminas\HttpHandlerRunner\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Swoole\ConfigProvider::class, // &lt;-- Here or later!</span>
-<span class="x">    // Include cache configuration</span>
-<span class="x">    new \Laminas\ConfigAggregator\ArrayProvider($cacheConfig),</span>
-<span class="x">    \Mezzio\Helper\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\ConfigProvider::class,</span>
-<span class="x">    \Mezzio\Router\ConfigProvider::class,</span>
-<span class="x">    \Laminas\Diactoros\ConfigProvider::class,</span>
-<span class="x">    // Default App module config</span>
-<span class="x">    \App\ConfigProvider::class,</span>
-<span class="x">    // Load application config in a pre-defined order in such a way that local settings</span>
-<span class="x">    // overwrite global settings. (Loaded as first to last):</span>
-<span class="x">    //   - `global.php`</span>
-<span class="x">    //   - `*.global.php`</span>
-<span class="x">    //   - `local.php`</span>
-<span class="x">    //   - `*.local.php`</span>
-<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/autoload/{{,*.}global,{,*.}local}.php&#39;),</span>
-<span class="x">    // Load development config if it exists</span>
-<span class="x">    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . &#39;/development.config.php&#39;),</span>
-<span class="x">], $cacheConfig[&#39;config_cache_path&#39;]);</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$aggregator = new ConfigAggregator([
+    \Mezzio\Plates\ConfigProvider::class,
+    \Mezzio\Helper\ConfigProvider::class,
+    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,
+    \Laminas\HttpHandlerRunner\ConfigProvider::class,
+    \Mezzio\Swoole\ConfigProvider::class, // &lt;-- Here or later!
+    // Include cache configuration
+    new \Laminas\ConfigAggregator\ArrayProvider($cacheConfig),
+    \Mezzio\Helper\ConfigProvider::class,
+    \Mezzio\ConfigProvider::class,
+    \Mezzio\Router\ConfigProvider::class,
+    \Laminas\Diactoros\ConfigProvider::class,
+    // Default App module config
+    \App\ConfigProvider::class,
+    // Load application config in a pre-defined order in such a way that local settings
+    // overwrite global settings. (Loaded as first to last):
+    //   - `global.php`
+    //   - `*.global.php`
+    //   - `local.php`
+    //   - `*.local.php`
+    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php'),
+    // Load development config if it exists
+    new \Laminas\ConfigAggregator\PhpFileProvider(realpath(__DIR__) . '/development.config.php'),
+], $cacheConfig['config_cache_path']);</code></pre>
 <p>Note the change in position for the <code>Mezzio\Swoole\ConfigProvider:class</code> entry in the above example.</p>
 
 
@@ -746,7 +744,7 @@ Because it defines the <em>same service name</em> as the one provided by laminas
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

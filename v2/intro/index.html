@@ -401,26 +401,22 @@ or the low-level Linux kernel.</p>
 <h2 id="install-swoole">Install swoole</h2>
 <p>You can install the Swoole extension on Linux or Mac environments using the
 following commands:</p>
-<div class="highlight"><pre><span></span><code>$ pecl install swoole
-</code></pre></div>
+<pre class="highlight"><code class="language-bash">$ pecl install swoole</code></pre>
 <p>For more information on the extension, <a href="https://pecl.php.net/package/swoole">visit its package details on PECL</a>.</p>
 <h2 id="install-mezzio-swoole">Install mezzio-swoole</h2>
 <p>To install this package, use <a href="https://getcomposer.org/">Composer</a>:</p>
-<div class="highlight"><pre><span></span><code>$ composer require mezzio/mezzio-swoole
-</code></pre></div>
+<pre class="highlight"><code class="language-bash">$ composer require mezzio/mezzio-swoole</code></pre>
 <h2 id="swoole-with-mezzio">Swoole with Mezzio</h2>
 <p>mezzio-swoole enables an Mezzio application to be executed with
 the <a href="https://www.swoole.co.uk/">Swoole</a> extension. This means you can run the
 application from the command line, <strong>without requiring a web server</strong>.</p>
 <p>You can run the application using the following command:</p>
-<div class="highlight"><pre><span></span><code>$ ./vendor/bin/mezzio-swoole start
-</code></pre></div>
+<pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole start</code></pre>
 <p>This command will execute Swoole on <code>localhost</code> via port <code>8080</code>.</p>
 <blockquote>
 <h3 id="other-commands">Other commands</h3>
 <p>To get a list of all available commands, run the command without arguments:</p>
-<div class="highlight"><pre><span></span><code>$ ./vendor/bin/mezzio-swoole
-</code></pre></div>
+<pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole</code></pre>
 <p>If you add the argument <code>help</code> before any command name, the tooling will
 provide you with more detailed information on that command.</p>
 <h3 id="mezzio-skeleton-versions-prior-to-310">Mezzio skeleton versions prior to 3.1.0</h3>
@@ -431,64 +427,61 @@ from 3.1.0 or later.</p>
 create a configuration file such as <code>config/autoload/mezzio-swoole.global.php</code>
 or <code>config/autoload/mezzio-swoole.local.php</code> with the following
 contents:</p>
-<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
-<span class="k">use</span> <span class="nx">Mezzio\Swoole\ConfigProvider</span><span class="p">;</span>
+<pre class="highlight"><code class="language-php">&lt;?php
+use Mezzio\Swoole\ConfigProvider;
 
-<span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nx">ConfigProvider</span><span class="p">())();</span>
-</code></pre></div>
+return (new ConfigProvider())();</code></pre>
 </blockquote>
 <p>You can change the host address and/or host name as well as the port using a
 configuration file, as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// In config/autoload/swoole.local.php:</span>
-<span class="x">return [</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
-<span class="x">            &#39;port&#39; =&gt; 9501,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">// In config/autoload/swoole.local.php:
+return [
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'host' =&gt; '192.168.0.1',
+            'port' =&gt; 9501,
+        ],
+    ],
+];</code></pre>
 <h3 id="providing-additional-swoole-configuration">Providing additional Swoole configuration</h3>
 <p>You can also configure the Swoole HTTP server using an <code>options</code> key to specify
 any accepted Swoole settings. For instance, the following configuration
 demonstrates enabling SSL:</p>
-<div class="highlight"><pre><span></span><code><span class="x">// config/autoload/swoole.local.php</span>
-<span class="x">return [</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        // Available in Swoole 4.1 and up; enables coroutine support</span>
-<span class="x">        // for most I/O operations:</span>
-<span class="x">        &#39;enable_coroutine&#39; =&gt; true,</span>
+<pre class="highlight"><code class="language-php">// config/autoload/swoole.local.php
+return [
+    'mezzio-swoole' =&gt; [
+        // Available in Swoole 4.1 and up; enables coroutine support
+        // for most I/O operations:
+        'enable_coroutine' =&gt; true,
 
-<span class="x">        // Configure Swoole HTTP Server:</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;host&#39; =&gt; &#39;192.168.0.1&#39;,</span>
-<span class="x">            &#39;port&#39; =&gt; 9501,</span>
-<span class="x">            &#39;mode&#39; =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;</span>
-<span class="x">                                   // SWOOLE_BASE is the default</span>
-<span class="x">            &#39;protocol&#39; =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server</span>
-<span class="x">            &#39;options&#39; =&gt; [</span>
-<span class="x">                // Set the SSL certificate and key paths for SSL support:</span>
-<span class="x">                &#39;ssl_cert_file&#39; =&gt; &#39;path/to/ssl.crt&#39;,</span>
-<span class="x">                &#39;ssl_key_file&#39; =&gt; &#39;path/to/ssl.key&#39;,</span>
-<span class="x">                // Whether or not the HTTP server should use coroutines;</span>
-<span class="x">                // enabled by default, and generally should not be disabled:</span>
-<span class="x">                &#39;enable_coroutine&#39; =&gt; true,</span>
+        // Configure Swoole HTTP Server:
+        'swoole-http-server' =&gt; [
+            'host' =&gt; '192.168.0.1',
+            'port' =&gt; 9501,
+            'mode' =&gt; SWOOLE_BASE, // SWOOLE_BASE or SWOOLE_PROCESS;
+                                   // SWOOLE_BASE is the default
+            'protocol' =&gt; SWOOLE_SOCK_TCP | SWOOLE_SSL, // SSL-enable the server
+            'options' =&gt; [
+                // Set the SSL certificate and key paths for SSL support:
+                'ssl_cert_file' =&gt; 'path/to/ssl.crt',
+                'ssl_key_file' =&gt; 'path/to/ssl.key',
+                // Whether or not the HTTP server should use coroutines;
+                // enabled by default, and generally should not be disabled:
+                'enable_coroutine' =&gt; true,
 
-<span class="x">                // Overwrite the default location of the pid file;</span>
-<span class="x">                // required when you want to run multiple instances of your service in different ports:</span>
-<span class="x">                &#39;pid_file&#39; =&gt; &#39;path/to/pid_file.pid&#39;,</span>
-<span class="x">            ],</span>
+                // Overwrite the default location of the pid file;
+                // required when you want to run multiple instances of your service in different ports:
+                'pid_file' =&gt; 'path/to/pid_file.pid',
+            ],
 
-<span class="x">            // Since 2.1.0: Set the process name prefix.</span>
-<span class="x">            // The master process will be named `{prefix}-master`,</span>
-<span class="x">            // worker processes will be named `{prefix}-worker-{id}`,</span>
-<span class="x">            // and task worker processes will be named `{prefix}-task-worker-{id}`</span>
-<span class="x">            &#39;process-name&#39; =&gt; &#39;your-app&#39;,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+            // Since 2.1.0: Set the process name prefix.
+            // The master process will be named `{prefix}-master`,
+            // worker processes will be named `{prefix}-worker-{id}`,
+            // and task worker processes will be named `{prefix}-task-worker-{id}`
+            'process-name' =&gt; 'your-app',
+        ],
+    ],
+];</code></pre>
 <blockquote>
 <h3 id="ssl-support">SSL support</h3>
 <p>By default, Swoole is not compiled with SSL support. To enable SSL in Swoole, it
@@ -736,7 +729,7 @@ configuration.</p>
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

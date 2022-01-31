@@ -443,181 +443,169 @@ Additionally, the arguments passed to the Swoole listener are now aggregated int
 <p>All event classes are in the <code>Mezzio\Swoole\Event</code> namespace.</p>
 <h3 id="start-event">Start Event</h3>
 <p>Describes the "start" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">/**</span>
-<span class="x"> * Describes &quot;start&quot; event</span>
-<span class="x"> */</span>
-<span class="x">class ServerStartEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">}</span>
-</code></pre></div>
+/**
+ * Describes "start" event
+ */
+class ServerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
 <h3 id="manager-start-event">Manager Start Event</h3>
 <p>Describes the "managerstart" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class ManagerStartEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">}</span>
-</code></pre></div>
+class ManagerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
 <h3 id="manager-stop-event">Manager Stop Event</h3>
 <p>Describes the "managerstop" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class ManagerStopEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">}</span>
-</code></pre></div>
+class ManagerStopEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
 <h3 id="worker-start-event">Worker Start Event</h3>
 <p>Describes the "workerstart" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class WorkerStartEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">    public function getWorkerId(): int;</span>
-<span class="x">}</span>
-</code></pre></div>
+class WorkerStartEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getWorkerId(): int;
+}</code></pre>
 <h3 id="worker-stop-event">Worker Stop Event</h3>
 <p>Describes the "workerstop" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class WorkerStopEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">    public function getWorkerId(): int;</span>
-<span class="x">}</span>
-</code></pre></div>
+class WorkerStopEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getWorkerId(): int;
+}</code></pre>
 <h3 id="worker-error-event">Worker Error Event</h3>
 <p>Describes the "workererror" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class WorkerErrorEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">    public function getWorkerId(): int;</span>
-<span class="x">    public function getExitCode(): int;</span>
-<span class="x">    public function getSignal(): int;</span>
-<span class="x">}</span>
-</code></pre></div>
+class WorkerErrorEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getWorkerId(): int;
+    public function getExitCode(): int;
+    public function getSignal(): int;
+}</code></pre>
 <h3 id="request-event">Request Event</h3>
 <p>Describes the "request" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Psr\EventDispatcher\StoppableEventInterface;</span>
-<span class="x">use Swoole\Http\Request as SwooleHttpRequest;</span>
-<span class="x">use Swoole\Http\Response as SwooleHttpResponse;</span>
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Psr\EventDispatcher\StoppableEventInterface;
+use Swoole\Http\Request as SwooleHttpRequest;
+use Swoole\Http\Response as SwooleHttpResponse;
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class RequestEvent implements StoppableEventInterface</span>
-<span class="x">{</span>
-<span class="x">    public function isPropagationStopped(): bool;</span>
-<span class="x">    public function getRequest(): SwooleHttpRequest;</span>
-<span class="x">    public function getResponse(): SwooleHttpResponse;</span>
-<span class="x">    public function responseSent(): void;</span>
-<span class="x">}</span>
-</code></pre></div>
+class RequestEvent implements StoppableEventInterface
+{
+    public function isPropagationStopped(): bool;
+    public function getRequest(): SwooleHttpRequest;
+    public function getResponse(): SwooleHttpResponse;
+    public function responseSent(): void;
+}</code></pre>
 <h3 id="before-reload-event">Before Reload Event</h3>
 <p>Describes the "beforereload" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class BeforeReloadEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">}</span>
-</code></pre></div>
+class BeforeReloadEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
 <h3 id="after-reload-event">After Reload Event</h3>
 <p>Describes the "afterreload" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class AfterReloadEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">}</span>
-</code></pre></div>
+class AfterReloadEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
 <h3 id="task-event">Task Event</h3>
 <p>Describes the "task" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Psr\EventDispatcher\StoppableEventInterface;</span>
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Psr\EventDispatcher\StoppableEventInterface;
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class TaskEvent implements StoppableEventInterface</span>
-<span class="x">{</span>
-<span class="x">    public function isPropagationStopped(): bool;</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">    public function getTaskId(): int;</span>
-<span class="x">    public function getWorkerId(): int;</span>
+class TaskEvent implements StoppableEventInterface
+{
+    public function isPropagationStopped(): bool;
+    public function getServer(): SwooleHttpServer;
+    public function getTaskId(): int;
+    public function getWorkerId(): int;
 
-<span class="x">    /**</span>
-<span class="x">     * Data passed to the task() method</span>
-<span class="x">     */</span>
-<span class="x">    public function getData(): mixed;</span>
+    /**
+     * Data passed to the task() method
+     */
+    public function getData(): mixed;
 
-<span class="x">    /**</span>
-<span class="x">     * &quot;Return value&quot; of the task; what to pass to finish()</span>
-<span class="x">     *</span>
-<span class="x">     * @param mixed $returnValue</span>
-<span class="x">     */</span>
-<span class="x">    public function setReturnValue($returnValue): void;</span>
+    /**
+     * "Return value" of the task; what to pass to finish()
+     *
+     * @param mixed $returnValue
+     */
+    public function setReturnValue($returnValue): void;
 
-<span class="x">    /** @return mixed */</span>
-<span class="x">    public function getReturnValue();</span>
+    /** @return mixed */
+    public function getReturnValue();
 
-<span class="x">    /**</span>
-<span class="x">     * Call this to indicate processing is complete, and to stop processing</span>
-<span class="x">     * further listeners.</span>
-<span class="x">     */</span>
-<span class="x">    public function taskProcessingComplete(): void;</span>
-<span class="x">}</span>
-</code></pre></div>
+    /**
+     * Call this to indicate processing is complete, and to stop processing
+     * further listeners.
+     */
+    public function taskProcessingComplete(): void;
+}</code></pre>
 <h3 id="finish-event">Finish Event</h3>
 <p>Describes the "finish" event emitted by the Swoole HTTP Server, called when processing a task has been completed.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class TaskFinishEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">    public function getTaskId(): int;</span>
+class TaskFinishEvent
+{
+    public function getServer(): SwooleHttpServer;
+    public function getTaskId(): int;
 
-<span class="x">    /**</span>
-<span class="x">     * Data passed to the finish() method</span>
-<span class="x">     */</span>
-<span class="x">    public function getData(): mixed;</span>
-<span class="x">}</span>
-</code></pre></div>
+    /**
+     * Data passed to the finish() method
+     */
+    public function getData(): mixed;
+}</code></pre>
 <h3 id="shutdown-event">Shutdown Event</h3>
 <p>Describes the "shutdown" event emitted by the Swoole HTTP Server.</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace Mezzio\Swoole\Event;</span>
+<pre class="highlight"><code class="language-php">namespace Mezzio\Swoole\Event;
 
-<span class="x">use Swoole\Http\Server as SwooleHttpServer;</span>
+use Swoole\Http\Server as SwooleHttpServer;
 
-<span class="x">class ServerShutdownEvent</span>
-<span class="x">{</span>
-<span class="x">    public function getServer(): SwooleHttpServer;</span>
-<span class="x">}</span>
-</code></pre></div>
+class ServerShutdownEvent
+{
+    public function getServer(): SwooleHttpServer;
+}</code></pre>
 <h2 id="listeners">Listeners</h2>
 <p>We define the following listeners for the specified events.
 All events and listeners are in the <code>Mezzio\Swoole\Event</code> namespace.</p>
@@ -655,18 +643,17 @@ The service referenced by its factory is a marker interface used only as a servi
 <p>By default, the <code>Mezzio\Swoole\Event\EventDispatcherInterface</code> service points to <code>Mezzio\Swoole\Event\EventDispatcher</code>, which is a simple PSR-14 dispatcher implementation.
 That service in turn consumes <code>Mezzio\Swoole\Event\SwooleListenerProvider</code>.</p>
 <p>The factory for <code>SwooleListenerProvider</code>, <code>Mezzio\Swoole\Event\SwooleListenerProviderFactory</code>, consumes the <code>config</code> service, looking for the following configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="x">[</span>
-<span class="x">    &#39;mezzio-swoole&#39; =&gt; [</span>
-<span class="x">        &#39;swoole-http-server&#39; =&gt; [</span>
-<span class="x">            &#39;listeners&#39; =&gt; [</span>
-<span class="x">                &#39;EventClassName&#39; =&gt; [</span>
-<span class="x">                    // service names of listeners</span>
-<span class="x">                ],</span>
-<span class="x">            ],</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">]</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">[
+    'mezzio-swoole' =&gt; [
+        'swoole-http-server' =&gt; [
+            'listeners' =&gt; [
+                'EventClassName' =&gt; [
+                    // service names of listeners
+                ],
+            ],
+        ],
+    ],
+]</code></pre>
 <p>Listeners for each event type are attached in the order they are discovered.</p>
 <p>We recommend using the <code>SwooleListenerProvider</code> service to aggregate the various listeners for Swoole server events, even if you do not use the shipped <code>EventDispatcher</code> implementation.
 Most PSR-14 libraries have functionality for aggregating multiple providers, and should allow you to compose the <code>SwooleListenerProvider</code> within them.</p>
@@ -935,7 +922,7 @@ Most PSR-14 libraries have functionality for aggregating multiple providers, and
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

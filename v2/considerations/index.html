@@ -503,39 +503,37 @@ Write services to be stateless, and/or mark state-changing methods as
 stateless. Well-written interfaces will be stateless by design, and not provide
 methods meant to internally change state. In these situations, you can create a
 proxy class that decorates the original service:</p>
-<div class="highlight"><pre><span></span><code><span class="x">class ProxyService implements OriginalInterface</span>
-<span class="x">{</span>
-<span class="x">    /** @var OriginalInterface */</span>
-<span class="x">    private $proxy;</span>
+<pre class="highlight"><code class="language-php">class ProxyService implements OriginalInterface
+{
+    /** @var OriginalInterface */
+    private $proxy;
 
-<span class="x">    public function __construct(OriginalInterface $proxy)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;proxy = $proxy;</span>
-<span class="x">    }</span>
+    public function __construct(OriginalInterface $proxy)
+    {
+        $this-&gt;proxy = $proxy;
+    }
 
-<span class="x">    public function someMethodDefinedInInterface(string $argument) : Result</span>
-<span class="x">    {</span>
-<span class="x">        return $this-&gt;proxy-&gt;someMethodDefinedInInterface($argument);</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function someMethodDefinedInInterface(string $argument) : Result
+    {
+        return $this-&gt;proxy-&gt;someMethodDefinedInInterface($argument);
+    }
+}</code></pre>
 <p>You would then:</p>
 <ul>
 <li>Map the factory for the original service to the implementation name.</li>
 <li>Create a factory that consumes the original service, and produces the proxy.</li>
 <li>Map the interface name to the factory that creates the proxy.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="x">// in config/autoload/dependencies.global.php:</span>
+<pre class="highlight"><code class="language-php">// in config/autoload/dependencies.global.php:
 
-<span class="x">return [</span>
-<span class="x">    &#39;dependencies&#39; =&gt; [</span>
-<span class="x">        &#39;factories&#39; =&gt; [</span>
-<span class="x">            OriginalImplementation::class =&gt; OriginalImplementationFactory::class,</span>
-<span class="x">            OriginalInterface::class =&gt; ProxyServiceFactory::class,</span>
-<span class="x">        ],</span>
-<span class="x">    ],</span>
-<span class="x">];</span>
-</code></pre></div>
+return [
+    'dependencies' =&gt; [
+        'factories' =&gt; [
+            OriginalImplementation::class =&gt; OriginalImplementationFactory::class,
+            OriginalInterface::class =&gt; ProxyServiceFactory::class,
+        ],
+    ],
+];</code></pre>
 <p>If you were writing to the interface, and not the implementation, you can now
 guarantee that any non-interface methods that changed state can now no longer be
 called.</p>
@@ -545,11 +543,10 @@ when those methods are invoked. (The latter approach ensures that you discover
 quickly when code is exercising those methods.) In each case, you would then use
 a <a href="https://docs.mezzio.dev/mezzio/v3/features/container/delegator-factories/">delegator factory</a>,
 to decorate the original instance in the proxy class:</p>
-<div class="highlight"><pre><span></span><code><span class="x">function (ContainerInterface $container, string $name, callable $callback)</span>
-<span class="x">{</span>
-<span class="x">    return new ProxyService($callback());</span>
-<span class="x">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">function (ContainerInterface $container, string $name, callable $callback)
+{
+    return new ProxyService($callback());
+}</code></pre>
 <p>(You can also use the delegator factory approach with the previous proxy service
 example.)</p>
 <h3 id="extension">Extension</h3>
@@ -561,17 +558,16 @@ ensures that you discover quickly when code is exercising those methods.)</p>
 <code>setTable()</code> in it, and that method would change the database table the mapper
 would query. This is a potentially bad situation!</p>
 <p>We could extend the class as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="x">class StatelessDataMapper extends DataMapper</span>
-<span class="x">{</span>
-<span class="x">    public function setTable(string $table) : void</span>
-<span class="x">    {</span>
-<span class="x">        throw new \DomainException(sprintf(</span>
-<span class="x">            &#39;%s should not be called in production code!&#39;,</span>
-<span class="x">            __METHOD__</span>
-<span class="x">        ));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">class StatelessDataMapper extends DataMapper
+{
+    public function setTable(string $table) : void
+    {
+        throw new \DomainException(sprintf(
+            '%s should not be called in production code!',
+            __METHOD__
+        ));
+    }
+}</code></pre>
 <p>In your factory that creates an instance of <code>DataMapper</code>, have it instead return
 a <code>StatelessDataMapper</code> instance, and you're now safe.</p>
 <h3 id="factories">Factories</h3>
@@ -581,92 +577,89 @@ approach ensures that the service is created only when needed, mitigating any
 state change issues.</p>
 <p>As an example, consider the following middleware that currently consumes a
 template renderer:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Psr\Http\Message\ResponseInterface;</span>
-<span class="x">use Psr\Http\Message\ServerRequestInterface;</span>
-<span class="x">use Psr\Http\Server\RequestHandlerInterface;</span>
-<span class="x">use Laminas\Diactoros\Response\HtmlResponse;</span>
-<span class="x">use Mezzio\Template\TemplateRendererInterface;</span>
+<pre class="highlight"><code class="language-php">use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Template\TemplateRendererInterface;
 
-<span class="x">class SomeHandler implements RequestHandlerInterface</span>
-<span class="x">{</span>
-<span class="x">    /** @var TemplateRendererInterface */</span>
-<span class="x">    private $renderer;</span>
+class SomeHandler implements RequestHandlerInterface
+{
+    /** @var TemplateRendererInterface */
+    private $renderer;
 
-<span class="x">    public function __construct(TemplateRendererInterface $renderer)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;renderer = $renderer;</span>
-<span class="x">    }</span>
+    public function __construct(TemplateRendererInterface $renderer)
+    {
+        $this-&gt;renderer = $renderer;
+    }
 
-<span class="x">    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
-<span class="x">    {</span>
-<span class="x">        return new HtmlResponse($this-&gt;renderer-&gt;render(</span>
-<span class="x">            &#39;app::some-handler&#39;,</span>
-<span class="x">            []</span>
-<span class="x">        ));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function handle(ServerRequestInterface $request) : ResponseInterface
+    {
+        return new HtmlResponse($this-&gt;renderer-&gt;render(
+            'app::some-handler',
+            []
+        ));
+    }
+}</code></pre>
 <p>What we will do is modify it to accept a <em>callable</em> to the constructor. We will
 then call that factory <em>just before</em> we need the renderer; we <em>will not</em> store
 the result in the handler, as we want to ensure we have a new instance each
 time.</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Psr\Http\Message\ResponseInterface;</span>
-<span class="x">use Psr\Http\Message\ServerRequestInterface;</span>
-<span class="x">use Psr\Http\Server\RequestHandlerInterface;</span>
-<span class="x">use Laminas\Diactoros\Response\HtmlResponse;</span>
-<span class="x">use Mezzio\Template\TemplateRendererInterface;</span>
+<pre class="highlight"><code class="language-php">use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Template\TemplateRendererInterface;
 
-<span class="x">class SomeHandler implements RequestHandlerInterface</span>
-<span class="x">{</span>
-<span class="x">    /** @var callable */</span>
-<span class="x">    private $rendererFactory;</span>
+class SomeHandler implements RequestHandlerInterface
+{
+    /** @var callable */
+    private $rendererFactory;
 
-<span class="x">    public function __construct(callable $rendererFactory)</span>
-<span class="x">    {</span>
-<span class="x">        $this-&gt;rendererFactory = $rendererFactory;</span>
-<span class="x">    }</span>
+    public function __construct(callable $rendererFactory)
+    {
+        $this-&gt;rendererFactory = $rendererFactory;
+    }
 
-<span class="x">    public function handle(ServerRequestInterface $request) : ResponseInterface</span>
-<span class="x">    {</span>
-<span class="x">        /** @var TemplateRendererInterface $renderer */</span>
-<span class="x">        $renderer = ($this-&gt;rendererFactory)();</span>
-<span class="x">        return new HtmlResponse($renderer-&gt;render(</span>
-<span class="x">            &#39;app::some-handler&#39;,</span>
-<span class="x">            []</span>
-<span class="x">        ));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+    public function handle(ServerRequestInterface $request) : ResponseInterface
+    {
+        /** @var TemplateRendererInterface $renderer */
+        $renderer = ($this-&gt;rendererFactory)();
+        return new HtmlResponse($renderer-&gt;render(
+            'app::some-handler',
+            []
+        ));
+    }
+}</code></pre>
 <p>From here, we create a factory for our dependency injection container that will
 return the factory we use here. As an example, if we are using the <a href="https://docs.mezzio.dev/mezzio/v3/features/template/laminas-view/">laminas-view
 integration</a>,
 we might do the following:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Psr\Container\ContainerInterface;</span>
-<span class="x">use Mezzio\Template\TemplateRendererInterface;</span>
-<span class="x">use Mezzio\LaminasView\LaminasViewRendererFactory;</span>
+<pre class="highlight"><code class="language-php">
+use Psr\Container\ContainerInterface;
+use Mezzio\Template\TemplateRendererInterface;
+use Mezzio\LaminasView\LaminasViewRendererFactory;
 
-<span class="x">class LaminasViewRendererFactoryFactory</span>
-<span class="x">{</span>
-<span class="x">    public function __invoke(ContainerInterface $container) : callable</span>
-<span class="x">    {</span>
-<span class="x">        $factory = new LaminasViewRendererFactory();</span>
-<span class="x">        return function () use ($container, $factory) : TemplateRendererInterface {</span>
-<span class="x">            return $factory($container);</span>
-<span class="x">        };</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+class LaminasViewRendererFactoryFactory
+{
+    public function __invoke(ContainerInterface $container) : callable
+    {
+        $factory = new LaminasViewRendererFactory();
+        return function () use ($container, $factory) : TemplateRendererInterface {
+            return $factory($container);
+        };
+    }
+}</code></pre>
 <p>If we mapped this to the "service" <code>Mezzio\Template\TemplateRendererInterfaceFactory</code>,
 our factory for the <code>SomeHandler</code> class would then look like:</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Mezzio\Template\TemplateRendererInterfaceFactory;</span>
+<pre class="highlight"><code class="language-php">use Mezzio\Template\TemplateRendererInterfaceFactory;
 
-<span class="x">function (ContainerInterface $container) : SomeHandler</span>
-<span class="x">{</span>
-<span class="x">    return new SomeHandler(</span>
-<span class="x">        $container-&gt;get(TemplateRendererInterfaceFactory::class)</span>
-<span class="x">    );</span>
-<span class="x">}</span>
-</code></pre></div>
+function (ContainerInterface $container) : SomeHandler
+{
+    return new SomeHandler(
+        $container-&gt;get(TemplateRendererInterfaceFactory::class)
+    );
+}</code></pre>
 <p>This approach ensures we get a new instance with known state at precisely the
 moment we wish to execute the functionality. By ensuring we <em>do not</em> store the
 instance in any way, we also ensure it is garbage collected when the instance
@@ -682,39 +675,38 @@ previously: <a href="https://docs.mezzio.dev/mezzio/v3/cookbook/passing-data-bet
 <p>In this particular case, the middleware documented in the original solution
 could be modified to provide data to a request attribute, instead of altering
 the state of the template renderer. It might then become:</p>
-<div class="highlight"><pre><span></span><code><span class="x">namespace App\Middleware;</span>
+<pre class="highlight"><code class="language-php">namespace App\Middleware;
 
-<span class="x">use Psr\Http\Message\ResponseInterface;</span>
-<span class="x">use Psr\Http\Message\ServerRequestInterface;</span>
-<span class="x">use Psr\Http\Server\MiddlewareInterface;</span>
-<span class="x">use Psr\Http\Server\RequestHandlerInterface;</span>
-<span class="x">use Mezzio\Router\RouteResult;</span>
-<span class="x">use Mezzio\Session\Authentication\UserInterface;</span>
-<span class="x">use Mezzio\Session\Flash\FlashMessagesInterface;</span>
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Mezzio\Router\RouteResult;
+use Mezzio\Session\Authentication\UserInterface;
+use Mezzio\Session\Flash\FlashMessagesInterface;
 
-<span class="x">class TemplateDefaultsMiddleware implements MiddlewareInterface</span>
-<span class="x">{</span>
-<span class="x">    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface</span>
-<span class="x">    {</span>
-<span class="x">        $routeResult = $request-&gt;getAttribute(RouteResult::class);</span>
-<span class="x">        $flashMessages = $request-&gt;getAttribute(FlashMessagesInterface::class);</span>
+class TemplateDefaultsMiddleware implements MiddlewareInterface
+{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    {
+        $routeResult = $request-&gt;getAttribute(RouteResult::class);
+        $flashMessages = $request-&gt;getAttribute(FlashMessagesInterface::class);
 
-<span class="x">        $defaults = [</span>
-<span class="x">            // Inject the current user, or null if there isn&#39;t one.</span>
-<span class="x">            // This is named security so it will not interfere with your user admin pages</span>
-<span class="x">            &#39;security&#39; =&gt; $request-&gt;getAttribute(UserInterface::class),</span>
+        $defaults = [
+            // Inject the current user, or null if there isn't one.
+            // This is named security so it will not interfere with your user admin pages
+            'security' =&gt; $request-&gt;getAttribute(UserInterface::class),
 
-<span class="x">            // Inject the currently matched route name.</span>
-<span class="x">            &#39;matchedRouteName&#39; =&gt; $routeResult ? $routeResult-&gt;getMatchedRouteName() : null,</span>
+            // Inject the currently matched route name.
+            'matchedRouteName' =&gt; $routeResult ? $routeResult-&gt;getMatchedRouteName() : null,
 
-<span class="x">            // Inject all flash messages</span>
-<span class="x">            &#39;notifications&#39; =&gt; $flashMessages ? $flashMessages-&gt;getFlashes() : [],</span>
-<span class="x">        ];</span>
+            // Inject all flash messages
+            'notifications' =&gt; $flashMessages ? $flashMessages-&gt;getFlashes() : [],
+        ];
 
-<span class="x">        return $handler-&gt;handle($request-&gt;withAttribute(__CLASS__, $defaults));</span>
-<span class="x">    }</span>
-<span class="x">}</span>
-</code></pre></div>
+        return $handler-&gt;handle($request-&gt;withAttribute(__CLASS__, $defaults));
+    }
+}</code></pre>
 <p>Once that change is made, you would then change your handler to do the
 following:</p>
 <ul>
@@ -722,14 +714,13 @@ following:</p>
 <li>Merge the pulled value with any local values when rendering the template.</li>
 </ul>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$defaultParams = $request-&gt;getAttribute(TemplateDefaultsMiddleware::class, []);</span>
-<span class="x">return new HtmlResponse($renderer-&gt;render(</span>
-<span class="x">    &#39;some::template&#39;,</span>
-<span class="x">    array_merge($defaultParams, [</span>
-<span class="x">        // handler-specific parameters here</span>
-<span class="x">    ])</span>
-<span class="x">));</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">$defaultParams = $request-&gt;getAttribute(TemplateDefaultsMiddleware::class, []);
+return new HtmlResponse($renderer-&gt;render(
+    'some::template',
+    array_merge($defaultParams, [
+        // handler-specific parameters here
+    ])
+));</code></pre>
 <p>This approach, while it requires more work on the part of handler authors,
 ensures that the renderer state does not vary between requests, making it
 safer for usage with Swoole and other long-running processes.</p>
@@ -968,7 +959,7 @@ safer for usage with Swoole and other long-running processes.</p>
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

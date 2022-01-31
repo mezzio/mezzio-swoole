@@ -430,24 +430,22 @@ update your code to adapt to them.</p>
 <p>The internals of <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code> have changed entirely.
 As a result, the constructor signature has also changed.
 Before, it read:</p>
-<div class="highlight"><pre><span></span><code><span class="x">public function __construct(</span>
-<span class="x">    Psr\Http\Server\RequestHandlerInterface $handler,</span>
-<span class="x">    callable $serverRequestFactory,</span>
-<span class="x">    callable $serverRequestErrorResponseGenerator,</span>
-<span class="x">    Mezzio\Swoole\PidManager $pidManager,</span>
-<span class="x">    Swoole\Http\Server $httpServer,</span>
-<span class="x">    Mezzio\Swoole\StaticResourceHandlerInterface $staticResourceHandler = null,</span>
-<span class="x">    Mezzio\Swoole\Log\AccessLogInterface $logger = null,</span>
-<span class="x">    string $processName = self::DEFAULT_PROCESS_NAME,</span>
-<span class="x">    ?Mezzio\Swoole\HotCodeReload\Reloader $hotCodeReloader = null</span>
-<span class="x">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">public function __construct(
+    Psr\Http\Server\RequestHandlerInterface $handler,
+    callable $serverRequestFactory,
+    callable $serverRequestErrorResponseGenerator,
+    Mezzio\Swoole\PidManager $pidManager,
+    Swoole\Http\Server $httpServer,
+    Mezzio\Swoole\StaticResourceHandlerInterface $staticResourceHandler = null,
+    Mezzio\Swoole\Log\AccessLogInterface $logger = null,
+    string $processName = self::DEFAULT_PROCESS_NAME,
+    ?Mezzio\Swoole\HotCodeReload\Reloader $hotCodeReloader = null
+)</code></pre>
 <p>It now reads:</p>
-<div class="highlight"><pre><span></span><code><span class="x">public function __construct(</span>
-<span class="x">    Swoole\Http\Server $httpServer,</span>
-<span class="x">    Psr\EventDispatcher\EventDispatcherInterface $dispatcher</span>
-<span class="x">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-php">public function __construct(
+    Swoole\Http\Server $httpServer,
+    Psr\EventDispatcher\EventDispatcherInterface $dispatcher
+)</code></pre>
 <p>As such, if you were providing your own factory for the class, or instantiating it manually, you will need to update your code.
 See the <a href="../events/">chapter on events</a> for more information on how the the <a href="https://www.php-fig.org/psr/psr-14/">PSR-14 event dispatcher</a> is used internally, and what listeners are provided.</p>
 <h2 id="reloader">Reloader</h2>
@@ -467,11 +465,9 @@ Alternately, you can pass the <code>--num-task-workers|-t</code> option with a n
 <p>In releases prior to version 3, the package shipped with its own binary, <code>mezzio-swoole</code>, and defined the commands <code>start</code>, <code>stop</code>, <code>status</code>, and <code>reload</code>.</p>
 <p>Starting with version 3, the package now leverages <a href="https://docs.laminas.dev/laminas-cli/">laminas-cli</a>, exposing the commands <code>mezzio:swoole:start</code>, <code>mezzio:swoole:stop</code>, <code>mezzio:swoole:status</code>, and <code>mezzio:swoole:reload</code>.
 As such, if you started the server as follows:</p>
-<div class="highlight"><pre><span></span><code>$ ./vendor/bin/mezzio-swoole start
-</code></pre></div>
+<pre class="highlight"><code class="language-bash">$ ./vendor/bin/mezzio-swoole start</code></pre>
 <p>you will now start it using:</p>
-<div class="highlight"><pre><span></span><code>$ ./vendor/bin/laminas mezzio:swoole:start
-</code></pre></div>
+<pre class="highlight"><code class="language-bash">$ ./vendor/bin/laminas mezzio:swoole:start</code></pre>
 <p>Usage of other commands will change similarly.</p>
 
 
@@ -734,7 +730,7 @@ As such, if you started the server as follows:</p>
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>
