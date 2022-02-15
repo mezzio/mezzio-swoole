@@ -33,7 +33,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function emergency($message, array $context = [])
+    public function emergency($message, array $context = []): void
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -42,7 +42,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function alert($message, array $context = [])
+    public function alert($message, array $context = []): void
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -51,7 +51,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function critical($message, array $context = [])
+    public function critical($message, array $context = []): void
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -60,7 +60,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function error($message, array $context = [])
+    public function error($message, array $context = []): void
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -69,7 +69,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function warning($message, array $context = [])
+    public function warning($message, array $context = []): void
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -78,7 +78,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function notice($message, array $context = [])
+    public function notice($message, array $context = []): void
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -87,7 +87,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function info($message, array $context = [])
+    public function info($message, array $context = []): void
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
@@ -96,7 +96,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function debug($message, array $context = [])
+    public function debug($message, array $context = []): void
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
@@ -106,7 +106,7 @@ class StdoutLogger implements LoggerInterface
      * @param string $message
      * @return void
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         foreach ($context as $key => $value) {
             $value   = is_string($value) || is_array($value) ? $value : (string) $value;
