@@ -925,7 +925,7 @@ We then create a <code>Mezzio\Swoole\Task\Task</code> instance and use the Swool
 <pre class="highlight"><code class="language-php">// in config/autoload/swoole.global.php or similar:
 
 use Mezzio\Swoole\Event\TaskEvent;
-use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListener;
 
 return [
     'mezzio-swoole' =&gt; [
@@ -1021,7 +1021,7 @@ We will also add configuration to bind the <code>TaskInvokerListener</code> to t
 use Example\SomeDeferrableEventListener;
 use Example\SomeDeferrableEventListenerFactory;
 use Mezzio\Swoole\Event\TaskEvent;
-use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListener;
 
 return [
     'dependencies' =&gt; [
@@ -1120,7 +1120,7 @@ use Example\SomeDeferrableEvent;
 use Example\SomeDeferrableEventListener;
 use Example\SomeDeferrableEventListenerFactory;
 use Mezzio\Swoole\Event\TaskEvent;
-use Mezzio\Swoole\Event\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListener;
 use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 
 return [
