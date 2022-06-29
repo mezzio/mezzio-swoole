@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Task;
 
-use Interop\Container\ContainerInterface;
 use Mezzio\Swoole\Task\DeferredServiceListener;
 use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 use MezzioTest\Swoole\TestAsset\CallableObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use stdClass;
 use Swoole\Http\Server as SwooleHttpServer;
