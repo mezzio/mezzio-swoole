@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Task;
 
-use Interop\Container\ContainerInterface;
 use Mezzio\Swoole\Event\TaskEvent;
 use Mezzio\Swoole\Task\TaskInterface;
 use Mezzio\Swoole\Task\TaskInvokerListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
