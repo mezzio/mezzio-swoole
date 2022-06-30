@@ -1,13 +1,11 @@
-<?php
+<?php // phpcs:disable Generic.Files.LineLength.TooLong
 
-/**
- * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- */
 
 declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
+use Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface;
 use Mezzio\Swoole\ServerRequestSwooleFactory;
 use Mezzio\Swoole\SwooleStream;
 use PHPUnit\Framework\TestCase;
@@ -112,5 +110,105 @@ class ServerRequestSwooleFactoryTest extends TestCase
         $body = $request->getBody();
         $this->assertInstanceOf(SwooleStream::class, $body);
         $this->assertEquals('this is the content', (string) $body);
+    }
+
+    /** @psalm-return iterable<string, array{0: string, 1: string}> */
+    public function provideRemoteAddressAndExpectedUrl(): iterable
+    {
+        yield 'localhost'      => ['127.0.0.1', 'https://example.com/foo/bar'];
+        yield 'class-a-subnet' => ['10.0.0.1', 'https://example.com/foo/bar'];
+        yield 'class-b-subnet' => ['172.16.16.16', 'https://example.com/foo/bar'];
+        yield 'class-c-subnet' => ['192.168.1.1', 'https://example.com/foo/bar'];
+        yield 'public-ip'      => ['1.2.3.4', 'http://localhost:8080/foo/bar'];
+    }
+
+    /** @dataProvider provideRemoteAddressAndExpectedUrl */
+    public function testRequestGeneratedFromReturnedFactoryContainsUriBasedOnXForwardedHeadersBasedOnSubnetOfRequestingServer(
+        string $remoteAddr,
+        string $expectedUrl
+    ): void {
+        $swooleRequest         = $this->createMock(SwooleHttpRequest::class);
+        $swooleRequest->server = [
+            'path_info'       => '/',
+            'remote_addr'     => $remoteAddr,
+            'remote_port'     => 8080,
+            'REQUEST_METHOD'  => 'GET',
+            'REQUEST_TIME'    => time(),
+            'REQUEST_URI'     => '/foo/bar',
+            'server_port'     => 9501,
+            'server_protocol' => 'HTTP/1.1',
+        ];
+        $swooleRequest->get    = [];
+        $swooleRequest->post   = [];
+        $swooleRequest->cookie = [];
+        $swooleRequest->files  = [];
+        $swooleRequest->header = [
+            'host'              => 'localhost:8080',
+            'x-forwarded-host'  => 'example.com',
+            'x-forwarded-proto' => 'https',
+            'x-forwarded-port'  => '443',
+        ];
+
+        $swooleRequest->method('rawContent')->willReturn('');
+
+        $factory = new ServerRequestSwooleFactory();
+
+        $requestFactory = $factory($this->createMock(ContainerInterface::class));
+        $request        = $requestFactory($swooleRequest);
+
+        $this->assertInstanceOf(ServerRequestInterface::class, $request);
+        $this->assertSame($expectedUrl, $request->getUri()->__toString());
+    }
+
+    public function testFactoryUsesARequestFilterWhenPresentInTheContainer(): void
+    {
+        $swooleRequest         = $this->createMock(SwooleHttpRequest::class);
+        $swooleRequest->server = [
+            'path_info'       => '/',
+            'remote_addr'     => '1.2.3.4',
+            'remote_port'     => 8080,
+            'REQUEST_METHOD'  => 'GET',
+            'REQUEST_TIME'    => time(),
+            'REQUEST_URI'     => '/foo/bar',
+            'server_port'     => 9501,
+            'server_protocol' => 'HTTP/1.1',
+        ];
+        $swooleRequest->get    = [];
+        $swooleRequest->post   = [];
+        $swooleRequest->cookie = [];
+        $swooleRequest->files  = [];
+        $swooleRequest->header = [
+            'host'              => 'localhost:8080',
+            'x-forwarded-host'  => 'example.com',
+            'x-forwarded-proto' => 'https',
+            'x-forwarded-port'  => '443',
+        ];
+
+        $swooleRequest->method('rawContent')->willReturn('');
+
+        $serverRequest = $this->createMock(ServerRequestInterface::class);
+        $filter        = $this->createMock(FilterServerRequestInterface::class);
+        $filter
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->isInstanceOf(ServerRequestInterface::class))
+            ->willReturn($serverRequest);
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects($this->once())
+            ->method('has')
+            ->with(FilterServerRequestInterface::class)
+            ->willReturn(true);
+        $container
+            ->expects($this->once())
+            ->method('get')
+            ->with(FilterServerRequestInterface::class)
+            ->willReturn($filter);
+
+        $factory        = new ServerRequestSwooleFactory();
+        $requestFactory = $factory($container);
+
+        $this->assertSame($serverRequest, $requestFactory($swooleRequest));
     }
 }
