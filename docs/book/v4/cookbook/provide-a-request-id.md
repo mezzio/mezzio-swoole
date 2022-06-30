@@ -65,3 +65,109 @@ This approach:
 - Keeps the logic close to the web server.
 - Utilizes facilities already built-in to Mezzio and mezzio-swoole.
 - Allows other code to perform similar work in order to manipulate and modify the request.
+
+## Alternate solution
+
+INFO: Available since 4.2.1
+
+As of mezzio-swoole 4.2.1, you can now define and consume a `Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface` service to modify the `ServerRequestInterface` generated when a request arrives.
+This can be done in one of two ways, depending on whether or not you explicitly define the `FilterServerRequestInterface` service.
+
+### Without a defined FilterServerRequestInterface
+
+If you have not defined the `FilterServerRequestInterface` you will do so now.
+First, create a factory class; we will do so here in `src/App/FilterAddingRequestId.php`:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface;
+use Ramsey\Uuid\Uuid;
+use Psr\Http\Message\ServerRequestInterface;
+
+class FilterAddingRequestId implements FilterServerRequestInterface
+{
+    public function __invoke(ServerRequestInterface $request): ServerRequestInterface
+    {
+        return $request->withHeader('X-Request_ID', Uuid::uuid1());
+    }
+}
+```
+
+Next, configure the `FilterServerRequestInterface` service to use this filter:
+
+```php
+return [
+    'dependencies' => [
+        'invokables' => [
+            \Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface::class =>
+                \App\FilterAddingRequestId::class,
+        ],
+    ],
+];
+```
+
+At this point, any generated requests will now have a unique request ID on creation.
+
+### With a defined FilterServerRequestInterface
+
+If you have already defined the `FilterServerRequestInterface` service, you will now need to decorate it to ensure you can add your request identifier.
+We will do that via a delegator factory and an anonymous class.
+Create the class file `src/App/FilterAddingRequestIdDecorator.php` with the following contents:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface;
+use Ramsey\Uuid\Uuid;
+use Psr\Container\ContainerInterface
+use Psr\Http\Message\ServerRequestInterface;
+
+class FilterAddingRequestIdDecorator
+{
+    public function __invoke(
+        ContainerInterface $container,
+        string $serviceName,
+        callable $factory
+    ): FilterServerRequestInterface {
+        $primaryFilter = $factory();
+
+        return new class($primaryFilter) implements FilterServerRequestInterface {
+            private FilterServerRequestInterface $primaryFilter;
+
+            public function __construct(FilterServerRequestInterface $primaryFilter)
+            {
+                $this->primaryFilter = $primaryFilter;
+            }
+
+            public function __invoke(ServerRequestInterface $request): ServerRequestInterface
+            {
+                return ($this->primaryFilter)($request)
+                    ->withHeader('X-Request_ID', Uuid::uuid1());
+            }
+        };
+    }
+}
+```
+
+Next, register the delegator factory against the `FilterServerRequestInterface`:
+
+```php
+return [
+    'dependencies' => [
+        'delegators' => [
+            \Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface::class => [
+                \App\FilterAddingRequestIdDecorator::class,
+            ],
+        ],
+    ],
+];
+```
