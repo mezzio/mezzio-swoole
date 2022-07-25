@@ -22,11 +22,11 @@ To change behavior of the class, we recommend using its [event system](events.md
 
 ## ServerRequestSwooleFactory
 
-INFO: Since 4.2.1
+INFO: Since 4.3.0
 
-Starting in version 4.2.1, the behavior of `Mezzio\Swoole\ServerRequestSwooleFactory` changes slightly with regards to how it handles the various `X-Forwarded-*` headers.
+Starting in version 4.3.0, the behavior of `Mezzio\Swoole\ServerRequestSwooleFactory` changes slightly with regards to how it handles the various `X-Forwarded-*` headers.
 These headers are conventionally used when a server is behind a load balancer or reverse proxy in order to present to the application the URL that initiated a request.
-Starting in version 4.2.1, by default, these headers are only honored if the request received originates from a reserved subnet (e.g., localhost; class A, B, and C subnets; IPv6 private and local-link subnets).
+Starting in version 4.3.0, by default, these headers are only honored if the request received originates from a reserved subnet (e.g., localhost; class A, B, and C subnets; IPv6 private and local-link subnets).
 
 If you want to honor these headers from any source, or if you never want to allow them, you can provide an alternate implementation via the `Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface` service.
 As an example, you could use the following to dis-allow them:

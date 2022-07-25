@@ -68,9 +68,9 @@ This approach:
 
 ## Alternate solution
 
-INFO: Available since 4.2.1
+INFO: Available since 4.3.0
 
-As of mezzio-swoole 4.2.1, you can now define and consume a `Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface` service to modify the `ServerRequestInterface` generated when a request arrives.
+As of mezzio-swoole 4.3.0, you can now define and consume a `Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface` service to modify the `ServerRequestInterface` generated when a request arrives.
 This can be done in one of two ways, depending on whether or not you explicitly define the `FilterServerRequestInterface` service.
 
 ### Without a defined FilterServerRequestInterface
