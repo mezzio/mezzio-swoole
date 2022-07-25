@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="v4.15.0@a1b5e489e6fcebe40cb804793d964e99fc347820">
+<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArgument occurrences="3">
       <code>$compressionLevel</code>
@@ -214,15 +214,6 @@
       <code>'-'</code>
       <code>'-'</code>
     </InvalidScalarArgument>
-    <MixedArgument occurrences="7">
-      <code>$matches[1]</code>
-      <code>$matches[1]</code>
-      <code>$matches[1]</code>
-      <code>$matches[1]</code>
-      <code>$matches[1]</code>
-      <code>$matches[1]</code>
-      <code>$matches[1]</code>
-    </MixedArgument>
   </file>
   <file src="src/Log/LoggerResolvingTrait.php">
     <MixedInferredReturnType occurrences="1">
@@ -262,6 +253,9 @@
     </MixedAssignment>
   </file>
   <file src="src/ServerRequestSwooleFactory.php">
+    <DeprecatedFunction occurrences="1">
+      <code>marshalUriFromSapi($server, $stripXForwardedHeaders($headers))</code>
+    </DeprecatedFunction>
     <MixedArgument occurrences="6">
       <code>$cookie</code>
       <code>$files</code>
@@ -270,12 +264,13 @@
       <code>$post</code>
       <code>$server</code>
     </MixedArgument>
-    <MixedAssignment occurrences="6">
+    <MixedAssignment occurrences="7">
       <code>$cookie</code>
       <code>$files</code>
       <code>$get</code>
       <code>$headers</code>
       <code>$post</code>
+      <code>$requestFilter</code>
       <code>$server</code>
     </MixedAssignment>
   </file>
@@ -562,9 +557,6 @@
     </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
-    <MissingClosureParamType occurrences="1">
-      <code>$errno</code>
-    </MissingClosureParamType>
     <MixedArgument occurrences="1">
       <code>$regex</code>
     </MixedArgument>
@@ -682,6 +674,10 @@
       <code>$command-&gt;killProcess</code>
       <code>$command-&gt;waitThreshold</code>
     </InternalProperty>
+    <TypeDoesNotContainType occurrences="2">
+      <code>assertTrue</code>
+      <code>assertTrue</code>
+    </TypeDoesNotContainType>
   </file>
   <file src="test/Command/TestAsset/config/pipeline.php">
     <UnusedClosureParam occurrences="3">
