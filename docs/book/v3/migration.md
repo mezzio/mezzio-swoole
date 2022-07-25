@@ -71,3 +71,27 @@ $ ./vendor/bin/laminas mezzio:swoole:start
 ```
 
 Usage of other commands will change similarly.
+
+## ServerRequestSwooleFactory
+
+INFO: Since 3.7.0
+
+Starting in version 3.7.0, the behavior of `Mezzio\Swoole\ServerRequestSwooleFactory` changes slightly with regards to how it handles the various `X-Forwarded-*` headers.
+These headers are conventionally used when a server is behind a load balancer or reverse proxy in order to present to the application the URL that initiated a request.
+Starting in version 3.7.0, by default, these headers are only honored if the request received originates from a reserved subnet (e.g., localhost; class A, B, and C subnets; IPv6 private and local-link subnets).
+
+If you want to honor these headers from any source, or if you never want to allow them, you can provide an alternate implementation via the `Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface` service.
+As an example, you could use the following to dis-allow them:
+
+```php
+return [
+    'dependencies' => [
+        'invokables' => [
+            \Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface::class =>
+                \Laminas\Diactoros\ServerRequestFilter\DoNotFilter::class,
+        ],
+    ],
+];
+```
+
+If you are using Mezzio 3.11.0 or later, you can also use its `Mezzio\Container\FilterUsingXForwardedHeadersFactory` and related configuration to fine-tune which sources may be considered for usage of these headers.

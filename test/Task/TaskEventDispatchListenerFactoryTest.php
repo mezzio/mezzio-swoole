@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Task;
 
-use Interop\Container\ContainerInterface;
 use Mezzio\Swoole\Event\EventDispatcherInterface as MezzioEventDispatcherInterface;
 use Mezzio\Swoole\Task\TaskEventDispatchListenerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionProperty;
