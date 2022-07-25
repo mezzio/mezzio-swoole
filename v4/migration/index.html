@@ -5,7 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Swoole support for Mezzio">  
+    <meta name="description" content="Swoole support for Mezzio"> 
+
+    
+    
+        
+    
+    <meta name="docsearch:version" content="4.0.0,latest">
+    <meta name="docsearch:language" content="en">
+    <meta name="docsearch:component" content="mezzio-swoole">
+
     <link rel="canonical" href="https://docs.mezzio.dev/mezzio-swoole/v4/migration/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
@@ -344,7 +353,7 @@
                     <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
                         <i class="fa fa-search"></i> Search
                     </a>
-                    <a href="https://github.com/mezzio/mezzio-swoole/" class="header__link header__link--github" title="Go to repository of mezzio-swoole">
+                    <a href="https://github.com/mezzio/mezzio-swoole" class="header__link header__link--github" title="Go to repository of mezzio-swoole">
                         <i class="fa fa-github"></i> GitHub
                     </a>
                 
@@ -370,6 +379,10 @@
                 
                     <li class="toc__entry">
                         <a href="#swoolerequesthandlerrunner" class="toc__link nav-link">SwooleRequestHandlerRunner</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#serverrequestswoolefactory" class="toc__link nav-link">ServerRequestSwooleFactory</a>
                     </li>
                 
             </ul>
@@ -423,6 +436,25 @@ The result is that mezzio-swoole v3 releases cannot be used with Mezzio versions
 Further, the class is now marked <strong>final</strong>.</p>
 <p>As such, you can no longer extend <code>Mezzio\Swoole\SwooleRequestHandlerRunner</code>.
 To change behavior of the class, we recommend using its <a href="../events/">event system</a> and attaching listeners to shape its behavior.</p>
+<h2 id="serverrequestswoolefactory">ServerRequestSwooleFactory</h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Since 4.3.0</p>
+</div>
+<p>Starting in version 4.3.0, the behavior of <code>Mezzio\Swoole\ServerRequestSwooleFactory</code> changes slightly with regards to how it handles the various <code>X-Forwarded-*</code> headers.
+These headers are conventionally used when a server is behind a load balancer or reverse proxy in order to present to the application the URL that initiated a request.
+Starting in version 4.3.0, by default, these headers are only honored if the request received originates from a reserved subnet (e.g., localhost; class A, B, and C subnets; IPv6 private and local-link subnets).</p>
+<p>If you want to honor these headers from any source, or if you never want to allow them, you can provide an alternate implementation via the <code>Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface</code> service.
+As an example, you could use the following to dis-allow them:</p>
+<pre class="highlight"><code class="language-php">return [
+    'dependencies' =&gt; [
+        'invokables' =&gt; [
+            \Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface::class =&gt;
+                \Laminas\Diactoros\ServerRequestFilter\DoNotFilter::class,
+        ],
+    ],
+];</code></pre>
+<p>If you are using Mezzio 3.11.0 or later, you can also use its <code>Mezzio\Container\FilterUsingXForwardedHeadersFactory</code> and related configuration to fine-tune which sources may be considered for usage of these headers.</p>
 
 
 
@@ -434,7 +466,9 @@ To change behavior of the class, we recommend using its <a href="../events/">eve
         <li class="page-nav__item">
             
                 <a rel="prev" class="page-nav__link page-nav__link--prev" href="../cookbook/provide-a-request-id/">
-                    <i class="fa fa-chevron-left"></i> Previous
+                    <small class="page-nav__label">Previous</small>
+                    <i class="fa fa-chevron-left"></i>
+                    Provide a unique ID in your request
                 </a>
             
         </li>
@@ -443,7 +477,9 @@ To change behavior of the class, we recommend using its <a href="../events/">eve
         <li class="page-nav__item">
             
                 <a rel="next" class="page-nav__link page-nav__link--next" href="../../v3/intro/">
-                    Next <i class="fa fa-chevron-right"></i>
+                    <small class="page-nav__label">Next</small>
+                    Introduction
+                    <i class="fa fa-chevron-right"></i>
                 </a>
             
         </li>
@@ -680,7 +716,7 @@ To change behavior of the class, we recommend using its <a href="../events/">eve
                         <h4 class="footer__headline">License</h4>
                         <p>
                             Code licensed under <a
-                                href="https://github.com/mezzio/mezzio-swoole/blob/master/LICENSE.md">BSD 3-Clause</a>.
+                                href="https://github.com/mezzio/mezzio-swoole/blob/-/LICENSE.md">BSD 3-Clause</a>.
                         </p>
                     </div>
 
