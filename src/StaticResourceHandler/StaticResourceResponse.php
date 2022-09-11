@@ -17,8 +17,7 @@ use function sprintf;
 
 class StaticResourceResponse
 {
-    /** @var int */
-    private $contentLength = 0;
+    private int $contentLength = 0;
 
     /** @psalm-var array<string, string> */
     private array $headers = [];

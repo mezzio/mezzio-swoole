@@ -27,7 +27,7 @@ class SwooleEmitter implements EmitterInterface
     /**
      * @see https://www.swoole.co.uk/docs/modules/swoole-http-server/methods-properties#swoole-http-response-write
      */
-    public const CHUNK_SIZE = 2097152; // 2 MB
+    public const CHUNK_SIZE = 2_097_152; // 2 MB
 
     private SwooleHttpResponse $swooleResponse;
 

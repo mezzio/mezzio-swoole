@@ -24,11 +24,8 @@ class IntegrationTest extends TestCase
 {
     use FormatTimestampTrait;
 
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $docRoot;
+    /** @psalm-var non-empty-string */
+    private string $docRoot;
 
     protected function setUp(): void
     {

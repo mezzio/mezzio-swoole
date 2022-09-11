@@ -22,9 +22,7 @@ class DeferredListenerDelegatorTest extends TestCase
     public function testDelegatorReturnsResultOfFactoryVerbatimIfNotCallable(): void
     {
         $instance = new stdClass();
-        $factory  = function () use ($instance): stdClass {
-            return $instance;
-        };
+        $factory  = static fn(): stdClass => $instance;
 
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->never())->method('get');
@@ -38,9 +36,7 @@ class DeferredListenerDelegatorTest extends TestCase
     {
         $server   = $this->createMock(SwooleHttpServer::class);
         $listener = new CallableObject();
-        $factory  = function () use ($listener): callable {
-            return $listener;
-        };
+        $factory  = static fn(): callable => $listener;
 
         $container = $this->createMock(ContainerInterface::class);
         $container

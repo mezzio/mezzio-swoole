@@ -79,7 +79,7 @@ class MiddlewareQueueTest extends TestCase
                         ->method('__invoke')
                         ->with($request, $filename, $middlewareQueue)
                         ->will($this->returnCallback(
-                            function (
+                            static function (
                                 Request $request,
                                 string $filename,
                                 MiddlewareQueue $middlewareQueue

@@ -39,7 +39,7 @@ class HotCodeReloaderWorkerStartListener
         $fileWatcher = $this->fileWatcher;
         $logger      = $this->logger;
 
-        $server->tick($this->interval, function () use ($server, $fileWatcher, $logger) {
+        $server->tick($this->interval, static function () use ($server, $fileWatcher, $logger): void {
             $changedFilePaths = $fileWatcher->readChangedFilePaths();
             if (! $changedFilePaths) {
                 return;

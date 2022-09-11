@@ -113,7 +113,7 @@ class TaskEventDispatchListenerTest extends TestCase
             ->method('error')
             ->with(
                 $this->stringContains('Error processing task'),
-                $this->callback(function (array $context) use ($taskId, $exception): bool {
+                $this->callback(static function (array $context) use ($taskId, $exception): bool {
                     if (
                         ! array_key_exists('taskId', $context)
                         || ! array_key_exists('error', $context)

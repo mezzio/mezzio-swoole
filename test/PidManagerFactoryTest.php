@@ -21,8 +21,7 @@ class PidManagerFactoryTest extends TestCase
      */
     private $container;
 
-    /** @var PidManagerFactory */
-    private $pidManagerFactory;
+    private PidManagerFactory $pidManagerFactory;
 
     protected function setUp(): void
     {

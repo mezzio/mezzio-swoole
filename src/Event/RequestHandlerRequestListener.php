@@ -78,25 +78,22 @@ class RequestHandlerRequestListener
         // Factories are cast as Closures to ensure return type safety.
         /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestFactory
-            = static function (SwooleHttpRequest $request) use ($serverRequestFactory): ServerRequestInterface {
+            = static fn(SwooleHttpRequest $request): ServerRequestInterface =>
                 /** @psalm-suppress MixedReturnStatement */
-                return $serverRequestFactory($request);
-            };
+                $serverRequestFactory($request);
 
         /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestErrorResponseGenerator
-            = static function (Throwable $exception) use ($serverRequestErrorResponseGenerator): ResponseInterface {
+            = static fn(Throwable $exception): ResponseInterface =>
                 /** @psalm-suppress MixedReturnStatement */
-                return $serverRequestErrorResponseGenerator($exception);
-            };
+                $serverRequestErrorResponseGenerator($exception);
 
         if ($emitterFactory) {
             /** @psalm-suppress MixedInferredReturnType */
             $this->emitterFactory
-                = static function (SwooleHttpResponse $response) use ($emitterFactory): SwooleEmitter {
+                = static fn(SwooleHttpResponse $response): SwooleEmitter =>
                     /** @psalm-suppress MixedReturnStatement */
-                    return $emitterFactory($response);
-                };
+                    $emitterFactory($response);
         }
     }
 

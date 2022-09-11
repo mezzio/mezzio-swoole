@@ -59,7 +59,7 @@ class StaticResourceResponseTest extends TestCase
         $response->setStatus(302);
         $response->addHeader('Location', 'https://example.com');
         $response->addHeader('Expires', '3600');
-        $response->setResponseContentCallback(static function () {
+        $response->setResponseContentCallback(static function (): void {
             TestCase::fail('Callback should not have been called');
         });
         $response->disableContent();

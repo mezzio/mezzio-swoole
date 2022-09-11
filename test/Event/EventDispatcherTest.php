@@ -44,7 +44,7 @@ class EventDispatcherTest extends TestCase
 
         $listeners = [];
         for ($i = 0; $i < 5; $i += 1) {
-            $listeners[] = function (object $event) use ($spy): void {
+            $listeners[] = static function (object $event) use ($spy): void {
                 $spy->caught += 1;
             };
         }
@@ -98,7 +98,7 @@ class EventDispatcherTest extends TestCase
 
         $listeners = [];
         for ($i = 0; $i < 5; $i += 1) {
-            $listeners[] = function (object $event) use ($spy): void {
+            $listeners[] = static function (object $event) use ($spy): void {
                 $spy->caught += 1;
             };
         }

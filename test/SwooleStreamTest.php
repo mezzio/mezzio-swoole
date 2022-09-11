@@ -32,8 +32,7 @@ class SwooleStreamTest extends TestCase
      */
     private $request;
 
-    /** @var SwooleStream */
-    private $stream;
+    private SwooleStream $stream;
 
     protected function setUp(): void
     {

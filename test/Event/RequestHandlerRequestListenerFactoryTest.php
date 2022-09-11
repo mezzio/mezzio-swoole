@@ -24,12 +24,9 @@ class RequestHandlerRequestListenerFactoryTest extends TestCase
     public function testFactoryProducesListenerUsingServicesFromContainer(): void
     {
         $pipeline             = $this->createMock(RequestHandlerInterface::class);
-        $requestFactory       = function (SwooleHttpRequest $request): ServerRequestInterface {
-            return $this->createMock(ServerRequestInterface::class);
-        };
-        $errorResponseFactory = function (Throwable $e): ResponseInterface {
-            return $this->createMock(ResponseInterface::class);
-        };
+        $requestFactory       = fn(SwooleHttpRequest $request): ServerRequestInterface
+            => $this->createMock(ServerRequestInterface::class);
+        $errorResponseFactory = fn(Throwable $e): ResponseInterface => $this->createMock(ResponseInterface::class);
         $logger               = $this->createMock(AccessLogInterface::class);
         $container            = $this->createMock(ContainerInterface::class);
         $container

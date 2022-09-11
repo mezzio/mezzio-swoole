@@ -22,11 +22,21 @@ class TaskTest extends TestCase
         $first    = 'first';
         $second   = 2;
         $third    = true;
-        $handler  = function (string $one, int $two, bool $three) use ($expected, $first, $second, $third): string {
-            TestCase::assertSame($first, $one);
-            TestCase::assertSame($second, $two);
-            TestCase::assertSame($third, $three);
-            return $expected;
+        $handler  = static function (
+            string $one,
+            int $two,
+            bool $three
+        ) use (
+            $expected,
+            $first,
+            $second,
+            $third
+        ): string {
+                TestCase::assertSame($first, $one);
+                TestCase::assertSame($second, $two);
+                TestCase::assertSame($third, $three);
+
+                return $expected;
         };
 
         $task = new Task($handler, $first, $second, $third);

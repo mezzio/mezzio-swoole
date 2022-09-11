@@ -22,20 +22,13 @@ use function time;
 
 class FileLocationRepositoryTest extends TestCase
 {
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $testDir;
+    /** @psalm-var non-empty-string */
+    private string $testDir;
 
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $testValDir;
+    /** @psalm-var non-empty-string */
+    private string $testValDir;
 
-    /** @var FileLocationRepository */
-    private $fileLocRepo;
+    private FileLocationRepository $fileLocRepo;
 
     protected function setUp(): void
     {

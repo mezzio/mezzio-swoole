@@ -102,12 +102,10 @@ class TaskInvokerListenerTest extends TestCase
             ->with(
                 LogLevel::NOTICE,
                 $this->stringContains('Starting work on task'),
-                $this->callback(function (array $context) use ($taskId, $serializedTask): bool {
-                    return array_key_exists('taskId', $context)
-                        && $taskId === $context['taskId']
-                        && array_key_exists('task', $context)
-                        && json_encode($serializedTask) === $context['task'];
-                })
+                $this->callback(static fn(array $context): bool => array_key_exists('taskId', $context)
+                    && $taskId === $context['taskId']
+                    && array_key_exists('task', $context)
+                    && json_encode($serializedTask) === $context['task'])
             );
 
         $this->assertNull($listener($this->event));
@@ -154,23 +152,19 @@ class TaskInvokerListenerTest extends TestCase
                 [
                     LogLevel::NOTICE,
                     $this->stringContains('Starting work on task'),
-                    $this->callback(function (array $context) use ($taskId, $serializedTask): bool {
-                        return array_key_exists('taskId', $context)
-                            && $taskId === $context['taskId']
-                            && array_key_exists('task', $context)
-                            && json_encode($serializedTask) === $context['task'];
-                    }),
+                    $this->callback(static fn(array $context): bool => array_key_exists('taskId', $context)
+                        && $taskId === $context['taskId']
+                        && array_key_exists('task', $context)
+                        && json_encode($serializedTask) === $context['task']),
                 ],
                 [
                     LogLevel::ERROR,
                     $this->stringContains('Error processing task'),
-                    $this->callback(function (array $context) use ($taskId, $exception): bool {
-                        return array_key_exists('taskId', $context)
-                            && $taskId === $context['taskId']
-                            && array_key_exists('error', $context)
-                            && is_string($context['error'])
-                            && false !== strpos($context['error'], get_class($exception));
-                    }),
+                    $this->callback(static fn(array $context): bool => array_key_exists('taskId', $context)
+                        && $taskId === $context['taskId']
+                        && array_key_exists('error', $context)
+                        && is_string($context['error'])
+                        && false !== strpos($context['error'], get_class($exception))),
                 ]
             );
 

@@ -69,9 +69,7 @@ class CacheControlMiddlewareTest extends TestCase
             'request_uri' => '/some/path.html',
         ];
 
-        $next = static function (Request $request, string $filename): StaticResourceResponse {
-            return new StaticResourceResponse();
-        };
+        $next = static fn(Request $request, string $filename): StaticResourceResponse => new StaticResourceResponse();
 
         $response = $middleware($request, 'some/path.html', $next);
 
@@ -94,9 +92,7 @@ class CacheControlMiddlewareTest extends TestCase
             'request_uri' => '/some/path.txt',
         ];
 
-        $next = static function (Request $request, string $filename): StaticResourceResponse {
-            return new StaticResourceResponse();
-        };
+        $next = static fn(Request $request, string $filename): StaticResourceResponse => new StaticResourceResponse();
 
         $response = $middleware($request, 'some/path.html', $next);
 

@@ -19,11 +19,8 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticResourceHandlerTest extends TestCase
 {
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $docRoot;
+    /** @psalm-var non-empty-string */
+    private string $docRoot;
 
     /**
      * @var SwooleHttpRequest|MockObject

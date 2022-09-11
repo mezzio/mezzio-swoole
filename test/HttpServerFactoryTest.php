@@ -60,7 +60,7 @@ class HttpServerFactoryTest extends TestCase
          *
          * @see https://github.com/swoole/swoole-src/issues/1754
          */
-        $process = new Process(function (Process $worker) {
+        $process = new Process(function (Process $worker): void {
             $this->container->method('get')->with('config')->willReturn([]);
             $factory      = new HttpServerFactory();
             $swooleServer = $factory($this->container);
@@ -78,7 +78,7 @@ class HttpServerFactoryTest extends TestCase
 
     public function testFactorySetsPortAndHostAsConfigured(): void
     {
-        $process = new Process(function (Process $worker) {
+        $process = new Process(function (Process $worker): void {
             $this->container->method('get')->with('config')->willReturn([
                 'mezzio-swoole' => [
                     'swoole-http-server' => [
@@ -228,7 +228,7 @@ class HttpServerFactoryTest extends TestCase
                 ],
             ],
         ]);
-        $process = new Process(function (Process $worker) {
+        $process = new Process(function (Process $worker): void {
             $factory      = new HttpServerFactory();
             $swooleServer = $factory($this->container);
             $worker->write(json_encode($swooleServer->setting));
@@ -289,21 +289,21 @@ class HttpServerFactoryTest extends TestCase
                 ],
             ],
         ]);
-        $process = new Process(function (Process $worker) {
+        $process = new Process(function (Process $worker): void {
             try {
                 $factory      = new HttpServerFactory();
                 $swooleServer = $factory($this->container);
-                $swooleServer->on('Start', static function (SwooleServer $server) use ($worker) {
+                $swooleServer->on('Start', static function (SwooleServer $server) use ($worker): void {
                     // Give the server a chance to start up and avoid zombies
                     usleep(10000);
                     $worker->write('Server Started');
                     $server->stop();
                     $server->shutdown();
                 });
-                $swooleServer->on('Request', static function ($req, $rep) {
+                $swooleServer->on('Request', static function ($req, $rep): void {
                     // noop
                 });
-                $swooleServer->on('Packet', static function (SwooleServer $server, $data, $clientInfo) {
+                $swooleServer->on('Packet', static function (SwooleServer $server, $data, $clientInfo): void {
                     // noop
                 });
                 $swooleServer->start();
@@ -337,17 +337,17 @@ class HttpServerFactoryTest extends TestCase
         if (extension_loaded('xdebug')) {
             $this->expectWarning();
 
-            go(static function () {
+            go(static function (): void {
             });
         } else {
             $i = 0;
-            go(static function () use (&$i) {
+            go(static function () use (&$i): void {
                 Assert::integer($i);
                 usleep(1000);
                 $i += 1;
                 SwooleEvent::exit();
             });
-            go(function () use (&$i) {
+            go(function () use (&$i): void {
                 Assert::integer($i);
                 $i += 1;
                 $this->assertEquals(1, $i);

@@ -26,8 +26,7 @@ use function substr;
 
 class SwooleEmitterTest extends TestCase
 {
-    /** @var SwooleEmitter */
-    private $emitter;
+    private SwooleEmitter $emitter;
 
     /**
      * @var SwooleHttpResponse|MockObject
@@ -119,7 +118,7 @@ class SwooleEmitterTest extends TestCase
             ->withConsecutive(
                 ['foo', 'bar', 0, '/', '', false, false, ''],
                 ['bar', 'baz', 0, '/', '', false, false, ''],
-                ['baz', 'qux', 1623233894, '/', 'somecompany.co.uk', true, true, ''],
+                ['baz', 'qux', 1_623_233_894, '/', 'somecompany.co.uk', true, true, ''],
                 // SameSite cookies
                 ['ss1', 'foo1', 0, '/', '', false, false, 'Strict'],
                 ['ss2', 'foo2', 0, '/', '', false, false, 'Strict'],
@@ -210,9 +209,7 @@ class SwooleEmitterTest extends TestCase
     public function testEmitCallbackStream(): void
     {
         $content  = 'content';
-        $callable = function () use ($content): string {
-            return $content;
-        };
+        $callable = static fn(): string => $content;
 
         $response = (new Response())
             ->withBody(new CallbackStream($callable))

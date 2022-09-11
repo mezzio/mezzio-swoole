@@ -44,11 +44,8 @@ class IntegrationMappedTest extends TestCase
      */
     private $mockFileLocRepo;
 
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $assetPath;
+    /** @psalm-var non-empty-string */
+    private string $assetPath;
 
     protected function setUp(): void
     {

@@ -13,7 +13,6 @@ use Mezzio\Swoole\Exception\RuntimeException;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Webmozart\Assert\Assert;
 
-use function array_merge;
 use function array_values;
 use function extension_loaded;
 use function in_array;
@@ -112,7 +111,7 @@ class InotifyFileWatcher implements FileWatcherInterface
                 continue;
             }
 
-            $paths = array_merge($paths, $this->listSubdirectoriesRecursively($filename));
+            $paths = [...$paths, ...$this->listSubdirectoriesRecursively($filename)];
         }
 
         Assert::allStringNotEmpty($paths);

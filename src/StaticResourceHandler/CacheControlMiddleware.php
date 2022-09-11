@@ -82,7 +82,7 @@ class CacheControlMiddleware implements MiddlewareInterface
                 ));
             }
 
-            array_walk($directives, function ($directive) use ($regex) {
+            array_walk($directives, function ($directive) use ($regex): void {
                 if (! is_string($directive)) {
                     throw new Exception\InvalidArgumentException(sprintf(
                         'One or more Cache-Control directives associated with the regex "%s" are invalid;'
