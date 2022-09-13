@@ -28,14 +28,10 @@ class FileLocationRepositoryFactoryTest extends TestCase
      */
     private $mockContainer;
 
-    /** @var FileLocationRepositoryFactory */
-    private $fileLocRepoFactory;
+    private FileLocationRepositoryFactory $fileLocRepoFactory;
 
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $assetDir;
+    /** @psalm-var non-empty-string */
+    private string $assetDir;
 
     protected function setUp(): void
     {

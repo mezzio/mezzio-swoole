@@ -71,8 +71,8 @@ class StopCommandTest extends TestCase
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];
-        yield 'base-mode'    => [[1000000, null]];
-        yield 'process-mode' => [[1000000, 1000001]];
+        yield 'base-mode'    => [[1_000_000, null]];
+        yield 'process-mode' => [[1_000_000, 1_000_001]];
     }
 
     /**
@@ -105,7 +105,7 @@ class StopCommandTest extends TestCase
     public function runningProcesses(): iterable
     {
         yield 'base-mode'    => [[getmypid(), null]];
-        yield 'process-mode' => [[1000000, getmypid()]];
+        yield 'process-mode' => [[1_000_000, getmypid()]];
     }
 
     /**

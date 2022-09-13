@@ -35,7 +35,7 @@ class ServerRequestSwooleFactory
             ? $container->get(FilterServerRequestInterface::class)
             : FilterUsingXForwardedHeaders::trustReservedSubnets();
 
-        $stripXForwardedHeaders = function (array $headers): array {
+        $stripXForwardedHeaders = static function (array $headers): array {
             /** @psalm-var list<string> */
             static $disallowedHeaders = [
                 'X-FORWARDED-FOR',

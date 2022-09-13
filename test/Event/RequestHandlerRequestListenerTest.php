@@ -71,9 +71,7 @@ class RequestHandlerRequestListenerTest extends TestCase
         };
 
         $this->emitter  = $emitter = $this->createMock(SwooleEmitter::class);
-        $emitterFactory = function (SwooleHttpResponse $response) use ($emitter): SwooleEmitter {
-            return $emitter;
-        };
+        $emitterFactory = static fn(SwooleHttpResponse $response): SwooleEmitter => $emitter;
 
         $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
         $this->logger         = $this->createMock(AccessLogInterface::class);

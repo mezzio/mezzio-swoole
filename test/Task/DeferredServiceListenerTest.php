@@ -26,7 +26,7 @@ class DeferredServiceListenerTest extends TestCase
     public function testListenerIsAccessibleAfterInstantiation(): void
     {
         $server   = $this->createMock(SwooleHttpServer::class);
-        $listener = function (): void {
+        $listener = static function (): void {
         };
         $deferred = new DeferredServiceListener($server, $listener, Closure::class);
 
@@ -37,14 +37,14 @@ class DeferredServiceListenerTest extends TestCase
     {
         $server   = $this->createMock(SwooleHttpServer::class);
         $event    = new stdClass();
-        $listener = function (): void {
+        $listener = static function (): void {
         };
         $deferred = new DeferredServiceListener($server, $listener, 'ListenerServiceName');
 
         $server
             ->expects($this->once())
             ->method('task')
-            ->with($this->callback(function (ServiceBasedTask $task) use ($event): bool {
+            ->with($this->callback(static function (ServiceBasedTask $task) use ($event): bool {
                 $r = new ReflectionProperty($task, 'serviceName');
                 $r->setAccessible(true);
                 $serviceName = $r->getValue($task);

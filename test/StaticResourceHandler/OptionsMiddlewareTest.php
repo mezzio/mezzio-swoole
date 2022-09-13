@@ -48,9 +48,8 @@ class OptionsMiddlewareTest extends TestCase
     public function testMiddlewareDoesNothingForNonOptionsRequests(string $method): void
     {
         $this->request->server = ['request_method' => $method];
-        $next                  = static function (Request $request, string $filename): StaticResourceResponse {
-            return new StaticResourceResponse();
-        };
+        $next                  = static fn(Request $request, string $filename): StaticResourceResponse
+            => new StaticResourceResponse();
 
         $middleware = new OptionsMiddleware();
 
@@ -64,9 +63,8 @@ class OptionsMiddlewareTest extends TestCase
     public function testMiddlewareSetsAllowHeaderAndDisablesContentForOptionsRequests(): void
     {
         $this->request->server = ['request_method' => 'OPTIONS'];
-        $next                  = static function (Request $request, string $filename): StaticResourceResponse {
-            return new StaticResourceResponse();
-        };
+        $next                  = static fn(Request $request, string $filename): StaticResourceResponse
+            => new StaticResourceResponse();
 
         $middleware = new OptionsMiddleware();
 

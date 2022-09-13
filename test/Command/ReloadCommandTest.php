@@ -146,9 +146,7 @@ class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static function (ArrayInput $arg) {
-                    return 'stop' === (string) $arg;
-                }),
+                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
                 $this->output
             )
             ->willReturn(1);
@@ -190,9 +188,7 @@ class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static function (ArrayInput $arg) {
-                    return 'stop' === (string) $arg;
-                }),
+                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
                 $this->output
             )
             ->willReturn(0);
@@ -201,9 +197,7 @@ class ReloadCommandTest extends TestCase
         $startCommand
             ->method('run')
             ->with(
-                $this->callback(static function (ArrayInput $arg) {
-                    return 'start --daemonize=1 --num-workers=5' === (string) $arg;
-                }),
+                $this->callback(static fn(ArrayInput $arg) => 'start --daemonize=1 --num-workers=5' === (string) $arg),
                 $this->output
             )
             ->willReturn(1);
@@ -269,9 +263,7 @@ class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static function (ArrayInput $arg) {
-                    return 'stop' === (string) $arg;
-                }),
+                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
                 $this->output
             )
             ->willReturn(0);
@@ -280,9 +272,10 @@ class ReloadCommandTest extends TestCase
         $startCommand
             ->method('run')
             ->with(
-                $this->callback(static function (ArrayInput $arg) {
-                    return 'start --daemonize=1 --num-workers=5 --num-task-workers=2' === (string) $arg;
-                }),
+                $this->callback(
+                    static fn(ArrayInput $arg)
+                        => 'start --daemonize=1 --num-workers=5 --num-task-workers=2' === (string) $arg
+                ),
                 $this->output
             )
             ->willReturn(0);

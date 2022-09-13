@@ -26,14 +26,14 @@ class DeferredListenerTest extends TestCase
     {
         $server   = $this->createMock(SwooleHttpServer::class);
         $event    = new stdClass();
-        $listener = function (): void {
+        $listener = static function (): void {
         };
         $deferred = new DeferredListener($server, $listener);
 
         $server
             ->expects($this->once())
             ->method('task')
-            ->with($this->callback(function (Task $task) use ($listener, $event): bool {
+            ->with($this->callback(static function (Task $task) use ($listener, $event): bool {
                 $r = new ReflectionProperty($task, 'handler');
                 $r->setAccessible(true);
                 $handler = $r->getValue($task);

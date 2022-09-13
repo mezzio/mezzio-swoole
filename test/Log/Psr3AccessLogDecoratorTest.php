@@ -136,11 +136,12 @@ class Psr3AccessLogDecoratorTest extends TestCase
 
         $this->formatter
             ->method('format')
-            ->with($this->callback(function (AccessLogDataMap $mapper) {
-                return $this->request === $this->getPropertyForInstance('request', $mapper)
-                    && $this->staticResponse === $this->getPropertyForInstance('staticResource', $mapper)
-                    && false === $this->getPropertyForInstance('useHostnameLookups', $mapper);
-            }))
+            ->with($this->callback(
+                fn(AccessLogDataMap $mapper) =>
+                    $this->request === $this->getPropertyForInstance('request', $mapper) &&
+                    $this->staticResponse === $this->getPropertyForInstance('staticResource', $mapper) &&
+                    false === $this->getPropertyForInstance('useHostnameLookups', $mapper)
+            ))
             ->willReturn($expected);
 
         $this->psr3Logger
@@ -166,11 +167,12 @@ class Psr3AccessLogDecoratorTest extends TestCase
 
         $this->formatter
              ->method('format')
-             ->with($this->callback(function (AccessLogDataMap $mapper) {
-                return $this->request === $this->getPropertyForInstance('request', $mapper)
-                    && $this->psr7Response === $this->getPropertyForInstance('psrResponse', $mapper)
-                    && false === $this->getPropertyForInstance('useHostnameLookups', $mapper);
-             }))
+             ->with($this->callback(
+                 fn(AccessLogDataMap $mapper) =>
+                     $this->request === $this->getPropertyForInstance('request', $mapper) &&
+                     $this->psr7Response === $this->getPropertyForInstance('psrResponse', $mapper) &&
+                     false === $this->getPropertyForInstance('useHostnameLookups', $mapper)
+             ))
             ->willReturn($expected);
 
         $this->psr3Logger

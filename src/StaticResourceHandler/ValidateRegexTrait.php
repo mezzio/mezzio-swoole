@@ -21,9 +21,7 @@ trait ValidateRegexTrait
 {
     private function isValidRegex(string $regex): bool
     {
-        set_error_handler(static function ($errno) {
-            return $errno === E_WARNING;
-        });
+        set_error_handler(static fn($errno) => $errno === E_WARNING);
         $isValid = preg_match($regex, '') !== false;
         restore_error_handler();
         return $isValid;

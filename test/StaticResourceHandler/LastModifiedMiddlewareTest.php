@@ -35,9 +35,8 @@ class LastModifiedMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->next    = static function (Request $request, string $filename): StaticResourceResponse {
-            return new StaticResourceResponse();
-        };
+        $this->next    = static fn(Request $request, string $filename): StaticResourceResponse
+            => new StaticResourceResponse();
         $this->request = $this->createMock(Request::class);
     }
 

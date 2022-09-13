@@ -41,7 +41,7 @@ class ServerStartListenerTest extends TestCase
         $processName    = 'alternate-process-name';
         $masterPid      = random_int(1, 10000);
         $managerPid     = random_int(1, 10000);
-        $setProcessName = function (string $name) use ($processName): void {
+        $setProcessName = static function (string $name) use ($processName): void {
             TestCase::assertSame($processName . '-master', $name);
         };
         $pidManager     = $this->createMock(PidManager::class);

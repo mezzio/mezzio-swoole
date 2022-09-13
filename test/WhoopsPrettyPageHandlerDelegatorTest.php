@@ -16,8 +16,7 @@ use Whoops\Handler\PrettyPageHandler;
 
 class WhoopsPrettyPageHandlerDelegatorTest extends TestCase
 {
-    /** @var ServiceManager */
-    private $container;
+    private ServiceManager $container;
 
     protected function setUp(): void
     {

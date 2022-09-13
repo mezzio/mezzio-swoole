@@ -260,7 +260,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(function (TaskEvent $event) use ($server, $expected) {
+            ->with($this->callback(static function (TaskEvent $event) use ($server, $expected): bool {
                 if (
                     $event->getServer() !== $server
                     || $event->getTaskId() !== 1
@@ -295,7 +295,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(function (TaskEvent $event) use ($server, $expected) {
+            ->with($this->callback(static function (TaskEvent $event) use ($server, $expected): bool {
                 if (
                     $event->getServer() !== $server
                     || $event->getTaskId() !== 1

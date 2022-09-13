@@ -38,17 +38,11 @@ class StaticMappedResourceHandlerTest extends TestCase
      */
     private $response;
 
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $uri;
+    /** @psalm-var non-empty-string */
+    private string $uri;
 
-    /**
-     * @var string
-     * @psalm-var non-empty-string
-     */
-    private $fullPath;
+    /** @psalm-var non-empty-string */
+    private string $fullPath;
 
     protected function setUp(): void
     {

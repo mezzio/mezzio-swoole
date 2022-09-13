@@ -50,9 +50,8 @@ class GzipMiddlewareTest extends TestCase
         $this->staticResponse = $this->createMock(StaticResourceResponse::class);
         $this->swooleRequest  = $this->createMock(SwooleHttpRequest::class);
 
-        $this->next = function (SwooleHttpRequest $request, string $filename): StaticResourceResponse {
-            return $this->staticResponse;
-        };
+        $this->next = fn(SwooleHttpRequest $request, string $filename): StaticResourceResponse
+            => $this->staticResponse;
     }
 
     public function testConstructorRaisesExceptionOnInvalidCompressionValues(): void
@@ -141,12 +140,8 @@ class GzipMiddlewareTest extends TestCase
         $middleware                  = new GzipMiddleware(9);
 
         $staticResponse = new StaticResourceResponse();
-        $next           = static function (
-            SwooleHttpRequest $request,
-            string $filename
-        ) use ($staticResponse): StaticResourceResponse {
-            return $staticResponse;
-        };
+        $next           = static fn(SwooleHttpRequest $request, string $filename): StaticResourceResponse
+            => $staticResponse;
 
         $response = $middleware($this->swooleRequest, '/content.txt', $next);
 

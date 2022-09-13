@@ -49,7 +49,7 @@ class WorkerStartListenerTest extends TestCase
         $workerId                      = random_int(0, 3);
         $listener                      = new WorkerStartListener($logger, $cwd, $processName);
         $event                         = new WorkerStartEvent($server, $workerId);
-        $listener::$setProcessName     = function (string $name) use ($processName, $workerId): void {
+        $listener::$setProcessName     = static function (string $name) use ($processName, $workerId): void {
             TestCase::assertSame($processName . '-worker-' . $workerId, $name);
         };
 
@@ -82,7 +82,7 @@ class WorkerStartListenerTest extends TestCase
         $workerId                      = random_int(4, 7);
         $listener                      = new WorkerStartListener($logger, $cwd, $processName);
         $event                         = new WorkerStartEvent($server, $workerId);
-        $listener::$setProcessName     = function (string $name) use ($processName, $workerId): void {
+        $listener::$setProcessName     = static function (string $name) use ($processName, $workerId): void {
             TestCase::assertSame($processName . '-task-worker-' . $workerId, $name);
         };
 

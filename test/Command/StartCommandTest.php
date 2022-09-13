@@ -48,8 +48,7 @@ class StartCommandTest extends TestCase
      */
     private $input;
 
-    /** @var string */
-    private $originalIncludePath;
+    private string $originalIncludePath;
 
     /**
      * @var OutputInterface|MockObject
@@ -192,7 +191,7 @@ class StartCommandTest extends TestCase
 
     public function testExecuteReturnsErrorIfServerIsRunningInProcessMode(): void
     {
-        $this->pidManager->method('read')->willReturn([1000000, getmypid()]);
+        $this->pidManager->method('read')->willReturn([1_000_000, getmypid()]);
         $this->container->method('get')->with(PidManager::class)->willReturn($this->pidManager);
 
         $command = new StartCommand($this->container);
@@ -210,8 +209,8 @@ class StartCommandTest extends TestCase
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];
-        yield 'base-mode'    => [[1000000, null]];
-        yield 'process-mode' => [[1000000, 1000001]];
+        yield 'base-mode'    => [[1_000_000, null]];
+        yield 'process-mode' => [[1_000_000, 1_000_001]];
     }
 
     /**
@@ -236,14 +235,12 @@ class StartCommandTest extends TestCase
         $httpServer
             ->expects($this->once())
             ->method('set')
-            ->with($this->callback(static function (array $options) {
-                return array_key_exists('daemonize', $options)
-                    && array_key_exists('worker_num', $options)
-                    && array_key_exists('task_worker_num', $options)
-                    && true === $options['daemonize']
-                    && 6 === $options['worker_num']
-                    && 4 === $options['task_worker_num'];
-            }));
+            ->with($this->callback(static fn(array $options) => array_key_exists('daemonize', $options)
+                && array_key_exists('worker_num', $options)
+                && array_key_exists('task_worker_num', $options)
+                && true === $options['daemonize']
+                && 6 === $options['worker_num']
+                && 4 === $options['task_worker_num']));
 
         $application->expects($this->once())->method('run');
 

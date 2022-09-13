@@ -134,7 +134,7 @@ class SwooleListenerProviderFactoryTest extends TestCase
 
     public function testFactoryProducesProviderWithConfiguredListeners(): void
     {
-        $listener = function (stdClass $event): void {
+        $listener = static function (stdClass $event): void {
         };
 
         $config    = [

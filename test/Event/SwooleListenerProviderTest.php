@@ -18,9 +18,9 @@ class SwooleListenerProviderTest extends TestCase
 {
     public function testProviderAllowsListenerRegistrationAndReturnsListenersBasedOnEventType(): void
     {
-        $listenerForTestEvent = function (TestAsset\TestEvent $e): void {
+        $listenerForTestEvent = static function (TestAsset\TestEvent $e): void {
         };
-        $listenerForStdclass  = function (stdClass $e): void {
+        $listenerForStdclass  = static function (stdClass $e): void {
         };
 
         $provider = new SwooleListenerProvider();
@@ -40,7 +40,7 @@ class SwooleListenerProviderTest extends TestCase
 
     public function testProviderDoesNotAllowDuplicateRegistration(): void
     {
-        $listenerForTestEvent = function (TestAsset\TestEvent $e): void {
+        $listenerForTestEvent = static function (TestAsset\TestEvent $e): void {
         };
 
         $provider = new SwooleListenerProvider();
