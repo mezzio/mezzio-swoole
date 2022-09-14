@@ -56,7 +56,7 @@
         "laminas/laminas-servicemanager": "^3.3",
         "phpunit/phpunit": "^9.5.5",
         "psalm/plugin-phpunit": "^0.17.0",
-        "swoole/ide-helper": "^4.5.5",
+        "swoole/ide-helper": "^5.0.0",
         "vimeo/psalm": "^4.0"
     },
     "suggest": {

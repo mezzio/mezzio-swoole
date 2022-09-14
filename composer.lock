@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0165e5e43ca0dcb00dc9d172754bb25e",
+    "content-hash": "f0672eabdc6a1635987a075ee74ac0fa",
     "packages": [
         {
             "name": "dflydev/fig-cookies",
@@ -5359,16 +5359,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "4.8.10",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "566dfdeb75fe89c836d59c8e06ec9615c1318c08"
+                "reference": "939352ede9e8cddce96897d18b4fbd0c1e2110a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/566dfdeb75fe89c836d59c8e06ec9615c1318c08",
-                "reference": "566dfdeb75fe89c836d59c8e06ec9615c1318c08",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/939352ede9e8cddce96897d18b4fbd0c1e2110a3",
+                "reference": "939352ede9e8cddce96897d18b4fbd0c1e2110a3",
                 "shasum": ""
             },
             "type": "library",
@@ -5385,7 +5385,7 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/4.8.10"
+                "source": "https://github.com/swoole/ide-helper/tree/5.0.0"
             },
             "funding": [
                 {
@@ -5397,7 +5397,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-13T22:24:54+00:00"
+            "time": "2022-08-10T05:32:06+00:00"
         },
         {
             "name": "theseer/tokenizer",
