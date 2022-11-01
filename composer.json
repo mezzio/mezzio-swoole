@@ -51,13 +51,13 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "filp/whoops": "^2.1",
+        "filp/whoops": "^2.14.5",
         "laminas/laminas-coding-standard": "~2.4.0",
         "laminas/laminas-servicemanager": "^3.3",
-        "phpunit/phpunit": "^9.5.5",
+        "phpunit/phpunit": "^9.5.26",
         "psalm/plugin-phpunit": "^0.17.0",
         "swoole/ide-helper": "^5.0.0",
-        "vimeo/psalm": "^4.0"
+        "vimeo/psalm": "^4.29.0"
     },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading.",
