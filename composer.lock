@@ -5277,16 +5277,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "939352ede9e8cddce96897d18b4fbd0c1e2110a3"
+                "reference": "f9cdf7bfb70ef3a8a2b8e9eb14ce3d09c02524fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/939352ede9e8cddce96897d18b4fbd0c1e2110a3",
-                "reference": "939352ede9e8cddce96897d18b4fbd0c1e2110a3",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/f9cdf7bfb70ef3a8a2b8e9eb14ce3d09c02524fa",
+                "reference": "f9cdf7bfb70ef3a8a2b8e9eb14ce3d09c02524fa",
                 "shasum": ""
             },
             "type": "library",
@@ -5303,7 +5303,7 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/5.0.0"
+                "source": "https://github.com/swoole/ide-helper/tree/5.0.1"
             },
             "funding": [
                 {
@@ -5315,7 +5315,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-10T05:32:06+00:00"
+            "time": "2022-11-08T07:13:40+00:00"
         },
         {
             "name": "theseer/tokenizer",
