@@ -85,7 +85,9 @@ EOH;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var PidManager $this->pidManager */
         $this->pidManager = $this->container->get(PidManager::class);
+
         if ($this->isRunning()) {
             $output->writeln('<error>Server is already running!</error>');
             return 1;

@@ -15,7 +15,6 @@ use Webmozart\Assert\Assert;
 
 use function array_values;
 use function extension_loaded;
-use function function_exists;
 use function in_array;
 use function inotify_add_watch;
 use function inotify_init;
@@ -39,9 +38,6 @@ class InotifyFileWatcher implements FileWatcherInterface
     public function __construct()
     {
         if (! extension_loaded('inotify')) {
-            throw new ExtensionNotLoadedException('PHP extension "inotify" is required for this file watcher');
-        }
-        if (! function_exists('inotify_init')) {
             throw new ExtensionNotLoadedException('PHP extension "inotify" is required for this file watcher');
         }
 
@@ -79,6 +75,7 @@ class InotifyFileWatcher implements FileWatcherInterface
         if (is_array($events)) {
             foreach ($events as $event) {
                 Assert::isArray($event);
+                /** @var ?string $wd */
                 $wd = $event['wd'] ?? null;
                 if (null === $wd) {
                     throw new RuntimeException('Missing watch descriptor from inotify event');

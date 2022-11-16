@@ -69,9 +69,13 @@ class StaticMappedResourceHandlerFactory extends AbstractStaticResourceHandlerFa
 {
     public function __invoke(ContainerInterface $container): StaticMappedResourceHandler
     {
+        /** @var array<array-key, mixed> $config */
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
+
+        /** @var FileLocationRepositoryInterface $fileLocationRepository */
+        $fileLocationRepository = $container->get(FileLocationRepositoryInterface::class);
         return new StaticMappedResourceHandler(
-            $container->get(FileLocationRepositoryInterface::class),
+            $fileLocationRepository,
             $this->configureMiddleware($config)
         );
     }

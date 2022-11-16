@@ -73,47 +73,20 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
     public function run(): void
     {
         if ($this->httpServer->mode === SWOOLE_PROCESS) {
-            $this->httpServer->on('start', function (SwooleHttpServer $server): void {
-                $this->onStart($server);
-            });
-            $this->httpServer->on('shutdown', function (SwooleHttpServer $server): void {
-                $this->onShutdown($server);
-            });
+            $this->httpServer->on('start', [$this, 'onStart']);
+            $this->httpServer->on('shutdown', [$this, 'onShutdown']);
         }
 
-        $this->httpServer->on('managerstart', function (SwooleHttpServer $server): void {
-            $this->onManagerStart($server);
-        });
-        $this->httpServer->on('managerstop', function (SwooleHttpServer $server): void {
-            $this->onManagerStop($server);
-        });
-        $this->httpServer->on('workerstart', function (SwooleHttpServer $server, int $workerId): void {
-            $this->onWorkerStart($server, $workerId);
-        });
-        $this->httpServer->on('workerstop', function (SwooleHttpServer $server, int $workerId): void {
-            $this->onWorkerStop($server, $workerId);
-        });
-        $this->httpServer->on('workererror', function (
-            SwooleHttpServer $server,
-            int $workerId,
-            int $exitCode,
-            int $signal
-        ): void {
-            $this->onWorkerError($server, $workerId, $exitCode, $signal);
-        });
-        $this->httpServer->on('request', function (SwooleHttpRequest $request, SwooleHttpResponse $response): void {
-            $this->onRequest($request, $response);
-        });
-        $this->httpServer->on('beforereload', function (SwooleHttpServer $server): void {
-            $this->onBeforeReload($server);
-        });
-        $this->httpServer->on('afterreload', function (SwooleHttpServer $server): void {
-            $this->onAfterReload($server);
-        });
-        $this->httpServer->on('task', fn (SwooleHttpServer $server, array $args) => $this->onTask($server, $args));
-        $this->httpServer->on('finish', function (SwooleHttpServer $server, int $taskId, $returnData): void {
-            $this->onTaskFinish($server, $taskId, $returnData);
-        });
+        $this->httpServer->on('managerstart', [$this, 'onManagerStart']);
+        $this->httpServer->on('managerstop', [$this, 'onManagerStop']);
+        $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
+        $this->httpServer->on('workerstop', [$this, 'onWorkerStop']);
+        $this->httpServer->on('workererror', [$this, 'onWorkerError']);
+        $this->httpServer->on('request', [$this, 'onRequest']);
+        $this->httpServer->on('beforereload', [$this, 'onBeforeReload']);
+        $this->httpServer->on('afterreload', [$this, 'onAfterReload']);
+        $this->httpServer->on('task', [$this, 'onTask']);
+        $this->httpServer->on('finish', [$this, 'onTaskFinish']);
 
         $this->httpServer->start();
     }

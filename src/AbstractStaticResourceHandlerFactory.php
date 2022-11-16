@@ -55,6 +55,7 @@ abstract class AbstractStaticResourceHandlerFactory
      */
     protected function configureMiddleware(array $config): array
     {
+        /** @var array{type-map:array<string,string>} $config */
         $middleware = [
             new ContentTypeFilterMiddleware(
                 $config['type-map'] ?? ContentTypeFilterMiddleware::TYPE_MAP_DEFAULT

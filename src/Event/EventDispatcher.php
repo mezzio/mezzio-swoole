@@ -34,10 +34,10 @@ class EventDispatcher implements EventDispatcherInterface
         foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             /** @psalm-suppress MixedFunctionCall */
             $listener($event);
-            /** @psalm-suppress MixedMethodCall */
             if (! $stoppable) {
                 continue;
             }
+            /** @psalm-suppress MixedMethodCall */
             if (! $event->isPropagationStopped()) {
                 continue;
             }
