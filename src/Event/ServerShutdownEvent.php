@@ -12,11 +12,8 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 class ServerShutdownEvent
 {
-    private SwooleHttpServer $server;
-
-    public function __construct(SwooleHttpServer $server)
+    public function __construct(private SwooleHttpServer $server)
     {
-        $this->server = $server;
     }
 
     public function getServer(): SwooleHttpServer

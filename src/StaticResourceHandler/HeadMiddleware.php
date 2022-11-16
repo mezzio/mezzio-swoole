@@ -19,6 +19,7 @@ class HeadMiddleware implements MiddlewareInterface
         if ($server['request_method'] !== 'HEAD') {
             return $response;
         }
+
         $response->disableContent();
         return $response;
     }

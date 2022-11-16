@@ -24,8 +24,16 @@ class StartCommand extends Command
 {
     use IsRunningTrait;
 
+    public PidManager $pidManager;
+
+    /**
+     * @var int
+     */
     public const DEFAULT_NUM_WORKERS = 4;
 
+    /**
+     * @var string
+     */
     public const HELP = <<<'EOH'
 Start the web server. If --daemonize is provided, starts the server as a
 background process and returns handling to the shell; otherwise, the
@@ -35,6 +43,9 @@ Use --num-workers to control how many worker processes to start. If you
 do not provide the option, 4 workers will be started.
 EOH;
 
+    /**
+     * @var string[]
+     */
     private const PROGRAMMATIC_CONFIG_FILES = [
         'config/pipeline.php',
         'config/routes.php',
@@ -43,11 +54,8 @@ EOH;
     /** @var null|string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:start';
 
-    private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
         parent::__construct();
     }
 
@@ -95,9 +103,11 @@ EOH;
         if ($daemonize) {
             $serverOptions['daemonize'] = $daemonize;
         }
+
         if (null !== $numWorkers) {
             $serverOptions['worker_num'] = (int) $numWorkers;
         }
+
         if (null !== $numTaskWorkers) {
             $serverOptions['task_worker_num'] = (int) $numTaskWorkers;
         }

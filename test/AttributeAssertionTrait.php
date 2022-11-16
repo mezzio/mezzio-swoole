@@ -35,7 +35,7 @@ trait AttributeAssertionTrait
      * @param object $instance Instance composing attribute to test
      */
     public static function assertAttributeEquals(
-        $expected,
+        mixed $expected,
         string $attributeName,
         $instance,
         string $message = '',
@@ -54,7 +54,7 @@ trait AttributeAssertionTrait
      * @param object $instance Instance composing attribute to test
      */
     public static function assertAttributeInstanceOf(
-        $expected,
+        mixed $expected,
         string $attributeName,
         $instance,
         string $message = ''
@@ -68,8 +68,12 @@ trait AttributeAssertionTrait
      * @param mixed  $expected Expected value
      * @param object $instance Instance composing attribute to test
      */
-    public static function assertAttributeSame($expected, string $attributeName, $instance, string $message = ''): void
-    {
+    public static function assertAttributeSame(
+        mixed $expected,
+        string $attributeName,
+        $instance,
+        string $message = ''
+    ): void {
         $r = new ReflectionProperty($instance, $attributeName);
         $r->setAccessible(true);
         Assert::assertSame($expected, $r->getValue($instance), $message);

@@ -14,7 +14,6 @@ use ReturnTypeWillChange;
 use Webmozart\Assert\Assert;
 
 use function array_shift;
-use function get_class;
 use function is_callable;
 use function is_object;
 use function is_string;
@@ -81,7 +80,7 @@ final class Task implements TaskInterface
     private function serializeHandler($handler): string
     {
         if (is_object($handler)) {
-            return get_class($handler);
+            return $handler::class;
         }
 
         if (is_string($handler)) {

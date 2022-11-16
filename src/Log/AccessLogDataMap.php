@@ -28,7 +28,7 @@ use function microtime;
 use function preg_match;
 use function round;
 use function sprintf;
-use function strpos;
+use function str_starts_with;
 use function strtolower;
 use function substr;
 
@@ -38,6 +38,9 @@ use const FILTER_VALIDATE_IP;
 
 class AccessLogDataMap
 {
+    /**
+     * @var string
+     */
     private const HOST_PORT_REGEX = '/^(?P<host>.*?)((?<!\]):(?P<port>\d+))?$/';
 
     /**
@@ -45,14 +48,7 @@ class AccessLogDataMap
      */
     private float $endTime;
 
-    private SwooleHttpRequest $request;
-
     private ?PsrResponse $psrResponse = null;
-
-    /**
-     * Whether or not to do a hostname lookup when retrieving the remote host name
-     */
-    private bool $useHostnameLookups;
 
     private ?StaticResourceResponse $staticResource = null;
 
@@ -110,11 +106,11 @@ class AccessLogDataMap
      */
     public function getFilename(): string
     {
-        if ($this->psrResponse) {
+        if ($this->psrResponse !== null) {
             return getcwd() . '/public/index.php';
         }
 
-        if ($this->staticResource) {
+        if ($this->staticResource !== null) {
             return getcwd() . '/public' . $this->getServerParam('PATH_INFO');
         }
 
@@ -129,11 +125,11 @@ class AccessLogDataMap
      */
     public function getBodySize(string $default): string
     {
-        if ($this->psrResponse) {
+        if ($this->psrResponse !== null) {
             return (string) $this->psrResponse->getBody()->getSize() ?: $default;
         }
 
-        if ($this->staticResource) {
+        if ($this->staticResource !== null) {
             return (string) $this->staticResource->getContentLength() ?: $default;
         }
 
@@ -185,11 +181,11 @@ class AccessLogDataMap
      */
     public function getResponseHeader(string $name): string
     {
-        if ($this->psrResponse) {
+        if ($this->psrResponse !== null) {
             return $this->psrResponse->getHeaderLine($name) ?: '-';
         }
 
-        if ($this->staticResource) {
+        if ($this->staticResource !== null) {
             return $this->staticResource->getHeader($name) ?: '-';
         }
 
@@ -248,11 +244,11 @@ class AccessLogDataMap
      */
     public function getStatus(): string
     {
-        if ($this->psrResponse) {
+        if ($this->psrResponse !== null) {
             return (string) $this->psrResponse->getStatusCode();
         }
 
-        if ($this->staticResource) {
+        if ($this->staticResource !== null) {
             return (string) $this->staticResource->getStatus();
         }
 
@@ -317,6 +313,7 @@ class AccessLogDataMap
         if ($this->psrResponse && $this->psrResponse->getReasonPhrase()) {
             $reasonPhrase .= sprintf(' %s', $this->psrResponse->getReasonPhrase());
         }
+
         return sprintf(
             '%s %d%s',
             $this->getProtocol(),
@@ -375,9 +372,9 @@ class AccessLogDataMap
      */
     public function getResponseMessageSize($default = null): ?int
     {
-        if ($this->psrResponse) {
+        if ($this->psrResponse !== null) {
             $bodySize = $this->psrResponse->getBody()->getSize();
-        } elseif ($this->staticResource) {
+        } elseif ($this->staticResource !== null) {
             $bodySize = $this->staticResource->getContentLength();
         } else {
             throw new RuntimeException(sprintf(
@@ -393,7 +390,7 @@ class AccessLogDataMap
         $strlen        = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
         $firstLineSize = $strlen($this->getResponseLine());
 
-        $headerSize = $this->psrResponse
+        $headerSize = $this->psrResponse !== null
             ? $this->getPsrResponseHeaderSize()
             : $this->staticResource->getHeaderSize();
 
@@ -408,9 +405,9 @@ class AccessLogDataMap
         $begin = $this->getServerParam('request_time_float');
         $time  = $begin;
 
-        if (strpos($format, 'begin:') === 0) {
+        if (str_starts_with($format, 'begin:')) {
             $format = substr($format, 6);
-        } elseif (strpos($format, 'end:') === 0) {
+        } elseif (str_starts_with($format, 'end:')) {
             $time   = $this->endTime;
             $format = substr($format, 4);
         }
@@ -438,21 +435,18 @@ class AccessLogDataMap
     public function getRequestDuration(string $format): string
     {
         $begin = $this->getServerParam('request_time_float');
-        switch ($format) {
-            case 'us':
-                return (string) round(($this->endTime - $begin) * 1E6);
-            case 'ms':
-                return (string) round(($this->endTime - $begin) * 1E3);
-            default:
-                return (string) round($this->endTime - $begin);
-        }
+        return match ($format) {
+            'us' => (string) round(($this->endTime - $begin) * 1E6),
+            'ms' => (string) round(($this->endTime - $begin) * 1E3),
+            default => (string) round($this->endTime - $begin),
+        };
     }
 
-    private function __construct(SwooleHttpRequest $request, bool $useHostnameLookups)
-    {
-        $this->endTime            = microtime(true);
-        $this->request            = $request;
-        $this->useHostnameLookups = $useHostnameLookups;
+    private function __construct(
+        private SwooleHttpRequest $request,
+        private bool $useHostnameLookups
+    ) {
+        $this->endTime = microtime(true);
     }
 
     /**
@@ -478,7 +472,7 @@ class AccessLogDataMap
 
     private function getPsrResponseHeaderSize(): int
     {
-        if (! $this->psrResponse) {
+        if ($this->psrResponse === null) {
             return 0;
         }
 

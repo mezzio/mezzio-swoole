@@ -9,12 +9,47 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Mezzio\Swoole\Command\ReloadCommand;
+use Mezzio\Swoole\Command\ReloadCommandFactory;
+use Mezzio\Swoole\Command\StartCommand;
+use Mezzio\Swoole\Command\StartCommandFactory;
+use Mezzio\Swoole\Command\StatusCommand;
+use Mezzio\Swoole\Command\StatusCommandFactory;
+use Mezzio\Swoole\Command\StopCommand;
+use Mezzio\Swoole\Command\StopCommandFactory;
+use Mezzio\Swoole\Event\EventDispatcherFactory;
+use Mezzio\Swoole\Event\EventDispatcherInterface;
+use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;
+use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListenerFactory;
+use Mezzio\Swoole\Event\RequestEvent;
+use Mezzio\Swoole\Event\RequestHandlerRequestListener;
+use Mezzio\Swoole\Event\RequestHandlerRequestListenerFactory;
+use Mezzio\Swoole\Event\ServerShutdownEvent;
+use Mezzio\Swoole\Event\ServerShutdownListener;
+use Mezzio\Swoole\Event\ServerShutdownListenerFactory;
+use Mezzio\Swoole\Event\ServerStartEvent;
+use Mezzio\Swoole\Event\ServerStartListener;
+use Mezzio\Swoole\Event\ServerStartListenerFactory;
+use Mezzio\Swoole\Event\StaticResourceRequestListener;
+use Mezzio\Swoole\Event\StaticResourceRequestListenerFactory;
+use Mezzio\Swoole\Event\SwooleListenerProvider;
+use Mezzio\Swoole\Event\SwooleListenerProviderFactory;
+use Mezzio\Swoole\Event\WorkerStartEvent;
+use Mezzio\Swoole\Event\WorkerStartListener;
+use Mezzio\Swoole\Event\WorkerStartListenerFactory;
 use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use Mezzio\Swoole\Log\AccessLogFactory;
+use Mezzio\Swoole\Log\AccessLogInterface;
+use Mezzio\Swoole\Log\SwooleLoggerFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepository;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryFactory;
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+use Mezzio\Swoole\Task\TaskEventDispatchListener;
+use Mezzio\Swoole\Task\TaskEventDispatchListenerFactory;
+use Mezzio\Swoole\Task\TaskInvokerListener;
+use Mezzio\Swoole\Task\TaskInvokerListenerFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
@@ -80,8 +115,8 @@ class ConfigProvider
                     'max_conn' => 1024,
                 ],
                 'listeners'    => [
-                    Event\ServerStartEvent::class => [
-                        Event\ServerStartListener::class,
+                    ServerStartEvent::class => [
+                        ServerStartListener::class,
                     ],
                     // To enable hot code reloading, add the following to your
                     // own configuration:
@@ -90,8 +125,8 @@ class ConfigProvider
                     //         \Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener::class,
                     //     ]),
                     // </code>
-                    Event\WorkerStartEvent::class => [
-                        Event\WorkerStartListener::class,
+                    WorkerStartEvent::class => [
+                        WorkerStartListener::class,
                     ],
                     // To disable the StaticResourceRequestListener, set the
                     // value of this event to:
@@ -100,12 +135,12 @@ class ConfigProvider
                     //         Event\RequestHandlerRequestListener::class,
                     //     ]),
                     // </code>
-                    Event\RequestEvent::class        => [
-                        Event\StaticResourceRequestListener::class,
-                        Event\RequestHandlerRequestListener::class,
+                    RequestEvent::class        => [
+                        StaticResourceRequestListener::class,
+                        RequestHandlerRequestListener::class,
                     ],
-                    Event\ServerShutdownEvent::class => [
-                        Event\ServerShutdownListener::class,
+                    ServerShutdownEvent::class => [
+                        ServerShutdownListener::class,
                     ],
                 ],
             ],
@@ -117,29 +152,29 @@ class ConfigProvider
         // phpcs:disable Generic.Files.LineLength.TooLong
         return [
             'factories'  => [
-                Command\ReloadCommand::class                    => Command\ReloadCommandFactory::class,
-                Command\StartCommand::class                     => Command\StartCommandFactory::class,
-                Command\StatusCommand::class                    => Command\StatusCommandFactory::class,
-                Command\StopCommand::class                      => Command\StopCommandFactory::class,
-                Event\EventDispatcherInterface::class           => Event\EventDispatcherFactory::class,
-                Event\HotCodeReloaderWorkerStartListener::class => Event\HotCodeReloaderWorkerStartListenerFactory::class,
-                Event\RequestHandlerRequestListener::class      => Event\RequestHandlerRequestListenerFactory::class,
-                Event\ServerShutdownListener::class             => Event\ServerShutdownListenerFactory::class,
-                Event\ServerStartListener::class                => Event\ServerStartListenerFactory::class,
-                Event\StaticResourceRequestListener::class      => Event\StaticResourceRequestListenerFactory::class,
-                Event\SwooleListenerProvider::class             => Event\SwooleListenerProviderFactory::class,
-                Event\WorkerStartListener::class                => Event\WorkerStartListenerFactory::class,
-                Log\AccessLogInterface::class                   => Log\AccessLogFactory::class,
-                Log\SwooleLoggerFactory::SWOOLE_LOGGER          => Log\SwooleLoggerFactory::class,
-                PidManager::class                               => PidManagerFactory::class,
-                SwooleRequestHandlerRunner::class               => SwooleRequestHandlerRunnerFactory::class,
-                ServerRequestInterface::class                   => ServerRequestSwooleFactory::class,
-                StaticResourceHandler::class                    => StaticResourceHandlerFactory::class,
-                StaticMappedResourceHandler::class              => StaticMappedResourceHandlerFactory::class,
-                SwooleHttpServer::class                         => HttpServerFactory::class,
-                Task\TaskEventDispatchListener::class           => Task\TaskEventDispatchListenerFactory::class,
-                Task\TaskInvokerListener::class                 => Task\TaskInvokerListenerFactory::class,
-                FileLocationRepository::class                   => FileLocationRepositoryFactory::class,
+                ReloadCommand::class                      => ReloadCommandFactory::class,
+                StartCommand::class                       => StartCommandFactory::class,
+                StatusCommand::class                      => StatusCommandFactory::class,
+                StopCommand::class                        => StopCommandFactory::class,
+                EventDispatcherInterface::class           => EventDispatcherFactory::class,
+                HotCodeReloaderWorkerStartListener::class => HotCodeReloaderWorkerStartListenerFactory::class,
+                RequestHandlerRequestListener::class      => RequestHandlerRequestListenerFactory::class,
+                ServerShutdownListener::class             => ServerShutdownListenerFactory::class,
+                ServerStartListener::class                => ServerStartListenerFactory::class,
+                StaticResourceRequestListener::class      => StaticResourceRequestListenerFactory::class,
+                SwooleListenerProvider::class             => SwooleListenerProviderFactory::class,
+                WorkerStartListener::class                => WorkerStartListenerFactory::class,
+                AccessLogInterface::class                 => AccessLogFactory::class,
+                SwooleLoggerFactory::SWOOLE_LOGGER        => SwooleLoggerFactory::class,
+                PidManager::class                         => PidManagerFactory::class,
+                SwooleRequestHandlerRunner::class         => SwooleRequestHandlerRunnerFactory::class,
+                ServerRequestInterface::class             => ServerRequestSwooleFactory::class,
+                StaticResourceHandler::class              => StaticResourceHandlerFactory::class,
+                StaticMappedResourceHandler::class        => StaticMappedResourceHandlerFactory::class,
+                SwooleHttpServer::class                   => HttpServerFactory::class,
+                TaskEventDispatchListener::class          => TaskEventDispatchListenerFactory::class,
+                TaskInvokerListener::class                => TaskInvokerListenerFactory::class,
+                FileLocationRepository::class             => FileLocationRepositoryFactory::class,
             ],
             'invokables' => [
                 InotifyFileWatcher::class => InotifyFileWatcher::class,
@@ -163,10 +198,10 @@ class ConfigProvider
     {
         return [
             'commands' => [
-                'mezzio:swoole:reload' => Command\ReloadCommand::class,
-                'mezzio:swoole:start'  => Command\StartCommand::class,
-                'mezzio:swoole:status' => Command\StatusCommand::class,
-                'mezzio:swoole:stop'   => Command\StopCommand::class,
+                'mezzio:swoole:reload' => ReloadCommand::class,
+                'mezzio:swoole:start'  => StartCommand::class,
+                'mezzio:swoole:status' => StatusCommand::class,
+                'mezzio:swoole:stop'   => StopCommand::class,
             ],
         ];
     }

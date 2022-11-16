@@ -28,16 +28,13 @@ final class ServiceBasedTask implements TaskInterface
 {
     private array $payload;
 
-    private string $serviceName;
-
     /**
      * @param array $payload Array of arguments for the $serviceName.
      * @psalm-param list<mixed> $payload
      */
-    public function __construct(string $serviceName, ...$payload)
+    public function __construct(private string $serviceName, ...$payload)
     {
-        $this->serviceName = $serviceName;
-        $this->payload     = $payload;
+        $this->payload = $payload;
     }
 
     /**

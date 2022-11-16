@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use Mezzio\Swoole\Exception\RuntimeException;
+
 use function dirname;
 use function explode;
 use function file_get_contents;
@@ -19,23 +21,21 @@ use function unlink;
 
 class PidManager
 {
-    private string $pidFile = '';
-
-    public function __construct(string $pidFile)
+    public function __construct(private string $pidFile)
     {
-        $this->pidFile = $pidFile;
     }
 
     /**
      * Write master pid and manager pid to pid file
      *
-     * @throws Exception\RuntimeException When $pidFile is not writable.
+     * @throws RuntimeException When $pidFile is not writable.
      */
     public function write(int $masterPid, int $managerPid): void
     {
         if (! is_writable($this->pidFile) && ! is_writable(dirname($this->pidFile))) {
-            throw new Exception\RuntimeException(sprintf('Pid file "%s" is not writable', $this->pidFile));
+            throw new RuntimeException(sprintf('Pid file "%s" is not writable', $this->pidFile));
         }
+
         file_put_contents($this->pidFile, $masterPid . ',' . $managerPid);
     }
 
@@ -52,6 +52,7 @@ class PidManager
             $content = file_get_contents($this->pidFile);
             $pids    = explode(',', $content);
         }
+
         return $pids;
     }
 
@@ -63,6 +64,7 @@ class PidManager
         if (is_writable($this->pidFile)) {
             return unlink($this->pidFile);
         }
+
         return false;
     }
 }

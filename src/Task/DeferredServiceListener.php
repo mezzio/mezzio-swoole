@@ -19,18 +19,12 @@ use Swoole\Http\Server as SwooleHttpServer;
  */
 final class DeferredServiceListener
 {
-    private SwooleHttpServer $server;
-
     /** @var callable */
     private $listener;
 
-    private string $serviceName;
-
-    public function __construct(SwooleHttpServer $server, callable $listener, string $serviceName)
+    public function __construct(private SwooleHttpServer $server, callable $listener, private string $serviceName)
     {
-        $this->server      = $server;
-        $this->listener    = $listener;
-        $this->serviceName = $serviceName;
+        $this->listener = $listener;
     }
 
     public function __invoke(object $event): void

@@ -5,6 +5,18 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
+use Mezzio\Swoole\Event\AfterReloadEvent;
+use Mezzio\Swoole\Event\BeforeReloadEvent;
+use Mezzio\Swoole\Event\ManagerStartEvent;
+use Mezzio\Swoole\Event\ManagerStopEvent;
+use Mezzio\Swoole\Event\RequestEvent;
+use Mezzio\Swoole\Event\ServerShutdownEvent;
+use Mezzio\Swoole\Event\ServerStartEvent;
+use Mezzio\Swoole\Event\TaskEvent;
+use Mezzio\Swoole\Event\TaskFinishEvent;
+use Mezzio\Swoole\Event\WorkerErrorEvent;
+use Mezzio\Swoole\Event\WorkerStartEvent;
+use Mezzio\Swoole\Event\WorkerStopEvent;
 use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Mezzio\Swoole\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -33,22 +45,22 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
 {
     /**
      * Default Process Name
+     *
+     * @var string
      */
     public const DEFAULT_PROCESS_NAME = 'mezzio';
-
-    protected EventDispatcherInterface $dispatcher;
     protected SwooleHttpServer $httpServer;
 
     public function __construct(
         SwooleHttpServer $httpServer,
-        EventDispatcherInterface $dispatcher
+        protected EventDispatcherInterface $dispatcher
     ) {
         // The HTTP server should not yet be running
         if ($httpServer->getMasterPid() > 0 || $httpServer->getManagerPid() > 0) {
             throw new InvalidArgumentException('The Swoole server has already been started');
         }
+
         $this->httpServer = $httpServer;
-        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -61,20 +73,47 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
     public function run(): void
     {
         if ($this->httpServer->mode === SWOOLE_PROCESS) {
-            $this->httpServer->on('start', [$this, 'onStart']);
-            $this->httpServer->on('shutdown', [$this, 'onShutdown']);
+            $this->httpServer->on('start', function (SwooleHttpServer $server): void {
+                $this->onStart($server);
+            });
+            $this->httpServer->on('shutdown', function (SwooleHttpServer $server): void {
+                $this->onShutdown($server);
+            });
         }
 
-        $this->httpServer->on('managerstart', [$this, 'onManagerStart']);
-        $this->httpServer->on('managerstop', [$this, 'onManagerStop']);
-        $this->httpServer->on('workerstart', [$this, 'onWorkerStart']);
-        $this->httpServer->on('workerstop', [$this, 'onWorkerStop']);
-        $this->httpServer->on('workererror', [$this, 'onWorkerError']);
-        $this->httpServer->on('request', [$this, 'onRequest']);
-        $this->httpServer->on('beforereload', [$this, 'onBeforeReload']);
-        $this->httpServer->on('afterreload', [$this, 'onAfterReload']);
-        $this->httpServer->on('task', [$this, 'onTask']);
-        $this->httpServer->on('finish', [$this, 'onTaskFinish']);
+        $this->httpServer->on('managerstart', function (SwooleHttpServer $server): void {
+            $this->onManagerStart($server);
+        });
+        $this->httpServer->on('managerstop', function (SwooleHttpServer $server): void {
+            $this->onManagerStop($server);
+        });
+        $this->httpServer->on('workerstart', function (SwooleHttpServer $server, int $workerId): void {
+            $this->onWorkerStart($server, $workerId);
+        });
+        $this->httpServer->on('workerstop', function (SwooleHttpServer $server, int $workerId): void {
+            $this->onWorkerStop($server, $workerId);
+        });
+        $this->httpServer->on('workererror', function (
+            SwooleHttpServer $server,
+            int $workerId,
+            int $exitCode,
+            int $signal
+        ): void {
+            $this->onWorkerError($server, $workerId, $exitCode, $signal);
+        });
+        $this->httpServer->on('request', function (SwooleHttpRequest $request, SwooleHttpResponse $response): void {
+            $this->onRequest($request, $response);
+        });
+        $this->httpServer->on('beforereload', function (SwooleHttpServer $server): void {
+            $this->onBeforeReload($server);
+        });
+        $this->httpServer->on('afterreload', function (SwooleHttpServer $server): void {
+            $this->onAfterReload($server);
+        });
+        $this->httpServer->on('task', fn (SwooleHttpServer $server, array $args) => $this->onTask($server, $args));
+        $this->httpServer->on('finish', function (SwooleHttpServer $server, int $taskId, $returnData): void {
+            $this->onTaskFinish($server, $taskId, $returnData);
+        });
 
         $this->httpServer->start();
     }
@@ -84,7 +123,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onStart(SwooleHttpServer $server): void
     {
-        $this->dispatcher->dispatch(new Event\ServerStartEvent($server));
+        $this->dispatcher->dispatch(new ServerStartEvent($server));
     }
 
     /**
@@ -92,7 +131,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onManagerStart(SwooleHttpServer $server): void
     {
-        $this->dispatcher->dispatch(new Event\ManagerStartEvent($server));
+        $this->dispatcher->dispatch(new ManagerStartEvent($server));
     }
 
     /**
@@ -100,7 +139,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onManagerStop(SwooleHttpServer $server): void
     {
-        $this->dispatcher->dispatch(new Event\ManagerStopEvent($server));
+        $this->dispatcher->dispatch(new ManagerStopEvent($server));
     }
 
     /**
@@ -108,7 +147,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onWorkerStart(SwooleHttpServer $server, int $workerId): void
     {
-        $this->dispatcher->dispatch(new Event\WorkerStartEvent($server, $workerId));
+        $this->dispatcher->dispatch(new WorkerStartEvent($server, $workerId));
     }
 
     /**
@@ -116,7 +155,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onWorkerStop(SwooleHttpServer $server, int $workerId): void
     {
-        $this->dispatcher->dispatch(new Event\WorkerStopEvent($server, $workerId));
+        $this->dispatcher->dispatch(new WorkerStopEvent($server, $workerId));
     }
 
     /**
@@ -124,7 +163,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onWorkerError(SwooleHttpServer $server, int $workerId, int $exitCode, int $signal): void
     {
-        $this->dispatcher->dispatch(new Event\WorkerErrorEvent($server, $workerId, $exitCode, $signal));
+        $this->dispatcher->dispatch(new WorkerErrorEvent($server, $workerId, $exitCode, $signal));
     }
 
     /**
@@ -132,7 +171,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onRequest(SwooleHttpRequest $request, SwooleHttpResponse $response): void
     {
-        $this->dispatcher->dispatch(new Event\RequestEvent($request, $response));
+        $this->dispatcher->dispatch(new RequestEvent($request, $response));
     }
 
     /**
@@ -140,7 +179,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onBeforeReload(SwooleHttpServer $server): void
     {
-        $this->dispatcher->dispatch(new Event\BeforeReloadEvent($server));
+        $this->dispatcher->dispatch(new BeforeReloadEvent($server));
     }
 
     /**
@@ -148,7 +187,7 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onAfterReload(SwooleHttpServer $server): void
     {
-        $this->dispatcher->dispatch(new Event\AfterReloadEvent($server));
+        $this->dispatcher->dispatch(new AfterReloadEvent($server));
     }
 
     /**
@@ -208,9 +247,9 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      *
      * @param mixed $returnData Return value provided to "finish" event.
      */
-    public function onTaskFinish(SwooleHttpServer $server, int $taskId, $returnData): void
+    public function onTaskFinish(SwooleHttpServer $server, int $taskId, mixed $returnData): void
     {
-        $this->dispatcher->dispatch(new Event\TaskFinishEvent($server, $taskId, $returnData));
+        $this->dispatcher->dispatch(new TaskFinishEvent($server, $taskId, $returnData));
     }
 
     /**
@@ -218,22 +257,19 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
      */
     public function onShutdown(SwooleHttpServer $server): void
     {
-        $this->dispatcher->dispatch(new Event\ServerShutdownEvent($server));
+        $this->dispatcher->dispatch(new ServerShutdownEvent($server));
     }
 
-    /**
-     * @param mixed $data
-     */
     private function createTaskEventFromStandardArguments(
         SwooleHttpServer $server,
         int $taskId,
         int $workerId,
-        $data
-    ): Event\TaskEvent {
-        return new Event\TaskEvent($server, $taskId, $workerId, $data);
+        mixed $data
+    ): TaskEvent {
+        return new TaskEvent($server, $taskId, $workerId, $data);
     }
 
-    private function createTaskEventFromTaskObject(SwooleHttpServer $server, object $task): Event\TaskEvent
+    private function createTaskEventFromTaskObject(SwooleHttpServer $server, object $task): TaskEvent
     {
         Assert::propertyExists($task, 'id');
         Assert::integer($task->id);
@@ -241,6 +277,6 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
         Assert::integer($task->worker_id);
         Assert::propertyExists($task, 'data');
 
-        return new Event\TaskEvent($server, $task->id, $task->worker_id, $task->data);
+        return new TaskEvent($server, $task->id, $task->worker_id, $task->data);
     }
 }

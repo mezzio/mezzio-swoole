@@ -9,6 +9,15 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\StaticResourceHandler;
+use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\FormatTimestampTrait;
 use PHPUnit\Framework\TestCase;
@@ -70,10 +79,10 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile');
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
         ]);
 
         $result = $handler->processStaticResource($request, $response);
@@ -101,10 +110,10 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile');
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
         ]);
 
         $result = $handler->processStaticResource($request, $response);
@@ -141,17 +150,17 @@ class IntegrationTest extends TestCase
         $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([
                 '/\.txt$/' => ['public', 'no-transform'],
             ]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware(['/\.txt$/']),
+            new LastModifiedMiddleware(['/\.txt$/']),
+            new ETagMiddleware(['/\.txt$/']),
         ]);
 
         $result = $handler->processStaticResource($request, $response);
@@ -187,19 +196,19 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([
                 '/\.txt$/' => ['public', 'no-transform'],
             ]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware(
+            new LastModifiedMiddleware(['/\.txt$/']),
+            new ETagMiddleware(
                 ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
+                ETagMiddleware::ETAG_VALIDATION_WEAK
             ),
         ]);
 
@@ -237,19 +246,19 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([
                 '/\.txt$/' => ['public', 'no-transform'],
             ]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware(
+            new LastModifiedMiddleware(['/\.txt$/']),
+            new ETagMiddleware(
                 ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
+                ETagMiddleware::ETAG_VALIDATION_WEAK
             ),
         ]);
 
@@ -288,17 +297,17 @@ class IntegrationTest extends TestCase
         $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([
                 '/\.txt$/' => ['public', 'no-transform'],
             ]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware([]),
+            new LastModifiedMiddleware([]),
+            new ETagMiddleware([]),
         ]);
 
         $result = $handler->processStaticResource($request, $response);
@@ -335,17 +344,17 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([
                 '/\.txt$/' => ['public', 'no-transform'],
             ]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware([]),
+            new LastModifiedMiddleware([]),
+            new ETagMiddleware([]),
         ]);
 
         $result = $handler->processStaticResource($request, $response);
@@ -380,17 +389,17 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware(
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([]),
+            new LastModifiedMiddleware([]),
+            new ETagMiddleware(
                 ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
+                ETagMiddleware::ETAG_VALIDATION_WEAK
             ),
         ]);
 
@@ -426,17 +435,17 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware(
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([]),
+            new LastModifiedMiddleware([]),
+            new ETagMiddleware(
                 ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
+                ETagMiddleware::ETAG_VALIDATION_WEAK
             ),
         ]);
 
@@ -470,17 +479,17 @@ class IntegrationTest extends TestCase
         $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware([]),
-            new StaticResourceHandler\ETagMiddleware(
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([]),
+            new LastModifiedMiddleware([]),
+            new ETagMiddleware(
                 ['/\.txt$/'],
-                StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_STRONG
+                ETagMiddleware::ETAG_VALIDATION_STRONG
             ),
         ]);
 
@@ -516,15 +525,15 @@ class IntegrationTest extends TestCase
         $response->expects($this->never())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware([]),
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([]),
+            new LastModifiedMiddleware(['/\.txt$/']),
+            new ETagMiddleware([]),
         ]);
 
         $result = $handler->processStaticResource($request, $response);
@@ -562,15 +571,15 @@ class IntegrationTest extends TestCase
         $response->expects($this->once())->method('sendfile')->with($file);
 
         $handler = new StaticResourceHandler($this->docRoot, [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
-            new StaticResourceHandler\GzipMiddleware(0),
-            new StaticResourceHandler\ClearStatCacheMiddleware(3600),
-            new StaticResourceHandler\CacheControlMiddleware([]),
-            new StaticResourceHandler\LastModifiedMiddleware(['/\.txt$/']),
-            new StaticResourceHandler\ETagMiddleware([]),
+            new ContentTypeFilterMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
+            new GzipMiddleware(0),
+            new ClearStatCacheMiddleware(3600),
+            new CacheControlMiddleware([]),
+            new LastModifiedMiddleware(['/\.txt$/']),
+            new ETagMiddleware([]),
         ]);
 
         $result = $handler->processStaticResource($request, $response);

@@ -29,6 +29,7 @@ trait ProcessNameTrait
         if (PHP_OS === 'Darwin') {
             return;
         }
+
         (self::$setProcessName)($name);
     }
 }

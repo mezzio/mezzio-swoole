@@ -23,13 +23,13 @@ class WorkerStartListenerTest extends TestCase
 {
     private string $cwd;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->cwd                           = getcwd();
         WorkerStartListener::$setProcessName = 'swoole_process_name';
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         chdir($this->cwd);
         WorkerStartListener::$setProcessName = 'swoole_process_name';

@@ -104,6 +104,7 @@ class StdoutLogger implements LoggerInterface
             $search  = sprintf('{%s}', $key);
             $message = str_replace($search, $value, $message);
         }
+
         printf('%s%s', $message, PHP_EOL);
     }
 }

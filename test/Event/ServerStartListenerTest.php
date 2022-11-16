@@ -23,13 +23,13 @@ class ServerStartListenerTest extends TestCase
 {
     private string $cwd;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         ServerStartListener::$setProcessName = 'swoole_set_process_name';
         $this->cwd                           = getcwd();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         ServerStartListener::$setProcessName = 'swoole_set_process_name';
         chdir($this->cwd);

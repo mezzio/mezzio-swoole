@@ -26,35 +26,20 @@ class Psr3AccessLogDecoratorTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /**
-     * @var LoggerInterface|MockObject
-     * @psalm-var MockObject&LoggerInterface
-     */
-    private $psr3Logger;
+    /** @psalm-var MockObject&LoggerInterface */
+    private LoggerInterface|MockObject $psr3Logger;
 
-    /**
-     * @var AccessLogFormatterInterface|MockObject
-     * @psalm-var MockObject&AccessLogFormatterInterface
-     */
-    private $formatter;
+    /** @psalm-var MockObject&AccessLogFormatterInterface */
+    private AccessLogFormatterInterface|MockObject $formatter;
 
-    /**
-     * @var Request|MockObject
-     * @psalm-var MockObject&Request
-     */
-    private $request;
+    /** @psalm-var MockObject&Request */
+    private Request|MockObject $request;
 
-    /**
-     * @var Psr7Response|MockObject
-     * @psalm-var MockObject&Psr7Response
-     */
-    private $psr7Response;
+    /** @psalm-var MockObject&Psr7Response */
+    private Psr7Response|MockObject $psr7Response;
 
-    /**
-     * @var StaticResourceResponse|MockObject
-     * @psalm-var MockObject&StaticResourceResponse
-     */
-    private $staticResponse;
+    /** @psalm-var MockObject&StaticResourceResponse */
+    private StaticResourceResponse|MockObject $staticResponse;
 
     protected function setUp(): void
     {
@@ -91,21 +76,18 @@ class Psr3AccessLogDecoratorTest extends TestCase
     public function testProxiesToPsr3Methods(string $method): void
     {
         $logger = new Psr3AccessLogDecorator($this->psr3Logger, $this->formatter);
-        switch ($method) {
-            case 'log':
-                $this->psr3Logger
-                    ->expects($this->once())
-                    ->method('log')
-                    ->with(LogLevel::DEBUG, 'message', ['foo' => 'bar']);
-                $this->assertNull($logger->log(LogLevel::DEBUG, 'message', ['foo' => 'bar']));
-                break;
-            default:
-                $this->psr3Logger
-                    ->expects($this->once())
-                    ->method($method)
-                    ->with('message', ['foo' => 'bar']);
-                $this->assertNull($logger->$method('message', ['foo' => 'bar']));
-                break;
+        if ($method === 'log') {
+            $this->psr3Logger
+                ->expects($this->once())
+                ->method('log')
+                ->with(LogLevel::DEBUG, 'message', ['foo' => 'bar']);
+            $this->assertNull($logger->log(LogLevel::DEBUG, 'message', ['foo' => 'bar']));
+        } else {
+            $this->psr3Logger
+                ->expects($this->once())
+                ->method($method)
+                ->with('message', ['foo' => 'bar']);
+            $this->assertNull($logger->$method('message', ['foo' => 'bar']));
         }
     }
 
@@ -137,8 +119,8 @@ class Psr3AccessLogDecoratorTest extends TestCase
         $this->formatter
             ->method('format')
             ->with($this->callback(
-                fn(AccessLogDataMap $mapper) =>
-                    $this->request === $this->getPropertyForInstance('request', $mapper) &&
+                fn (AccessLogDataMap $mapper) =>
+                $this->request === $this->getPropertyForInstance('request', $mapper) &&
                     $this->staticResponse === $this->getPropertyForInstance('staticResource', $mapper) &&
                     false === $this->getPropertyForInstance('useHostnameLookups', $mapper)
             ))
@@ -166,13 +148,13 @@ class Psr3AccessLogDecoratorTest extends TestCase
         $this->psr7Response->method('getStatusCode')->willReturn($status);
 
         $this->formatter
-             ->method('format')
-             ->with($this->callback(
-                 fn(AccessLogDataMap $mapper) =>
-                     $this->request === $this->getPropertyForInstance('request', $mapper) &&
-                     $this->psr7Response === $this->getPropertyForInstance('psrResponse', $mapper) &&
-                     false === $this->getPropertyForInstance('useHostnameLookups', $mapper)
-             ))
+            ->method('format')
+            ->with($this->callback(
+                fn (AccessLogDataMap $mapper) =>
+                $this->request === $this->getPropertyForInstance('request', $mapper) &&
+                    $this->psr7Response === $this->getPropertyForInstance('psrResponse', $mapper) &&
+                    false === $this->getPropertyForInstance('useHostnameLookups', $mapper)
+            ))
             ->willReturn($expected);
 
         $this->psr3Logger

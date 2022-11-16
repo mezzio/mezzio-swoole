@@ -15,6 +15,7 @@ use Webmozart\Assert\Assert;
 
 use function array_values;
 use function extension_loaded;
+use function function_exists;
 use function in_array;
 use function inotify_add_watch;
 use function inotify_init;
@@ -22,6 +23,7 @@ use function inotify_read;
 use function is_array;
 use function is_dir;
 use function scandir;
+use function sprintf;
 use function stream_set_blocking;
 
 use const IN_MODIFY;
@@ -39,10 +41,15 @@ class InotifyFileWatcher implements FileWatcherInterface
         if (! extension_loaded('inotify')) {
             throw new ExtensionNotLoadedException('PHP extension "inotify" is required for this file watcher');
         }
+        if (! function_exists('inotify_init')) {
+            throw new ExtensionNotLoadedException('PHP extension "inotify" is required for this file watcher');
+        }
+
         $resource = inotify_init();
         if (false === $resource) {
             throw new RuntimeException('Unable to initialize an inotify instance');
         }
+
         if (! stream_set_blocking($resource, false)) {
             throw new RuntimeException('Unable to set non-blocking mode on inotify stream');
         }
@@ -76,10 +83,12 @@ class InotifyFileWatcher implements FileWatcherInterface
                 if (null === $wd) {
                     throw new RuntimeException('Missing watch descriptor from inotify event');
                 }
+
                 $path = $this->filePathByWd[$wd] ?? null;
                 if (null === $path) {
-                    throw new RuntimeException("Unrecognized watch descriptor: \"{$wd}\"");
+                    throw new RuntimeException(sprintf('Unrecognized watch descriptor: "%s"', $wd));
                 }
+
                 $paths[$path] = $path;
             }
         }

@@ -39,10 +39,6 @@ class RequestHandlerRequestListener
      */
     private $emitterFactory;
 
-    private AccessLogInterface $logger;
-
-    private RequestHandlerInterface $requestHandler;
-
     /**
      * A factory capable of generating an error response in the scenario that
      * the $serverRequestFactory raises an exception during generation of the
@@ -66,15 +62,12 @@ class RequestHandlerRequestListener
     private $serverRequestFactory;
 
     public function __construct(
-        RequestHandlerInterface $requestHandler,
+        private RequestHandlerInterface $requestHandler,
         callable $serverRequestFactory,
         callable $serverRequestErrorResponseGenerator,
-        AccessLogInterface $logger,
+        private AccessLogInterface $logger,
         ?callable $emitterFactory = null
     ) {
-        $this->requestHandler = $requestHandler;
-        $this->logger         = $logger;
-
         // Factories are cast as Closures to ensure return type safety.
         /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestFactory
@@ -88,7 +81,7 @@ class RequestHandlerRequestListener
                 /** @psalm-suppress MixedReturnStatement */
                 $serverRequestErrorResponseGenerator($exception);
 
-        if ($emitterFactory) {
+        if ($emitterFactory !== null) {
             /** @psalm-suppress MixedInferredReturnType */
             $this->emitterFactory
                 = static fn(SwooleHttpResponse $response): SwooleEmitter =>
@@ -104,9 +97,9 @@ class RequestHandlerRequestListener
 
         try {
             $psr7Request = ($this->serverRequestFactory)($request);
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             // Error in generating the request
-            $psr7Response = ($this->serverRequestErrorResponseGenerator)($e);
+            $psr7Response = ($this->serverRequestErrorResponseGenerator)($throwable);
             $emitter->emit($psr7Response);
             $this->logger->logAccessForPsr7Resource($request, $psr7Response);
             $event->responseSent();
@@ -121,7 +114,7 @@ class RequestHandlerRequestListener
 
     private function createEmitterFromResponse(SwooleHttpResponse $response): SwooleEmitter
     {
-        if ($this->emitterFactory) {
+        if ($this->emitterFactory !== null) {
             return ($this->emitterFactory)($response);
         }
 

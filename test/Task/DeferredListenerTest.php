@@ -19,6 +19,7 @@ use Webmozart\Assert\Assert;
 use function array_shift;
 use function count;
 use function is_array;
+use function is_countable;
 
 class DeferredListenerTest extends TestCase
 {
@@ -36,14 +37,18 @@ class DeferredListenerTest extends TestCase
             ->with($this->callback(static function (Task $task) use ($listener, $event): bool {
                 $r = new ReflectionProperty($task, 'handler');
                 $r->setAccessible(true);
+
                 $handler = $r->getValue($task);
                 Assert::object($handler);
 
                 $r = new ReflectionProperty($task, 'payload');
                 $r->setAccessible(true);
-                $payload = $r->getValue($task);
 
-                if (! is_array($payload) || 0 === count($payload)) {
+                $payload = $r->getValue($task);
+                if (! is_array($payload)) {
+                    return false;
+                }
+                if (0 === (is_countable($payload) ? count($payload) : 0)) {
                     return false;
                 }
 

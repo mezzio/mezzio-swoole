@@ -22,6 +22,9 @@ class StopCommand extends Command
 {
     use IsRunningTrait;
 
+    /**
+     * @var string
+     */
     public const HELP = <<<'EOH'
 Stop the web server. Kills all worker processes and stops the web server.
 
@@ -48,12 +51,9 @@ EOH;
      */
     public int $waitThreshold = 60;
 
-    private PidManager $pidManager;
-
-    public function __construct(PidManager $pidManager)
+    public function __construct(private PidManager $pidManager)
     {
         $this->killProcess = Closure::fromCallable([SwooleProcess::class, 'kill']);
-        $this->pidManager  = $pidManager;
         parent::__construct();
     }
 
@@ -91,10 +91,12 @@ EOH;
             if (! ($this->killProcess)((int) $masterPid, 0)) {
                 continue;
             }
+
             if (time() - $startTime >= $this->waitThreshold) {
                 $result = false;
                 break;
             }
+
             usleep(10000);
         }
 

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
@@ -24,5 +25,5 @@ interface StaticResourceHandlerInterface
     public function processStaticResource(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
-    ): ?StaticResourceHandler\StaticResourceResponse;
+    ): ?StaticResourceResponse;
 }

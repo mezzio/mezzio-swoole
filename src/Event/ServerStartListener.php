@@ -25,24 +25,12 @@ class ServerStartListener
 {
     use ProcessNameTrait;
 
-    private string $cwd;
-
-    private LoggerInterface $logger;
-
-    private PidManager $pidManager;
-
-    private string $processName;
-
     public function __construct(
-        PidManager $pidManager,
-        LoggerInterface $logger,
-        string $cwd,
-        string $processName = SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME
+        private PidManager $pidManager,
+        private LoggerInterface $logger,
+        private string $cwd,
+        private string $processName = SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME
     ) {
-        $this->pidManager  = $pidManager;
-        $this->logger      = $logger;
-        $this->cwd         = $cwd;
-        $this->processName = $processName;
     }
 
     public function __invoke(ServerStartEvent $event): void

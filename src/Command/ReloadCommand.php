@@ -20,6 +20,9 @@ use const SWOOLE_PROCESS;
 
 class ReloadCommand extends Command
 {
+    /**
+     * @var string
+     */
     public const HELP = <<<'EOH'
 Reload the web server. Sends a SIGUSR1 signal to master process and reload
 all worker processes.
@@ -32,11 +35,8 @@ EOH;
     /** @var null|string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:reload';
 
-    private int $serverMode;
-
-    public function __construct(int $serverMode)
+    public function __construct(private int $serverMode)
     {
-        $this->serverMode = $serverMode;
         parent::__construct();
     }
 
@@ -62,8 +62,7 @@ EOH;
     {
         if ($this->serverMode !== SWOOLE_PROCESS) {
             $output->writeln(
-                '<error>Server is not configured to run in SWOOLE_PROCESS mode;'
-                . ' cannot reload</error>'
+                '<error>Server is not configured to run in SWOOLE_PROCESS mode; cannot reload</error>'
             );
             return 1;
         }
@@ -83,10 +82,11 @@ EOH;
         }
 
         $output->write('<info>Waiting for 5 seconds to ensure server is stopped...</info>');
-        for ($i = 0; $i < 5; $i += 1) {
+        for ($i = 0; $i < 5; ++$i) {
             $output->write('<info>.</info>');
             sleep(1);
         }
+
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 

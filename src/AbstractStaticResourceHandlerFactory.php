@@ -8,6 +8,15 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\GzipMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use Psr\Container\ContainerInterface;
 
 use function is_string;
@@ -47,22 +56,22 @@ abstract class AbstractStaticResourceHandlerFactory
     protected function configureMiddleware(array $config): array
     {
         $middleware = [
-            new StaticResourceHandler\ContentTypeFilterMiddleware(
-                $config['type-map'] ?? StaticResourceHandler\ContentTypeFilterMiddleware::TYPE_MAP_DEFAULT
+            new ContentTypeFilterMiddleware(
+                $config['type-map'] ?? ContentTypeFilterMiddleware::TYPE_MAP_DEFAULT
             ),
-            new StaticResourceHandler\MethodNotAllowedMiddleware(),
-            new StaticResourceHandler\OptionsMiddleware(),
-            new StaticResourceHandler\HeadMiddleware(),
+            new MethodNotAllowedMiddleware(),
+            new OptionsMiddleware(),
+            new HeadMiddleware(),
         ];
 
         $compressionLevel = $config['gzip']['level'] ?? 0;
         if ($compressionLevel > 0) {
-            $middleware[] = new StaticResourceHandler\GzipMiddleware($compressionLevel);
+            $middleware[] = new GzipMiddleware($compressionLevel);
         }
 
         $clearStatCacheInterval = $config['clearstatcache-interval'] ?? false;
         if ($clearStatCacheInterval) {
-            $middleware[] = new StaticResourceHandler\ClearStatCacheMiddleware((int) $clearStatCacheInterval);
+            $middleware[] = new ClearStatCacheMiddleware((int) $clearStatCacheInterval);
         }
 
         $directiveList          = $config['directives'] ?? [];
@@ -74,26 +83,28 @@ abstract class AbstractStaticResourceHandlerFactory
             if (isset($directives['cache-control'])) {
                 $cacheControlDirectives[$regex] = $directives['cache-control'];
             }
+
             if (isset($directives['last-modified']) && is_string($regex)) {
                 $lastModifiedDirectives[] = $regex;
             }
+
             if (isset($directives['etag']) && is_string($regex)) {
                 $etagDirectives[] = $regex;
             }
         }
 
         if ($cacheControlDirectives !== []) {
-            $middleware[] = new StaticResourceHandler\CacheControlMiddleware($cacheControlDirectives);
+            $middleware[] = new CacheControlMiddleware($cacheControlDirectives);
         }
 
         if ($lastModifiedDirectives !== []) {
-            $middleware[] = new StaticResourceHandler\LastModifiedMiddleware($lastModifiedDirectives);
+            $middleware[] = new LastModifiedMiddleware($lastModifiedDirectives);
         }
 
         if ($etagDirectives !== []) {
-            $middleware[] = new StaticResourceHandler\ETagMiddleware(
+            $middleware[] = new ETagMiddleware(
                 $etagDirectives,
-                $config['etag-type'] ?? StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK
+                $config['etag-type'] ?? ETagMiddleware::ETAG_VALIDATION_WEAK
             );
         }
 

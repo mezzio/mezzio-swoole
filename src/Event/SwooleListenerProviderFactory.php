@@ -45,10 +45,7 @@ class SwooleListenerProviderFactory
         return $provider;
     }
 
-    /**
-     * @param string|callable $listener
-     */
-    private function prepareListener(ContainerInterface $container, $listener, string $event): callable
+    private function prepareListener(ContainerInterface $container, string|callable $listener, string $event): callable
     {
         if (is_callable($listener)) {
             return $listener;

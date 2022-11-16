@@ -41,8 +41,9 @@ class LastModifiedMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        $lastModified          = filemtime($filename) ?: 0;
-        $lastModified          = new DateTimeImmutable('@' . $lastModified, new DateTimeZone('GMT'));
+        $lastModified = filemtime($filename) ?: 0;
+        $lastModified = new DateTimeImmutable('@' . $lastModified, new DateTimeZone('GMT'));
+
         $formattedLastModified = IntlDateFormatter::formatObject(
             $lastModified,
             'EEEE dd-MMM-yy HH:mm:ss z'
@@ -65,6 +66,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
                 return true;
             }
         }
+
         return false;
     }
 
@@ -78,11 +80,6 @@ class LastModifiedMiddleware implements MiddlewareInterface
         if ('' === $ifModifiedSince) {
             return false;
         }
-
-        if (new DateTimeImmutable($ifModifiedSince) < new DateTimeImmutable($lastModified)) {
-            return false;
-        }
-
-        return true;
+        return new DateTimeImmutable($ifModifiedSince) >= new DateTimeImmutable($lastModified);
     }
 }

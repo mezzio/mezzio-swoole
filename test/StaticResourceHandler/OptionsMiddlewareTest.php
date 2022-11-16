@@ -19,11 +19,8 @@ class OptionsMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /**
-     * @var Request|MockObject
-     * @psalm-var MockObject&Request
-     */
-    private $request;
+    /** @psalm-var MockObject&Request */
+    private Request|MockObject $request;
 
     protected function setUp(): void
     {

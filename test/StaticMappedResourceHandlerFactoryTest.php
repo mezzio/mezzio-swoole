@@ -32,17 +32,11 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /**
-     * @var ContainerInterface|MockObject
-     * @psalm-var MockObject&ContainerInterface
-     */
-    private $container;
+    /** @psalm-var MockObject&ContainerInterface */
+    private ContainerInterface|MockObject $container;
 
-    /**
-     * @var FileLocationRepositoryInterface|MockObject
-     * @psalm-var MockObject&FileLocationRepositoryInterface
-     */
-    private $fileLocRepo;
+    /** @psalm-var MockObject&FileLocationRepositoryInterface */
+    private FileLocationRepositoryInterface|MockObject $fileLocRepo;
 
     protected function setUp(): void
     {
@@ -71,6 +65,7 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
                 return $middleware;
             }
         }
+
         $this->fail(sprintf(
             'Could not find middleware of type %s',
             $type
@@ -133,6 +128,7 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
 
         $r = new ReflectionProperty($handler, 'middleware');
         $r->setAccessible(true);
+
         $middleware = $r->getValue($handler);
 
         Assert::isList($middleware);

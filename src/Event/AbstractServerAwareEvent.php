@@ -12,11 +12,8 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 abstract class AbstractServerAwareEvent
 {
-    protected SwooleHttpServer $server;
-
-    public function __construct(SwooleHttpServer $server)
+    public function __construct(protected SwooleHttpServer $server)
     {
-        $this->server = $server;
     }
 
     public function getServer(): SwooleHttpServer

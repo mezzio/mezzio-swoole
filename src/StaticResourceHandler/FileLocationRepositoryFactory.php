@@ -14,8 +14,8 @@ use function array_merge;
 use function count;
 use function getcwd;
 use function is_array;
+use function is_countable;
 use function strlen;
-use function strval;
 
 class FileLocationRepositoryFactory
 {
@@ -30,15 +30,15 @@ class FileLocationRepositoryFactory
         $configDocRoots = $config['document-root'] ?? getcwd() . '/public';
         $isArray        = is_array($configDocRoots);
 
-        $mappedDocRoots = ($isArray && (count($configDocRoots) > 0))
-            || (! $isArray && strlen(strval($configDocRoots)) > 0)
+        $mappedDocRoots = ($isArray && ($configDocRoots !== []))
+            || (! $isArray && strlen((string) $configDocRoots) > 0)
             ? ['/' => $configDocRoots]
             : [];
 
         // Add any configured mapped document roots
         $configMappedDocRoots = $config['mapped-document-roots'] ?? [];
 
-        if (count($configMappedDocRoots) > 0) {
+        if ((is_countable($configMappedDocRoots) ? count($configMappedDocRoots) : 0) > 0) {
             $mappedDocRoots = array_merge($mappedDocRoots, $configMappedDocRoots);
         }
 

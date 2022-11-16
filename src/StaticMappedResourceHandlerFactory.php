@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole;
 
+use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -70,7 +71,7 @@ class StaticMappedResourceHandlerFactory extends AbstractStaticResourceHandlerFa
     {
         $config = $container->get('config')['mezzio-swoole']['swoole-http-server']['static-files'] ?? [];
         return new StaticMappedResourceHandler(
-            $container->get(StaticResourceHandler\FileLocationRepositoryInterface::class),
+            $container->get(FileLocationRepositoryInterface::class),
             $this->configureMiddleware($config)
         );
     }

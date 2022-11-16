@@ -19,10 +19,7 @@ use ReflectionProperty;
 
 class TaskEventDispatchListenerFactoryTest extends TestCase
 {
-    /**
-     * @param mixed $expected
-     */
-    public function asssertPropertySame($expected, string $property, object $instance, string $message = ''): void
+    public function asssertPropertySame(mixed $expected, string $property, object $instance, string $message = ''): void
     {
         $r = new ReflectionProperty($instance, $property);
         $r->setAccessible(true);

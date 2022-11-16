@@ -15,24 +15,15 @@ use Swoole\Http\Request;
 
 class Psr3AccessLogDecorator implements AccessLogInterface
 {
-    private AccessLogFormatterInterface $formatter;
-
-    private LoggerInterface $logger;
-
-    /**
-     * Whether or not to look up remote host names when preparing the access
-     * log message
-     */
-    private bool $useHostnameLookups;
-
     public function __construct(
-        LoggerInterface $logger,
-        AccessLogFormatterInterface $formatter,
-        bool $useHostnameLookups = false
+        private LoggerInterface $logger,
+        private AccessLogFormatterInterface $formatter,
+        /**
+         * Whether or not to look up remote host names when preparing the access
+         * log message
+         */
+        private bool $useHostnameLookups = false
     ) {
-        $this->logger             = $logger;
-        $this->formatter          = $formatter;
-        $this->useHostnameLookups = $useHostnameLookups;
     }
 
     public function logAccessForStaticResource(Request $request, StaticResourceResponse $response): void

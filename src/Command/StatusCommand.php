@@ -17,6 +17,9 @@ class StatusCommand extends Command
 {
     use IsRunningTrait;
 
+    /**
+     * @var string
+     */
     public const HELP = <<<'EOH'
 Find out if the server is running.
 
@@ -27,11 +30,8 @@ EOH;
     /** @var null|string Cannot be defined explicitly due to parent class */
     public static $defaultName = 'mezzio:swoole:status';
 
-    private PidManager $pidManager;
-
-    public function __construct(PidManager $pidManager)
+    public function __construct(private PidManager $pidManager)
     {
-        $this->pidManager = $pidManager;
         parent::__construct();
     }
 

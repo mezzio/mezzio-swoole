@@ -33,6 +33,8 @@ class ContentTypeFilterMiddleware implements MiddlewareInterface
      * Default static file extensions supported
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+     *
+     * @var array<string, string>
      */
     public const TYPE_MAP_DEFAULT = [
         '7z'    => 'application/x-7z-compressed',

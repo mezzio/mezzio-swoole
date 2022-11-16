@@ -22,13 +22,17 @@ class StaticResourceRequestListenerTest extends TestCase
 {
     /** @psalm-var StaticResourceHandlerInterface&MockObject */
     private StaticResourceHandlerInterface $handler;
+
     private StaticResourceRequestListener $listener;
+
     /** @psalm-var AccessLogInterface&MockObject */
     private AccessLogInterface $logger;
+
     private SwooleHttpRequest $swooleRequest;
+
     private SwooleHttpResponse $swooleResponse;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->swooleRequest  = $this->createMock(SwooleHttpRequest::class);
         $this->swooleResponse = $this->createMock(SwooleHttpResponse::class);

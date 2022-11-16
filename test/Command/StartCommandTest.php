@@ -13,6 +13,7 @@ use Mezzio\MiddlewareFactory;
 use Mezzio\Swoole\Command\StartCommand;
 use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use MezzioTest\Swoole\Command\TestAsset\HttpServer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -36,17 +37,11 @@ class StartCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /**
-     * @var ContainerInterface|MockObject
-     * @psalm-var MockObject&ContainerInterface
-     */
-    private $container;
+    /** @psalm-var MockObject&ContainerInterface */
+    private ContainerInterface|MockObject $container;
 
-    /**
-     * @var InputInterface|MockObject
-     * @psalm-var MockObject&InputInterface
-     */
-    private $input;
+    /** @psalm-var MockObject&InputInterface */
+    private InputInterface|MockObject $input;
 
     private string $originalIncludePath;
 
@@ -56,11 +51,8 @@ class StartCommandTest extends TestCase
      */
     private $output;
 
-    /**
-     * @var PidManager|MockObject
-     * @psalm-var MockObject&PidManager
-     */
-    private $pidManager;
+    /** @psalm-var MockObject&PidManager */
+    private PidManager|MockObject $pidManager;
 
     protected function setUp(): void
     {
@@ -218,7 +210,7 @@ class StartCommandTest extends TestCase
      */
     public function testExecuteRunsApplicationIfServerIsNotCurrentlyRunning(array $pids): void
     {
-        $httpServer        = $this->createMock(TestAsset\HttpServer::class);
+        $httpServer        = $this->createMock(HttpServer::class);
         $middlewareFactory = $this->createMock(MiddlewareFactory::class);
         $application       = $this->createMock(Application::class);
 
@@ -304,7 +296,7 @@ class StartCommandTest extends TestCase
 
     private function prepareSuccessfulStartCommand(array $pids): array
     {
-        $httpServer        = $this->createMock(TestAsset\HttpServer::class);
+        $httpServer        = $this->createMock(HttpServer::class);
         $middlewareFactory = $this->createMock(MiddlewareFactory::class);
         $application       = $this->createMock(Application::class);
 

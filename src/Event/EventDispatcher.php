@@ -14,11 +14,8 @@ use Psr\EventDispatcher\StoppableEventInterface;
 
 class EventDispatcher implements EventDispatcherInterface
 {
-    private ListenerProviderInterface $listenerProvider;
-
-    public function __construct(ListenerProviderInterface $listenerProvider)
+    public function __construct(private ListenerProviderInterface $listenerProvider)
     {
-        $this->listenerProvider = $listenerProvider;
     }
 
     /**
@@ -37,11 +34,14 @@ class EventDispatcher implements EventDispatcherInterface
         foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             /** @psalm-suppress MixedFunctionCall */
             $listener($event);
-
             /** @psalm-suppress MixedMethodCall */
-            if ($stoppable && $event->isPropagationStopped()) {
-                break;
+            if (! $stoppable) {
+                continue;
             }
+            if (! $event->isPropagationStopped()) {
+                continue;
+            }
+            break;
         }
 
         return $event;

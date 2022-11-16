@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\Exception;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
@@ -30,6 +31,7 @@ class GzipMiddleware implements MiddlewareInterface
 {
     /**
      * @psalm-var array<int, string>
+     * @var array<int, string>
      */
     public const COMPRESSION_CONTENT_ENCODING_MAP = [
         ZLIB_ENCODING_DEFLATE => 'deflate',
@@ -47,12 +49,13 @@ class GzipMiddleware implements MiddlewareInterface
     public function __construct(int $compressionLevel = 0)
     {
         if ($compressionLevel > 9) {
-            throw new Exception\InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 '%s only allows compression levels up to 9; received %d',
                 self::class,
                 $compressionLevel
             ));
         }
+
         $this->compressionLevel = $compressionLevel;
     }
 
@@ -91,7 +94,7 @@ class GzipMiddleware implements MiddlewareInterface
 
                 $countBytes = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
                 $length     = 0;
-                while (feof($handle) !== true) {
+                while (! feof($handle)) {
                     $line = fgets($handle, 4096);
                     /** @psalm-suppress MixedAssignment */
                     $length += $countBytes($line);
@@ -131,6 +134,7 @@ class GzipMiddleware implements MiddlewareInterface
                 return ZLIB_ENCODING_DEFLATE;
             }
         }
+
         return null;
     }
 }
