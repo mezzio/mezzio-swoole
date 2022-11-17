@@ -1,128 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
+<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
-    <MixedArgument occurrences="3">
-      <code>$compressionLevel</code>
-      <code>$config['etag-type'] ?? StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_WEAK</code>
-      <code>$config['type-map'] ?? StaticResourceHandler\ContentTypeFilterMiddleware::TYPE_MAP_DEFAULT</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$directives['cache-control']</code>
-    </MixedArrayAccess>
     <MixedArrayOffset occurrences="1">
       <code>$cacheControlDirectives[$regex]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="6">
-      <code>$cacheControlDirectives[$regex]</code>
-      <code>$clearStatCacheInterval</code>
-      <code>$compressionLevel</code>
-      <code>$directiveList</code>
-      <code>$directives</code>
-      <code>$regex</code>
-    </MixedAssignment>
-  </file>
-  <file src="src/Command/IsRunningTrait.php">
-    <InvalidArgument occurrences="2">
-      <code>0</code>
-      <code>0</code>
-    </InvalidArgument>
-    <MixedMethodCall occurrences="1">
-      <code>read</code>
-    </MixedMethodCall>
-    <UndefinedThisPropertyFetch occurrences="1">
-      <code>$this-&gt;pidManager</code>
-    </UndefinedThisPropertyFetch>
-  </file>
-  <file src="src/Command/ReloadCommand.php">
-    <PossiblyNullArgument occurrences="2">
-      <code>StartCommand::$defaultName</code>
-      <code>StopCommand::$defaultName</code>
-    </PossiblyNullArgument>
-    <PossiblyNullReference occurrences="1">
-      <code>find</code>
-    </PossiblyNullReference>
-  </file>
-  <file src="src/Command/ReloadCommandFactory.php">
-    <MixedArgument occurrences="1">
-      <code>$mode</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$config['mezzio-swoole']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$config</code>
-      <code>$mode</code>
-    </MixedAssignment>
-  </file>
-  <file src="src/Command/StartCommand.php">
-    <MixedAssignment occurrences="1">
-      <code>$server</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="1">
-      <code>set</code>
-    </MixedMethodCall>
-    <UndefinedThisPropertyAssignment occurrences="1">
-      <code>$this-&gt;pidManager</code>
-    </UndefinedThisPropertyAssignment>
-  </file>
-  <file src="src/Command/StatusCommandFactory.php">
-    <MixedArgument occurrences="1">
-      <code>$container-&gt;get(PidManager::class)</code>
-    </MixedArgument>
-  </file>
-  <file src="src/Command/StopCommandFactory.php">
-    <MixedArgument occurrences="1">
-      <code>$container-&gt;get(PidManager::class)</code>
-    </MixedArgument>
-  </file>
-  <file src="src/Event/ServerStartListenerFactory.php">
-    <MixedAssignment occurrences="1">
-      <code>$config</code>
-    </MixedAssignment>
-  </file>
-  <file src="src/Event/SwooleListenerProviderFactory.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$config['mezzio-swoole']['swoole-http-server']['listeners']</code>
-    </MixedArrayAccess>
-  </file>
-  <file src="src/Event/WorkerStartListenerFactory.php">
-    <MixedAssignment occurrences="1">
-      <code>$config</code>
-    </MixedAssignment>
   </file>
   <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
-    <MixedArgument occurrences="1">
-      <code>IN_MODIFY</code>
-    </MixedArgument>
-    <MixedArrayOffset occurrences="1">
-      <code>$this-&gt;filePathByWd[$wd]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="1">
-      <code>$wd</code>
-    </MixedAssignment>
     <UndefinedConstant occurrences="1">
       <code>IN_MODIFY</code>
     </UndefinedConstant>
   </file>
   <file src="src/HttpServerFactory.php">
-    <MixedArgument occurrences="2">
-      <code>$validProtocols</code>
-      <code>static::MODES</code>
-    </MixedArgument>
     <MixedArrayAssignment occurrences="2">
       <code>$validProtocols[]</code>
       <code>$validProtocols[]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="8">
-      <code>$enableCoroutine</code>
-      <code>$host</code>
-      <code>$mode</code>
-      <code>$port</code>
-      <code>$protocol</code>
-      <code>$validProtocols</code>
-      <code>$validProtocols[]</code>
-      <code>$validProtocols[]</code>
-    </MixedAssignment>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
     <InvalidOperand occurrences="3">
@@ -130,50 +22,10 @@
       <code>$begin</code>
       <code>$begin</code>
     </InvalidOperand>
-    <MixedArgument occurrences="5">
-      <code>$header</code>
-      <code>$header</code>
-      <code>$line</code>
-      <code>$query</code>
-      <code>$this-&gt;request-&gt;header['host'] ?? ''</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="5">
-      <code>$this-&gt;request-&gt;cookie[$name]</code>
-      <code>$this-&gt;request-&gt;header[$header]</code>
-      <code>$this-&gt;request-&gt;header['host']</code>
-      <code>$this-&gt;request-&gt;header[strtolower($name)]</code>
-      <code>$this-&gt;request-&gt;server[strtolower($key)]</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="8">
-      <code>$bodySize</code>
-      <code>$firstLineSize</code>
-      <code>$header</code>
-      <code>$headersSize</code>
-      <code>$line</code>
-      <code>$query</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="6">
-      <code>?int</code>
-      <code>?int</code>
-      <code>int</code>
-      <code>string</code>
-      <code>string</code>
-      <code>string</code>
-    </MixedInferredReturnType>
     <MixedOperand occurrences="2">
       <code>$firstLineSize</code>
       <code>$strlen($firstLine)</code>
     </MixedOperand>
-    <MixedReturnStatement occurrences="6">
-      <code>$firstLineSize + 2 + $headerSize + 4 + $bodySize</code>
-      <code>$strlen($firstLine) + 2 + $headersSize + 4 + $bodySize</code>
-      <code>$strlen(implode("\r\n", $headers))</code>
-      <code>$this-&gt;request-&gt;cookie[$name] ?? '-'</code>
-      <code>$this-&gt;request-&gt;header[$header]</code>
-      <code>$this-&gt;request-&gt;header[strtolower($name)] ?? '-'</code>
-    </MixedReturnStatement>
     <PossiblyInvalidArgument occurrences="1">
       <code>$time</code>
     </PossiblyInvalidArgument>
@@ -189,112 +41,23 @@
       <code>getHeaderSize</code>
     </PossiblyNullReference>
   </file>
-  <file src="src/Log/AccessLogFactory.php">
-    <MixedArgument occurrences="3">
-      <code>$config</code>
-      <code>$config['format'] ?? AccessLogFormatter::FORMAT_COMMON</code>
-      <code>$config['use-hostname-lookups'] ?? false</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$config['mezzio-swoole']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$config</code>
-      <code>$config</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>AccessLogFormatterInterface</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$container-&gt;get(AccessLogFormatterInterface::class)</code>
-    </MixedReturnStatement>
-  </file>
   <file src="src/Log/AccessLogFormatter.php">
     <InvalidScalarArgument occurrences="3">
       <code>'-'</code>
       <code>'-'</code>
     </InvalidScalarArgument>
   </file>
-  <file src="src/Log/LoggerResolvingTrait.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>LoggerInterface</code>
-    </MixedInferredReturnType>
-  </file>
-  <file src="src/Log/StdoutLogger.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$value</code>
-    </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="1">
-      <code>$value</code>
-    </MixedAssignment>
-  </file>
-  <file src="src/Log/SwooleLoggerFactory.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$config['mezzio-swoole']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$config</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>LoggerInterface</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="2">
-      <code>$container-&gt;get($loggerConfig['logger-name'])</code>
-      <code>$container-&gt;has(LoggerInterface::class) ? $container-&gt;get(LoggerInterface::class) : new StdoutLogger()</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/PidManagerFactory.php">
-    <MixedArgument occurrences="1"/>
-    <MixedArrayAccess occurrences="1">
-      <code>$config['mezzio-swoole']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$config</code>
-    </MixedAssignment>
-  </file>
   <file src="src/ServerRequestSwooleFactory.php">
     <DeprecatedFunction occurrences="1">
       <code>marshalUriFromSapi($server, $stripXForwardedHeaders($headers))</code>
     </DeprecatedFunction>
-    <MixedArgument occurrences="6">
-      <code>$cookie</code>
-      <code>$files</code>
-      <code>$get</code>
-      <code>$headers</code>
-      <code>$post</code>
-      <code>$server</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="7">
-      <code>$cookie</code>
-      <code>$files</code>
-      <code>$get</code>
-      <code>$headers</code>
-      <code>$post</code>
-      <code>$requestFilter</code>
-      <code>$server</code>
-    </MixedAssignment>
   </file>
   <file src="src/StaticMappedResourceHandler.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArrayAccess>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
   </file>
-  <file src="src/StaticMappedResourceHandlerFactory.php">
-    <MixedArgument occurrences="2">
-      <code>$config</code>
-      <code>$container-&gt;get(StaticResourceHandler\FileLocationRepositoryInterface::class)</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$config</code>
-    </MixedAssignment>
-  </file>
   <file src="src/StaticResourceHandler.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArrayAccess>
     <MixedOperand occurrences="1">
       <code>$request-&gt;server['request_uri']</code>
     </MixedOperand>
@@ -303,370 +66,40 @@
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
-    <MissingClosureParamType occurrences="1">
-      <code>$directive</code>
-    </MissingClosureParamType>
-    <MixedArgument occurrences="1">
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="2">
-      <code>$regex</code>
-      <code>$regex</code>
-    </MixedArgumentTypeCoercion>
-    <MixedArrayAccess occurrences="1">
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$response</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="1">
-      <code>addHeader</code>
-    </MixedMethodCall>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$cacheControlDirectives</code>
     </MixedPropertyTypeCoercion>
-    <MixedReturnStatement occurrences="1">
-      <code>$response</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/ClearStatCacheMiddleware.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$next($request, $filename)</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/ContentTypeFilterMiddleware.php">
-    <MixedAssignment occurrences="1">
-      <code>$response</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="1">
-      <code>addHeader</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="1">
-      <code>$response</code>
-    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
-    <MixedArgument occurrences="3">
-      <code>$ifMatch ?: $ifNoneMatch</code>
-      <code>$request-&gt;server['request_uri']</code>
-      <code>$response</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="3">
-      <code>$request-&gt;header['if-match']</code>
-      <code>$request-&gt;header['if-none-match']</code>
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="3">
-      <code>$ifMatch</code>
-      <code>$ifNoneMatch</code>
-      <code>$response</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$etagDirectives</code>
     </MixedPropertyTypeCoercion>
-    <MixedReturnStatement occurrences="1">
-      <code>$response</code>
-    </MixedReturnStatement>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
-    <MixedArgument occurrences="3">
-      <code>$d</code>
-      <code>$directory</code>
-      <code>$this-&gt;mappedDocRoots[$prefix]</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="3">
-      <code>$prefix</code>
-      <code>$prefix</code>
-      <code>$prefix</code>
-    </MixedArgumentTypeCoercion>
     <MixedArrayAssignment occurrences="1">
       <code>$this-&gt;mappedDocRoots[$prefix][]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="3">
-      <code>$d</code>
-      <code>$directories</code>
-      <code>$directory</code>
-    </MixedAssignment>
     <MixedOperand occurrences="1">
       <code>$directory</code>
     </MixedOperand>
   </file>
-  <file src="src/StaticResourceHandler/FileLocationRepositoryFactory.php">
-    <MixedArgument occurrences="4">
-      <code>$configDocRoots</code>
-      <code>$configDocRoots</code>
-      <code>$configMappedDocRoots</code>
-      <code>$configMappedDocRoots</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="2">
-      <code>$config['document-root']</code>
-      <code>$config['mapped-document-roots']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="3">
-      <code>$config</code>
-      <code>$configDocRoots</code>
-      <code>$configMappedDocRoots</code>
-    </MixedAssignment>
-  </file>
   <file src="src/StaticResourceHandler/GzipMiddleware.php">
-    <InvalidScalarArgument occurrences="3">
-      <code>true</code>
-      <code>true</code>
-      <code>true</code>
-    </InvalidScalarArgument>
-    <MixedArgument occurrences="1">
-      <code>$request-&gt;header['accept-encoding']</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$request-&gt;header['accept-encoding']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$response</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>setContentLength</code>
-      <code>setResponseContentCallback</code>
-    </MixedMethodCall>
     <MixedOperand occurrences="1">
       <code>$countBytes($line)</code>
     </MixedOperand>
-    <MixedReturnStatement occurrences="3">
-      <code>$response</code>
-      <code>$response</code>
-      <code>$response</code>
-    </MixedReturnStatement>
     <UnusedFunctionCall occurrences="1">
       <code>stream_filter_append</code>
     </UnusedFunctionCall>
   </file>
-  <file src="src/StaticResourceHandler/HeadMiddleware.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$server['request_method']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$response</code>
-      <code>$server</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="1">
-      <code>disableContent</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="2">
-      <code>$response</code>
-      <code>$response</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/LastModifiedMiddleware.php">
-    <MixedArgument occurrences="2">
-      <code>$ifModifiedSince</code>
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="2">
-      <code>$request-&gt;header['if-modified-since']</code>
-      <code>$request-&gt;server['request_uri']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$ifModifiedSince</code>
-      <code>$response</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="3">
-      <code>addHeader</code>
-      <code>disableContent</code>
-      <code>setStatus</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="2">
-      <code>$response</code>
-      <code>$response</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/MethodNotAllowedMiddleware.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$server['request_method']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$server</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$next($request, $filename)</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/MiddlewareQueue.php">
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$middleware</code>
-    </MixedPropertyTypeCoercion>
-  </file>
-  <file src="src/StaticResourceHandler/OptionsMiddleware.php">
-    <MixedArrayAccess occurrences="1">
-      <code>$server['request_method']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$response</code>
-      <code>$server</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StaticResourceResponse</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>addHeader</code>
-      <code>disableContent</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="2">
-      <code>$response</code>
-      <code>$response</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/StaticResourceResponse.php">
-    <InvalidArgument occurrences="2">
-      <code>$this-&gt;status</code>
-      <code>true</code>
-    </InvalidArgument>
-    <InvalidScalarArgument occurrences="1">
-      <code>true</code>
-    </InvalidScalarArgument>
-    <MixedInferredReturnType occurrences="1">
-      <code>int</code>
-    </MixedInferredReturnType>
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$headers</code>
-    </MixedPropertyTypeCoercion>
-    <MixedReturnStatement occurrences="1">
-      <code>$strlen(implode("\r\n", $headers))</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
-    <MixedArgument occurrences="1">
-      <code>$regex</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$regex</code>
-    </MixedAssignment>
-  </file>
-  <file src="src/StaticResourceHandlerFactory.php">
-    <MixedArgument occurrences="2">
-      <code>$config</code>
-      <code>$config['document-root'] ?? getcwd() . '/public'</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$config['document-root']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
-      <code>$config</code>
-    </MixedAssignment>
-  </file>
   <file src="src/SwooleEmitter.php">
-    <InvalidArgument occurrences="4">
-      <code>$cookie-&gt;getExpires()</code>
-      <code>$cookie-&gt;getHttpOnly()</code>
-      <code>$cookie-&gt;getSecure()</code>
-      <code>$response-&gt;getStatusCode()</code>
-    </InvalidArgument>
-    <MixedArgument occurrences="1">
-      <code>static::CHUNK_SIZE</code>
-    </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$name</code>
-    </MixedArgumentTypeCoercion>
-    <PossiblyNullArgument occurrences="1">
-      <code>$cookie-&gt;getValue()</code>
-    </PossiblyNullArgument>
     <PossiblyNullReference occurrences="1">
       <code>asString</code>
     </PossiblyNullReference>
-    <TooManyArguments occurrences="1">
-      <code>cookie</code>
-    </TooManyArguments>
-  </file>
-  <file src="src/SwooleStream.php">
-    <InvalidToString occurrences="1">
-      <code>string</code>
-    </InvalidToString>
-    <NullableReturnStatement occurrences="1">
-      <code>$this-&gt;body</code>
-    </NullableReturnStatement>
-    <PossiblyNullArgument occurrences="2">
-      <code>$this-&gt;body</code>
-      <code>$this-&gt;body</code>
-    </PossiblyNullArgument>
-  </file>
-  <file src="src/Task/DeferredListener.php">
-    <InvalidCast occurrences="1">
-      <code>new Task($this-&gt;listener, $event)</code>
-    </InvalidCast>
-  </file>
-  <file src="src/Task/DeferredServiceListener.php">
-    <InvalidCast occurrences="1">
-      <code>new ServiceBasedTask($this-&gt;serviceName, $event)</code>
-    </InvalidCast>
   </file>
   <file src="src/Task/Task.php">
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$payload</code>
     </MixedPropertyTypeCoercion>
-  </file>
-  <file src="test/AssertResponseTrait.php">
-    <MixedArgument occurrences="7">
-      <code>$actual</code>
-      <code>$headers</code>
-      <code>$headers</code>
-      <code>$headers</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="2">
-      <code>$headers[$header]</code>
-      <code>$headers[$header]</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="5">
-      <code>$headers</code>
-      <code>$headers</code>
-      <code>$headers</code>
-      <code>$headers</code>
-      <code>$value</code>
-    </MixedAssignment>
-  </file>
-  <file src="test/AttributeAssertionTrait.php">
-    <MixedArgument occurrences="1">
-      <code>$expected</code>
-    </MixedArgument>
-  </file>
-  <file src="test/Command/StartCommandTest.php">
-    <MixedArgument occurrences="2">
-      <code>$command</code>
-      <code>$command</code>
-    </MixedArgument>
-    <MixedInferredReturnType occurrences="1">
-      <code>iterable</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="4">
-      <code>expects</code>
-      <code>expects</code>
-      <code>method</code>
-      <code>method</code>
-    </MixedMethodCall>
   </file>
   <file src="test/Command/StopCommandTest.php">
     <InternalProperty occurrences="3">
@@ -679,153 +112,16 @@
       <code>assertTrue</code>
     </TypeDoesNotContainType>
   </file>
-  <file src="test/Command/TestAsset/config/pipeline.php">
-    <UnusedClosureParam occurrences="3">
-      <code>$app</code>
-      <code>$container</code>
-      <code>$factory</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/Command/TestAsset/config/routes.php">
-    <UnusedClosureParam occurrences="3">
-      <code>$app</code>
-      <code>$container</code>
-      <code>$factory</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/Event/EventDispatcherTest.php">
-    <UnusedClosureParam occurrences="2">
-      <code>$event</code>
-      <code>$event</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/Event/RequestHandlerRequestListenerFactoryTest.php">
-    <UnusedClosureParam occurrences="2">
-      <code>$e</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/Event/RequestHandlerRequestListenerTest.php">
-    <UnusedClosureParam occurrences="2">
-      <code>$response</code>
-      <code>$swooleRequest</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/Event/SwooleListenerProviderFactoryTest.php">
-    <UnusedClosureParam occurrences="1">
-      <code>$event</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/Event/SwooleListenerProviderTest.php">
-    <UnusedClosureParam occurrences="3">
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-    </UnusedClosureParam>
-  </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
     <InvalidPropertyAssignmentValue occurrences="1">
       <code>$this-&gt;file</code>
     </InvalidPropertyAssignmentValue>
   </file>
   <file src="test/HttpServerFactoryTest.php">
-    <InvalidScalarArgument occurrences="2">
-      <code>0</code>
-      <code>0</code>
-    </InvalidScalarArgument>
     <LessSpecificReturnStatement occurrences="1">
       <code>$validTypes</code>
     </LessSpecificReturnStatement>
-    <MissingClosureParamType occurrences="4">
-      <code>$clientInfo</code>
-      <code>$data</code>
-      <code>$rep</code>
-      <code>$req</code>
-    </MissingClosureParamType>
     <MoreSpecificReturnType occurrences="1"/>
-    <UnusedClosureParam occurrences="5">
-      <code>$clientInfo</code>
-      <code>$data</code>
-      <code>$rep</code>
-      <code>$req</code>
-      <code>$server</code>
-    </UnusedClosureParam>
-    <UnusedFunctionCall occurrences="3">
-      <code>go</code>
-      <code>go</code>
-      <code>go</code>
-    </UnusedFunctionCall>
-  </file>
-  <file src="test/Log/LoggerFactoryHelperTrait.php">
-    <MixedAssignment occurrences="1">
-      <code>$value</code>
-    </MixedAssignment>
-  </file>
-  <file src="test/StaticResourceHandler/CacheControlMiddlewareTest.php">
-    <UnusedClosureParam occurrences="4">
-      <code>$filename</code>
-      <code>$filename</code>
-      <code>$request</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/ContentTypeFilterMiddlewareTest.php">
-    <UnusedClosureParam occurrences="4">
-      <code>$filename</code>
-      <code>$filename</code>
-      <code>$request</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/ETagMiddlewareTest.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>iterable</code>
-    </MixedInferredReturnType>
-    <UnusedClosureParam occurrences="2">
-      <code>$filename</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/GzipMiddlewareTest.php">
-    <UnusedClosureParam occurrences="4">
-      <code>$filename</code>
-      <code>$filename</code>
-      <code>$request</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/HeadMiddlewareTest.php">
-    <UnusedClosureParam occurrences="2">
-      <code>$filename</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/LastModifiedMiddlewareTest.php">
-    <UnusedClosureParam occurrences="2">
-      <code>$filename</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php">
-    <UnusedClosureParam occurrences="4">
-      <code>$filename</code>
-      <code>$filename</code>
-      <code>$request</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/OptionsMiddlewareTest.php">
-    <UnusedClosureParam occurrences="4">
-      <code>$filename</code>
-      <code>$filename</code>
-      <code>$request</code>
-      <code>$request</code>
-    </UnusedClosureParam>
-  </file>
-  <file src="test/StaticResourceHandler/StaticResourceResponseTest.php">
-    <UnusedClosureParam occurrences="1">
-      <code>$response</code>
-    </UnusedClosureParam>
   </file>
   <file src="test/TestAsset/CallableObject.php">
     <MixedReturnTypeCoercion occurrences="2">

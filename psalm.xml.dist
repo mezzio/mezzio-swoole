@@ -38,6 +38,18 @@
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with"/>
             </errorLevel>
         </InternalMethod>
+
+        <MissingClosureParamType errorLevel="suppress"/>
+        <MixedArgument errorLevel="suppress"/>
+        <MixedArgumentTypeCoercion errorLevel="suppress"/>
+        <MixedArrayAccess errorLevel="suppress"/>
+        <MixedAssignment errorLevel="suppress"/>
+        <MixedInferredReturnType errorLevel="suppress"/>
+        <MixedMethodCall errorLevel="suppress"/>
+        <MixedReturnStatement errorLevel="suppress"/>
+        <PossiblyNullArgument errorLevel="suppress"/>
+        <PropertyNotSetInConstructor errorLevel="suppress"/>
+        <UnusedClosureParam errorLevel="suppress"/>
     </issueHandlers>
 
     <plugins>
