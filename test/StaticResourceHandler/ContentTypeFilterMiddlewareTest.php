@@ -57,6 +57,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
             'txt' => 'text/plain',
         ]);
 
+        /** @psalm-suppress InvalidArgument */
         $response = $middleware($this->request, __DIR__ . '/../image.png', $next);
 
         $this->assertTrue($response->isFailure());
@@ -65,7 +66,7 @@ class ContentTypeFilterMiddlewareTest extends TestCase
     public function testMiddlewareAddsContentTypeToResponseWhenResourceLocatedAndAllowed(): void
     {
         $expected   = new StaticResourceResponse();
-        $next       = static fn(Request $request, string $filename): StaticResourceResponse => $expected;
+        $next       = static fn (Request $request, string $filename): StaticResourceResponse => $expected;
         $middleware = new ContentTypeFilterMiddleware();
 
         $response = $middleware($this->request, __DIR__ . '/../TestAsset/image.png', $next);

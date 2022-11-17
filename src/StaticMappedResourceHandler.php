@@ -42,7 +42,6 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
     ): ?StaticResourceResponse {
-        /** @psalm-suppress MixedArgument */
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
         if (! $filename) {
             return null;

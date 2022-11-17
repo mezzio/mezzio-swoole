@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Command;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -69,6 +70,7 @@ EOH;
 
         $output->writeln('<info>Reloading server ...</info>');
 
+        /** @var Application $application */
         $application = $this->getApplication();
 
         $stop   = $application->find(StopCommand::$defaultName);
@@ -98,7 +100,6 @@ EOH;
             '--num-workers' => $input->getOption('num-workers') ?? StartCommand::DEFAULT_NUM_WORKERS,
         ];
 
-        /** @psalm-suppress MixedAssignment */
         $numTaskWorkers = $input->getOption('num-task-workers');
         if (null !== $numTaskWorkers) {
             $inputArguments['--num-task-workers'] = (int) $numTaskWorkers;

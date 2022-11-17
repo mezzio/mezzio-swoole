@@ -10,6 +10,7 @@ namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Psr\Log\LoggerInterface;
+use Swoole\Server;
 
 class HotCodeReloaderWorkerStartListener
 {
@@ -29,6 +30,7 @@ class HotCodeReloaderWorkerStartListener
             return;
         }
 
+        /** @var Server $server */
         $server      = $event->getServer();
         $fileWatcher = $this->fileWatcher;
         $logger      = $this->logger;

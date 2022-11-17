@@ -76,6 +76,7 @@ class LastModifiedMiddleware implements MiddlewareInterface
      */
     private function isUnmodified(Request $request, string $lastModified): bool
     {
+        /** @var array<string,string> $request->header */
         $ifModifiedSince = $request->header['if-modified-since'] ?? '';
         if ('' === $ifModifiedSince) {
             return false;

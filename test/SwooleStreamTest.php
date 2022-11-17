@@ -29,8 +29,8 @@ class SwooleStreamTest extends TestCase
      */
     public const DEFAULT_CONTENT = 'This is a test!';
 
-    /** @psalm-var SwooleHttpRequest&MockObject */
-    private SwooleHttpRequest|MockObject $request;
+    /** @var SwooleHttpRequest&MockObject */
+    private MockObject $request;
 
     private SwooleStream $stream;
 
@@ -40,6 +40,7 @@ class SwooleStreamTest extends TestCase
             $this->markTestSkipped('The Swoole extension is not available');
         }
 
+        /** @var SwooleHttpRequest&MockObject */
         $this->request = $this->createMock(SwooleHttpRequest::class);
         $this->request
             ->method('rawContent')

@@ -79,7 +79,7 @@ class CacheControlMiddleware implements MiddlewareInterface
             if (! is_array($directives)) {
                 throw new InvalidArgumentException(sprintf(
                     'The Cache-Control directives associated with the regex "%s" are invalid;'
-                    . ' each must be an array of strings',
+                        . ' each must be an array of strings',
                     $regex
                 ));
             }
@@ -88,7 +88,7 @@ class CacheControlMiddleware implements MiddlewareInterface
                 if (! is_string($directive)) {
                     throw new InvalidArgumentException(sprintf(
                         'One or more Cache-Control directives associated with the regex "%s" are invalid;'
-                        . ' each must be a string',
+                            . ' each must be a string',
                         $regex
                     ));
                 }
@@ -113,7 +113,7 @@ class CacheControlMiddleware implements MiddlewareInterface
 
         throw new InvalidArgumentException(sprintf(
             'The Cache-Control directive "%s" associated with regex "%s" is invalid.'
-            . ' Must be one of [%s] or match /^max-age=\d+$/',
+                . ' Must be one of [%s] or match /^max-age=\d+$/',
             $directive,
             $regex,
             implode(', ', self::CACHECONTROL_DIRECTIVES)

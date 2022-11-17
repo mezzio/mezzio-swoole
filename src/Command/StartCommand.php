@@ -115,6 +115,7 @@ EOH;
         }
 
         if ([] !== $serverOptions) {
+            /** @var SwooleHttpServer $server */
             $server = $this->container->get(SwooleHttpServer::class);
             $server->set($serverOptions);
         }

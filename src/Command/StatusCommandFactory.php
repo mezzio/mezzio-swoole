@@ -15,6 +15,8 @@ class StatusCommandFactory
 {
     public function __invoke(ContainerInterface $container): StatusCommand
     {
-        return new StatusCommand($container->get(PidManager::class));
+        /** @var PidManager $pidManager */
+        $pidManager = $container->get(PidManager::class);
+        return new StatusCommand($pidManager);
     }
 }

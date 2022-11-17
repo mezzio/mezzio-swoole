@@ -112,7 +112,7 @@ class SwooleEmitter implements EmitterInterface
 
             $this->swooleResponse->cookie(
                 $cookie->getName(),
-                $cookie->getValue(),
+                (string) $cookie->getValue(),
                 $cookie->getExpires(),
                 $cookie->getPath() ?: '/',
                 $cookie->getDomain() ?: '',

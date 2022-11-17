@@ -14,6 +14,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Swoole\Event as SwooleEvent;
+use Swoole\Http\Request;
+use Swoole\Http\Response;
 use Swoole\Http\Server as SwooleServer;
 use Swoole\Process;
 use Swoole\Runtime as SwooleRuntime;
@@ -298,10 +300,10 @@ class HttpServerFactoryTest extends TestCase
                     $server->stop();
                     $server->shutdown();
                 });
-                $swooleServer->on('Request', static function ($req, $rep): void {
+                $swooleServer->on('Request', static function (Request $req, Response $rep): void {
                     // noop
                 });
-                $swooleServer->on('Packet', static function (SwooleServer $server, $data, $clientInfo): void {
+                $swooleServer->on('Packet', static function (SwooleServer $server, string $data, array $clientInfo): void {
                     // noop
                 });
                 $swooleServer->start();

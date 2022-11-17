@@ -20,7 +20,6 @@ use Webmozart\Assert\Assert;
 use function array_shift;
 use function count;
 use function is_array;
-use function is_countable;
 
 class DeferredServiceListenerTest extends TestCase
 {
@@ -59,7 +58,8 @@ class DeferredServiceListenerTest extends TestCase
                 if (! is_array($payload)) {
                     return false;
                 }
-                if (1 !== (is_countable($payload) ? count($payload) : 0)) {
+
+                if (1 !== count($payload)) {
                     return false;
                 }
 

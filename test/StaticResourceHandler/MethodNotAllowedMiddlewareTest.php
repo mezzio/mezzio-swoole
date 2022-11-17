@@ -62,9 +62,10 @@ class MethodNotAllowedMiddlewareTest extends TestCase
             'request_method' => $method,
         ];
         $response              = new StaticResourceResponse();
-        $next                  = static fn(Request $request, string $filename): StaticResourceResponse => $response;
+        $next                  = static fn (Request $request, string $filename): StaticResourceResponse => $response;
         $middleware            = new MethodNotAllowedMiddleware();
 
+        /** @psalm-suppress InvalidArgument */
         $test = $middleware($this->request, '/does/not/matter', $next);
 
         $this->assertSame($response, $test);
@@ -84,6 +85,7 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         };
         $middleware            = new MethodNotAllowedMiddleware();
 
+        /** @psalm-suppress InvalidArgument */
         $response = $middleware($this->request, '/does/not/matter', $next);
 
         $this->assertStatus(405, $response);

@@ -13,18 +13,18 @@ use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
 use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Swoole\Http\Request;
+use Swoole\Http\Request as SwooleHttpRequest;
 
 class OptionsMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /** @psalm-var MockObject&Request */
-    private Request|MockObject $request;
+    /** @var MockObject&SwooleHttpRequest */
+    private MockObject $request;
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(Request::class);
+        $this->request = $this->createMock(SwooleHttpRequest::class);
     }
 
     /**
@@ -45,8 +45,8 @@ class OptionsMiddlewareTest extends TestCase
     public function testMiddlewareDoesNothingForNonOptionsRequests(string $method): void
     {
         $this->request->server = ['request_method' => $method];
-        $next                  = static fn(Request $request, string $filename): StaticResourceResponse
-            => new StaticResourceResponse();
+        $next                  = static fn (SwooleHttpRequest $request, string $filename): StaticResourceResponse
+        => new StaticResourceResponse();
 
         $middleware = new OptionsMiddleware();
 
@@ -60,8 +60,7 @@ class OptionsMiddlewareTest extends TestCase
     public function testMiddlewareSetsAllowHeaderAndDisablesContentForOptionsRequests(): void
     {
         $this->request->server = ['request_method' => 'OPTIONS'];
-        $next                  = static fn(Request $request, string $filename): StaticResourceResponse
-            => new StaticResourceResponse();
+        $next                  = static fn (SwooleHttpRequest $request, string $filename): StaticResourceResponse => new StaticResourceResponse();
 
         $middleware = new OptionsMiddleware();
 
