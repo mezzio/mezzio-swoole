@@ -47,14 +47,19 @@ class DeferredServiceListenerTest extends TestCase
             ->with($this->callback(static function (ServiceBasedTask $task) use ($event): bool {
                 $r = new ReflectionProperty($task, 'serviceName');
                 $r->setAccessible(true);
+
                 $serviceName = $r->getValue($task);
                 Assert::stringNotEmpty($serviceName);
 
                 $r = new ReflectionProperty($task, 'payload');
                 $r->setAccessible(true);
-                $payload = $r->getValue($task);
 
-                if (! is_array($payload) || 1 !== count($payload)) {
+                $payload = $r->getValue($task);
+                if (! is_array($payload)) {
+                    return false;
+                }
+
+                if (1 !== count($payload)) {
                     return false;
                 }
 

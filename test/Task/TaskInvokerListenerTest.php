@@ -20,10 +20,9 @@ use RuntimeException;
 use stdClass;
 
 use function array_key_exists;
-use function get_class;
 use function is_string;
 use function json_encode;
-use function strpos;
+use function str_contains;
 
 class TaskInvokerListenerTest extends TestCase
 {
@@ -45,7 +44,7 @@ class TaskInvokerListenerTest extends TestCase
      */
     private LoggerInterface $logger;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);
         $this->logger    = $this->createMock(LoggerInterface::class);
@@ -164,7 +163,7 @@ class TaskInvokerListenerTest extends TestCase
                         && $taskId === $context['taskId']
                         && array_key_exists('error', $context)
                         && is_string($context['error'])
-                        && false !== strpos($context['error'], get_class($exception))),
+                        && str_contains($context['error'], $exception::class)),
                 ]
             );
 

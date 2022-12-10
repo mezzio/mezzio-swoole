@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\Exception;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Swoole\Http\Request;
 
 use function array_walk;
@@ -56,6 +57,7 @@ class CacheControlMiddleware implements MiddlewareInterface
         if ($cacheControl) {
             $response->addHeader('Cache-Control', $cacheControl);
         }
+
         return $response;
     }
 
@@ -68,28 +70,29 @@ class CacheControlMiddleware implements MiddlewareInterface
     {
         foreach ($cacheControlDirectives as $regex => $directives) {
             if (! $this->isValidRegex($regex)) {
-                throw new Exception\InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'The Cache-Control regex "%s" is invalid',
                     $regex
                 ));
             }
 
             if (! is_array($directives)) {
-                throw new Exception\InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'The Cache-Control directives associated with the regex "%s" are invalid;'
-                    . ' each must be an array of strings',
+                        . ' each must be an array of strings',
                     $regex
                 ));
             }
 
             array_walk($directives, function ($directive) use ($regex): void {
                 if (! is_string($directive)) {
-                    throw new Exception\InvalidArgumentException(sprintf(
+                    throw new InvalidArgumentException(sprintf(
                         'One or more Cache-Control directives associated with the regex "%s" are invalid;'
-                        . ' each must be a string',
+                            . ' each must be a string',
                         $regex
                     ));
                 }
+
                 $this->validateCacheControlDirective($regex, $directive);
             });
         }
@@ -103,12 +106,14 @@ class CacheControlMiddleware implements MiddlewareInterface
         if (in_array($directive, self::CACHECONTROL_DIRECTIVES, true)) {
             return;
         }
-        if (preg_match('/^max-age=\d+$/', $directive)) {
+
+        if (preg_match('#^max-age=\d+$#', $directive)) {
             return;
         }
-        throw new Exception\InvalidArgumentException(sprintf(
+
+        throw new InvalidArgumentException(sprintf(
             'The Cache-Control directive "%s" associated with regex "%s" is invalid.'
-            . ' Must be one of [%s] or match /^max-age=\d+$/',
+                . ' Must be one of [%s] or match /^max-age=\d+$/',
             $directive,
             $regex,
             implode(', ', self::CACHECONTROL_DIRECTIVES)
@@ -128,6 +133,7 @@ class CacheControlMiddleware implements MiddlewareInterface
                 return implode(', ', $values);
             }
         }
+
         return null;
     }
 }

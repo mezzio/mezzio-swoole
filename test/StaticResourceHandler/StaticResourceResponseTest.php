@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace MezzioTest\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Response as SwooleResponse;
 
@@ -18,6 +19,7 @@ class StaticResourceResponseTest extends TestCase
     {
         $expectedFilename = '/image.png';
 
+        /** @var SwooleResponse&MockObject $swooleResponse*/
         $swooleResponse = $this->createMock(SwooleResponse::class);
         $swooleResponse->expects($this->once())->method('status')->with(302);
         $swooleResponse
@@ -45,6 +47,7 @@ class StaticResourceResponseTest extends TestCase
     {
         $filename = '/image.png';
 
+        /** @var SwooleResponse&MockObject $swooleResponse*/
         $swooleResponse = $this->createMock(SwooleResponse::class);
         $swooleResponse->expects($this->once())->method('status')->with(302);
         $swooleResponse

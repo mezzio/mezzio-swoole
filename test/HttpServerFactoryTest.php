@@ -14,6 +14,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Swoole\Event as SwooleEvent;
+use Swoole\Http\Request;
+use Swoole\Http\Response;
 use Swoole\Http\Server as SwooleServer;
 use Swoole\Process;
 use Swoole\Runtime as SwooleRuntime;
@@ -29,6 +31,7 @@ use function json_encode;
 use function method_exists;
 use function usleep;
 
+use const JSON_THROW_ON_ERROR;
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
 use const SWOOLE_SOCK_TCP;
@@ -41,11 +44,8 @@ use const SWOOLE_UNIX_STREAM;
 
 class HttpServerFactoryTest extends TestCase
 {
-    /**
-     * @var ContainerInterface|MockObject
-     * @psalm-var MockObject&ContainerInterface
-     */
-    private $container;
+    /** @psalm-var MockObject&ContainerInterface */
+    private ContainerInterface|MockObject $container;
 
     protected function setUp(): void
     {
@@ -96,14 +96,15 @@ class HttpServerFactoryTest extends TestCase
                 'port' => $swooleServer->port,
                 'mode' => $swooleServer->mode,
                 'type' => $swooleServer->type,
-            ]));
+            ], JSON_THROW_ON_ERROR));
             $worker->exit(0);
         });
         $process->start();
+
         $data = $process->read();
         Process::wait(true);
 
-        $result = json_decode($data, true);
+        $result = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame([
             'host' => '0.0.0.0',
             'port' => 8081,
@@ -141,8 +142,8 @@ class HttpServerFactoryTest extends TestCase
         try {
             $factory($this->container);
             $this->fail('An exception was not thrown');
-        } catch (InvalidArgumentException $e) {
-            $this->assertSame('Invalid port', $e->getMessage());
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this->assertSame('Invalid port', $invalidArgumentException->getMessage());
         }
     }
 
@@ -161,9 +162,8 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidServerModes
-     * @param int|string $mode
      */
-    public function testExceptionThrownForInvalidServerMode($mode): void
+    public function testExceptionThrownForInvalidServerMode(int|string $mode): void
     {
         $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
@@ -176,8 +176,8 @@ class HttpServerFactoryTest extends TestCase
         try {
             $factory($this->container);
             $this->fail('An exception was not thrown');
-        } catch (InvalidArgumentException $e) {
-            $this->assertSame('Invalid server mode', $e->getMessage());
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this->assertSame('Invalid server mode', $invalidArgumentException->getMessage());
         }
     }
 
@@ -196,9 +196,8 @@ class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidSocketTypes
-     * @param int|string $type
      */
-    public function testExceptionThrownForInvalidSocketType($type): void
+    public function testExceptionThrownForInvalidSocketType(int|string $type): void
     {
         $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
@@ -211,8 +210,8 @@ class HttpServerFactoryTest extends TestCase
         try {
             $factory($this->container);
             $this->fail('An exception was not thrown');
-        } catch (InvalidArgumentException $e) {
-            $this->assertSame('Invalid server protocol', $e->getMessage());
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this->assertSame('Invalid server protocol', $invalidArgumentException->getMessage());
         }
     }
 
@@ -231,11 +230,12 @@ class HttpServerFactoryTest extends TestCase
         $process = new Process(function (Process $worker): void {
             $factory      = new HttpServerFactory();
             $swooleServer = $factory($this->container);
-            $worker->write(json_encode($swooleServer->setting));
+            $worker->write(json_encode($swooleServer->setting, JSON_THROW_ON_ERROR));
             $worker->exit();
         });
         $process->start();
-        $setOptions = json_decode($process->read(), true);
+
+        $setOptions = json_decode($process->read(), true, 512, JSON_THROW_ON_ERROR);
         Process::wait(true);
         $this->assertSame($serverOptions, $setOptions);
     }
@@ -300,19 +300,21 @@ class HttpServerFactoryTest extends TestCase
                     $server->stop();
                     $server->shutdown();
                 });
-                $swooleServer->on('Request', static function ($req, $rep): void {
+                $swooleServer->on('Request', static function (Request $req, Response $rep): void {
                     // noop
                 });
-                $swooleServer->on('Packet', static function (SwooleServer $server, $data, $clientInfo): void {
+                $swooleServer->on('Packet', static function (SwooleServer $server, string $data, array $clientInfo): void {
                     // noop
                 });
                 $swooleServer->start();
-            } catch (Throwable $exception) {
-                $worker->write('Exception Thrown: ' . $exception->getMessage());
+            } catch (Throwable $throwable) {
+                $worker->write('Exception Thrown: ' . $throwable->getMessage());
             }
+
             $worker->exit();
         });
         $process->start();
+
         $output = $process->read();
         Process::wait(true);
         $this->assertSame('Server Started', $output);
@@ -344,12 +346,12 @@ class HttpServerFactoryTest extends TestCase
             go(static function () use (&$i): void {
                 Assert::integer($i);
                 usleep(1000);
-                $i += 1;
+                ++$i;
                 SwooleEvent::exit();
             });
             go(function () use (&$i): void {
                 Assert::integer($i);
-                $i += 1;
+                ++$i;
                 $this->assertEquals(1, $i);
             });
         }

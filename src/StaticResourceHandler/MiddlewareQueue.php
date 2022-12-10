@@ -17,12 +17,11 @@ use function array_shift;
  */
 class MiddlewareQueue
 {
-    /** @var MiddlewareInterface[] */
-    private array $middleware;
-
-    public function __construct(array $middleware)
+    /**
+     * @param MiddlewareInterface[] $middleware
+     */
+    public function __construct(private array $middleware)
     {
-        $this->middleware = $middleware;
     }
 
     public function __invoke(Request $request, string $filename): StaticResourceResponse

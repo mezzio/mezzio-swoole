@@ -27,7 +27,7 @@ final class StrftimeToICUFormatMap
     public static function mapStrftimeToICU(string $format, DateTimeInterface $requestTime): string
     {
         return preg_replace_callback(
-            '/(?P<token>%[aAbBcCdDeFgGhHIjklmMpPrRsSTuUVwWxXyYzZ])/',
+            '#(?P<token>%[aAbBcCdDeFgGhHIjklmMpPrRsSTuUVwWxXyYzZ])#',
             self::generateMapCallback($requestTime),
             $format
         );
@@ -41,83 +41,47 @@ final class StrftimeToICUFormatMap
         /** @psalm-param array<array-key, string> */
         return static function (array $matches) use ($requestTime): string {
             Assert::keyExists($matches, 'token');
-            switch (true) {
-                case $matches['token'] === '%a':
-                    return 'eee';
-                case $matches['token'] === '%A':
-                    return 'eeee';
-                case $matches['token'] === '%b':
-                    return 'MMM';
-                case $matches['token'] === '%B':
-                    return 'MMMM';
-                case $matches['token'] === '%C':
-                    return 'yy';
-                case $matches['token'] === '%d':
-                    return 'dd';
-                case $matches['token'] === '%D':
-                    return 'MM/dd/yy';
-                case $matches['token'] === '%e':
-                    return ' d';
-                case $matches['token'] === '%F':
-                    return 'y-MM-dd';
-                case $matches['token'] === '%g':
-                    return 'yy';
-                case $matches['token'] === '%G':
-                    return 'y';
-                case $matches['token'] === '%h':
-                    return 'MMM';
-                case $matches['token'] === '%H':
-                    return 'HH';
-                case $matches['token'] === '%I':
-                    return 'KK';
-                case $matches['token'] === '%j':
-                    return 'D';
-                case $matches['token'] === '%k':
-                    return ' H';
-                case $matches['token'] === '%l':
-                    return ' h';
-                case $matches['token'] === '%m':
-                    return 'MM';
-                case $matches['token'] === '%M':
-                    return 'mm';
-                case $matches['token'] === '%p':
-                    return 'a';
-                case $matches['token'] === '%P':
-                    return 'a';
-                case $matches['token'] === '%r':
-                    return ' h:mm:ss a';
-                case $matches['token'] === '%R':
-                    return 'HH:mm';
-                case $matches['token'] === '%S':
-                    return 'ss';
-                case $matches['token'] === '%s':
-                    return (string) $requestTime->getTimestamp();
-                case $matches['token'] === '%T':
-                    return 'HH:mm:ss';
-                case $matches['token'] === '%u':
-                    return 'e';
-                case $matches['token'] === '%U':
-                    return 'ww';
-                case $matches['token'] === '%w':
-                    return 'c';
-                case $matches['token'] === '%W':
-                    return 'ww';
-                case $matches['token'] === '%V':
-                    return 'ww';
-                case $matches['token'] === '%y':
-                    return 'yy';
-                case $matches['token'] === '%Y':
-                    return 'y';
-                case $matches['token'] === '%z':
-                    return 'xx';
-                case $matches['token'] === '%Z':
-                    return 'z';
-                default:
-                    throw new RuntimeException(sprintf(
-                        'The request time format token "%s" is unsupported; please use ICU Date/Time format codes',
-                        $matches['token']
-                    ));
-            }
+            return match (true) {
+                $matches['token'] === '%a' => 'eee',
+                $matches['token'] === '%A' => 'eeee',
+                $matches['token'] === '%b' => 'MMM',
+                $matches['token'] === '%B' => 'MMMM',
+                $matches['token'] === '%C' => 'yy',
+                $matches['token'] === '%d' => 'dd',
+                $matches['token'] === '%D' => 'MM/dd/yy',
+                $matches['token'] === '%e' => ' d',
+                $matches['token'] === '%F' => 'y-MM-dd',
+                $matches['token'] === '%g' => 'yy',
+                $matches['token'] === '%G' => 'y',
+                $matches['token'] === '%h' => 'MMM',
+                $matches['token'] === '%H' => 'HH',
+                $matches['token'] === '%I' => 'KK',
+                $matches['token'] === '%j' => 'D',
+                $matches['token'] === '%k' => ' H',
+                $matches['token'] === '%l' => ' h',
+                $matches['token'] === '%m' => 'MM',
+                $matches['token'] === '%M' => 'mm',
+                $matches['token'] === '%p' => 'a',
+                $matches['token'] === '%P' => 'a',
+                $matches['token'] === '%r' => ' h:mm:ss a',
+                $matches['token'] === '%R' => 'HH:mm',
+                $matches['token'] === '%S' => 'ss',
+                $matches['token'] === '%s' => (string) $requestTime->getTimestamp(),
+                $matches['token'] === '%T' => 'HH:mm:ss',
+                $matches['token'] === '%u' => 'e',
+                $matches['token'] === '%U' => 'ww',
+                $matches['token'] === '%w' => 'c',
+                $matches['token'] === '%W' => 'ww',
+                $matches['token'] === '%V' => 'ww',
+                $matches['token'] === '%y' => 'yy',
+                $matches['token'] === '%Y' => 'y',
+                $matches['token'] === '%z' => 'xx',
+                $matches['token'] === '%Z' => 'z',
+                default => throw new RuntimeException(sprintf(
+                    'The request time format token "%s" is unsupported; please use ICU Date/Time format codes',
+                    $matches['token']
+                )),
+            };
         };
     }
 }

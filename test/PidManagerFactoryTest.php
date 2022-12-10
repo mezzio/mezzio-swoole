@@ -15,11 +15,8 @@ use Psr\Container\ContainerInterface;
 
 class PidManagerFactoryTest extends TestCase
 {
-    /**
-     * @var ContainerInterface|MockObject
-     * @psalm-var MockObject&ContainerInterface
-     */
-    private $container;
+    /** @psalm-var MockObject&ContainerInterface */
+    private ContainerInterface|MockObject $container;
 
     private PidManagerFactory $pidManagerFactory;
 

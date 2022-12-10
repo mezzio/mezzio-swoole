@@ -30,17 +30,11 @@ class GzipMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /**
-     * @var StaticResourceResponse|MockObject
-     * @psalm-var StaticResourceResponse&MockObject
-     */
-    private $staticResponse;
+    /** @psalm-var StaticResourceResponse&MockObject */
+    private StaticResourceResponse|MockObject $staticResponse;
 
-    /**
-     * @var SwooleHttpRequest|MockObject
-     * @psalm-var SwooleHttpRequest&MockObject
-     */
-    private $swooleRequest;
+    /** @psalm-var SwooleHttpRequest&MockObject */
+    private SwooleHttpRequest|MockObject $swooleRequest;
 
     /** @var callable */
     private $next;
@@ -149,6 +143,7 @@ class GzipMiddlewareTest extends TestCase
 
         $r = new ReflectionProperty($response, 'responseContentCallback');
         $r->setAccessible(true);
+
         $callback = $r->getValue($response);
         Assert::isCallable($callback);
 

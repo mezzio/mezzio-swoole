@@ -24,14 +24,11 @@ use Swoole\Http\Server as SwooleHttpServer;
  */
 final class DeferredListener
 {
-    private SwooleHttpServer $server;
-
     /** @var callable */
     private $listener;
 
-    public function __construct(SwooleHttpServer $server, callable $listener)
+    public function __construct(private SwooleHttpServer $server, callable $listener)
     {
-        $this->server   = $server;
         $this->listener = $listener;
     }
 

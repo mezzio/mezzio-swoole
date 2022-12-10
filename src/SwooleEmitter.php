@@ -26,14 +26,13 @@ class SwooleEmitter implements EmitterInterface
 
     /**
      * @see https://www.swoole.co.uk/docs/modules/swoole-http-server/methods-properties#swoole-http-response-write
+     *
+     * @var int
      */
-    public const CHUNK_SIZE = 2_097_152; // 2 MB
+    public const CHUNK_SIZE = 2_097_152;
 
-    private SwooleHttpResponse $swooleResponse;
-
-    public function __construct(SwooleHttpResponse $response)
+    public function __construct(private SwooleHttpResponse $swooleResponse)
     {
-        $this->swooleResponse = $response;
     }
 
     /**
@@ -99,6 +98,7 @@ class SwooleEmitter implements EmitterInterface
         while (! $body->eof()) {
             $this->swooleResponse->write($body->read(static::CHUNK_SIZE));
         }
+
         $this->swooleResponse->end();
     }
 
@@ -108,11 +108,11 @@ class SwooleEmitter implements EmitterInterface
     private function emitCookies(ResponseInterface $response): void
     {
         foreach (SetCookies::fromResponse($response)->getAll() as $cookie) {
-            $sameSite = $cookie->getSameSite() ? substr($cookie->getSameSite()->asString(), 9) : '';
+            $sameSite = $cookie->getSameSite() !== null ? substr($cookie->getSameSite()->asString(), 9) : '';
 
             $this->swooleResponse->cookie(
                 $cookie->getName(),
-                $cookie->getValue(),
+                (string) $cookie->getValue(),
                 $cookie->getExpires(),
                 $cookie->getPath() ?: '/',
                 $cookie->getDomain() ?: '',

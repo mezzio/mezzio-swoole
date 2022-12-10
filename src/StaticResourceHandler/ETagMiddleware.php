@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\StaticResourceHandler;
 
-use Mezzio\Swoole\Exception;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Swoole\Http\Request;
 
 use function array_walk;
@@ -27,9 +27,15 @@ class ETagMiddleware implements MiddlewareInterface
 
     /**
      * ETag validation type
+     *
+     * @var string
      */
     public const ETAG_VALIDATION_STRONG = 'strong';
-    public const ETAG_VALIDATION_WEAK   = 'weak';
+
+    /**
+     * @var string
+     */
+    public const ETAG_VALIDATION_WEAK = 'weak';
 
     /** @var string[] */
     private array $allowedETagValidationTypes = [
@@ -41,7 +47,7 @@ class ETagMiddleware implements MiddlewareInterface
      * @var string[] Array of regexp; if a path matches a regexp, an ETag will
      *     be emitted for the static file resource.
      */
-    private array $etagDirectives;
+    private array $etagDirectives = [];
 
     /**
      * ETag validation type, 'weak' means Weak Validation, 'strong' means Strong Validation,
@@ -53,7 +59,7 @@ class ETagMiddleware implements MiddlewareInterface
     {
         $this->validateRegexList($etagDirectives, 'ETag');
         if (! in_array($etagValidationType, $this->allowedETagValidationTypes, true)) {
-            throw new Exception\InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'ETag validation type must be one of [%s]; received "%s"',
                 implode(', ', $this->allowedETagValidationTypes),
                 $etagValidationType
@@ -85,6 +91,7 @@ class ETagMiddleware implements MiddlewareInterface
                 return true;
             }
         }
+
         return false;
     }
 
@@ -100,6 +107,7 @@ class ETagMiddleware implements MiddlewareInterface
                 if (! $lastModified || ! $filesize) {
                     return $response;
                 }
+
                 $etag = sprintf('W/"%x-%x"', $lastModified, $filesize);
                 break;
             case self::ETAG_VALIDATION_STRONG:

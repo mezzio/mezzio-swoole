@@ -11,6 +11,7 @@ namespace Mezzio\Swoole;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
+use Stringable;
 use Swoole\Http\Request as SwooleHttpRequest;
 
 use function strlen;
@@ -20,31 +21,26 @@ use const SEEK_CUR;
 use const SEEK_END;
 use const SEEK_SET;
 
-final class SwooleStream implements StreamInterface
+final class SwooleStream implements StreamInterface, Stringable
 {
     /**
      * Memoized body content, as pulled via SwooleHttpRequest::rawContent().
      */
     private ?string $body = null;
-
     /**
      * Length of the request body content.
      */
     private ?int $bodySize = null;
-
     /**
      * Index to which we have seek'd or read within the request body.
      */
     private int $index = 0;
-
-    /**
-     * Swoole request containing the body contents.
-     */
-    private SwooleHttpRequest $request;
-
-    public function __construct(SwooleHttpRequest $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        /**
+         * Swoole request containing the body contents.
+         */
+        private SwooleHttpRequest $request
+    ) {
     }
 
     /**
@@ -83,13 +79,12 @@ final class SwooleStream implements StreamInterface
         return (string) $this->body;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        $this->body !== null || $this->initRawContent();
-        return $this->body;
+        if ($this->body === null) {
+            $this->initRawContent();
+        }
+        return (string) $this->body;
     }
 
     /**
@@ -98,9 +93,12 @@ final class SwooleStream implements StreamInterface
     public function getSize()
     {
         if (null === $this->bodySize) {
-            $this->body !== null || $this->initRawContent();
+            if ($this->body === null) {
+                $this->initRawContent();
+            }
             $this->bodySize = strlen($this->body);
         }
+
         return $this->bodySize;
     }
 
@@ -134,7 +132,9 @@ final class SwooleStream implements StreamInterface
      */
     public function read($length)
     {
-        $this->body !== null || $this->initRawContent();
+        if ($this->body === null) {
+            $this->initRawContent();
+        }
         $result = substr($this->body, $this->index, $length);
 
         // Reset index based on legnth; should not be > EOF position.
@@ -169,6 +169,7 @@ final class SwooleStream implements StreamInterface
                         'Offset cannot be longer than content size'
                     );
                 }
+
                 $this->index = $offset;
                 break;
             case SEEK_CUR:
@@ -177,6 +178,7 @@ final class SwooleStream implements StreamInterface
                         'Offset + current position cannot be longer than content size when using SEEK_CUR'
                     );
                 }
+
                 $this->index += $offset;
                 break;
             case SEEK_END:
@@ -185,12 +187,12 @@ final class SwooleStream implements StreamInterface
                         'Offset must be a negative number to be under the content size when using SEEK_END'
                     );
                 }
+
                 $this->index = $size + $offset;
                 break;
             default:
                 throw new InvalidArgumentException(
-                    'Invalid $whence argument provided; must be one of SEEK_CUR,'
-                    . 'SEEK_END, or SEEK_SET'
+                    'Invalid $whence argument provided; must be one of SEEK_CUR,SEEK_END, or SEEK_SET'
                 );
         }
     }
@@ -212,7 +214,6 @@ final class SwooleStream implements StreamInterface
     }
 
     // phpcs:disable Squiz.Commenting.FunctionComment.InvalidNoReturn
-
     /**
      * @param string $string
      * @return int
@@ -224,7 +225,6 @@ final class SwooleStream implements StreamInterface
     }
 
     // phpcs:enable
-
     /**
      * @param string $key
      * @return null|array
@@ -244,7 +244,6 @@ final class SwooleStream implements StreamInterface
     }
 
     // phpcs:enable
-
     /**
      * Memoize the request raw content in the $body property, if not already done.
      */
@@ -253,6 +252,7 @@ final class SwooleStream implements StreamInterface
         if ($this->body) {
             return;
         }
+
         $this->body = $this->request->rawContent() ?: '';
     }
 }

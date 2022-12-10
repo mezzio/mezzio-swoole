@@ -23,4 +23,5 @@ interface HttpServer
 {
     public function set(array $options): void;
 }
+
 // phpcs:enable

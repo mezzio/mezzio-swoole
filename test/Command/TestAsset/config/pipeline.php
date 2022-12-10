@@ -1,10 +1,8 @@
 <?php
 
-/**
- * @see       https://github.com/mezzio/mezzio-swoole for the canonical source repository
- */
-
 declare(strict_types=1);
+
+namespace MezzioTest\Swoole\Command\TestAsset\config;
 
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;

@@ -100,8 +100,13 @@ class FileLocationRepository implements FileLocationRepositoryInterface
                 $directory
             ));
         }
-
-        if ($directory === '/' || $directory === '\\' || $directory === '\\\\') {
+        if ($directory === '/') {
+            return '/';
+        }
+        if ($directory === '\\') {
+            return '/';
+        }
+        if ($directory === '\\\\') {
             return '/';
         }
 
@@ -132,6 +137,7 @@ class FileLocationRepository implements FileLocationRepositoryInterface
                 }
             }
         }
+
         return null;
     }
 }

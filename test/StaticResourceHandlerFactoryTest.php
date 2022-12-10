@@ -8,8 +8,15 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole;
 
-use Mezzio\Swoole\StaticResourceHandler;
+use Mezzio\Swoole\StaticResourceHandler\CacheControlMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ClearStatCacheMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ContentTypeFilterMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\ETagMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\HeadMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\LastModifiedMiddleware;
+use Mezzio\Swoole\StaticResourceHandler\MethodNotAllowedMiddleware;
 use Mezzio\Swoole\StaticResourceHandler\MiddlewareInterface;
+use Mezzio\Swoole\StaticResourceHandler\OptionsMiddleware;
 use Mezzio\Swoole\StaticResourceHandlerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,11 +30,8 @@ class StaticResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /**
-     * @var ContainerInterface|MockObject
-     * @psalm-var MockObject&ContainerInterface
-     */
-    private $container;
+    /** @psalm-var MockObject&ContainerInterface */
+    private ContainerInterface|MockObject $container;
 
     protected function setUp(): void
     {
@@ -55,6 +59,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
                 return $middleware;
             }
         }
+
         $this->fail(sprintf(
             'Could not find middleware of type %s',
             $type
@@ -109,18 +114,19 @@ class StaticResourceHandlerFactoryTest extends TestCase
 
         $r = new ReflectionProperty($handler, 'middleware');
         $r->setAccessible(true);
+
         $middleware = $r->getValue($handler);
         Assert::isList($middleware);
         Assert::allIsInstanceOf($middleware, MiddlewareInterface::class);
 
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\ContentTypeFilterMiddleware::class, $middleware);
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\MethodNotAllowedMiddleware::class, $middleware);
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\OptionsMiddleware::class, $middleware);
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\HeadMiddleware::class, $middleware);
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\ClearStatCacheMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(ContentTypeFilterMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(MethodNotAllowedMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(OptionsMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(HeadMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(ClearStatCacheMiddleware::class, $middleware);
 
         $contentTypeFilter = $this->getMiddlewareByType(
-            StaticResourceHandler\ContentTypeFilterMiddleware::class,
+            ContentTypeFilterMiddleware::class,
             $middleware
         );
         $this->assertAttributeSame(
@@ -130,7 +136,7 @@ class StaticResourceHandlerFactoryTest extends TestCase
         );
 
         $clearStatsCache = $this->getMiddlewareByType(
-            StaticResourceHandler\ClearStatCacheMiddleware::class,
+            ClearStatCacheMiddleware::class,
             $middleware
         );
         $this->assertAttributeSame(
@@ -139,8 +145,8 @@ class StaticResourceHandlerFactoryTest extends TestCase
             $clearStatsCache
         );
 
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\CacheControlMiddleware::class, $middleware);
-        $cacheControl = $this->getMiddlewareByType(StaticResourceHandler\CacheControlMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(CacheControlMiddleware::class, $middleware);
+        $cacheControl = $this->getMiddlewareByType(CacheControlMiddleware::class, $middleware);
         $this->assertAttributeEquals(
             [
                 '/\.txt$/' => [
@@ -156,23 +162,23 @@ class StaticResourceHandlerFactoryTest extends TestCase
             $cacheControl
         );
 
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\LastModifiedMiddleware::class, $middleware);
-        $lastModified = $this->getMiddlewareByType(StaticResourceHandler\LastModifiedMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(LastModifiedMiddleware::class, $middleware);
+        $lastModified = $this->getMiddlewareByType(LastModifiedMiddleware::class, $middleware);
         $this->assertAttributeEquals(
             ['/\.png$/'],
             'lastModifiedDirectives',
             $lastModified
         );
 
-        $this->assertHasMiddlewareOfType(StaticResourceHandler\ETagMiddleware::class, $middleware);
-        $eTag = $this->getMiddlewareByType(StaticResourceHandler\ETagMiddleware::class, $middleware);
+        $this->assertHasMiddlewareOfType(ETagMiddleware::class, $middleware);
+        $eTag = $this->getMiddlewareByType(ETagMiddleware::class, $middleware);
         $this->assertAttributeEquals(
             ['/\.png$/'],
             'etagDirectives',
             $eTag
         );
         $this->assertAttributeEquals(
-            StaticResourceHandler\ETagMiddleware::ETAG_VALIDATION_STRONG,
+            ETagMiddleware::ETAG_VALIDATION_STRONG,
             'etagValidationType',
             $eTag
         );

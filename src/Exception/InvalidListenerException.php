@@ -8,22 +8,17 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Exception;
 
-use function get_class;
-use function gettype;
-use function is_object;
+use function get_debug_type;
 use function sprintf;
 
 class InvalidListenerException extends InvalidArgumentException
 {
-    /**
-     * @param mixed $listener
-     */
-    public static function forListenerOfEvent($listener, string $event): self
+    public static function forListenerOfEvent(mixed $listener, string $event): self
     {
         return new self(sprintf(
             'Unexpected listener for event "%s"; expected callable or string service name, received %s',
             $event,
-            is_object($listener) ? get_class($listener) : gettype($listener)
+            get_debug_type($listener)
         ));
     }
 

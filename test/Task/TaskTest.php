@@ -32,11 +32,11 @@ class TaskTest extends TestCase
             $second,
             $third
         ): string {
-                TestCase::assertSame($first, $one);
-                TestCase::assertSame($second, $two);
-                TestCase::assertSame($third, $three);
+            TestCase::assertSame($first, $one);
+            TestCase::assertSame($second, $two);
+            TestCase::assertSame($third, $three);
 
-                return $expected;
+            return $expected;
         };
 
         $task = new Task($handler, $first, $second, $third);

@@ -14,22 +14,18 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Throwable;
 
-use function get_class;
 use function json_encode;
 use function sprintf;
+
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Derived from phly/phly-swoole-taskworker, @copyright Copyright (c) Matthew Weier O'Phinney
  */
 final class TaskInvokerListener
 {
-    private ContainerInterface $container;
-    private ?LoggerInterface $logger;
-
-    public function __construct(ContainerInterface $container, ?LoggerInterface $logger = null)
+    public function __construct(private ContainerInterface $container, private ?LoggerInterface $logger = null)
     {
-        $this->container = $container;
-        $this->logger    = $logger;
     }
 
     public function __invoke(TaskEvent $event): void
@@ -42,20 +38,20 @@ final class TaskInvokerListener
 
         $this->log(LogLevel::NOTICE, 'Starting work on task {taskId} using: {task}', [
             'taskId' => $event->getTaskId(),
-            'task'   => json_encode($task),
+            'task'   => json_encode($task, JSON_THROW_ON_ERROR),
         ]);
 
         try {
             $task($this->container);
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             $this->log(LogLevel::ERROR, 'Error processing task {taskId}: {error}', [
                 'taskId' => $event->getTaskId(),
                 'error'  => sprintf(
                     "[%s - %d] %s\n%s",
-                    get_class($e),
-                    $e->getCode(),
-                    $e->getMessage(),
-                    $e->getTraceAsString()
+                    $throwable::class,
+                    $throwable->getCode(),
+                    $throwable->getMessage(),
+                    $throwable->getTraceAsString()
                 ),
             ]);
         } finally {
@@ -66,7 +62,7 @@ final class TaskInvokerListener
 
     private function log(string $logLevel, string $message, array $context = []): void
     {
-        if (! $this->logger) {
+        if ($this->logger === null) {
             return;
         }
 

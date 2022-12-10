@@ -24,13 +24,13 @@ use const SEEK_END;
 
 class SwooleStreamTest extends TestCase
 {
+    /**
+     * @var string
+     */
     public const DEFAULT_CONTENT = 'This is a test!';
 
-    /**
-     * @var SwooleHttpRequest|MockObject
-     * @psalm-var SwooleHttpRequest&MockObject
-     */
-    private $request;
+    /** @var SwooleHttpRequest&MockObject */
+    private MockObject $request;
 
     private SwooleStream $stream;
 
@@ -131,7 +131,7 @@ class SwooleStreamTest extends TestCase
 
     public function testTellIndicatesIndexInString(): void
     {
-        for ($i = 0; $i < strlen(self::DEFAULT_CONTENT); $i++) {
+        for ($i = 0; $i < strlen(self::DEFAULT_CONTENT); ++$i) {
             $this->stream->seek($i);
             $this->assertEquals($i, $this->stream->tell());
         }

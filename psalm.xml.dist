@@ -38,9 +38,80 @@
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with"/>
             </errorLevel>
         </InternalMethod>
+
+        <MissingClosureParamType errorLevel="suppress"/>
+        <MixedArgument errorLevel="suppress"/>
+        <MixedArgumentTypeCoercion errorLevel="suppress"/>
+        <MixedArrayAccess errorLevel="suppress"/>
+        <MixedAssignment errorLevel="suppress"/>
+        <MixedInferredReturnType errorLevel="suppress"/>
+        <MixedMethodCall errorLevel="suppress"/>
+        <MixedReturnStatement errorLevel="suppress"/>
+        <PossiblyNullArgument errorLevel="suppress"/>
+        <PropertyNotSetInConstructor errorLevel="suppress"/>
+        <UnusedClosureParam errorLevel="suppress"/>
     </issueHandlers>
 
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>
+    <stubs>
+        <file name="vendor/swoole/ide-helper/src/swoole/constants.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/functions.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/shortnames.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Atomic.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Atomic/Long.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Client.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Client/Exception.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Connection/Iterator.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Channel.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Client.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Context.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Curl/Exception.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Http/Client.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Http/Client/Exception.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Http/Server.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Http2/Client.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Iterator.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/MySQL.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/MySQL/Exception.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/MySQL/Statement.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/PostgreSQL.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/PostgreSQLStatement.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Redis.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Scheduler.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Socket.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Socket/Exception.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/System.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Error.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Event.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Exception.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/ExitException.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Http/Request.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Http/Response.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Http/Server.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Http2/Request.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Http2/Response.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Lock.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/NameResolver/Context.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Process.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Process/Pool.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Redis/Server.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Runtime.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/Event.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/Packet.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/PipeMessage.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/Port.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/StatusInfo.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/Task.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Server/TaskResult.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Table.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Timer.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Timer/Iterator.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/WebSocket/CloseFrame.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/WebSocket/Frame.php" />
+        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/WebSocket/Server.php" />
+    </stubs>
 </psalm>

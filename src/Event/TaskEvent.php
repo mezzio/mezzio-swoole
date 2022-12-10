@@ -15,16 +15,15 @@ class TaskEvent extends AbstractTaskEvent implements StoppableEventInterface
 {
     /** @var mixed */
     private $returnValue;
+
     private bool $taskProcessed = false;
-    private int $workerId;
 
     /** @param mixed $data */
-    public function __construct(SwooleHttpServer $server, int $taskId, int $workerId, $data)
+    public function __construct(SwooleHttpServer $server, int $taskId, private int $workerId, $data)
     {
-        $this->server   = $server;
-        $this->taskId   = $taskId;
-        $this->workerId = $workerId;
-        $this->data     = $data;
+        $this->server = $server;
+        $this->taskId = $taskId;
+        $this->data   = $data;
     }
 
     public function isPropagationStopped(): bool
@@ -37,8 +36,7 @@ class TaskEvent extends AbstractTaskEvent implements StoppableEventInterface
         $this->taskProcessed = true;
     }
 
-    /** @param mixed $returnValue */
-    public function setReturnValue($returnValue): void
+    public function setReturnValue(mixed $returnValue): void
     {
         $this->returnValue = $returnValue;
     }

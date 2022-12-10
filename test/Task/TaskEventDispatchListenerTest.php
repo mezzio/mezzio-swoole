@@ -18,9 +18,8 @@ use RuntimeException;
 use stdClass;
 
 use function array_key_exists;
-use function get_class;
 use function is_string;
-use function strpos;
+use function str_contains;
 
 class TaskEventDispatchListenerTest extends TestCase
 {
@@ -42,7 +41,7 @@ class TaskEventDispatchListenerTest extends TestCase
      */
     private LoggerInterface $logger;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->logger     = $this->createMock(LoggerInterface::class);
@@ -114,16 +113,17 @@ class TaskEventDispatchListenerTest extends TestCase
             ->with(
                 $this->stringContains('Error processing task'),
                 $this->callback(static function (array $context) use ($taskId, $exception): bool {
-                    if (
-                        ! array_key_exists('taskId', $context)
-                        || ! array_key_exists('error', $context)
-                        || ! is_string($context['error'])
-                    ) {
+                    if (! array_key_exists('taskId', $context)) {
                         return false;
                     }
-
+                    if (! array_key_exists('error', $context)) {
+                        return false;
+                    }
+                    if (! is_string($context['error'])) {
+                        return false;
+                    }
                     return $taskId === $context['taskId']
-                        && false !== strpos($context['error'], get_class($exception));
+                        && str_contains($context['error'], $exception::class);
                 })
             );
 

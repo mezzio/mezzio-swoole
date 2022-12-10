@@ -23,20 +23,11 @@ class WorkerStartListener
 {
     use ProcessNameTrait;
 
-    private string $cwd;
-
-    private LoggerInterface $logger;
-
-    private string $processName;
-
     public function __construct(
-        LoggerInterface $logger,
-        string $cwd,
-        string $processName = SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME
+        private LoggerInterface $logger,
+        private string $cwd,
+        private string $processName = SwooleRequestHandlerRunner::DEFAULT_PROCESS_NAME
     ) {
-        $this->logger      = $logger;
-        $this->cwd         = $cwd;
-        $this->processName = $processName;
     }
 
     public function __invoke(WorkerStartEvent $event): void

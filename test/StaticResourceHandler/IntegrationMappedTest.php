@@ -38,11 +38,8 @@ class IntegrationMappedTest extends TestCase
 {
     use FormatTimestampTrait;
 
-    /**
-     * @var FileLocationRepositoryInterface|MockObject
-     * @psalm-var MockObject&FileLocationRepositoryInterface
-     */
-    private $mockFileLocRepo;
+    /** @psalm-var MockObject&FileLocationRepositoryInterface */
+    private FileLocationRepositoryInterface|MockObject $mockFileLocRepo;
 
     /** @psalm-var non-empty-string */
     private string $assetPath;

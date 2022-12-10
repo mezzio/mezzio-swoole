@@ -19,9 +19,6 @@ class StaticResourceResponse
 {
     private int $contentLength = 0;
 
-    /** @psalm-var array<string, string> */
-    private array $headers = [];
-
     /**
      * Does this response represent a failure to locate the requested resource
      * and/or that it cannot be requested?
@@ -31,24 +28,18 @@ class StaticResourceResponse
     /** @var callable */
     private $responseContentCallback;
 
-    private bool $sendContent = true;
-
-    private int $status;
-
     /**
      * @param null|callable $responseContentCallback Callback to use when emitting
      *     the response body content via Swoole. Must have the signature:
      *     function (SwooleHttpResponse $response, string $filename) : void
      */
     public function __construct(
-        int $status = 200,
-        array $headers = [],
-        bool $sendContent = true,
+        private int $status = 200,
+        /** @psalm-var array<string, string> */
+        private array $headers = [],
+        private bool $sendContent = true,
         ?callable $responseContentCallback = null
     ) {
-        $this->status                  = $status;
-        $this->headers                 = $headers;
-        $this->sendContent             = $sendContent;
         $this->responseContentCallback = $responseContentCallback
             ?: function (SwooleHttpResponse $response, string $filename): void {
                 $this->contentLength = filesize($filename);

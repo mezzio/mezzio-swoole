@@ -16,6 +16,9 @@ use function is_string;
 
 class SwooleLoggerFactory
 {
+    /**
+     * @var string
+     */
     public const SWOOLE_LOGGER = 'Mezzio\Swoole\Log\SwooleLogger';
 
     public function __invoke(ContainerInterface $container): LoggerInterface

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use ArrayAccess;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 use Swoole\Runtime as SwooleRuntime;
@@ -32,11 +33,20 @@ use const SWOOLE_UNIX_STREAM;
 
 class HttpServerFactory
 {
+    /**
+     * @var string
+     */
     public const DEFAULT_HOST = '127.0.0.1';
+
+    /**
+     * @var int
+     */
     public const DEFAULT_PORT = 8080;
 
     /**
      * Swoole server supported modes
+     *
+     * @var int[]
      */
     private const MODES = [
         SWOOLE_BASE,
@@ -45,6 +55,8 @@ class HttpServerFactory
 
     /**
      * Swoole server supported protocols
+     *
+     * @var int[]
      */
     private const PROTOCOLS = [
         SWOOLE_SOCK_TCP,
@@ -59,9 +71,9 @@ class HttpServerFactory
      * @see https://www.swoole.co.uk/docs/modules/swoole-server-methods#swoole_server-__construct
      * @see https://www.swoole.co.uk/docs/modules/swoole-server/predefined-constants for $mode and $protocol constant
      *
-     * @throws Exception\InvalidArgumentException For invalid $port values.
-     * @throws Exception\InvalidArgumentException For invalid $mode values.
-     * @throws Exception\InvalidArgumentException For invalid $protocol values.
+     * @throws InvalidArgumentException For invalid $port values.
+     * @throws InvalidArgumentException For invalid $mode values.
+     * @throws InvalidArgumentException For invalid $protocol values.
      */
     public function __invoke(ContainerInterface $container): SwooleHttpServer
     {
@@ -80,11 +92,11 @@ class HttpServerFactory
         $protocol = $serverConfig['protocol'] ?? SWOOLE_SOCK_TCP;
 
         if ($port < 1 || $port > 65535) {
-            throw new Exception\InvalidArgumentException('Invalid port');
+            throw new InvalidArgumentException('Invalid port');
         }
 
         if (! in_array($mode, static::MODES, true)) {
-            throw new Exception\InvalidArgumentException('Invalid server mode');
+            throw new InvalidArgumentException('Invalid server mode');
         }
 
         $validProtocols = static::PROTOCOLS;
@@ -94,7 +106,7 @@ class HttpServerFactory
         }
 
         if (! in_array($protocol, $validProtocols, true)) {
-            throw new Exception\InvalidArgumentException('Invalid server protocol');
+            throw new InvalidArgumentException('Invalid server protocol');
         }
 
         $enableCoroutine = $swooleConfig['enable_coroutine'] ?? false;

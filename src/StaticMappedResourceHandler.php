@@ -9,46 +9,45 @@ declare(strict_types=1);
 namespace Mezzio\Swoole;
 
 use Mezzio\Swoole\StaticResourceHandler\FileLocationRepositoryInterface;
+use Mezzio\Swoole\StaticResourceHandler\MiddlewareQueue;
+use Mezzio\Swoole\StaticResourceHandler\StaticResourceResponse;
+use Mezzio\Swoole\StaticResourceHandler\ValidateMiddlewareTrait;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
 class StaticMappedResourceHandler implements StaticResourceHandlerInterface
 {
-    use StaticResourceHandler\ValidateMiddlewareTrait;
+    use ValidateMiddlewareTrait;
 
     /**
      * Middleware to execute when serving a static resource.
      *
      * @var StaticResourceHandler\MiddlewareInterface[]
      */
-    private array $middleware;
-
-    private FileLocationRepositoryInterface $fileLocationRepo;
+    private array $middleware = [];
 
     /**
      * @throws Exception\InvalidStaticResourceMiddlewareException For any
      *     non-callable middleware encountered.
      */
     public function __construct(
-        FileLocationRepositoryInterface $fileLocationRepo,
+        private FileLocationRepositoryInterface $fileLocationRepo,
         array $middleware = []
     ) {
         $this->validateMiddleware($middleware);
-        $this->middleware       = $middleware;
-        $this->fileLocationRepo = $fileLocationRepo;
+        $this->middleware = $middleware;
     }
 
     public function processStaticResource(
         SwooleHttpRequest $request,
         SwooleHttpResponse $response
-    ): ?StaticResourceHandler\StaticResourceResponse {
-        /** @psalm-suppress MixedArgument */
+    ): ?StaticResourceResponse {
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
         if (! $filename) {
             return null;
         }
 
-        $middleware             = new StaticResourceHandler\MiddlewareQueue($this->middleware);
+        $middleware             = new MiddlewareQueue($this->middleware);
         $staticResourceResponse = $middleware($request, $filename);
         if ($staticResourceResponse->isFailure()) {
             return null;

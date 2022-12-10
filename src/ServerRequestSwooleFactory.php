@@ -31,12 +31,13 @@ class ServerRequestSwooleFactory
 {
     public function __invoke(ContainerInterface $container): callable
     {
+        /** @var FilterServerRequestInterface $requestFilter */
         $requestFilter = $container->has(FilterServerRequestInterface::class)
             ? $container->get(FilterServerRequestInterface::class)
             : FilterUsingXForwardedHeaders::trustReservedSubnets();
 
         $stripXForwardedHeaders = static function (array $headers): array {
-            /** @psalm-var list<string> */
+            /** @var array<array-key,string> $disallowedHeaders */
             static $disallowedHeaders = [
                 'X-FORWARDED-FOR',
                 'X-FORWARDED-HOST',
@@ -54,8 +55,12 @@ class ServerRequestSwooleFactory
             return $headers;
         };
 
-        // phpcs:disable Generic.Files.LineLength.TooLong
-        return static function (SwooleHttpRequest $request) use ($requestFilter, $stripXForwardedHeaders): ServerRequestInterface {
+        return static function (
+            SwooleHttpRequest $request
+        ) use (
+            $requestFilter,
+            $stripXForwardedHeaders
+): ServerRequestInterface {
             // Aggregate values from Swoole request object
             $get     = $request->get ?? [];
             $post    = $request->post ?? [];
@@ -84,6 +89,5 @@ class ServerRequestSwooleFactory
                 ? $requestFilter($request)
                 : $request;
         };
-        // phpcs:enable Generic.Files.LineLength.TooLong
     }
 }

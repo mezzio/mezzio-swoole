@@ -10,23 +10,18 @@ namespace Mezzio\Swoole\Event;
 
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Psr\Log\LoggerInterface;
+use Swoole\Server;
 
 class HotCodeReloaderWorkerStartListener
 {
-    /**
-     * A file watcher to monitor changes in files.
-     */
-    private FileWatcherInterface $fileWatcher;
-
-    private LoggerInterface $logger;
-
-    private int $interval;
-
-    public function __construct(FileWatcherInterface $fileWatcher, LoggerInterface $logger, int $interval)
-    {
-        $this->fileWatcher = $fileWatcher;
-        $this->logger      = $logger;
-        $this->interval    = $interval;
+    public function __construct(
+        /**
+         * A file watcher to monitor changes in files.
+         */
+        private FileWatcherInterface $fileWatcher,
+        private LoggerInterface $logger,
+        private int $interval
+    ) {
     }
 
     public function __invoke(WorkerStartEvent $event): void
@@ -35,19 +30,21 @@ class HotCodeReloaderWorkerStartListener
             return;
         }
 
+        /** @var Server $server */
         $server      = $event->getServer();
         $fileWatcher = $this->fileWatcher;
         $logger      = $this->logger;
 
         $server->tick($this->interval, static function () use ($server, $fileWatcher, $logger): void {
             $changedFilePaths = $fileWatcher->readChangedFilePaths();
-            if (! $changedFilePaths) {
+            if ($changedFilePaths === []) {
                 return;
             }
 
             foreach ($changedFilePaths as $path) {
                 $logger->notice('Reloading due to file change: {path}', ['path' => $path]);
             }
+
             $server->reload();
         });
     }

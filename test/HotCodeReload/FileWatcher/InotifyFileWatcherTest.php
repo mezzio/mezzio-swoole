@@ -32,6 +32,7 @@ class InotifyFileWatcherTest extends TestCase
         if (false === $file) {
             static::markTestSkipped('Unable to create a temporary file');
         }
+
         $this->file = $file;
 
         parent::setUp();

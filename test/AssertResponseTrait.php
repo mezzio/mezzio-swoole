@@ -22,6 +22,7 @@ trait AssertResponseTrait
     {
         $r = new ReflectionProperty($response, 'status');
         $r->setAccessible(true);
+
         $actual = $r->getValue($response);
 
         $message = $message ?: sprintf(
@@ -37,6 +38,7 @@ trait AssertResponseTrait
     {
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
+
         $headers = $r->getValue($response);
 
         $message = $message ?: sprintf(
@@ -56,6 +58,7 @@ trait AssertResponseTrait
 
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
+
         $headers = $r->getValue($response);
 
         Assert::assertArrayHasKey($name, $headers, $message);
@@ -70,6 +73,7 @@ trait AssertResponseTrait
 
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
+
         $headers = $r->getValue($response);
 
         Assert::assertArrayNotHasKey($name, $headers, $message);
@@ -85,6 +89,7 @@ trait AssertResponseTrait
 
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
+
         $headers = $r->getValue($response);
         $value   = $headers[$header];
 
@@ -108,6 +113,7 @@ trait AssertResponseTrait
 
         $r = new ReflectionProperty($response, 'headers');
         $r->setAccessible(true);
+
         $headers = $r->getValue($response);
         $value   = $headers[$header];
 
@@ -127,6 +133,7 @@ trait AssertResponseTrait
 
         $r = new ReflectionProperty($response, 'sendContent');
         $r->setAccessible(true);
+
         $value = $r->getValue($response);
         Assert::assertTrue($value, $message);
     }
@@ -137,6 +144,7 @@ trait AssertResponseTrait
 
         $r = new ReflectionProperty($response, 'sendContent');
         $r->setAccessible(true);
+
         $value = $r->getValue($response);
         Assert::assertFalse($value, $message);
     }

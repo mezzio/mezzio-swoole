@@ -21,17 +21,11 @@ use function date_default_timezone_get;
 
 class AccessLogDataMapTest extends TestCase
 {
-    /**
-     * @var SwooleHttpRequest|MockObject
-     * @psalm-var MockObject&SwooleHttpRequest
-     */
-    private $request;
+    /** @psalm-var MockObject&SwooleHttpRequest */
+    private SwooleHttpRequest|MockObject $request;
 
-    /**
-     * @var ResponseInterface|MockObject
-     * @psalm-var MockObject&ResponseInterface
-     */
-    private $response;
+    /** @psalm-var MockObject&ResponseInterface */
+    private ResponseInterface|MockObject $response;
 
     protected function setUp(): void
     {

@@ -30,11 +30,8 @@ class ReloadCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /**
-     * @var InputInterface|MockObject
-     * @psalm-var MockObject&InputInterface
-     */
-    private $input;
+    /** @psalm-var MockObject&InputInterface */
+    private InputInterface|MockObject $input;
 
     /**
      * @var OutputInterface|MockObject
@@ -49,10 +46,9 @@ class ReloadCommandTest extends TestCase
     }
 
     /**
-     * @return Application|MockObject
      * @psalm-return MockObject&Application
      */
-    public function mockApplication()
+    public function mockApplication(): Application|MockObject
     {
         $helperSet   = $this->createMock(HelperSet::class);
         $application = $this->createMock(Application::class);

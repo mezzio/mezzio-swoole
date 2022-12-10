@@ -13,7 +13,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-use function get_class;
 use function is_object;
 use function sprintf;
 
@@ -22,15 +21,8 @@ use function sprintf;
  */
 final class TaskEventDispatchListener
 {
-    private EventDispatcherInterface $dispatcher;
-    private ?LoggerInterface $logger;
-
-    public function __construct(
-        EventDispatcherInterface $dispatcher,
-        ?LoggerInterface $logger = null
-    ) {
-        $this->dispatcher = $dispatcher;
-        $this->logger     = $logger;
+    public function __construct(private EventDispatcherInterface $dispatcher, private ?LoggerInterface $logger = null)
+    {
     }
 
     public function __invoke(TaskEvent $event): void
@@ -42,8 +34,8 @@ final class TaskEventDispatchListener
 
         try {
             $event->setReturnValue($this->dispatcher->dispatch($data));
-        } catch (Throwable $e) {
-            $this->logDispatchError($e, $event);
+        } catch (Throwable $throwable) {
+            $this->logDispatchError($throwable, $event);
         } finally {
             // Notify the server that processing of the task has finished:
             $event->taskProcessingComplete();
@@ -52,7 +44,7 @@ final class TaskEventDispatchListener
 
     private function logDispatchError(Throwable $e, TaskEvent $event): void
     {
-        if (! $this->logger) {
+        if ($this->logger === null) {
             return;
         }
 
@@ -60,7 +52,7 @@ final class TaskEventDispatchListener
             'taskId' => $event->getTaskId(),
             'error'  => sprintf(
                 "[%s - %d] %s\n%s",
-                get_class($e),
+                $e::class,
                 $e->getCode(),
                 $e->getMessage(),
                 $e->getTraceAsString()

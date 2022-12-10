@@ -35,9 +35,8 @@ class SwooleListenerProviderFactoryTest extends TestCase
 
     /**
      * @dataProvider invalidListenerTypes
-     * @param mixed $invalidListener
      */
-    public function testFactoryRaisesErrorForNonCallableNonStringListeners($invalidListener): void
+    public function testFactoryRaisesErrorForNonCallableNonStringListeners(mixed $invalidListener): void
     {
         $config    = [
             'mezzio-swoole' => [

@@ -13,16 +13,8 @@ use Psr\Log\LoggerInterface;
 
 class ServerShutdownListener
 {
-    private LoggerInterface $logger;
-
-    private PidManager $pidManager;
-
-    public function __construct(
-        PidManager $pidManager,
-        LoggerInterface $logger
-    ) {
-        $this->pidManager = $pidManager;
-        $this->logger     = $logger;
+    public function __construct(private PidManager $pidManager, private LoggerInterface $logger)
+    {
     }
 
     public function __invoke(ServerShutdownEvent $event): void

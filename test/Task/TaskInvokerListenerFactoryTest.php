@@ -16,10 +16,7 @@ use ReflectionProperty;
 
 class TaskInvokerListenerFactoryTest extends TestCase
 {
-    /**
-     * @param mixed $expected
-     */
-    public function assertPropertySame($expected, string $property, object $instance, string $message = ''): void
+    public function assertPropertySame(mixed $expected, string $property, object $instance, string $message = ''): void
     {
         $r = new ReflectionProperty($instance, $property);
         $r->setAccessible(true);

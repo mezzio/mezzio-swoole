@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\StaticResourceHandler;
 
 use Mezzio\Swoole\Exception;
+use Mezzio\Swoole\Exception\InvalidArgumentException;
 
 use function preg_match;
 use function restore_error_handler;
@@ -34,7 +35,7 @@ trait ValidateRegexTrait
     {
         foreach ($regexList as $regex) {
             if (! $this->isValidRegex($regex)) {
-                throw new Exception\InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'The %s regex "%s" is invalid',
                     $type,
                     $regex

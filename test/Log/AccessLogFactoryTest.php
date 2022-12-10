@@ -31,11 +31,8 @@ class AccessLogFactoryTest extends TestCase
      */
     private $logger;
 
-    /**
-     * @var AccessLogFormatterInterface|MockObject
-     * @psalm-var AccessLogFormatterInterface&MockObject
-     */
-    private $formatter;
+    /** @psalm-var AccessLogFormatterInterface&MockObject */
+    private AccessLogFormatterInterface|MockObject $formatter;
 
     protected function setUp(): void
     {
@@ -126,6 +123,7 @@ class AccessLogFactoryTest extends TestCase
 
         $r = new ReflectionProperty($logger, 'formatter');
         $r->setAccessible(true);
+
         $formatter = $r->getValue($logger);
         Assert::isInstanceOf($formatter, AccessLogFormatterInterface::class);
 

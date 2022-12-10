@@ -12,12 +12,9 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 abstract class AbstractSwooleWorkerEvent extends AbstractServerAwareEvent
 {
-    protected int $workerId;
-
-    public function __construct(SwooleHttpServer $server, int $workerId)
+    public function __construct(SwooleHttpServer $server, protected int $workerId)
     {
-        $this->server   = $server;
-        $this->workerId = $workerId;
+        $this->server = $server;
     }
 
     public function getWorkerId(): int

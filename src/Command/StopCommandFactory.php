@@ -15,6 +15,8 @@ class StopCommandFactory
 {
     public function __invoke(ContainerInterface $container): StopCommand
     {
-        return new StopCommand($container->get(PidManager::class));
+        /** @var PidManager $pidManager */
+        $pidManager = $container->get(PidManager::class);
+        return new StopCommand($pidManager);
     }
 }

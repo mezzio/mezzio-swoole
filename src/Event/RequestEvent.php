@@ -14,18 +14,10 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 class RequestEvent implements StoppableEventInterface
 {
-    private SwooleHttpRequest $request;
-
-    private SwooleHttpResponse $response;
-
     private bool $responseSent = false;
 
-    public function __construct(
-        SwooleHttpRequest $request,
-        SwooleHttpResponse $response
-    ) {
-        $this->request  = $request;
-        $this->response = $response;
+    public function __construct(private SwooleHttpRequest $request, private SwooleHttpResponse $response)
+    {
     }
 
     public function isPropagationStopped(): bool

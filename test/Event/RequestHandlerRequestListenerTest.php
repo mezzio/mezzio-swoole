@@ -49,29 +49,31 @@ class RequestHandlerRequestListenerTest extends TestCase
     /** @psalm-var SwooleHttpResponse&MockObject */
     private SwooleHttpResponse $swooleResponse;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->swooleRequest  = $this->createMock(SwooleHttpRequest::class);
-        $this->swooleResponse = $this->createMock(SwooleHttpResponse::class);
-
-        $this->request  = $request = $this->createMock(ServerRequestInterface::class);
-        $requestFactory = function (SwooleHttpRequest $swooleRequest) use ($request): ServerRequestInterface {
-            if ($this->exceptionToThrowOnRequestGeneration) {
+        $this->swooleRequest    = $this->createMock(SwooleHttpRequest::class);
+        $this->swooleResponse   = $this->createMock(SwooleHttpResponse::class);
+        $this->request          = $this->createMock(ServerRequestInterface::class);
+        $request                = $this->request;
+        $requestFactory         = function (SwooleHttpRequest $swooleRequest) use ($request): ServerRequestInterface {
+            if ($this->exceptionToThrowOnRequestGeneration !== null) {
                 throw $this->exceptionToThrowOnRequestGeneration;
             }
+
             return $request;
         };
-
-        $this->errorResponse    = $errorResponse = $this->createMock(ResponseInterface::class);
+        $this->errorResponse    = $this->createMock(ResponseInterface::class);
+        $errorResponse          = $this->errorResponse;
         $errorResponseGenerator = function (Throwable $e) use ($errorResponse): ResponseInterface {
-            if ($this->exceptionToThrowOnRequestGeneration) {
+            if ($this->exceptionToThrowOnRequestGeneration !== null) {
                 TestCase::assertSame($this->exceptionToThrowOnRequestGeneration, $e);
             }
+
             return $errorResponse;
         };
-
-        $this->emitter  = $emitter = $this->createMock(SwooleEmitter::class);
-        $emitterFactory = static fn(SwooleHttpResponse $response): SwooleEmitter => $emitter;
+        $this->emitter          = $this->createMock(SwooleEmitter::class);
+        $emitter                = $this->emitter;
+        $emitterFactory         = static fn(SwooleHttpResponse $response): SwooleEmitter => $emitter;
 
         $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
         $this->logger         = $this->createMock(AccessLogInterface::class);
