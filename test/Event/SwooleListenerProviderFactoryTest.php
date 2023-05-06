@@ -22,7 +22,7 @@ class SwooleListenerProviderFactoryTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list<mixed>>
      */
-    public function invalidListenerTypes(): iterable
+    public static function invalidListenerTypes(): iterable
     {
         yield 'null'                => [null];
         yield 'true'                => [true];

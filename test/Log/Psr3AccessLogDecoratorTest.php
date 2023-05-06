@@ -61,7 +61,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list<string>>
      */
-    public function psr3Methods(): iterable
+    public static function psr3Methods(): iterable
     {
         $r = new ReflectionClass(LoggerInterface::class);
         foreach ($r->getMethods() as $method) {
@@ -94,7 +94,7 @@ class Psr3AccessLogDecoratorTest extends TestCase
     /**
      * @psalm-return array<array-key, array{0: int, 1: string}>
      */
-    public function statusLogMethodValues(): array
+    public static function statusLogMethodValues(): array
     {
         return [
             '100' => [100, 'info'],

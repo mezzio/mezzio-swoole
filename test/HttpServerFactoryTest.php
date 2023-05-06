@@ -116,7 +116,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, int[]>
      */
-    public function getInvalidPortNumbers(): array
+    public static function getInvalidPortNumbers(): array
     {
         return [
             [-1],
@@ -150,7 +150,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, list<int|string>>
      */
-    public function invalidServerModes(): array
+    public static function invalidServerModes(): array
     {
         return [
             [0],
@@ -184,7 +184,7 @@ class HttpServerFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, list<int|string>>
      */
-    public function invalidSocketTypes(): array
+    public static function invalidSocketTypes(): array
     {
         return [
             [0],
@@ -246,7 +246,7 @@ class HttpServerFactoryTest extends TestCase
      *     1: array<empty, empty>|array<string, non-empty-string>,
      * }>
      */
-    public function validSocketTypes(): array
+    public static function validSocketTypes(): array
     {
         $validTypes = [
             [SWOOLE_SOCK_TCP, []],

@@ -11,6 +11,7 @@ namespace Mezzio\Swoole;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface;
 use Laminas\Diactoros\ServerRequestFilter\FilterUsingXForwardedHeaders;
+use Laminas\Diactoros\UriFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
@@ -19,7 +20,6 @@ use function array_change_key_case;
 use function array_key_exists;
 use function Laminas\Diactoros\marshalMethodFromSapi;
 use function Laminas\Diactoros\marshalProtocolVersionFromSapi;
-use function Laminas\Diactoros\marshalUriFromSapi;
 use function Laminas\Diactoros\normalizeUploadedFiles;
 
 use const CASE_UPPER;
@@ -75,7 +75,7 @@ class ServerRequestSwooleFactory
             $request = new ServerRequest(
                 $server,
                 normalizeUploadedFiles($files),
-                marshalUriFromSapi($server, $stripXForwardedHeaders($headers)),
+                UriFactory::createFromSapi($server, $stripXForwardedHeaders($headers)),
                 marshalMethodFromSapi($server),
                 new SwooleStream($request),
                 $headers,

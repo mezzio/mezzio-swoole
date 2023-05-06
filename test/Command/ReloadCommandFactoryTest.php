@@ -42,7 +42,7 @@ class ReloadCommandFactoryTest extends TestCase
      *     }
      * >
      */
-    public function configProvider(): iterable
+    public static function configProvider(): iterable
     {
         yield 'empty' => [
             [],

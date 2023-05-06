@@ -30,7 +30,7 @@ class MethodNotAllowedMiddlewareTest extends TestCase
     /**
      * @psalm-return array<string, list<non-empty-string>>
      */
-    public function alwaysAllowedMethods(): array
+    public static function alwaysAllowedMethods(): array
     {
         return [
             'GET'     => ['GET'],
@@ -42,7 +42,7 @@ class MethodNotAllowedMiddlewareTest extends TestCase
     /**
      * @psalm-return array<string, list<non-empty-string>>
      */
-    public function neverAllowedMethods(): array
+    public static function neverAllowedMethods(): array
     {
         return [
             'POST'   => ['POST'],

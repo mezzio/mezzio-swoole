@@ -61,7 +61,7 @@ class StatusCommandTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list<list<int|null>>>
      */
-    public function runningProcesses(): iterable
+    public static function runningProcesses(): iterable
     {
         yield 'base-mode'    => [[getmypid(), null]];
         yield 'process-mode' => [[1_000_000, getmypid()]];
@@ -94,7 +94,7 @@ class StatusCommandTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list<list<null|int>>>
      */
-    public function noRunningProcesses(): iterable
+    public static function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];
