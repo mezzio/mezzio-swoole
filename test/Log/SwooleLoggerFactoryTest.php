@@ -38,7 +38,7 @@ class SwooleLoggerFactoryTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list<null|array<string, mixed>>>
      */
-    public function provideConfigsWithNoNamedLogger(): iterable
+    public static function provideConfigsWithNoNamedLogger(): iterable
     {
         yield 'no config' => [null];
         yield 'empty config' => [[]];

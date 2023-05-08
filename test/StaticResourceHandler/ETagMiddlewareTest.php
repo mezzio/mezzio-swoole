@@ -77,7 +77,7 @@ class ETagMiddlewareTest extends TestCase
      *     3: string,
      * }>
      */
-    public function expectedEtagProvider(): array
+    public static function expectedEtagProvider(): array
     {
         $filename     = __DIR__ . '/../TestAsset/image.png';
         $lastModified = filemtime($filename);
@@ -115,12 +115,12 @@ class ETagMiddlewareTest extends TestCase
         $this->assertShouldSendContent($response);
     }
 
-    public function clientMatchHeaders(): iterable
+    public static function clientMatchHeaders(): iterable
     {
         $clientHeaders = ['if-match', 'if-none-match'];
 
         foreach ($clientHeaders as $header) {
-            foreach ($this->expectedEtagProvider() as $case => $arguments) {
+            foreach (self::expectedEtagProvider() as $case => $arguments) {
                 $name = sprintf('%s - %s', $header, $case);
                 array_unshift($arguments, $header);
                 yield $name => $arguments;

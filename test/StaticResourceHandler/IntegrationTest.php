@@ -44,7 +44,7 @@ class IntegrationTest extends TestCase
     /**
      * @psalm-return array<array-key, list<string>>
      */
-    public function unsupportedHttpMethods(): array
+    public static function unsupportedHttpMethods(): array
     {
         return [
             'POST'   => ['POST'],

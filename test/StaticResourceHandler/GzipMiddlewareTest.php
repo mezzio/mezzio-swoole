@@ -92,7 +92,7 @@ class GzipMiddlewareTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list<string>>
      */
-    public function acceptedEncodings(): iterable
+    public static function acceptedEncodings(): iterable
     {
         foreach (array_values(GzipMiddleware::COMPRESSION_CONTENT_ENCODING_MAP) as $encoding) {
             yield $encoding => [$encoding];

@@ -113,7 +113,7 @@ class ServerRequestSwooleFactoryTest extends TestCase
     }
 
     /** @psalm-return iterable<string, array{0: string, 1: string}> */
-    public function provideRemoteAddressAndExpectedUrl(): iterable
+    public static function provideRemoteAddressAndExpectedUrl(): iterable
     {
         yield 'localhost'      => ['127.0.0.1', 'https://example.com/foo/bar'];
         yield 'class-a-subnet' => ['10.0.0.1', 'https://example.com/foo/bar'];

@@ -30,7 +30,7 @@ class OptionsMiddlewareTest extends TestCase
     /**
      * @psalm-return array<string, list<non-empty-string>>
      */
-    public function nonOptionsRequests(): array
+    public static function nonOptionsRequests(): array
     {
         return [
             'GET'  => ['GET'],

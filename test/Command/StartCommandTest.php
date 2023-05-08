@@ -197,7 +197,7 @@ class StartCommandTest extends TestCase
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
     }
 
-    public function noRunningProcesses(): iterable
+    public static function noRunningProcesses(): iterable
     {
         yield 'empty'        => [[]];
         yield 'null-all'     => [[null, null]];

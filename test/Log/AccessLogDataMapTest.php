@@ -40,7 +40,7 @@ class AccessLogDataMapTest extends TestCase
      *     2: string,
      * }>
      */
-    public function provideServer(): iterable
+    public static function provideServer(): iterable
     {
         yield 'no address' => [[], [], '-'];
         yield 'x-real-ip'  => [

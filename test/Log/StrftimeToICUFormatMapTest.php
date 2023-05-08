@@ -28,7 +28,7 @@ class StrftimeToICUFormatMapTest extends TestCase
     }
 
     /** @psalm-return array<string, array{0: non-empty-string}> */
-    public function unsupportedFormats(): array
+    public static function unsupportedFormats(): array
     {
         return [
             '%c' => ['%c'],

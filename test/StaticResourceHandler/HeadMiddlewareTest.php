@@ -35,7 +35,7 @@ class HeadMiddlewareTest extends TestCase
     /**
      * @psalm-return array<array-key, list<string>>
      */
-    public function nonHeadMethods(): array
+    public static function nonHeadMethods(): array
     {
         return [
             'GET'     => ['GET'],
