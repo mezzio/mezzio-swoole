@@ -57,7 +57,7 @@
         "phpunit/phpunit": "9.5.26",
         "psalm/plugin-phpunit": "^0.18.4",
         "swoole/ide-helper": "^5.0.3",
-        "vimeo/psalm": "^4.29.0"
+        "vimeo/psalm": "^5.12"
     },
     "suggest": {
         "ext-inotify": "To use inotify based file watcher. Required for hot code reloading.",
