@@ -57,7 +57,6 @@ class ContentTypeFilterMiddlewareTest extends TestCase
             'txt' => 'text/plain',
         ]);
 
-        /** @psalm-suppress InvalidArgument */
         $response = $middleware($this->request, __DIR__ . '/../image.png', $next);
 
         $this->assertTrue($response->isFailure());

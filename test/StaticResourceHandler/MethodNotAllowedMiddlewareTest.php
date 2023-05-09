@@ -65,7 +65,6 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         $next                  = static fn (Request $request, string $filename): StaticResourceResponse => $response;
         $middleware            = new MethodNotAllowedMiddleware();
 
-        /** @psalm-suppress InvalidArgument */
         $test = $middleware($this->request, '/does/not/matter', $next);
 
         $this->assertSame($response, $test);
@@ -80,12 +79,11 @@ class MethodNotAllowedMiddlewareTest extends TestCase
         $this->request->server = [
             'request_method' => $method,
         ];
-        $next                  = function (Request $request, string $filename): void {
+        $next                  = function (): void {
             $this->fail('Should not have reached next()');
         };
         $middleware            = new MethodNotAllowedMiddleware();
 
-        /** @psalm-suppress InvalidArgument */
         $response = $middleware($this->request, '/does/not/matter', $next);
 
         $this->assertStatus(405, $response);

@@ -27,7 +27,6 @@ final class TaskInvokerListenerFactory
 
     /**
      * @psalm-param array<string, mixed> $config
-     * @psalm-suppress MixedInferredReturnType
      */
     private function getLoggerService(array $config, ContainerInterface $container): ?LoggerInterface
     {
@@ -39,7 +38,6 @@ final class TaskInvokerListenerFactory
 
         Assert::stringNotEmpty($loggerService);
 
-        /** @psalm-suppress MixedReturnStatement */
         return $container->get($loggerService);
     }
 }

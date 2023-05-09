@@ -1,132 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
-    <MixedArrayOffset occurrences="1">
+    <MixedArrayOffset>
       <code>$cacheControlDirectives[$regex]</code>
     </MixedArrayOffset>
   </file>
   <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
-    <UndefinedConstant occurrences="1">
+    <UndefinedConstant>
       <code>IN_MODIFY</code>
     </UndefinedConstant>
   </file>
-  <file src="src/HttpServerFactory.php">
-    <MixedArrayAssignment occurrences="2">
-      <code>$validProtocols[]</code>
-      <code>$validProtocols[]</code>
-    </MixedArrayAssignment>
-  </file>
   <file src="src/Log/AccessLogDataMap.php">
-    <InvalidOperand occurrences="3">
+    <InvalidOperand>
       <code>$begin</code>
       <code>$begin</code>
       <code>$begin</code>
     </InvalidOperand>
-    <MixedOperand occurrences="2">
+    <MixedOperand>
       <code>$firstLineSize</code>
       <code>$strlen($firstLine)</code>
     </MixedOperand>
-    <PossiblyInvalidArgument occurrences="1">
+    <PossiblyInvalidArgument>
       <code>$time</code>
     </PossiblyInvalidArgument>
-    <PossiblyInvalidOperand occurrences="2">
+    <PossiblyInvalidOperand>
       <code>$time</code>
       <code>$time</code>
     </PossiblyInvalidOperand>
-    <PossiblyNullOperand occurrences="2">
-      <code>$this-&gt;getRequestMessageSize(0)</code>
-      <code>$this-&gt;getResponseMessageSize(0)</code>
+    <PossiblyNullOperand>
+      <code><![CDATA[$this->getRequestMessageSize(0)]]></code>
+      <code><![CDATA[$this->getResponseMessageSize(0)]]></code>
     </PossiblyNullOperand>
-    <PossiblyNullReference occurrences="1">
+    <PossiblyNullReference>
       <code>getHeaderSize</code>
     </PossiblyNullReference>
   </file>
-  <file src="src/Log/AccessLogFormatter.php">
-    <InvalidScalarArgument occurrences="3">
-      <code>'-'</code>
-      <code>'-'</code>
-    </InvalidScalarArgument>
-  </file>
-  <file src="src/ServerRequestSwooleFactory.php">
-    <DeprecatedFunction occurrences="1">
-      <code>marshalUriFromSapi($server, $stripXForwardedHeaders($headers))</code>
-    </DeprecatedFunction>
-  </file>
   <file src="src/StaticMappedResourceHandler.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler.php">
-    <MixedOperand occurrences="1">
-      <code>$request-&gt;server['request_uri']</code>
+    <MixedOperand>
+      <code><![CDATA[$request->server['request_uri']]]></code>
     </MixedOperand>
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$cacheControlDirectives</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$etagDirectives</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
-    <MixedArrayAssignment occurrences="1">
-      <code>$this-&gt;mappedDocRoots[$prefix][]</code>
+    <MixedArrayAssignment>
+      <code><![CDATA[$this->mappedDocRoots[$prefix][]]]></code>
     </MixedArrayAssignment>
-    <MixedOperand occurrences="1">
+    <MixedOperand>
       <code>$directory</code>
     </MixedOperand>
   </file>
   <file src="src/StaticResourceHandler/GzipMiddleware.php">
-    <MixedOperand occurrences="1">
+    <MixedOperand>
       <code>$countBytes($line)</code>
     </MixedOperand>
-    <UnusedFunctionCall occurrences="1">
+    <UnusedFunctionCall>
       <code>stream_filter_append</code>
     </UnusedFunctionCall>
   </file>
   <file src="src/SwooleEmitter.php">
-    <PossiblyNullReference occurrences="1">
+    <PossiblyNullReference>
       <code>asString</code>
     </PossiblyNullReference>
   </file>
-  <file src="src/Task/Task.php">
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$payload</code>
-    </MixedPropertyTypeCoercion>
-  </file>
   <file src="test/Command/StopCommandTest.php">
-    <InternalProperty occurrences="3">
-      <code>$command-&gt;killProcess</code>
-      <code>$command-&gt;killProcess</code>
-      <code>$command-&gt;waitThreshold</code>
+    <InternalProperty>
+      <code><![CDATA[$command->killProcess]]></code>
+      <code><![CDATA[$command->killProcess]]></code>
+      <code><![CDATA[$command->waitThreshold]]></code>
     </InternalProperty>
-    <TypeDoesNotContainType occurrences="2">
-      <code>assertTrue</code>
-      <code>assertTrue</code>
-    </TypeDoesNotContainType>
   </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;file</code>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->file]]></code>
     </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="test/HttpServerFactoryTest.php">
-    <LessSpecificReturnStatement occurrences="1">
-      <code>$validTypes</code>
-    </LessSpecificReturnStatement>
-    <MoreSpecificReturnType occurrences="1"/>
-  </file>
-  <file src="test/TestAsset/CallableObject.php">
-    <MixedReturnTypeCoercion occurrences="2">
-      <code>$params</code>
-      <code>list&lt;mixed&gt;</code>
-    </MixedReturnTypeCoercion>
   </file>
 </files>

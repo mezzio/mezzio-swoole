@@ -69,23 +69,17 @@ class RequestHandlerRequestListener
         ?callable $emitterFactory = null
     ) {
         // Factories are cast as Closures to ensure return type safety.
-        /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestFactory
             = static fn(SwooleHttpRequest $request): ServerRequestInterface =>
-                /** @psalm-suppress MixedReturnStatement */
                 $serverRequestFactory($request);
 
-        /** @psalm-suppress MixedInferredReturnType */
         $this->serverRequestErrorResponseGenerator
             = static fn(Throwable $exception): ResponseInterface =>
-                /** @psalm-suppress MixedReturnStatement */
                 $serverRequestErrorResponseGenerator($exception);
 
         if ($emitterFactory !== null) {
-            /** @psalm-suppress MixedInferredReturnType */
             $this->emitterFactory
                 = static fn(SwooleHttpResponse $response): SwooleEmitter =>
-                    /** @psalm-suppress MixedReturnStatement */
                     $emitterFactory($response);
         }
     }

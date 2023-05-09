@@ -28,7 +28,6 @@ final class HotCodeReloaderWorkerStartListenerFactory
         $config = $container->has('config') ? $container->get('config') : [];
         Assert::isMap($config);
 
-        /** @psalm-suppress MixedAssignment */
         $config = $config['mezzio-swoole']['hot-code-reload'] ?? [];
         Assert::isMap($config);
 

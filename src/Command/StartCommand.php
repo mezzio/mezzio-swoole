@@ -96,10 +96,8 @@ EOH;
         $serverOptions = [];
         $daemonize     = (bool) $input->getOption('daemonize');
 
-        /** @psalm-suppress MixedAssignment */
         $numWorkers = $input->getOption('num-workers');
 
-        /** @psalm-suppress MixedAssignment */
         $numTaskWorkers = $input->getOption('num-task-workers');
 
         if ($daemonize) {

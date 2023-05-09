@@ -37,7 +37,6 @@ class ServerStartListener
     {
         $server = $event->getServer();
 
-        /** @psalm-suppress MixedArgument */
         $this->pidManager->write($server->getMasterPid(), $server->getManagerPid());
 
         // Reset CWD
