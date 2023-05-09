@@ -21,7 +21,6 @@ trait AssertResponseTrait
     public function assertStatus(int $expected, StaticResourceResponse $response, string $message = ''): void
     {
         $r = new ReflectionProperty($response, 'status');
-        $r->setAccessible(true);
 
         $actual = $r->getValue($response);
 
@@ -37,7 +36,6 @@ trait AssertResponseTrait
     public function assertHeadersEmpty(StaticResourceResponse $response, string $message = ''): void
     {
         $r = new ReflectionProperty($response, 'headers');
-        $r->setAccessible(true);
 
         $headers = $r->getValue($response);
 
@@ -57,7 +55,6 @@ trait AssertResponseTrait
         );
 
         $r = new ReflectionProperty($response, 'headers');
-        $r->setAccessible(true);
 
         $headers = $r->getValue($response);
 
@@ -72,7 +69,6 @@ trait AssertResponseTrait
         );
 
         $r = new ReflectionProperty($response, 'headers');
-        $r->setAccessible(true);
 
         $headers = $r->getValue($response);
 
@@ -88,7 +84,6 @@ trait AssertResponseTrait
         $this->assertHeaderExists($header, $response);
 
         $r = new ReflectionProperty($response, 'headers');
-        $r->setAccessible(true);
 
         $headers = $r->getValue($response);
         $value   = $headers[$header];
@@ -112,7 +107,6 @@ trait AssertResponseTrait
         $this->assertHeaderExists($header, $response);
 
         $r = new ReflectionProperty($response, 'headers');
-        $r->setAccessible(true);
 
         $headers = $r->getValue($response);
         $value   = $headers[$header];
@@ -132,7 +126,6 @@ trait AssertResponseTrait
         $message = $message ?: 'Failed asserting that the static resource response should send content';
 
         $r = new ReflectionProperty($response, 'sendContent');
-        $r->setAccessible(true);
 
         $value = $r->getValue($response);
         Assert::assertTrue($value, $message);
@@ -143,7 +136,6 @@ trait AssertResponseTrait
         $message = $message ?: 'Failed asserting that the static resource response should not send content';
 
         $r = new ReflectionProperty($response, 'sendContent');
-        $r->setAccessible(true);
 
         $value = $r->getValue($response);
         Assert::assertFalse($value, $message);

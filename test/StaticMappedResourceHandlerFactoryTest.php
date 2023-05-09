@@ -127,7 +127,6 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
         );
 
         $r = new ReflectionProperty($handler, 'middleware');
-        $r->setAccessible(true);
 
         $middleware = $r->getValue($handler);
 
