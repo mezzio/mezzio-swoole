@@ -408,35 +408,34 @@
         },
         {
             "name": "laminas/laminas-stratigility",
-            "version": "3.9.0",
+            "version": "3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stratigility.git",
-                "reference": "b847ad3a0a9f1c09de9bcc918454cc8d36efb6aa"
+                "reference": "d45eec2f61b9706d9efcb398af53a196c3c7f301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stratigility/zipball/b847ad3a0a9f1c09de9bcc918454cc8d36efb6aa",
-                "reference": "b847ad3a0a9f1c09de9bcc918454cc8d36efb6aa",
+                "url": "https://api.github.com/repos/laminas/laminas-stratigility/zipball/d45eec2f61b9706d9efcb398af53a196c3c7f301",
+                "reference": "d45eec2f61b9706d9efcb398af53a196c3c7f301",
                 "shasum": ""
             },
             "require": {
                 "fig/http-message-util": "^1.1",
                 "laminas/laminas-escaper": "^2.10.0",
                 "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
-                "psr/http-message": "^1.0",
-                "psr/http-server-middleware": "^1.0"
+                "psr/http-message": "^1.0 || ^2.0",
+                "psr/http-server-middleware": "^1.0.2"
             },
             "conflict": {
-                "laminas/laminas-diactoros": "<1.7.1",
                 "zendframework/zend-stratigility": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "laminas/laminas-diactoros": "^2.18",
-                "phpunit/phpunit": "^9.5.25",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.28"
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-diactoros": "^2.25 || ^3.0",
+                "phpunit/phpunit": "^9.5.26",
+                "psalm/plugin-phpunit": "^0.18.3",
+                "vimeo/psalm": "^5.0.0"
             },
             "suggest": {
                 "psr/http-message-implementation": "Please install a psr/http-message-implementation to consume Stratigility; e.g., laminas/laminas-diactoros"
@@ -484,20 +483,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-10T19:34:46+00:00"
+            "time": "2023-05-09T14:23:43+00:00"
         },
         {
             "name": "mezzio/mezzio",
-            "version": "3.16.3",
+            "version": "3.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio.git",
-                "reference": "11fd593cba09946b80749a62ad5ba937ecee4cde"
+                "reference": "d0173b73fd6da085779b32db92a207a3e70e108f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio/zipball/11fd593cba09946b80749a62ad5ba937ecee4cde",
-                "reference": "11fd593cba09946b80749a62ad5ba937ecee4cde",
+                "url": "https://api.github.com/repos/mezzio/mezzio/zipball/d0173b73fd6da085779b32db92a207a3e70e108f",
+                "reference": "d0173b73fd6da085779b32db92a207a3e70e108f",
                 "shasum": ""
             },
             "require": {
@@ -509,7 +508,7 @@
                 "php": "~8.1.0 || ~8.2.0",
                 "psr/container": "^1.0||^2.0",
                 "psr/http-factory": "^1.0",
-                "psr/http-message": "^1.0.1",
+                "psr/http-message": "^1.0.1 || ^2.0.0",
                 "psr/http-server-middleware": "^1.0",
                 "webmozart/assert": "^1.10"
             },
@@ -525,7 +524,7 @@
             "require-dev": {
                 "filp/whoops": "^2.14.6",
                 "laminas/laminas-coding-standard": "~2.5.0",
-                "laminas/laminas-diactoros": "^2.24",
+                "laminas/laminas-diactoros": "^3.0",
                 "laminas/laminas-servicemanager": "^3.20",
                 "mezzio/mezzio-aurarouter": "^3.6",
                 "mezzio/mezzio-fastroute": "^3.8",
@@ -591,7 +590,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-05-09T00:23:21+00:00"
+            "time": "2023-05-09T14:54:58+00:00"
         },
         {
             "name": "mezzio/mezzio-router",
