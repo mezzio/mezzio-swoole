@@ -51,8 +51,8 @@ class AccessLogFormatterTest extends TestCase
         $dataMap->method('getPath')->willReturn('/path'); // %U
         $dataMap->method('getHost')->willReturn('mezzio.local'); // %v
         $dataMap->method('getServerName')->willReturn('mezzio.local'); // %V
-        $dataMap->method('getRequestMessageSize')->with('-')->willReturn(78); // %I
-        $dataMap->method('getResponseMessageSize')->with('-')->willReturn(89); // %O
+        $dataMap->method('getRequestMessageSize')->with()->willReturn(78); // %I
+        $dataMap->method('getResponseMessageSize')->with()->willReturn(89); // %O
         $dataMap->method('getTransferredSize')->willReturn('123'); // %S
         $dataMap->method('getCookie')->with('cookie_name')->willReturn('chocolate'); // %{cookie_name}C
         $dataMap->method('getEnv')->with('env_name')->willReturn('php'); // %{env_name}e
