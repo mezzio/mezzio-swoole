@@ -10,6 +10,7 @@ namespace MezzioTest\Swoole\Log;
 
 use Mezzio\Swoole\Log\AccessLogDataMap;
 use Mezzio\Swoole\Log\AccessLogFormatter;
+use MezzioTest\Swoole\ConsecutiveConstraint;
 use PHPUnit\Framework\TestCase;
 
 use function gethostname;
@@ -26,11 +27,18 @@ class AccessLogFormatterTest extends TestCase
         $dataMap->method('getLocalIp')->willReturn('127.0.0.1'); // %A
         $dataMap
             ->method('getBodySize')
-            ->withConsecutive(['0'], ['-']) // %B / %b
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo('0'),
+                $this->identicalTo('-'),
+            ])) // %B / %b
             ->willReturn('1234');
         $dataMap
             ->method('getRequestDuration')
-            ->withConsecutive(['ms'], ['s'], ['us']) // %D / %T / %{us}T
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo('ms'),
+                $this->identicalTo('s'),
+                $this->identicalTo('us'),
+            ])) // %D / %T / %{us}T
             ->willReturnOnConsecutiveCalls('4321', '22', '22');
         $dataMap->method('getFilename')->willReturn(__FILE__); // %f
         $dataMap->method('getRemoteHostname')->willReturn($hostname); // %h
@@ -38,14 +46,20 @@ class AccessLogFormatterTest extends TestCase
         $dataMap->method('getMethod')->willReturn('POST'); // %m
         $dataMap
             ->method('getPort')
-            ->withConsecutive(['canonical'], ['local']) // %p / %{local}p
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo('canonical'),
+                $this->identicalTo('local'),
+            ])) // %p / %{local}p
             ->willReturnOnConsecutiveCalls('9000', '9999');
         $dataMap->method('getQuery')->willReturn('?foo=bar'); // %q
         $dataMap->method('getRequestLine')->willReturn('POST /path?foo=bar HTTP/1.1'); // %r
         $dataMap->method('getStatus')->willReturn('202'); // %s
         $dataMap
             ->method('getRequestTime')
-            ->withConsecutive(['begin:%d/%b/%Y:%H:%M:%S %z'], ['end:sec']) // %t / %{end:sec}t
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo('begin:%d/%b/%Y:%H:%M:%S %z'),
+                $this->identicalTo('end:sec'),
+            ])) // %t / %{end:sec}t
             ->willReturnOnConsecutiveCalls('[1234567890]', '[1234567890]');
         $dataMap->method('getRemoteUser')->willReturn('mezzio'); // %u
         $dataMap->method('getPath')->willReturn('/path'); // %U

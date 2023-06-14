@@ -11,6 +11,7 @@ namespace MezzioTest\Swoole\Task;
 use Mezzio\Swoole\Event\TaskEvent;
 use Mezzio\Swoole\Task\TaskInterface;
 use Mezzio\Swoole\Task\TaskInvokerListener;
+use MezzioTest\Swoole\ConsecutiveConstraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -147,24 +148,30 @@ class TaskInvokerListenerTest extends TestCase
         $this->logger
             ->expects($this->exactly(2))
             ->method('log')
-            ->withConsecutive(
-                [
-                    LogLevel::NOTICE,
+            ->with(
+                new ConsecutiveConstraint([
+                    $this->identicalTo(LogLevel::NOTICE),
+                    $this->identicalTo(LogLevel::ERROR),
+                ]),
+                new ConsecutiveConstraint([
                     $this->stringContains('Starting work on task'),
-                    $this->callback(static fn(array $context): bool => array_key_exists('taskId', $context)
+                    $this->stringContains('Error processing task'),
+                ]),
+                new ConsecutiveConstraint([
+                    $this->callback(
+                        static fn(array $context): bool => array_key_exists('taskId', $context)
                         && $taskId === $context['taskId']
                         && array_key_exists('task', $context)
-                        && json_encode($serializedTask) === $context['task']),
-                ],
-                [
-                    LogLevel::ERROR,
-                    $this->stringContains('Error processing task'),
-                    $this->callback(static fn(array $context): bool => array_key_exists('taskId', $context)
+                        && json_encode($serializedTask) === $context['task']
+                    ),
+                    $this->callback(
+                        static fn(array $context): bool => array_key_exists('taskId', $context)
                         && $taskId === $context['taskId']
                         && array_key_exists('error', $context)
                         && is_string($context['error'])
-                        && str_contains($context['error'], $exception::class)),
-                ]
+                        && str_contains($context['error'], $exception::class)
+                    ),
+                ]),
             );
 
         $this->assertNull($listener($this->event));

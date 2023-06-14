@@ -49,14 +49,10 @@ class TaskInvokerListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(
-                ['config'],
-                ['LoggerService']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $config,
-                $logger
-            );
+            ->willReturnMap([
+                ['config', $config],
+                ['LoggerService', $logger],
+            ]);
 
         $factory = new TaskInvokerListenerFactory();
 

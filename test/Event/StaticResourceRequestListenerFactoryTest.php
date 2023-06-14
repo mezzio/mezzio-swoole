@@ -26,14 +26,10 @@ class StaticResourceRequestListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(
-                [StaticResourceHandlerInterface::class],
-                [AccessLogInterface::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $handler,
-                $logger
-            );
+            ->willReturnMap([
+                [StaticResourceHandlerInterface::class, $handler],
+                [AccessLogInterface::class, $logger],
+            ]);
 
         $this->assertIsObject($factory($container));
     }

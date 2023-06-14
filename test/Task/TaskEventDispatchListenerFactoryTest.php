@@ -60,16 +60,11 @@ class TaskEventDispatchListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(3))
             ->method('get')
-            ->withConsecutive(
-                ['config'],
-                ['EventDispatcher'],
-                ['Logger']
-            )
-            ->will($this->onConsecutiveCalls(
-                $config,
-                $dispatcher,
-                $logger
-            ));
+            ->willReturnMap([
+                ['config', $config],
+                ['EventDispatcher', $dispatcher],
+                ['Logger', $logger],
+            ]);
 
         $listener = $factory($container);
         $this->asssertPropertySame($dispatcher, 'dispatcher', $listener);

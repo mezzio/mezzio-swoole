@@ -146,18 +146,33 @@ class GzipMiddlewareTest extends TestCase
         $callback = $r->getValue($response);
         Assert::isCallable($callback);
 
-        $swooleResponse = $this->createMock(SwooleHttpResponse::class);
+        $swooleResponse      = $this->createMock(SwooleHttpResponse::class);
+        $expectedHeaderCalls = [
+            ['Content-Encoding', $encoding, true],
+            ['Connection', 'close', true],
+            ['Content-Length', mb_strlen($expected), true],
+        ];
+        $actualHeaderCalls   = [];
         $swooleResponse
             ->expects($this->exactly(3))
             ->method('header')
-            ->withConsecutive(
-                ['Content-Encoding', $encoding, true],
-                ['Connection', 'close', true],
-                ['Content-Length', mb_strlen($expected), true]
-            );
+            ->willReturnCallback(static function (
+                string $key,
+                string|array $value,
+                bool $format = true
+            ) use (&$actualHeaderCalls): bool {
+                /** @psalm-var array $actualHeaderCalls */
+                $actualHeaderCalls[] = [$key, $value, $format];
+                return true;
+            });
         $swooleResponse->expects($this->once())->method('write')->with($expected);
         $swooleResponse->expects($this->once())->method('end');
 
         $this->assertNull($callback($swooleResponse, $filename));
+        $this->assertEqualsCanonicalizing(
+            $expectedHeaderCalls,
+            $actualHeaderCalls,
+            'Expected header calls do not match'
+        );
     }
 }
