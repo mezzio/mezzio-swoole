@@ -122,7 +122,6 @@ class AccessLogFactoryTest extends TestCase
         $this->assertAttributeSame(true, 'useHostnameLookups', $logger);
 
         $r = new ReflectionProperty($logger, 'formatter');
-        $r->setAccessible(true);
 
         $formatter = $r->getValue($logger);
         Assert::isInstanceOf($formatter, AccessLogFormatterInterface::class);

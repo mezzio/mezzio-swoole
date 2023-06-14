@@ -189,27 +189,22 @@ final class SwooleRequestHandlerRunner implements RequestHandlerRunnerInterface
             ));
         }
 
-        /** @psalm-suppress MixedArgument */
         $event = is_int($task)
             ? $this->createTaskEventFromStandardArguments($server, $task, ...$args)
             : $this->createTaskEventFromTaskObject($server, $task);
 
         $this->dispatcher->dispatch($event);
 
-        /** @psalm-suppress MixedAssignment */
         $returnValue = $event->getReturnValue();
 
         if (is_object($task)) {
             Assert::methodExists($task, 'finish');
 
-            /** @psalm-suppress MixedArgument */
-            /** @psalm-suppress MixedMethodCall */
             $task->finish($returnValue);
 
             return $returnValue;
         }
 
-        /** @psalm-suppress MixedArgument */
         $this->httpServer->finish($returnValue);
 
         return $returnValue;

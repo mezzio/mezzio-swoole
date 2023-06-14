@@ -52,11 +52,9 @@ class DeferredServiceListenerDelegatorTest extends TestCase
         $this->assertSame($listener, $deferred->getListener());
 
         $r = new ReflectionProperty($deferred, 'serviceName');
-        $r->setAccessible(true);
         $this->assertSame(CallableObject::class, $r->getValue($deferred));
 
         $r = new ReflectionProperty($deferred, 'server');
-        $r->setAccessible(true);
         $this->assertSame($server, $r->getValue($deferred));
     }
 }

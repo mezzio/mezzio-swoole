@@ -22,7 +22,6 @@ class SwooleListenerProviderFactory
         $config = $container->has('config') ? $container->get('config') : [];
         Assert::isMap($config);
 
-        /** @psalm-suppress MixedAssignment */
         $config = $config['mezzio-swoole']['swoole-http-server']['listeners'] ?? [];
         Assert::isMap($config);
 
@@ -32,7 +31,6 @@ class SwooleListenerProviderFactory
             Assert::stringNotEmpty($event);
             Assert::isList($listeners);
 
-            /** @psalm-suppress MixedAssignment */
             foreach ($listeners as $listener) {
                 Assert::true(is_string($listener) || is_callable($listener));
                 $provider->addListener(
@@ -55,7 +53,6 @@ class SwooleListenerProviderFactory
             throw InvalidListenerException::forNonexistentListenerType($listener, $event);
         }
 
-        /** @psalm-suppress MixedAssignment */
         $listener = $container->get($listener);
         if (! is_callable($listener)) {
             throw InvalidListenerException::forListenerOfEvent($listener, $event);

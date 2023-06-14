@@ -54,7 +54,6 @@ class Psr3AccessLogDecoratorTest extends TestCase
     private function getPropertyForInstance(string $property, object $instance)
     {
         $r = new ReflectionProperty($instance, $property);
-        $r->setAccessible(true);
         return $r->getValue($instance);
     }
 

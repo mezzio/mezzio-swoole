@@ -1,132 +1,283 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
-    <MixedArrayOffset occurrences="1">
+    <MixedArrayOffset>
       <code>$cacheControlDirectives[$regex]</code>
     </MixedArrayOffset>
   </file>
+  <file src="src/Event/ServerShutdownEvent.php">
+    <PossiblyUnusedMethod>
+      <code>getServer</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Event/ServerShutdownListener.php">
+    <PossiblyUnusedParam>
+      <code>$event</code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Event/WorkerErrorEvent.php">
+    <PossiblyUnusedMethod>
+      <code>getExitCode</code>
+      <code>getSignal</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Exception/InvalidConfigException.php">
+    <UnusedClass>
+      <code>InvalidConfigException</code>
+    </UnusedClass>
+  </file>
   <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
-    <UndefinedConstant occurrences="1">
-      <code>IN_MODIFY</code>
-    </UndefinedConstant>
+    <LessSpecificReturnStatement>
+      <code>$paths</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code><![CDATA[list<non-empty-string>]]></code>
+    </MoreSpecificReturnType>
   </file>
   <file src="src/HttpServerFactory.php">
-    <MixedArrayAssignment occurrences="2">
-      <code>$validProtocols[]</code>
-      <code>$validProtocols[]</code>
-    </MixedArrayAssignment>
+    <InvalidConstantAssignmentValue>
+      <code>PROTOCOLS = [
+        SWOOLE_SOCK_TCP,
+        SWOOLE_SOCK_TCP6,
+        SWOOLE_SOCK_UDP,
+        SWOOLE_SOCK_UDP6,
+        SWOOLE_UNIX_DGRAM,
+        SWOOLE_UNIX_STREAM,
+    ]</code>
+    </InvalidConstantAssignmentValue>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
-    <InvalidOperand occurrences="3">
+    <InvalidOperand>
       <code>$begin</code>
       <code>$begin</code>
       <code>$begin</code>
     </InvalidOperand>
-    <MixedOperand occurrences="2">
+    <MixedOperand>
       <code>$firstLineSize</code>
       <code>$strlen($firstLine)</code>
     </MixedOperand>
-    <PossiblyInvalidArgument occurrences="1">
+    <PossiblyInvalidArgument>
       <code>$time</code>
     </PossiblyInvalidArgument>
-    <PossiblyInvalidOperand occurrences="2">
+    <PossiblyInvalidOperand>
       <code>$time</code>
       <code>$time</code>
     </PossiblyInvalidOperand>
-    <PossiblyNullOperand occurrences="2">
-      <code>$this-&gt;getRequestMessageSize(0)</code>
-      <code>$this-&gt;getResponseMessageSize(0)</code>
+    <PossiblyNullOperand>
+      <code><![CDATA[$this->getRequestMessageSize(0)]]></code>
+      <code><![CDATA[$this->getResponseMessageSize(0)]]></code>
     </PossiblyNullOperand>
-    <PossiblyNullReference occurrences="1">
+    <PossiblyNullReference>
       <code>getHeaderSize</code>
     </PossiblyNullReference>
   </file>
-  <file src="src/Log/AccessLogFormatter.php">
-    <InvalidScalarArgument occurrences="3">
-      <code>'-'</code>
-      <code>'-'</code>
-    </InvalidScalarArgument>
-  </file>
-  <file src="src/ServerRequestSwooleFactory.php">
-    <DeprecatedFunction occurrences="1">
-      <code>marshalUriFromSapi($server, $stripXForwardedHeaders($headers))</code>
-    </DeprecatedFunction>
+  <file src="src/PidManager.php">
+    <PossiblyUnusedReturnValue>
+      <code>bool</code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="src/StaticMappedResourceHandler.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler.php">
-    <MixedOperand occurrences="1">
-      <code>$request-&gt;server['request_uri']</code>
+    <MixedOperand>
+      <code><![CDATA[$request->server['request_uri']]]></code>
     </MixedOperand>
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$middleware</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$cacheControlDirectives</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$etagDirectives</code>
     </MixedPropertyTypeCoercion>
+    <UnusedProperty>
+      <code>$allowedETagValidationTypes</code>
+    </UnusedProperty>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
-    <MixedArrayAssignment occurrences="1">
-      <code>$this-&gt;mappedDocRoots[$prefix][]</code>
+    <MixedArrayAssignment>
+      <code><![CDATA[$this->mappedDocRoots[$prefix][]]]></code>
     </MixedArrayAssignment>
-    <MixedOperand occurrences="1">
+    <MixedOperand>
       <code>$directory</code>
     </MixedOperand>
   </file>
   <file src="src/StaticResourceHandler/GzipMiddleware.php">
-    <MixedOperand occurrences="1">
+    <MixedOperand>
       <code>$countBytes($line)</code>
     </MixedOperand>
-    <UnusedFunctionCall occurrences="1">
+    <UnusedFunctionCall>
       <code>stream_filter_append</code>
     </UnusedFunctionCall>
   </file>
   <file src="src/SwooleEmitter.php">
-    <PossiblyNullReference occurrences="1">
+    <PossiblyNullReference>
       <code>asString</code>
     </PossiblyNullReference>
   </file>
+  <file src="src/SwooleRequestHandlerRunner.php">
+    <PossiblyUnusedReturnValue>
+      <code>mixed</code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/SwooleStream.php">
+    <PossiblyUnusedReturnValue>
+      <code>int</code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Task/DeferredListenerDelegator.php">
+    <UnusedParam>
+      <code>$serviceName</code>
+    </UnusedParam>
+  </file>
   <file src="src/Task/Task.php">
-    <MixedPropertyTypeCoercion occurrences="1">
+    <PropertyTypeCoercion>
       <code>$payload</code>
-    </MixedPropertyTypeCoercion>
+    </PropertyTypeCoercion>
+  </file>
+  <file src="src/WhoopsPrettyPageHandlerDelegator.php">
+    <PossiblyUnusedParam>
+      <code>$container</code>
+      <code>$serviceName</code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="test/AttributeAssertionTrait.php">
+    <PossiblyUnusedMethod>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+      <code>assertAttributeEmpty</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code>$canonicalize</code>
+      <code>$delta</code>
+      <code>$ignoreCase</code>
+      <code>$maxDepth</code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="test/Command/StatusCommandTest.php">
+    <InvalidArgument>
+      <code>testExecuteIndicatesNoRunningServerWhenServerNotDetected</code>
+      <code>testExecuteIndicatesRunningServerWhenServerDetected</code>
+    </InvalidArgument>
+    <InvalidReturnType>
+      <code><![CDATA[iterable<array-key, list<list<int|null>>>]]></code>
+    </InvalidReturnType>
   </file>
   <file src="test/Command/StopCommandTest.php">
-    <InternalProperty occurrences="3">
-      <code>$command-&gt;killProcess</code>
-      <code>$command-&gt;killProcess</code>
-      <code>$command-&gt;waitThreshold</code>
+    <InternalProperty>
+      <code><![CDATA[$command->killProcess]]></code>
+      <code><![CDATA[$command->killProcess]]></code>
+      <code><![CDATA[$command->waitThreshold]]></code>
     </InternalProperty>
-    <TypeDoesNotContainType occurrences="2">
-      <code>assertTrue</code>
-      <code>assertTrue</code>
-    </TypeDoesNotContainType>
+    <InvalidArgument>
+      <code>testExecuteReturnsErrorIfUnableToStopServer</code>
+      <code>testExecuteReturnsSuccessIfAbleToStopServer</code>
+      <code>testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning</code>
+    </InvalidArgument>
+    <InvalidReturnType>
+      <code><![CDATA[iterable<array-key, list<list<null|int>>>]]></code>
+    </InvalidReturnType>
+  </file>
+  <file src="test/Command/TestAsset/HttpServer.php">
+    <PossiblyUnusedMethod>
+      <code>set</code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$this-&gt;file</code>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->file]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
   <file src="test/HttpServerFactoryTest.php">
-    <LessSpecificReturnStatement occurrences="1">
+    <InvalidArgument>
+      <code>testExceptionThrownForInvalidServerMode</code>
+      <code>testExceptionThrownForInvalidSocketType</code>
+    </InvalidArgument>
+    <MixedReturnTypeCoercion>
       <code>$validTypes</code>
-    </LessSpecificReturnStatement>
-    <MoreSpecificReturnType occurrences="1"/>
+      <code><![CDATA[array<array-key, array{
+     *     0: int,
+     *     1: array<empty, empty>|array<string, non-empty-string>,
+     * }>]]></code>
+    </MixedReturnTypeCoercion>
+  </file>
+  <file src="test/Log/Psr3AccessLogDecoratorTest.php">
+    <InvalidArgument>
+      <code>testProxiesToPsr3Methods</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/Log/SwooleLoggerFactoryTest.php">
+    <InvalidArgument>
+      <code>testReturnsPsrLoggerWhenNoNamedLoggerIsFound</code>
+      <code>testReturnsStdoutLoggerWhenOtherLoggersAreNotFound</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/GzipMiddlewareTest.php">
+    <InvalidArgument>
+      <code>testMiddlewareInjectsResponseContentCallbackWhenItDetectsAnAcceptEncodingItCanHandle</code>
+      <code>testResponseContentCallbackEmitsExpectedHeadersAndCompressesContent</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/HeadMiddlewareTest.php">
+    <InvalidArgument>
+      <code>testMiddlewareDoesNothingIfRequestMethodIsNotHead</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/IntegrationMappedTest.php">
+    <InvalidArgument>
+      <code>testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/IntegrationTest.php">
+    <InvalidArgument>
+      <code>testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php">
+    <InvalidArgument>
+      <code>testMiddlewareDoesNothingForAllowedMethods</code>
+      <code>testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods</code>
+    </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/OptionsMiddlewareTest.php">
+    <InvalidArgument>
+      <code>testMiddlewareDoesNothingForNonOptionsRequests</code>
+    </InvalidArgument>
   </file>
   <file src="test/TestAsset/CallableObject.php">
-    <MixedReturnTypeCoercion occurrences="2">
+    <LessSpecificReturnStatement>
       <code>$params</code>
-      <code>list&lt;mixed&gt;</code>
-    </MixedReturnTypeCoercion>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code><![CDATA[list<mixed>]]></code>
+    </MoreSpecificReturnType>
+  </file>
+  <file src="test/TestAsset/ClassWithCallbacks.php">
+    <PossiblyUnusedMethod>
+      <code>instanceCallback</code>
+      <code>staticCallback</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code>$payload</code>
+      <code>$payload</code>
+    </PossiblyUnusedParam>
   </file>
 </files>

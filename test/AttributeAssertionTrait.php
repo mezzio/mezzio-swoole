@@ -26,7 +26,6 @@ trait AttributeAssertionTrait
     public static function assertAttributeEmpty(string $attributeName, $instance, string $message = ''): void
     {
         $r = new ReflectionProperty($instance, $attributeName);
-        $r->setAccessible(true);
         Assert::assertEmpty($r->getValue($instance), $message);
     }
 
@@ -45,7 +44,6 @@ trait AttributeAssertionTrait
         bool $ignoreCase = false
     ): void {
         $r = new ReflectionProperty($instance, $attributeName);
-        $r->setAccessible(true);
         Assert::assertEquals($expected, $r->getValue($instance), $message);
     }
 
@@ -60,7 +58,6 @@ trait AttributeAssertionTrait
         string $message = ''
     ): void {
         $r = new ReflectionProperty($instance, $attributeName);
-        $r->setAccessible(true);
         Assert::assertInstanceOf($expected, $r->getValue($instance), $message);
     }
 
@@ -75,7 +72,6 @@ trait AttributeAssertionTrait
         string $message = ''
     ): void {
         $r = new ReflectionProperty($instance, $attributeName);
-        $r->setAccessible(true);
         Assert::assertSame($expected, $r->getValue($instance), $message);
     }
 }

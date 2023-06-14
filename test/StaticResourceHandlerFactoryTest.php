@@ -113,7 +113,6 @@ class StaticResourceHandlerFactoryTest extends TestCase
         );
 
         $r = new ReflectionProperty($handler, 'middleware');
-        $r->setAccessible(true);
 
         $middleware = $r->getValue($handler);
         Assert::isList($middleware);

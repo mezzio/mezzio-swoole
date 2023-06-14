@@ -83,7 +83,12 @@ EOH;
 
     private function stopServer(): bool
     {
-        [$masterPid] = $this->pidManager->read();
+        $pids = $this->pidManager->read();
+        if ([] === $pids) {
+            // QA: unreachable due to isRunning() check in calling context
+            return false;
+        }
+        [$masterPid] = $pids;
         $startTime   = time();
         $result      = ($this->killProcess)((int) $masterPid);
 

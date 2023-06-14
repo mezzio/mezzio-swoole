@@ -169,7 +169,6 @@ class SwooleEmitterTest extends TestCase
         fwrite($stream, $content);
         rewind($stream);
 
-        /** @psalm-suppress PropertyNotSetInConstructor */
         $streamWithSimulatedUnknownSize = new class ($stream) extends Stream
         {
             public function getSize(): ?int

@@ -142,7 +142,6 @@ class GzipMiddlewareTest extends TestCase
         $this->assertSame($staticResponse, $response);
 
         $r = new ReflectionProperty($response, 'responseContentCallback');
-        $r->setAccessible(true);
 
         $callback = $r->getValue($response);
         Assert::isCallable($callback);

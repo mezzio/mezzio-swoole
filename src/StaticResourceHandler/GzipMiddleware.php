@@ -95,8 +95,7 @@ class GzipMiddleware implements MiddlewareInterface
                 $countBytes = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
                 $length     = 0;
                 while (! feof($handle)) {
-                    $line = fgets($handle, 4096);
-                    /** @psalm-suppress MixedAssignment */
+                    $line    = fgets($handle, 4096);
                     $length += $countBytes($line);
                     $swooleResponse->write($line);
                 }

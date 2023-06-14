@@ -19,7 +19,6 @@ class TaskInvokerListenerFactoryTest extends TestCase
     public function assertPropertySame(mixed $expected, string $property, object $instance, string $message = ''): void
     {
         $r = new ReflectionProperty($instance, $property);
-        $r->setAccessible(true);
         $this->assertSame($expected, $r->getValue($instance), $message);
     }
 

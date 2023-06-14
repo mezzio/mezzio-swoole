@@ -29,20 +29,17 @@ final class TaskEventDispatchListenerFactory
 
     /**
      * @psalm-param array<string, mixed> $config
-     * @psalm-suppress MixedInferredReturnType
      */
     private function getDispatcherService(array $config, ContainerInterface $container): PsrEventDispatcherInterface
     {
         $dispatcherService = $config['mezzio-swoole']['task-dispatcher-service'] ?? EventDispatcherInterface::class;
         Assert::stringNotEmpty($dispatcherService);
 
-        /** @psalm-suppress MixedReturnStatement */
         return $container->get($dispatcherService);
     }
 
     /**
      * @psalm-param array<string, mixed> $config
-     * @psalm-suppress MixedInferredReturnType
      */
     private function getLoggerService(array $config, ContainerInterface $container): ?LoggerInterface
     {
@@ -54,7 +51,6 @@ final class TaskEventDispatchListenerFactory
 
         Assert::stringNotEmpty($loggerService);
 
-        /** @psalm-suppress MixedReturnStatement */
         return $container->get($loggerService);
     }
 }

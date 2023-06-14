@@ -32,7 +32,6 @@ final class DeferredListenerDelegator
      * returns it verbatim. Otherwise, it decorates it as a DeferredListener.
      *
      * @return array|object|DeferredListener
-     * @psalm-suppress MixedInferredReturnType
      */
     public function __invoke(
         ContainerInterface $container,
@@ -41,7 +40,6 @@ final class DeferredListenerDelegator
     ) {
         $listener = $factory();
         if (! is_callable($listener)) {
-            /** @psalm-suppress MixedReturnStatement */
             return $listener;
         }
 

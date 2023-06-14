@@ -29,7 +29,6 @@ final class DeferredServiceListener
 
     public function __invoke(object $event): void
     {
-        /** @psalm-suppress InvalidArgument */
         $this->server->task(new ServiceBasedTask($this->serviceName, $event));
     }
 
