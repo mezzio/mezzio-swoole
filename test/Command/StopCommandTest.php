@@ -11,6 +11,7 @@ namespace MezzioTest\Swoole\Command;
 use Mezzio\Swoole\Command\StopCommand;
 use Mezzio\Swoole\PidManager;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use MezzioTest\Swoole\ConsecutiveConstraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -126,10 +127,10 @@ class StopCommandTest extends TestCase
         $this->output
             ->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                [$this->stringContains('Stopping server')],
-                [$this->stringContains('Error stopping server')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Stopping server'),
+                $this->stringContains('Error stopping server'),
+            ]));
 
         $execute = $this->reflectMethod($command, 'execute');
 
@@ -168,10 +169,10 @@ class StopCommandTest extends TestCase
         $this->output
             ->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                [$this->stringContains('Stopping server')],
-                [$this->stringContains('Server stopped')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Stopping server'),
+                $this->stringContains('Server stopped'),
+            ]));
 
         $execute = $this->reflectMethod($command, 'execute');
 

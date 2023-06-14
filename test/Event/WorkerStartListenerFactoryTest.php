@@ -40,8 +40,10 @@ class WorkerStartListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['config'], [AccessLogInterface::class])
-            ->willReturnOnConsecutiveCalls($config, $logger);
+            ->willReturnMap([
+                ['config', $config],
+                [AccessLogInterface::class, $logger],
+            ]);
 
         $this->assertInstanceOf(WorkerStartListener::class, $factory($container));
     }

@@ -74,15 +74,29 @@ class SwooleEmitterTest extends TestCase
             ->expects($this->once())
             ->method('status')
             ->with(200);
+        $expectedHeaderCalls = [
+            ['Content-Type', 'text/plain'],
+            ['Content-Length', '256'],
+        ];
+        $actualHeaderCalls   = [];
         $this->swooleResponse
             ->expects($this->exactly(2))
             ->method('header')
-            ->withConsecutive(
-                ['Content-Type', 'text/plain'],
-                ['Content-Length', '256']
-            );
+            ->willReturnCallback(static function (
+                string $key,
+                string|array $value
+            ) use (&$actualHeaderCalls): bool {
+                /** @psalm-var array $actualHeaderCalls */
+                $actualHeaderCalls[] = [$key, $value];
+                return true;
+            });
 
         $this->assertTrue($this->emitter->emit($response));
+        $this->assertEqualsCanonicalizing(
+            $expectedHeaderCalls,
+            $actualHeaderCalls,
+            'Expected header calls do not match'
+        );
     }
 
     public function testMultipleSetCookieHeaders(): void
@@ -112,23 +126,43 @@ class SwooleEmitterTest extends TestCase
             ->method('header')
             ->with('Set-Cookie', $this->anything());
 
+        $expectedCookieCalls = [
+            ['foo', 'bar', 0, '/', '', false, false, ''],
+            ['bar', 'baz', 0, '/', '', false, false, ''],
+            ['baz', 'qux', 1_623_233_894, '/', 'somecompany.co.uk', true, true, ''],
+            // SameSite cookies
+            ['ss1', 'foo1', 0, '/', '', false, false, 'Strict'],
+            ['ss2', 'foo2', 0, '/', '', false, false, 'Strict'],
+            ['ss3', 'foo3', 0, '/', '', false, false, 'Lax'],
+            ['ss4', 'foo4', 0, '/', '', false, false, 'Lax'],
+            ['ss5', 'foo5', 0, '/', '', false, false, 'None'],
+            ['ss6', 'foo6', 0, '/', '', false, false, 'None'],
+        ];
+        $actualCookieCalls = [];
         $this->swooleResponse
             ->expects($this->exactly(9))
             ->method('cookie')
-            ->withConsecutive(
-                ['foo', 'bar', 0, '/', '', false, false, ''],
-                ['bar', 'baz', 0, '/', '', false, false, ''],
-                ['baz', 'qux', 1_623_233_894, '/', 'somecompany.co.uk', true, true, ''],
-                // SameSite cookies
-                ['ss1', 'foo1', 0, '/', '', false, false, 'Strict'],
-                ['ss2', 'foo2', 0, '/', '', false, false, 'Strict'],
-                ['ss3', 'foo3', 0, '/', '', false, false, 'Lax'],
-                ['ss4', 'foo4', 0, '/', '', false, false, 'Lax'],
-                ['ss5', 'foo5', 0, '/', '', false, false, 'None'],
-                ['ss6', 'foo6', 0, '/', '', false, false, 'None']
-            );
+            ->willReturnCallback(static function (
+                string $name,
+                string $value = '',
+                int $expires = 0,
+                string $path = '/',
+                string $domain = '',
+                bool $secure = false,
+                bool $httponly = false,
+                string $samesite = ''
+            ) use (&$actualCookieCalls): bool {
+                /** @psalm-var array $actualCookieCalls */
+                $actualCookieCalls[] = [$name, $value, $expires, $path, $domain, $secure, $httponly, $samesite];
+                return true;
+            });
 
         $this->assertTrue($this->emitter->emit($response));
+        $this->assertEqualsCanonicalizing(
+            $expectedCookieCalls,
+            $actualCookieCalls,
+            'Expected header calls do not match'
+        );
     }
 
     public function testEmitWithBigContentBody(): void
@@ -150,10 +184,10 @@ class SwooleEmitterTest extends TestCase
         $this->swooleResponse
             ->expects($this->exactly(2))
             ->method('write')
-            ->withConsecutive(
-                [substr($content, 0, SwooleEmitter::CHUNK_SIZE)],
-                [substr($content, SwooleEmitter::CHUNK_SIZE)]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo(substr($content, 0, SwooleEmitter::CHUNK_SIZE)),
+                $this->identicalTo(substr($content, SwooleEmitter::CHUNK_SIZE)),
+            ]));
         $this->swooleResponse
             ->expects($this->once())
             ->method('end');
@@ -192,10 +226,10 @@ class SwooleEmitterTest extends TestCase
         $this->swooleResponse
             ->expects($this->exactly(1))
             ->method('write')
-            ->withConsecutive(
-                [substr($content, 0, SwooleEmitter::CHUNK_SIZE)],
-                [substr($content, SwooleEmitter::CHUNK_SIZE)]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo(substr($content, 0, SwooleEmitter::CHUNK_SIZE)),
+                $this->identicalTo(substr($content, SwooleEmitter::CHUNK_SIZE)),
+            ]));
         $this->swooleResponse
             ->expects($this->once())
             ->method('end');

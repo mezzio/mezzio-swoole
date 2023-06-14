@@ -12,6 +12,7 @@ use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListenerFactory;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\Log\AccessLogInterface;
+use MezzioTest\Swoole\ConsecutiveConstraint;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -42,6 +43,7 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
 
     public function testProducesHotCodeReloaderListenerUsingIntervalFromConfiguration(): void
     {
+        $this->assertSame(getcwd(), getcwd());
         $fileWatcher = $this->createMock(InotifyFileWatcher::class);
         $logger      = $this->createMock(LoggerInterface::class);
         $container   = $this->createMock(ContainerInterface::class);
@@ -71,10 +73,10 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
         $fileWatcher
             ->expects($this->exactly(2))
             ->method('addFilePath')
-            ->withConsecutive(
-                [getcwd()],
-                [__DIR__]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->identicalTo(getcwd()),
+                $this->identicalTo(__DIR__),
+            ]));
 
         $factory = new HotCodeReloaderWorkerStartListenerFactory();
         $this->assertIsObject($factory($container));

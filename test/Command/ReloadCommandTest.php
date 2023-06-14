@@ -12,6 +12,7 @@ use Mezzio\Swoole\Command\ReloadCommand;
 use Mezzio\Swoole\Command\StartCommand;
 use Mezzio\Swoole\Command\StopCommand;
 use MezzioTest\Swoole\AttributeAssertionTrait;
+use MezzioTest\Swoole\ConsecutiveConstraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
@@ -155,10 +156,10 @@ class ReloadCommandTest extends TestCase
         $this->output
             ->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                [$this->stringContains('Reloading server')],
-                [$this->stringContains('Cannot reload server: unable to stop')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Reloading server'),
+                $this->stringContains('Cannot reload server: unable to stop'),
+            ]));
 
         $execute = $this->reflectMethod($command, 'execute');
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
@@ -171,14 +172,10 @@ class ReloadCommandTest extends TestCase
         $this->input
             ->expects($this->exactly(2))
             ->method('getOption')
-            ->withConsecutive(
-                ['num-workers'],
-                ['num-task-workers']
-            )
-            ->willReturnOnConsecutiveCalls(
-                5,
-                null
-            );
+            ->willReturnMap([
+                ['num-workers', 5],
+                ['num-task-workers', null],
+            ]);
 
         $stopCommand = $this->createMock(Command::class);
         $stopCommand
@@ -202,38 +199,34 @@ class ReloadCommandTest extends TestCase
         $application
             ->expects($this->exactly(2))
             ->method('find')
-            ->withConsecutive(
-                [StopCommand::$defaultName],
-                [StartCommand::$defaultName]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $stopCommand,
-                $startCommand
-            );
+            ->willReturnMap([
+                [StopCommand::$defaultName, $stopCommand],
+                [StartCommand::$defaultName, $startCommand],
+            ]);
 
         $command->setApplication($application);
 
         $this->output
             ->expects($this->exactly(4))
             ->method('writeln')
-            ->withConsecutive(
-                [$this->stringContains('Reloading server')],
-                [$this->stringContains('[DONE]')],
-                [$this->stringContains('Starting server')],
-                [$this->stringContains('Cannot reload server: unable to start')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Reloading server'),
+                $this->stringContains('[DONE]'),
+                $this->stringContains('Starting server'),
+                $this->stringContains('Cannot reload server: unable to start'),
+            ]));
 
         $this->output
             ->expects($this->exactly(6))
             ->method('write')
-            ->withConsecutive(
-                [$this->stringContains('Waiting for 5 seconds')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Waiting for 5 seconds'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+            ]));
 
         $execute = $this->reflectMethod($command, 'execute');
         $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
@@ -246,14 +239,10 @@ class ReloadCommandTest extends TestCase
         $this->input
             ->expects($this->exactly(2))
             ->method('getOption')
-            ->withConsecutive(
-                ['num-workers'],
-                ['num-task-workers']
-            )
-            ->willReturnOnConsecutiveCalls(
-                5,
-                2
-            );
+            ->willReturnMap([
+                ['num-workers', 5],
+                ['num-task-workers', 2],
+            ]);
 
         $stopCommand = $this->createMock(Command::class);
         $stopCommand
@@ -280,35 +269,31 @@ class ReloadCommandTest extends TestCase
         $application
             ->expects($this->exactly(2))
             ->method('find')
-            ->withConsecutive(
-                [StopCommand::$defaultName],
-                [StartCommand::$defaultName]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $stopCommand,
-                $startCommand
-            );
+            ->willReturnMap([
+                [StopCommand::$defaultName, $stopCommand],
+                [StartCommand::$defaultName, $startCommand],
+            ]);
 
         $this->output
             ->expects($this->exactly(3))
             ->method('writeln')
-            ->withConsecutive(
-                [$this->stringContains('Reloading server')],
-                [$this->stringContains('[DONE]')],
-                [$this->stringContains('Starting server')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Reloading server'),
+                $this->stringContains('[DONE]'),
+                $this->stringContains('Starting server'),
+            ]));
 
         $this->output
             ->expects($this->exactly(6))
             ->method('write')
-            ->withConsecutive(
-                [$this->stringContains('Waiting for 5 seconds')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')],
-                [$this->stringContains('<info>.</info>')]
-            );
+            ->with(new ConsecutiveConstraint([
+                $this->stringContains('Waiting for 5 seconds'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+                $this->stringContains('<info>.</info>'),
+            ]));
 
         $command->setApplication($application);
 

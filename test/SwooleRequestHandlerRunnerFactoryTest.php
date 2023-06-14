@@ -28,8 +28,10 @@ class SwooleRequestHandlerRunnerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive([SwooleHttpServer::class], [EventDispatcherInterface::class])
-            ->willReturnOnConsecutiveCalls($httpServer, $dispatcher);
+            ->willReturnMap([
+                [SwooleHttpServer::class, $httpServer],
+                [EventDispatcherInterface::class, $dispatcher],
+            ]);
 
         $this->assertInstanceOf(SwooleRequestHandlerRunner::class, $factory($container));
     }

@@ -40,16 +40,11 @@ class ServerStartListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(3))
             ->method('get')
-            ->withConsecutive(
-                ['config'],
-                [PidManager::class],
-                [AccessLogInterface::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $config,
-                $pidManager,
-                $logger
-            );
+            ->willReturnMap([
+                ['config', $config],
+                [PidManager::class, $pidManager],
+                [AccessLogInterface::class, $logger],
+            ]);
 
         $factory = new ServerStartListenerFactory();
         $this->assertIsObject($factory($container));
@@ -70,14 +65,10 @@ class ServerStartListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(
-                [PidManager::class],
-                [AccessLogInterface::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $pidManager,
-                $logger
-            );
+            ->willReturnMap([
+                [PidManager::class, $pidManager],
+                [AccessLogInterface::class, $logger],
+            ]);
 
         $factory = new ServerStartListenerFactory();
         $this->assertIsObject($factory($container));

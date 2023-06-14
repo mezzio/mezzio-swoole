@@ -84,8 +84,10 @@ class SwooleListenerProviderFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], ['ClassDoesNotExist'])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnMap([
+                ['config', true],
+                ['ClassDoesNotExist', false],
+            ]);
         $container
             ->expects($this->once())
             ->method('get')
@@ -116,13 +118,17 @@ class SwooleListenerProviderFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], ['UncallableListener'])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnMap([
+                ['config', true],
+                ['UncallableListener', true],
+            ]);
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['config'], ['UncallableListener'])
-            ->willReturnOnConsecutiveCalls($config, new stdClass());
+            ->willReturnMap([
+                ['config', $config],
+                ['UncallableListener', new stdClass()],
+            ]);
 
         $factory = new SwooleListenerProviderFactory();
 
@@ -151,13 +157,17 @@ class SwooleListenerProviderFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], ['ValidListener'])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnMap([
+                ['config', true],
+                ['ValidListener', true],
+            ]);
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['config'], ['ValidListener'])
-            ->willReturnOnConsecutiveCalls($config, $listener);
+            ->willReturnMap([
+                ['config', $config],
+                ['ValidListener', $listener],
+            ]);
 
         $factory = new SwooleListenerProviderFactory();
 

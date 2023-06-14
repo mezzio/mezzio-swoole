@@ -22,13 +22,23 @@ class StaticResourceResponseTest extends TestCase
         /** @var SwooleResponse&MockObject $swooleResponse*/
         $swooleResponse = $this->createMock(SwooleResponse::class);
         $swooleResponse->expects($this->once())->method('status')->with(302);
+        $expectedHeaderCalls = [
+            ['Location', 'https://example.com', true],
+            ['Expires', '3600', true],
+        ];
+        $actualHeaderCalls   = [];
         $swooleResponse
             ->expects($this->exactly(2))
             ->method('header')
-            ->withConsecutive(
-                ['Location', 'https://example.com', true],
-                ['Expires', '3600', true]
-            );
+            ->willReturnCallback(static function (
+                string $key,
+                string|array $value,
+                bool $format = true
+            ) use (&$actualHeaderCalls): bool {
+                /** @psalm-var array $actualHeaderCalls */
+                $actualHeaderCalls[] = [$key, $value, $format];
+                return true;
+            });
 
         $response = new StaticResourceResponse();
         $response->setStatus(302);
@@ -41,6 +51,11 @@ class StaticResourceResponseTest extends TestCase
         );
 
         $this->assertNull($response->sendSwooleResponse($swooleResponse, $expectedFilename));
+        $this->assertEqualsCanonicalizing(
+            $expectedHeaderCalls,
+            $actualHeaderCalls,
+            'Expected header calls do not match'
+        );
     }
 
     public function testSendSwooleResponseSkipsSendingContentWhenContentDisabled(): void
@@ -50,13 +65,23 @@ class StaticResourceResponseTest extends TestCase
         /** @var SwooleResponse&MockObject $swooleResponse*/
         $swooleResponse = $this->createMock(SwooleResponse::class);
         $swooleResponse->expects($this->once())->method('status')->with(302);
+        $expectedHeaderCalls = [
+            ['Location', 'https://example.com', true],
+            ['Expires', '3600', true],
+        ];
+        $actualHeaderCalls   = [];
         $swooleResponse
             ->expects($this->exactly(2))
             ->method('header')
-            ->withConsecutive(
-                ['Location', 'https://example.com', true],
-                ['Expires', '3600', true]
-            );
+            ->willReturnCallback(static function (
+                string $key,
+                string|array $value,
+                bool $format = true
+            ) use (&$actualHeaderCalls): bool {
+                /** @psalm-var array $actualHeaderCalls */
+                $actualHeaderCalls[] = [$key, $value, $format];
+                return true;
+            });
 
         $response = new StaticResourceResponse();
         $response->setStatus(302);
@@ -68,5 +93,10 @@ class StaticResourceResponseTest extends TestCase
         $response->disableContent();
 
         $this->assertNull($response->sendSwooleResponse($swooleResponse, $filename));
+        $this->assertEqualsCanonicalizing(
+            $expectedHeaderCalls,
+            $actualHeaderCalls,
+            'Expected header calls do not match'
+        );
     }
 }

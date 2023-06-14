@@ -32,18 +32,12 @@ class RequestHandlerRequestListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(4))
             ->method('get')
-            ->withConsecutive(
-                ['Mezzio\ApplicationPipeline'],
-                [ServerRequestInterface::class],
-                [ServerRequestErrorResponseGenerator::class],
-                [AccessLogInterface::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $pipeline,
-                $requestFactory,
-                $errorResponseFactory,
-                $logger
-            );
+            ->willReturnMap([
+                ['Mezzio\ApplicationPipeline', $pipeline],
+                [ServerRequestInterface::class, $requestFactory],
+                [ServerRequestErrorResponseGenerator::class, $errorResponseFactory],
+                [AccessLogInterface::class, $logger],
+            ]);
 
         $factory = new RequestHandlerRequestListenerFactory();
         $this->assertIsObject($factory($container));
