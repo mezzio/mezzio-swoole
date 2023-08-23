@@ -43,10 +43,7 @@ final class SwooleStream implements StreamInterface, Stringable
     ) {
     }
 
-    /**
-     * @return string
-     */
-    public function getContents()
+    public function getContents(): string
     {
         // If we're at the end of the string, return an empty string.
         if ($this->eof()) {
@@ -87,10 +84,7 @@ final class SwooleStream implements StreamInterface, Stringable
         return (string) $this->body;
     }
 
-    /**
-     * @return int
-     */
-    public function getSize()
+    public function getSize(): ?int
     {
         if (null === $this->bodySize) {
             if ($this->body === null) {
@@ -102,18 +96,12 @@ final class SwooleStream implements StreamInterface, Stringable
         return $this->bodySize;
     }
 
-    /**
-     * @return int
-     */
-    public function tell()
+    public function tell(): int
     {
         return $this->index;
     }
 
-    /**
-     * @return bool
-     */
-    public function eof()
+    public function eof(): bool
     {
         return $this->index >= $this->getSize();
     }
@@ -121,16 +109,12 @@ final class SwooleStream implements StreamInterface, Stringable
     /**
      * @return bool Always returns true.
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
 
-    /**
-     * @param int $length
-     * @return string
-     */
-    public function read($length)
+    public function read(int $length): string
     {
         if ($this->body === null) {
             $this->initRawContent();
@@ -149,17 +133,15 @@ final class SwooleStream implements StreamInterface, Stringable
     /**
      * @return bool Always returns true.
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return true;
     }
 
     /**
-     * @param int $offset
-     * @param int $whence
      * @psalm-return void
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek(int $offset, int $whence = SEEK_SET): void
     {
         $size = $this->getSize();
         switch ($whence) {
@@ -200,7 +182,7 @@ final class SwooleStream implements StreamInterface, Stringable
     /**
      * @psalm-return void
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = 0;
     }
@@ -208,18 +190,16 @@ final class SwooleStream implements StreamInterface, Stringable
     /**
      * @return bool Always returns false.
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
 
     // phpcs:disable Squiz.Commenting.FunctionComment.InvalidNoReturn
     /**
-     * @param string $string
-     * @return int
      * @throws RuntimeException Always throws, as not writable.
      */
-    public function write($string)
+    public function write(string $string): int
     {
         throw new RuntimeException('Stream is not writable');
     }
@@ -229,7 +209,7 @@ final class SwooleStream implements StreamInterface, Stringable
      * @param string $key
      * @return null|array
      */
-    public function getMetadata($key = null)
+    public function getMetadata($key = null): ?array
     {
         return $key ? null : [];
     }
@@ -239,7 +219,7 @@ final class SwooleStream implements StreamInterface, Stringable
         return $this->request;
     }
 
-    public function close()
+    public function close(): void
     {
     }
 
