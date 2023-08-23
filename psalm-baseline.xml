@@ -129,6 +129,16 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/SwooleStream.php">
+    <PossiblyNullOperand>
+      <code>$size</code>
+      <code>$size</code>
+    </PossiblyNullOperand>
+    <PossiblyNullPropertyAssignmentValue>
+      <code>$size</code>
+      <code><![CDATA[$this->index + $length >= $size
+            ? $size
+            : $this->index + $length]]></code>
+    </PossiblyNullPropertyAssignmentValue>
     <PossiblyUnusedReturnValue>
       <code>int</code>
     </PossiblyUnusedReturnValue>
