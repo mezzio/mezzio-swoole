@@ -51,6 +51,12 @@ abstract class AbstractStaticResourceHandlerFactory
      * This method is marked protected to allow users to extend this factory
      * in order to provide their own middleware and/or configuration schema.
      *
+     * @psalm-param $config array{
+     *     type-map?: array<string, string>,
+     *     gzip?: array{level?: int},
+     *     clearstatcache-interval?: int,
+     *     directives?: array<non-empty-string, array{cache-control?: string, last-modified?: bool, etag?: bool}>
+     * },
      * @return StaticResourceHandler\MiddlewareInterface[]
      */
     protected function configureMiddleware(array $config): array
