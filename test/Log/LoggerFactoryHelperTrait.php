@@ -112,7 +112,7 @@ trait LoggerFactoryHelperTrait
                 $valueMap[] = [$service, $value];
             }
 
-            $container->method($method)->will($this->returnValueMap($valueMap));
+            $container->method($method)->willReturnMap($valueMap);
         }
 
         return $container;

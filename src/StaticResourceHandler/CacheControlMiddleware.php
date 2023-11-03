@@ -40,7 +40,7 @@ class CacheControlMiddleware implements MiddlewareInterface
      * Key is a regexp; if a static resource path matches the regexp, the array
      * of values provided will be used as the Cache-Control header value.
      *
-     * @psalm-var array<string, list<string>>
+     * @psalm-var array<non-empty-string, list<string>>
      */
     private array $cacheControlDirectives;
 
@@ -99,6 +99,7 @@ class CacheControlMiddleware implements MiddlewareInterface
     }
 
     /**
+     * @param non-empty-string $regex
      * @throws Exception\InvalidArgumentException If any regexp is invalid.
      */
     private function validateCacheControlDirective(string $regex, string $directive): void

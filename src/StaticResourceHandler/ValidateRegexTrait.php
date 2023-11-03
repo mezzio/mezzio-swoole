@@ -20,6 +20,9 @@ use const E_WARNING;
 
 trait ValidateRegexTrait
 {
+    /**
+     * @param non-empty-string $regex
+     */
     private function isValidRegex(string $regex): bool
     {
         set_error_handler(static fn($errno) => $errno === E_WARNING);

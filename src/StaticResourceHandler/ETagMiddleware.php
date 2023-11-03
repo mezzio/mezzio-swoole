@@ -44,7 +44,7 @@ class ETagMiddleware implements MiddlewareInterface
     ];
 
     /**
-     * @var string[] Array of regexp; if a path matches a regexp, an ETag will
+     * @var non-empty-string[] Array of regexp; if a path matches a regexp, an ETag will
      *     be emitted for the static file resource.
      */
     private array $etagDirectives = [];

@@ -32,10 +32,10 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [FileWatcherInterface::class, $fileWatcher],
                 [AccessLogInterface::class, $logger],
-            ]));
+            ]);
 
         $factory = new HotCodeReloaderWorkerStartListenerFactory();
         $this->assertIsObject($factory($container));
@@ -64,11 +64,11 @@ class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
         $container
             ->expects($this->exactly(3))
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [FileWatcherInterface::class, $fileWatcher],
                 [AccessLogInterface::class, $logger],
                 ['config', $config],
-            ]));
+            ]);
 
         $fileWatcher
             ->expects($this->exactly(2))

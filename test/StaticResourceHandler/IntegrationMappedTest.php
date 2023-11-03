@@ -80,10 +80,10 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(2))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'image/png', true],
                 ['Allow', 'GET, HEAD, OPTIONS', true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(405);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile');
@@ -115,10 +115,10 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(2))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'image/png', true],
                 ['Allow', 'GET, HEAD, OPTIONS', true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile');
@@ -157,13 +157,13 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(5))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Content-Length', $this->anything(), true],
                 ['Cache-Control', 'public, no-transform', true],
                 ['Last-Modified', $lastModifiedFormatted, true],
                 ['ETag', $etag, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->never())->method('end');
         $response->expects($this->once())->method('sendfile')->with($file);
@@ -209,12 +209,12 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(4))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Cache-Control', 'public, no-transform', true],
                 ['Last-Modified', $lastModifiedFormatted, true],
                 ['ETag', $etag, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile')->with($file);
@@ -263,13 +263,13 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(5))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Allow', 'GET, HEAD, OPTIONS', true],
                 ['Cache-Control', 'public, no-transform', true],
                 ['Last-Modified', $lastModifiedFormatted, true],
                 ['ETag', $etag, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile')->with($file);
@@ -321,11 +321,11 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(3))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Content-Length', $this->anything(), true],
                 ['Cache-Control', 'public, no-transform', true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->never())->method('end');
         $response->expects($this->once())->method('sendfile')->with($file);
@@ -374,10 +374,10 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(2))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Cache-Control', 'public, no-transform', true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile')->with($file);
@@ -424,10 +424,10 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(2))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['ETag', $etag, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(304);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile')->with($file);
@@ -475,10 +475,10 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(2))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['ETag', $etag, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(304);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile')->with($file);
@@ -523,11 +523,11 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(3))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Content-Length', $this->anything(), true],
                 ['ETag', $etag, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->never())->method('end');
         $response->expects($this->once())->method('sendfile')->with($file);
@@ -575,10 +575,10 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(2))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'image/png', true],
                 ['Last-Modified', $lastModifiedFormatted, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(304);
         $response->expects($this->once())->method('end');
         $response->expects($this->never())->method('sendfile')->with($file);
@@ -625,11 +625,11 @@ class IntegrationMappedTest extends TestCase
         $response
             ->expects($this->exactly(3))
             ->method('header')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Content-Type', 'text/plain', true],
                 ['Content-Length', $this->anything(), true],
                 ['Last-Modified', $lastModifiedFormatted, true],
-            ]));
+            ]);
         $response->expects($this->once())->method('status')->with(200);
         $response->expects($this->never())->method('end');
         $response->expects($this->once())->method('sendfile')->with($file);

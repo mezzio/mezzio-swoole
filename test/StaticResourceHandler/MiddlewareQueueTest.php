@@ -66,7 +66,7 @@ class MiddlewareQueueTest extends TestCase
         $first
             ->method('__invoke')
             ->with($this->request, 'some/filename.txt', $this->isInstanceOf(MiddlewareQueue::class))
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function (
                     Request $request,
                     string $filename,
@@ -75,7 +75,7 @@ class MiddlewareQueueTest extends TestCase
                     $second
                         ->method('__invoke')
                         ->with($request, $filename, $middlewareQueue)
-                        ->will($this->returnCallback(
+                        ->willReturnCallback(
                             static function (
                                 Request $request,
                                 string $filename,
@@ -87,11 +87,11 @@ class MiddlewareQueueTest extends TestCase
                                 $response->disableContent();
                                 return $response;
                             }
-                        ));
+                        );
 
                     return $middlewareQueue($request, $filename);
                 }
-            ));
+            );
 
         /** @psalm-suppress InternalClass,InternalMethod */
         $queue = new MiddlewareQueue([$first, $second]);

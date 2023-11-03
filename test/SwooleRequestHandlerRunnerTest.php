@@ -82,7 +82,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->httpServer
             ->expects($this->exactly(10))
             ->method('on')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['managerstart', [$this->runner, 'onManagerStart'], null],
                 ['managerstop', [$this->runner, 'onManagerStop'], null],
                 ['workerstart', [$this->runner, 'onWorkerStart'], null],
@@ -93,7 +93,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
                 ['afterreload', [$this->runner, 'onAfterReload'], null],
                 ['task', [$this->runner, 'onTask'], null],
                 ['finish', [$this->runner, 'onTaskFinish'], null],
-            ]));
+            ]);
 
         $this->httpServer
             ->expects($this->once())
@@ -108,7 +108,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->httpServer
             ->expects($this->exactly(12))
             ->method('on')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['start', [$this->runner, 'onStart'], null],
                 ['shutdown', [$this->runner, 'onShutdown'], null],
                 ['managerstart', [$this->runner, 'onManagerStart'], null],
@@ -121,7 +121,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
                 ['afterreload', [$this->runner, 'onAfterReload'], null],
                 ['task', [$this->runner, 'onTask'], null],
                 ['finish', [$this->runner, 'onTaskFinish'], null],
-            ]));
+            ]);
 
         $this->httpServer
             ->expects($this->once())
@@ -274,7 +274,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
                 return true;
             }))
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->runner->onTask($this->httpServer, 1, 10, ['values', 'to', 'process']);
     }
@@ -309,7 +309,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
                 return true;
             }))
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $task = new class ($server) {
             public int $id = 1;

@@ -20,11 +20,11 @@ class LastModifiedMiddleware implements MiddlewareInterface
 {
     use ValidateRegexTrait;
 
-    /** @var string[] */
+    /** @var non-empty-string[] */
     private array $lastModifiedDirectives = [];
 
     /**
-     * @param string[] $lastModifiedDirectives Array of regexex indicating
+     * @param non-empty-string[] $lastModifiedDirectives Array of regexex indicating
      *     paths/file types that should emit a Last-Modified header.
      */
     public function __construct(array $lastModifiedDirectives = [])

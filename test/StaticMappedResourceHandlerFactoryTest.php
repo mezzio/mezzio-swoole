@@ -111,10 +111,10 @@ class StaticMappedResourceHandlerFactoryTest extends TestCase
 
         $this->container
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['config', $config],
                 [FileLocationRepositoryInterface::class, $this->fileLocRepo],
-            ]));
+            ]);
 
         $factory = new StaticMappedResourceHandlerFactory();
 
