@@ -82,24 +82,24 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->httpServer
             ->expects($this->exactly(10))
             ->method('on')
-            ->will($this->returnValueMap([
-                ['managerstart', [$this->runner, 'onManagerStart'], null],
-                ['managerstop', [$this->runner, 'onManagerStop'], null],
-                ['workerstart', [$this->runner, 'onWorkerStart'], null],
-                ['workerstop', [$this->runner, 'onWorkerStop'], null],
-                ['workererror', [$this->runner, 'onWorkerError'], null],
-                ['request', [$this->runner, 'onRequest'], null],
-                ['beforereload', [$this->runner, 'onBeforeReload'], null],
-                ['afterreload', [$this->runner, 'onAfterReload'], null],
-                ['task', [$this->runner, 'onTask'], null],
-                ['finish', [$this->runner, 'onTaskFinish'], null],
-            ]));
+            ->willReturnMap([
+                ['managerstart', [$this->runner, 'onManagerStart'], true],
+                ['managerstop', [$this->runner, 'onManagerStop'], true],
+                ['workerstart', [$this->runner, 'onWorkerStart'], true],
+                ['workerstop', [$this->runner, 'onWorkerStop'], true],
+                ['workererror', [$this->runner, 'onWorkerError'], true],
+                ['request', [$this->runner, 'onRequest'], true],
+                ['beforereload', [$this->runner, 'onBeforeReload'], true],
+                ['afterreload', [$this->runner, 'onAfterReload'], true],
+                ['task', [$this->runner, 'onTask'], true],
+                ['finish', [$this->runner, 'onTaskFinish'], true],
+            ]);
 
         $this->httpServer
             ->expects($this->once())
             ->method('start');
 
-        $this->assertNull($this->runner->run());
+        $this->runner->run();
     }
 
     public function testRunRegistersExpectedHttpServerListenersAndStartsServerWhenInProcessMode(): void
@@ -108,26 +108,26 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         $this->httpServer
             ->expects($this->exactly(12))
             ->method('on')
-            ->will($this->returnValueMap([
-                ['start', [$this->runner, 'onStart'], null],
-                ['shutdown', [$this->runner, 'onShutdown'], null],
-                ['managerstart', [$this->runner, 'onManagerStart'], null],
-                ['managerstop', [$this->runner, 'onManagerStop'], null],
-                ['workerstart', [$this->runner, 'onWorkerStart'], null],
-                ['workerstop', [$this->runner, 'onWorkerStop'], null],
-                ['workererror', [$this->runner, 'onWorkerError'], null],
-                ['request', [$this->runner, 'onRequest'], null],
-                ['beforereload', [$this->runner, 'onBeforeReload'], null],
-                ['afterreload', [$this->runner, 'onAfterReload'], null],
-                ['task', [$this->runner, 'onTask'], null],
-                ['finish', [$this->runner, 'onTaskFinish'], null],
-            ]));
+            ->willReturnMap([
+                ['start', [$this->runner, 'onStart'], true],
+                ['shutdown', [$this->runner, 'onShutdown'], true],
+                ['managerstart', [$this->runner, 'onManagerStart'], true],
+                ['managerstop', [$this->runner, 'onManagerStop'], true],
+                ['workerstart', [$this->runner, 'onWorkerStart'], true],
+                ['workerstop', [$this->runner, 'onWorkerStop'], true],
+                ['workererror', [$this->runner, 'onWorkerError'], true],
+                ['request', [$this->runner, 'onRequest'], true],
+                ['beforereload', [$this->runner, 'onBeforeReload'], true],
+                ['afterreload', [$this->runner, 'onAfterReload'], true],
+                ['task', [$this->runner, 'onTask'], true],
+                ['finish', [$this->runner, 'onTaskFinish'], true],
+            ]);
 
         $this->httpServer
             ->expects($this->once())
             ->method('start');
 
-        $this->assertNull($this->runner->run());
+        $this->runner->run();
     }
 
     public function testOnStartDispatchesServerStartEvent(): void
@@ -274,7 +274,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
                 return true;
             }))
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->runner->onTask($this->httpServer, 1, 10, ['values', 'to', 'process']);
     }
@@ -309,7 +309,7 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
                 return true;
             }))
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $task = new class ($server) {
             public int $id = 1;
