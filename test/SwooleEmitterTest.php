@@ -86,7 +86,6 @@ class SwooleEmitterTest extends TestCase
                 string $key,
                 string|array $value
             ) use (&$actualHeaderCalls): bool {
-                /** @psalm-var array $actualHeaderCalls */
                 $actualHeaderCalls[] = [$key, $value];
                 return true;
             });
@@ -152,7 +151,6 @@ class SwooleEmitterTest extends TestCase
                 bool $httponly = false,
                 string $samesite = ''
             ) use (&$actualCookieCalls): bool {
-                /** @psalm-var array $actualCookieCalls */
                 $actualCookieCalls[] = [$name, $value, $expires, $path, $domain, $secure, $httponly, $samesite];
                 return true;
             });

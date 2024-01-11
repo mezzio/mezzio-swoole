@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
+<files psalm-version="5.19.0@06b71be009a6bd6d81b9811855d6629b9fe90e1b">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArrayOffset>
       <code>$cacheControlDirectives[$regex]</code>
@@ -25,14 +25,6 @@
     <UnusedClass>
       <code>InvalidConfigException</code>
     </UnusedClass>
-  </file>
-  <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
-    <LessSpecificReturnStatement>
-      <code>$paths</code>
-    </LessSpecificReturnStatement>
-    <MoreSpecificReturnType>
-      <code><![CDATA[list<non-empty-string>]]></code>
-    </MoreSpecificReturnType>
   </file>
   <file src="src/HttpServerFactory.php">
     <InvalidConstantAssignmentValue>
@@ -90,11 +82,17 @@
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
+    <ArgumentTypeCoercion>
+      <code>$regexp</code>
+    </ArgumentTypeCoercion>
     <MixedPropertyTypeCoercion>
       <code>$cacheControlDirectives</code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
+    <ArgumentTypeCoercion>
+      <code>$regexp</code>
+    </ArgumentTypeCoercion>
     <MixedPropertyTypeCoercion>
       <code>$etagDirectives</code>
     </MixedPropertyTypeCoercion>
@@ -117,6 +115,16 @@
     <UnusedFunctionCall>
       <code>stream_filter_append</code>
     </UnusedFunctionCall>
+  </file>
+  <file src="src/StaticResourceHandler/LastModifiedMiddleware.php">
+    <ArgumentTypeCoercion>
+      <code>$regexp</code>
+    </ArgumentTypeCoercion>
+  </file>
+  <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
+    <ArgumentTypeCoercion>
+      <code>$regex</code>
+    </ArgumentTypeCoercion>
   </file>
   <file src="src/SwooleEmitter.php">
     <PossiblyNullReference>

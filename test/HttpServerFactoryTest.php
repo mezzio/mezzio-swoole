@@ -20,7 +20,6 @@ use Swoole\Http\Server as SwooleServer;
 use Swoole\Process;
 use Swoole\Runtime as SwooleRuntime;
 use Throwable;
-use Webmozart\Assert\Assert;
 
 use function array_merge;
 use function defined;
@@ -341,13 +340,11 @@ class HttpServerFactoryTest extends TestCase
 
         $i = 0;
         go(static function () use (&$i): void {
-            Assert::integer($i);
             usleep(1000);
             ++$i;
             SwooleEvent::exit();
         });
         go(function () use (&$i): void {
-            Assert::integer($i);
             ++$i;
             $this->assertEquals(1, $i);
         });
