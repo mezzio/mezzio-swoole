@@ -1,6 +1,5 @@
 {
     "extensions": [
-        "inotify",
-        "swoole"
+        "inotify"
     ]
 }
