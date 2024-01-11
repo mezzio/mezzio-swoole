@@ -23,7 +23,6 @@
 This library provides support for [Swoole](https://github.com/swoole/swoole-src) or [Open Swoole](https://www.swoole.co.uk/) for [Mezzio](https://docs.mezzio.dev/) applications.
 This means you can execute your Mezzio application using Swoole directly from the command line.
 
-
 ## Installation
 
 Run the following to install this library:
