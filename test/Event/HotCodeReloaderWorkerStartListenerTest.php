@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event;
 
-use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;
 use Mezzio\Swoole\Event\WorkerStartEvent;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
+use MezzioTest\Swoole\Event\TestAsset\HotCodeReloaderWorkerStartListenerStub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Server;
@@ -28,14 +28,18 @@ class HotCodeReloaderWorkerStartListenerTest extends TestCase
         $workerId    = 0;
         $event       = new WorkerStartEvent($server, $workerId);
 
-        $server
-            ->expects($this->once())
-            ->method('tick')
-            ->with($interval, $this->isType('callable'));
+        $listener = new HotCodeReloaderWorkerStartListenerStub($fileWatcher, $logger, $interval);
 
-        $listener = new HotCodeReloaderWorkerStartListener($fileWatcher, $logger, $interval);
+        $called = 0;
+
+        $listener->callbackTickAssertion = function ($ms, $callback) use (&$called, $interval): void {
+            $called++;
+            $this->assertSame($interval, $ms);
+            $this->assertIsCallable($callback);
+        };
 
         $this->assertNull($listener($event));
+        $this->assertSame(1, $called, 'Callback was not registered');
     }
 
     public function testListenerDoesNotCreateServerTickWhenWorkerIdIsNonZero(): void
@@ -47,10 +51,15 @@ class HotCodeReloaderWorkerStartListenerTest extends TestCase
         $workerId    = random_int(1, 42);
         $event       = new WorkerStartEvent($server, $workerId);
 
-        $server->expects($this->never())->method('tick');
+        $listener = new HotCodeReloaderWorkerStartListenerStub($fileWatcher, $logger, $interval);
 
-        $listener = new HotCodeReloaderWorkerStartListener($fileWatcher, $logger, $interval);
+        $called = 0;
+
+        $listener->callbackTickAssertion = function () use (&$called): void {
+            $called++;
+        };
 
         $this->assertNull($listener($event));
+        $this->assertSame(0, $called, 'Callback was registered');
     }
 }
