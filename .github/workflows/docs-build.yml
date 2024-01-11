@@ -12,5 +12,5 @@ jobs:
       - name: Build Docs
         uses: laminas/documentation-theme/github-actions/docs@master
         env:
-          DEPLOY_TOKEN: ${{ secrets.ORGANIZATION_ADMIN_TOKEN }}
+          DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
