@@ -47,7 +47,7 @@
         "psr/http-message-implementation": "^1.0 || ^2.0",
         "psr/http-server-handler": "^1.0.2",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
-        "symfony/console": "^5.0 || ^6.0.19",
+        "symfony/console": "^5.0 || ^6.0.19 || ^7.0.0",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
