@@ -20,7 +20,6 @@ use Swoole\Http\Server as SwooleServer;
 use Swoole\Process;
 use Swoole\Runtime as SwooleRuntime;
 use Throwable;
-use Webmozart\Assert\Assert;
 
 use function array_merge;
 use function defined;
@@ -325,6 +324,10 @@ class HttpServerFactoryTest extends TestCase
         if (! method_exists(SwooleRuntime::class, 'enableCoroutine')) {
             $this->markTestSkipped('The installed version of Swoole does not support coroutines.');
         }
+        // Xdebug is not ready yet in swoole.
+        if (extension_loaded('xdebug')) {
+            $this->markTestSkipped('Skipped with xdebug presence.');
+        }
 
         $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
@@ -335,25 +338,15 @@ class HttpServerFactoryTest extends TestCase
         $factory = new HttpServerFactory();
         $factory($this->container);
 
-        // Xdebug is not ready yet in swoole.
-        if (extension_loaded('xdebug')) {
-            $this->expectWarning();
-
-            go(static function (): void {
-            });
-        } else {
-            $i = 0;
-            go(static function () use (&$i): void {
-                Assert::integer($i);
-                usleep(1000);
-                ++$i;
-                SwooleEvent::exit();
-            });
-            go(function () use (&$i): void {
-                Assert::integer($i);
-                ++$i;
-                $this->assertEquals(1, $i);
-            });
-        }
+        $i = 0;
+        go(static function () use (&$i): void {
+            usleep(1000);
+            ++$i;
+            SwooleEvent::exit();
+        });
+        go(function () use (&$i): void {
+            ++$i;
+            $this->assertEquals(1, $i);
+        });
     }
 }

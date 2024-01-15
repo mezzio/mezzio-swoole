@@ -35,7 +35,6 @@ class StaticResourceResponseTest extends TestCase
                 string|array $value,
                 bool $format = true
             ) use (&$actualHeaderCalls): bool {
-                /** @psalm-var array $actualHeaderCalls */
                 $actualHeaderCalls[] = [$key, $value, $format];
                 return true;
             });
@@ -78,7 +77,6 @@ class StaticResourceResponseTest extends TestCase
                 string|array $value,
                 bool $format = true
             ) use (&$actualHeaderCalls): bool {
-                /** @psalm-var array $actualHeaderCalls */
                 $actualHeaderCalls[] = [$key, $value, $format];
                 return true;
             });

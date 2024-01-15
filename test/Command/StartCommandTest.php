@@ -216,11 +216,11 @@ class StartCommandTest extends TestCase
 
         $this->input
             ->method('getOption')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['daemonize', true],
                 ['num-workers', 6],
                 ['num-task-workers', 4],
-            ]));
+            ]);
 
         $this->pidManager->method('read')->willReturn($pids);
 
@@ -243,12 +243,12 @@ class StartCommandTest extends TestCase
 
         $this->container
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [PidManager::class, $this->pidManager],
                 [SwooleHttpServer::class, $httpServer],
                 [MiddlewareFactory::class, $middlewareFactory],
                 [Application::class, $application],
-            ]));
+            ]);
 
         $command = new StartCommand($this->container);
 
@@ -264,11 +264,11 @@ class StartCommandTest extends TestCase
     {
         $this->input
             ->method('getOption')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['daemonize', false],
                 ['num-workers', null],
                 ['num-task-workers', null],
-            ]));
+            ]);
 
         [$command, $httpServer, $application] = $this->prepareSuccessfulStartCommand($pids);
 
@@ -303,12 +303,12 @@ class StartCommandTest extends TestCase
         $this->pidManager->method('read')->willReturn($pids);
         $this->container
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [PidManager::class, $this->pidManager],
                 [SwooleHttpServer::class, $httpServer],
                 [MiddlewareFactory::class, $middlewareFactory],
                 [Application::class, $application],
-            ]));
+            ]);
 
         $command = new StartCommand($this->container);
 

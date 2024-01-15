@@ -11,6 +11,7 @@ namespace Mezzio\Swoole\Event;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Psr\Log\LoggerInterface;
 use Swoole\Server;
+use Swoole\Timer;
 
 class HotCodeReloaderWorkerStartListener
 {
@@ -35,7 +36,7 @@ class HotCodeReloaderWorkerStartListener
         $fileWatcher = $this->fileWatcher;
         $logger      = $this->logger;
 
-        $server->tick($this->interval, static function () use ($server, $fileWatcher, $logger): void {
+        static::tick($this->interval, static function () use ($server, $fileWatcher, $logger): void {
             $changedFilePaths = $fileWatcher->readChangedFilePaths();
             if ($changedFilePaths === []) {
                 return;
@@ -47,5 +48,13 @@ class HotCodeReloaderWorkerStartListener
 
             $server->reload();
         });
+    }
+
+    /**
+     * @internal For unit testing static dependency only.
+     */
+    protected function tick(int $ms, callable $callback): void
+    {
+        Timer::tick($ms, $callback);
     }
 }
