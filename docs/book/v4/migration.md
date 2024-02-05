@@ -43,3 +43,10 @@ return [
 ```
 
 If you are using Mezzio 3.11.0 or later, you can also use its `Mezzio\Container\FilterUsingXForwardedHeadersFactory` and related configuration to fine-tune which sources may be considered for usage of these headers.
+
+## Support for OpenSwoole 22.0.x
+
+INFO: Since 4.10.0 mezzio-swoole supports the use of openswoole PHP extension version 22.0 and later.
+
+If your application has custom code that re-implements the function `swoole_set_process_name` then make sure to remove it.
+This package will take care of the compatibility issues.
