@@ -67,7 +67,10 @@
     "autoload": {
         "psr-4": {
             "Mezzio\\Swoole\\": "src/"
-        }
+        },
+        "files": [
+            "compat/openswoole.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
