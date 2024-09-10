@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Swoole\Command;
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,6 +20,7 @@ use function sleep;
 
 use const SWOOLE_PROCESS;
 
+#[AsCommand('mezzio:swoole:reload')]
 class ReloadCommand extends Command
 {
     /**
@@ -32,9 +34,6 @@ This command is only relevant when the server was started using the
 --daemonize option, and the mezzio-swoole.swoole-http-server.mode
 configuration value is set to SWOOLE_PROCESS.
 EOH;
-
-    /** @var null|string Cannot be defined explicitly due to parent class */
-    public static $defaultName = 'mezzio:swoole:reload';
 
     public function __construct(private int $serverMode)
     {
@@ -73,7 +72,7 @@ EOH;
         /** @var Application $application */
         $application = $this->getApplication();
 
-        $stop   = $application->find(StopCommand::$defaultName);
+        $stop   = $application->find(StopCommand::getDefaultName());
         $result = $stop->run(new ArrayInput([
             'command' => 'stop',
         ]), $output);
@@ -92,7 +91,7 @@ EOH;
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 
-        $start = $application->find(StartCommand::$defaultName);
+        $start = $application->find(StartCommand::getDefaultName());
 
         $inputArguments = [
             'command'       => 'start',

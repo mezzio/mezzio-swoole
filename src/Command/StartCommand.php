@@ -13,6 +13,7 @@ use Mezzio\MiddlewareFactory;
 use Mezzio\Swoole\PidManager;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function file_exists;
 
+#[AsCommand('mezzio:swoole:start')]
 class StartCommand extends Command
 {
     use IsRunningTrait;
@@ -50,9 +52,6 @@ EOH;
         'config/pipeline.php',
         'config/routes.php',
     ];
-
-    /** @var null|string Cannot be defined explicitly due to parent class */
-    public static $defaultName = 'mezzio:swoole:start';
 
     public function __construct(private ContainerInterface $container)
     {
