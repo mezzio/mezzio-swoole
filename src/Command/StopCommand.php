@@ -35,6 +35,13 @@ This command is only relevant when the server was started using the
 EOH;
 
     /**
+     * @deprecated Use StopCommand::getDefaultName() instead. Will be removed in 5.0.0
+     *
+     * @var null|string
+     */
+    public static $defaultName = 'mezzio:swoole:stop';
+
+    /**
      * @internal
      *
      * @var Closure Callable to execute when attempting to kill the server

@@ -53,6 +53,13 @@ EOH;
         'config/routes.php',
     ];
 
+    /**
+     * @deprecated Use StartCommand::getDefaultName() instead. Will be removed in 5.0.0
+     *
+     * @var null|string
+     */
+    public static $defaultName = 'mezzio:swoole:start';
+
     public function __construct(private ContainerInterface $container)
     {
         parent::__construct();

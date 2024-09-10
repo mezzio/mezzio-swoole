@@ -35,6 +35,13 @@ This command is only relevant when the server was started using the
 configuration value is set to SWOOLE_PROCESS.
 EOH;
 
+    /**
+     * @deprecated Use ReloadCommand::getDefaultName() instead. Will be removed in 5.0.0
+     *
+     * @var null|string
+     */
+    public static $defaultName = 'mezzio:swoole:reload';
+
     public function __construct(private int $serverMode)
     {
         parent::__construct();

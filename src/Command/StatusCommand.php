@@ -29,6 +29,13 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
+    /**
+     * @deprecated Use StatusCommand::getDefaultName() instead. Will be removed in 5.0.0
+     *
+     * @var null|string
+     */
+    public static $defaultName = 'mezzio:swoole:status';
+
     public function __construct(private PidManager $pidManager)
     {
         parent::__construct();
