@@ -5,6 +5,26 @@
       <code>$cacheControlDirectives[$regex]</code>
     </MixedArrayOffset>
   </file>
+  <file src="src/Command/ReloadCommand.php">
+    <PossiblyUnusedProperty>
+      <code>$defaultName</code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Command/StartCommand.php">
+    <PossiblyUnusedProperty>
+      <code>$defaultName</code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Command/StatusCommand.php">
+    <PossiblyUnusedProperty>
+      <code>$defaultName</code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Command/StopCommand.php">
+    <PossiblyUnusedProperty>
+      <code>$defaultName</code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="src/Event/ServerShutdownEvent.php">
     <PossiblyUnusedMethod>
       <code>getServer</code>

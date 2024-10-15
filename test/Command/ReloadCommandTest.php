@@ -149,7 +149,7 @@ class ReloadCommandTest extends TestCase
             ->willReturn(1);
 
         $application = $this->mockApplication();
-        $application->method('find')->with(StopCommand::$defaultName)->willReturn($stopCommand);
+        $application->method('find')->with(StopCommand::getDefaultName())->willReturn($stopCommand);
 
         $command->setApplication($application);
 
@@ -200,8 +200,8 @@ class ReloadCommandTest extends TestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->willReturnMap([
-                [StopCommand::$defaultName, $stopCommand],
-                [StartCommand::$defaultName, $startCommand],
+                [StopCommand::getDefaultName(), $stopCommand],
+                [StartCommand::getDefaultName(), $startCommand],
             ]);
 
         $command->setApplication($application);
@@ -270,8 +270,8 @@ class ReloadCommandTest extends TestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->willReturnMap([
-                [StopCommand::$defaultName, $stopCommand],
-                [StartCommand::$defaultName, $startCommand],
+                [StopCommand::getDefaultName(), $stopCommand],
+                [StartCommand::getDefaultName(), $startCommand],
             ]);
 
         $this->output
