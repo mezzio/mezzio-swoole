@@ -52,8 +52,8 @@
     },
     "require-dev": {
         "filp/whoops": "^2.15.2",
-        "laminas/laminas-coding-standard": "~2.5.0",
-        "laminas/laminas-servicemanager": "^3.20",
+        "laminas/laminas-coding-standard": "~3.0.0",
+        "laminas/laminas-servicemanager": "^4.0",
         "phpunit/phpunit": "^10.5",
         "psalm/plugin-phpunit": "^0.18.4",
         "swoole/ide-helper": "^5.0.3",
