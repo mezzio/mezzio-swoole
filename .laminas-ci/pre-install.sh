@@ -5,3 +5,4 @@ PHP_VERSION=$(echo "${JOB}" | jq -r '.php')
 
 apt update
 apt install -y "php${PHP_VERSION}-swoole"
+apt install -y "php${PHP_VERSION}-inotify"
