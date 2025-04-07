@@ -50,6 +50,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
      * @link https://anonscm.debian.org/cgit/pkg-apache/apache2.git/tree/debian/config-dir/apache2.conf.in#n212
      *
      * phpcs:disable
+     *
      * @var string
      */
     public const FORMAT_COMMON_DEBIAN = '%h %l %u %t “%r” %>s %O';

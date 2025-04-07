@@ -1,234 +1,709 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.19.0@06b71be009a6bd6d81b9811855d6629b9fe90e1b">
+<files psalm-version="6.10.0@9c0add4eb88d4b169ac04acb7c679918cbb9c252">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArrayOffset>
-      <code>$cacheControlDirectives[$regex]</code>
+      <code><![CDATA[$cacheControlDirectives[$regex]]]></code>
     </MixedArrayOffset>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$clearStatCacheInterval]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Command/IsRunningTrait.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$managerPid]]></code>
+      <code><![CDATA[$masterPid]]></code>
+      <code><![CDATA[$masterPid]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Command/ReloadCommand.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ReloadCommand]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Command/ReloadCommandFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ReloadCommandFactory]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/Command/StartCommand.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StartCommand]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Command/StartCommandFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StartCommandFactory]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/Command/StatusCommand.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StatusCommand]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Command/StatusCommandFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StatusCommandFactory]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/Command/StopCommand.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StopCommand]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="src/Command/StopCommandFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StopCommandFactory]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/ConfigProvider.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ConfigProvider]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/AfterReloadEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AfterReloadEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/BeforeReloadEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[BeforeReloadEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/EventDispatcher.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[EventDispatcher]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/ManagerStartEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ManagerStartEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/ManagerStopEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ManagerStopEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/RequestEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[RequestEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/RequestHandlerRequestListener.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[RequestHandlerRequestListener]]></code>
+    </ClassMustBeFinal>
+  </file>
   <file src="src/Event/ServerShutdownEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerShutdownEvent]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedMethod>
-      <code>getServer</code>
+      <code><![CDATA[getServer]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Event/ServerShutdownListener.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerShutdownListener]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedParam>
-      <code>$event</code>
+      <code><![CDATA[$event]]></code>
     </PossiblyUnusedParam>
   </file>
+  <file src="src/Event/ServerStartEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerStartEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/ServerStartListener.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerStartListener]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/StaticResourceRequestListener.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceRequestListener]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/SwooleListenerProvider.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleListenerProvider]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/SwooleListenerProviderFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleListenerProviderFactory]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/TaskEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/TaskFinishEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskFinishEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
   <file src="src/Event/WorkerErrorEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WorkerErrorEvent]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedMethod>
-      <code>getExitCode</code>
-      <code>getSignal</code>
+      <code><![CDATA[getExitCode]]></code>
+      <code><![CDATA[getSignal]]></code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="src/Exception/InvalidConfigException.php">
+  <file src="src/Event/WorkerStartEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WorkerStartEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/WorkerStartListener.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WorkerStartListener]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Event/WorkerStopEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WorkerStopEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Exception/ExtensionNotLoadedException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ExtensionNotLoadedException]]></code>
+    </ClassMustBeFinal>
     <UnusedClass>
-      <code>InvalidConfigException</code>
+      <code><![CDATA[ExtensionNotLoadedException]]></code>
     </UnusedClass>
   </file>
+  <file src="src/Exception/InvalidConfigException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[InvalidConfigException]]></code>
+    </ClassMustBeFinal>
+    <UnusedClass>
+      <code><![CDATA[InvalidConfigException]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/InvalidListenerException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[InvalidListenerException]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Exception/InvalidStaticResourceMiddlewareException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[InvalidStaticResourceMiddlewareException]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[InotifyFileWatcher]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseIterator>
+      <code><![CDATA[scandir($path)]]></code>
+    </PossiblyFalseIterator>
+    <RedundantCondition>
+      <code><![CDATA[isArray]]></code>
+    </RedundantCondition>
+    <UndefinedConstant>
+      <code><![CDATA[IN_MODIFY]]></code>
+    </UndefinedConstant>
+  </file>
   <file src="src/HttpServerFactory.php">
-    <InvalidConstantAssignmentValue>
-      <code>PROTOCOLS = [
-        SWOOLE_SOCK_TCP,
-        SWOOLE_SOCK_TCP6,
-        SWOOLE_SOCK_UDP,
-        SWOOLE_SOCK_UDP6,
-        SWOOLE_UNIX_DGRAM,
-        SWOOLE_UNIX_STREAM,
-    ]</code>
-    </InvalidConstantAssignmentValue>
+    <ClassMustBeFinal>
+      <code><![CDATA[HttpServerFactory]]></code>
+    </ClassMustBeFinal>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$enableCoroutine]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AccessLogDataMap]]></code>
+    </ClassMustBeFinal>
+    <FalsableReturnStatement>
+      <code><![CDATA[$ip !== '-' && $this->useHostnameLookups
+            ? gethostbyaddr($ip)
+            : $ip]]></code>
+      <code><![CDATA[gethostname()]]></code>
+    </FalsableReturnStatement>
+    <InvalidFalsableReturnType>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+    </InvalidFalsableReturnType>
     <InvalidOperand>
-      <code>$begin</code>
-      <code>$begin</code>
-      <code>$begin</code>
+      <code><![CDATA[$begin]]></code>
+      <code><![CDATA[$begin]]></code>
+      <code><![CDATA[$begin]]></code>
+      <code><![CDATA[($this->endTime - $begin) * 1E3]]></code>
+      <code><![CDATA[($this->endTime - $begin) * 1E6]]></code>
     </InvalidOperand>
     <MixedOperand>
-      <code>$firstLineSize</code>
-      <code>$strlen($firstLine)</code>
+      <code><![CDATA[$firstLineSize]]></code>
+      <code><![CDATA[$strlen($firstLine)]]></code>
     </MixedOperand>
+    <PossiblyFalseOperand>
+      <code><![CDATA[getcwd()]]></code>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
     <PossiblyInvalidArgument>
-      <code>$time</code>
+      <code><![CDATA[$time]]></code>
     </PossiblyInvalidArgument>
     <PossiblyInvalidOperand>
-      <code>$time</code>
-      <code>$time</code>
+      <code><![CDATA[$time]]></code>
+      <code><![CDATA[$time]]></code>
     </PossiblyInvalidOperand>
     <PossiblyNullOperand>
       <code><![CDATA[$this->getRequestMessageSize(0)]]></code>
       <code><![CDATA[$this->getResponseMessageSize(0)]]></code>
     </PossiblyNullOperand>
     <PossiblyNullReference>
-      <code>getHeaderSize</code>
+      <code><![CDATA[getHeaderSize]]></code>
     </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$port]]></code>
+      <code><![CDATA[(string) $this->psrResponse->getBody()->getSize()]]></code>
+      <code><![CDATA[getenv($name)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Log/AccessLogFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AccessLogFactory]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Log/AccessLogFormatter.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AccessLogFormatter]]></code>
+    </ClassMustBeFinal>
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace_callback(
+            '#%(?:[<>])?([%aABbDfhHklLmpPqrRstTuUvVXIOS])#',
+            static fn(array $matches) => match ($matches[1]) {
+                '%' => '%',
+                'a' => $map->getClientIp(),
+                'A' => $map->getLocalIp(),
+                'B' => $map->getBodySize('0'),
+                'b' => $map->getBodySize('-'),
+                'D' => $map->getRequestDuration('ms'),
+                'f' => $map->getFilename(),
+                'h' => $map->getRemoteHostname(),
+                'H' => $map->getProtocol(),
+                'm' => $map->getMethod(),
+                'p' => $map->getPort('canonical'),
+                'q' => $map->getQuery(),
+                'r' => $map->getRequestLine(),
+                's' => $map->getStatus(),
+                't' => $map->getRequestTime('begin:%d/%b/%Y:%H:%M:%S %z'),
+                'T' => $map->getRequestDuration('s'),
+                'u' => $map->getRemoteUser(),
+                'U' => $map->getPath(),
+                'v' => $map->getHost(),
+                'V' => $map->getServerName(),
+                'I' => (string) ($map->getRequestMessageSize() ?? '-'),
+                'O' => (string) ($map->getResponseMessageSize() ?? '-'),
+                'S' => $map->getTransferredSize(),
+                default => '-',
+            },
+            $format
+        )]]></code>
+      <code><![CDATA[preg_replace_callback(
+            '#%(?:[<>])?{([^}]+)}([aCeinopPtT])#',
+            static fn(array $matches) => match ($matches[2]) {
+                'a' => $map->getClientIp(),
+                'C' => $map->getCookie($matches[1]),
+                'e' => $map->getEnv($matches[1]),
+                'i' => $map->getRequestHeader($matches[1]),
+                'o' => $map->getResponseHeader($matches[1]),
+                'p' => $map->getPort($matches[1]),
+                't' => $map->getRequestTime($matches[1]),
+                'T' => $map->getRequestDuration($matches[1]),
+                default => '-',
+            },
+            $format
+        )]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Log/Psr3AccessLogDecorator.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Psr3AccessLogDecorator]]></code>
+    </ClassMustBeFinal>
+    <MissingParamType>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+    </MissingParamType>
+  </file>
+  <file src="src/Log/StdoutLogger.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StdoutLogger]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Log/StrftimeToICUFormatMap.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace_callback(
+            '#(?P<token>%[aAbBcCdDeFgGhHIjklmMpPrRsSTuUVwWxXyYzZ])#',
+            self::generateMapCallback($requestTime),
+            $format
+        )]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Log/SwooleLoggerFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleLoggerFactory]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/PidManager.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[PidManager]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$content]]></code>
+    </PossiblyFalseArgument>
     <PossiblyUnusedReturnValue>
-      <code>bool</code>
+      <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
   </file>
+  <file src="src/PidManagerFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[PidManagerFactory]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/ServerRequestSwooleFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerRequestSwooleFactory]]></code>
+    </ClassMustBeFinal>
+  </file>
   <file src="src/StaticMappedResourceHandler.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticMappedResourceHandler]]></code>
+    </ClassMustBeFinal>
     <MixedPropertyTypeCoercion>
-      <code>$middleware</code>
+      <code><![CDATA[$middleware]]></code>
     </MixedPropertyTypeCoercion>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[! $filename]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/StaticMappedResourceHandlerFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticMappedResourceHandlerFactory]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/StaticResourceHandler.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceHandler]]></code>
+    </ClassMustBeFinal>
     <MixedOperand>
       <code><![CDATA[$request->server['request_uri']]]></code>
     </MixedOperand>
     <MixedPropertyTypeCoercion>
-      <code>$middleware</code>
+      <code><![CDATA[$middleware]]></code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
     <ArgumentTypeCoercion>
-      <code>$regexp</code>
+      <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
+    <ClassMustBeFinal>
+      <code><![CDATA[CacheControlMiddleware]]></code>
+    </ClassMustBeFinal>
     <MixedPropertyTypeCoercion>
-      <code>$cacheControlDirectives</code>
+      <code><![CDATA[$cacheControlDirectives]]></code>
     </MixedPropertyTypeCoercion>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$cacheControl]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/StaticResourceHandler/ClearStatCacheMiddleware.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ClearStatCacheMiddleware]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/StaticResourceHandler/ContentTypeFilterMiddleware.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ContentTypeFilterMiddleware]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
     <ArgumentTypeCoercion>
-      <code>$regexp</code>
+      <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
+    <ClassMustBeFinal>
+      <code><![CDATA[ETagMiddleware]]></code>
+    </ClassMustBeFinal>
     <MixedPropertyTypeCoercion>
-      <code>$etagDirectives</code>
+      <code><![CDATA[$etagDirectives]]></code>
     </MixedPropertyTypeCoercion>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$etag]]></code>
+    </PossiblyFalseArgument>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$ifMatch]]></code>
+      <code><![CDATA[filemtime($filename)]]></code>
+      <code><![CDATA[filesize($filename)]]></code>
+    </RiskyTruthyFalsyComparison>
     <UnusedProperty>
-      <code>$allowedETagValidationTypes</code>
+      <code><![CDATA[$allowedETagValidationTypes]]></code>
     </UnusedProperty>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FileLocationRepository]]></code>
+    </ClassMustBeFinal>
     <MixedArrayAssignment>
       <code><![CDATA[$this->mappedDocRoots[$prefix][]]]></code>
     </MixedArrayAssignment>
     <MixedOperand>
-      <code>$directory</code>
+      <code><![CDATA[$directory]]></code>
     </MixedOperand>
   </file>
+  <file src="src/StaticResourceHandler/FileLocationRepositoryFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FileLocationRepositoryFactory]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseOperand>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
+  </file>
   <file src="src/StaticResourceHandler/GzipMiddleware.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[GzipMiddleware]]></code>
+    </ClassMustBeFinal>
     <MixedOperand>
-      <code>$countBytes($line)</code>
+      <code><![CDATA[$countBytes($line)]]></code>
     </MixedOperand>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$line]]></code>
+    </PossiblyFalseArgument>
     <UnusedFunctionCall>
-      <code>stream_filter_append</code>
+      <code><![CDATA[stream_filter_append]]></code>
     </UnusedFunctionCall>
+  </file>
+  <file src="src/StaticResourceHandler/HeadMiddleware.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HeadMiddleware]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="src/StaticResourceHandler/LastModifiedMiddleware.php">
     <ArgumentTypeCoercion>
-      <code>$regexp</code>
+      <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
+    <ClassMustBeFinal>
+      <code><![CDATA[LastModifiedMiddleware]]></code>
+    </ClassMustBeFinal>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[filemtime($filename)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/StaticResourceHandler/MethodNotAllowedMiddleware.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[MethodNotAllowedMiddleware]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/StaticResourceHandler/MiddlewareQueue.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[MiddlewareQueue]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/StaticResourceHandler/OptionsMiddleware.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[OptionsMiddleware]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/StaticResourceHandler/StaticResourceResponse.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceResponse]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalsePropertyAssignmentValue>
+      <code><![CDATA[filesize($filename)]]></code>
+    </PossiblyFalsePropertyAssignmentValue>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$responseContentCallback]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
     <ArgumentTypeCoercion>
-      <code>$regex</code>
+      <code><![CDATA[$regex]]></code>
     </ArgumentTypeCoercion>
   </file>
+  <file src="src/StaticResourceHandlerFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceHandlerFactory]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseOperand>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
+  </file>
   <file src="src/SwooleEmitter.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleEmitter]]></code>
+    </ClassMustBeFinal>
     <PossiblyNullReference>
-      <code>asString</code>
+      <code><![CDATA[asString]]></code>
     </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$cookie->getDomain()]]></code>
+      <code><![CDATA[$cookie->getPath()]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/SwooleRequestHandlerRunner.php">
     <PossiblyUnusedReturnValue>
-      <code>mixed</code>
+      <code><![CDATA[mixed]]></code>
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/SwooleStream.php">
     <PossiblyNullOperand>
-      <code>$size</code>
-      <code>$size</code>
+      <code><![CDATA[$size]]></code>
+      <code><![CDATA[$size]]></code>
     </PossiblyNullOperand>
     <PossiblyNullPropertyAssignmentValue>
-      <code>$size</code>
+      <code><![CDATA[$size]]></code>
       <code><![CDATA[$this->index + $length >= $size
             ? $size
             : $this->index + $length]]></code>
     </PossiblyNullPropertyAssignmentValue>
     <PossiblyUnusedReturnValue>
-      <code>int</code>
+      <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$key]]></code>
+      <code><![CDATA[$this->body]]></code>
+      <code><![CDATA[$this->request->rawContent()]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Task/DeferredListenerDelegator.php">
     <UnusedParam>
-      <code>$serviceName</code>
+      <code><![CDATA[$serviceName]]></code>
     </UnusedParam>
   </file>
   <file src="src/Task/Task.php">
     <PropertyTypeCoercion>
-      <code>$payload</code>
+      <code><![CDATA[$payload]]></code>
     </PropertyTypeCoercion>
+    <RedundantCondition>
+      <code><![CDATA[is_object($classOrObject)]]></code>
+    </RedundantCondition>
   </file>
   <file src="src/WhoopsPrettyPageHandlerDelegator.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WhoopsPrettyPageHandlerDelegator]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedParam>
-      <code>$container</code>
-      <code>$serviceName</code>
+      <code><![CDATA[$container]]></code>
+      <code><![CDATA[$serviceName]]></code>
     </PossiblyUnusedParam>
   </file>
   <file src="test/AttributeAssertionTrait.php">
     <PossiblyUnusedMethod>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedParam>
-      <code>$canonicalize</code>
-      <code>$delta</code>
-      <code>$ignoreCase</code>
-      <code>$maxDepth</code>
+      <code><![CDATA[$canonicalize]]></code>
+      <code><![CDATA[$delta]]></code>
+      <code><![CDATA[$ignoreCase]]></code>
+      <code><![CDATA[$maxDepth]]></code>
     </PossiblyUnusedParam>
   </file>
+  <file src="test/Command/ReloadCommandFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ReloadCommandFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Command/ReloadCommandTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ReloadCommandTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Command/StartCommandFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StartCommandFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Command/StartCommandTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StartCommandTest]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseArgument>
+      <code><![CDATA[realpath(__DIR__)]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="test/Command/StatusCommandFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StatusCommandFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
   <file src="test/Command/StatusCommandTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StatusCommandTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testExecuteIndicatesNoRunningServerWhenServerNotDetected</code>
-      <code>testExecuteIndicatesRunningServerWhenServerDetected</code>
+      <code><![CDATA[testExecuteIndicatesNoRunningServerWhenServerNotDetected]]></code>
+      <code><![CDATA[testExecuteIndicatesRunningServerWhenServerDetected]]></code>
     </InvalidArgument>
     <InvalidReturnType>
       <code><![CDATA[iterable<array-key, list<list<int|null>>>]]></code>
     </InvalidReturnType>
   </file>
+  <file src="test/Command/StopCommandFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StopCommandFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
   <file src="test/Command/StopCommandTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StopCommandTest]]></code>
+    </ClassMustBeFinal>
     <InternalProperty>
       <code><![CDATA[$command->killProcess]]></code>
       <code><![CDATA[$command->killProcess]]></code>
       <code><![CDATA[$command->waitThreshold]]></code>
     </InternalProperty>
     <InvalidArgument>
-      <code>testExecuteReturnsErrorIfUnableToStopServer</code>
-      <code>testExecuteReturnsSuccessIfAbleToStopServer</code>
-      <code>testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning</code>
+      <code><![CDATA[testExecuteReturnsErrorIfUnableToStopServer]]></code>
+      <code><![CDATA[testExecuteReturnsSuccessIfAbleToStopServer]]></code>
+      <code><![CDATA[testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning]]></code>
     </InvalidArgument>
     <InvalidReturnType>
       <code><![CDATA[iterable<array-key, list<list<null|int>>>]]></code>
@@ -236,86 +711,474 @@
   </file>
   <file src="test/Command/TestAsset/HttpServer.php">
     <PossiblyUnusedMethod>
-      <code>set</code>
+      <code><![CDATA[set]]></code>
     </PossiblyUnusedMethod>
   </file>
+  <file src="test/ConfigProviderTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ConfigProviderTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/EventDispatcherFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[EventDispatcherFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/EventDispatcherTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[EventDispatcherTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/HotCodeReloaderWorkerStartListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HotCodeReloaderWorkerStartListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/HotCodeReloaderWorkerStartListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HotCodeReloaderWorkerStartListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/RequestHandlerRequestListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[RequestHandlerRequestListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/RequestHandlerRequestListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[RequestHandlerRequestListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/ServerShutdownListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerShutdownListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/ServerShutdownListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerShutdownListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/ServerStartListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerStartListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/ServerStartListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerStartListenerTest]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalsePropertyAssignmentValue>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalsePropertyAssignmentValue>
+  </file>
+  <file src="test/Event/StaticResourceRequestListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceRequestListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/StaticResourceRequestListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceRequestListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/SwooleListenerProviderFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleListenerProviderFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/SwooleListenerProviderTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleListenerProviderTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/TestAsset/HotCodeReloaderWorkerStartListenerStub.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HotCodeReloaderWorkerStartListenerStub]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/TestAsset/TestEvent.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TestEvent]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/WorkerStartListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WorkerStartListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Event/WorkerStartListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WorkerStartListenerTest]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalsePropertyAssignmentValue>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalsePropertyAssignmentValue>
+  </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[InotifyFileWatcherTest]]></code>
+    </ClassMustBeFinal>
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$this->file]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
   <file src="test/HttpServerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HttpServerFactoryTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testExceptionThrownForInvalidServerMode</code>
-      <code>testExceptionThrownForInvalidSocketType</code>
+      <code><![CDATA[testExceptionThrownForInvalidServerMode]]></code>
+      <code><![CDATA[testExceptionThrownForInvalidSocketType]]></code>
     </InvalidArgument>
-    <MixedReturnTypeCoercion>
-      <code>$validTypes</code>
-      <code><![CDATA[array<array-key, array{
-     *     0: int,
-     *     1: array<empty, empty>|array<string, non-empty-string>,
-     * }>]]></code>
-    </MixedReturnTypeCoercion>
+  </file>
+  <file src="test/Log/AccessLogDataMapTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AccessLogDataMapTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Log/AccessLogFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AccessLogFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Log/AccessLogFormatterTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AccessLogFormatterTest]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="test/Log/Psr3AccessLogDecoratorTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Psr3AccessLogDecoratorTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testProxiesToPsr3Methods</code>
+      <code><![CDATA[testProxiesToPsr3Methods]]></code>
     </InvalidArgument>
+  </file>
+  <file src="test/Log/StrftimeToICUFormatMapTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StrftimeToICUFormatMapTest]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="test/Log/SwooleLoggerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleLoggerFactoryTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testReturnsPsrLoggerWhenNoNamedLoggerIsFound</code>
-      <code>testReturnsStdoutLoggerWhenOtherLoggersAreNotFound</code>
+      <code><![CDATA[testReturnsPsrLoggerWhenNoNamedLoggerIsFound]]></code>
+      <code><![CDATA[testReturnsStdoutLoggerWhenOtherLoggersAreNotFound]]></code>
     </InvalidArgument>
+  </file>
+  <file src="test/PidManagerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[PidManagerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/ServerRequestSwooleFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServerRequestSwooleFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticMappedResourceHandlerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticMappedResourceHandlerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticMappedResourceHandlerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticMappedResourceHandlerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticResourceHandler/CacheControlMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[CacheControlMiddlewareTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticResourceHandler/ContentTypeFilterMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ContentTypeFilterMiddlewareTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticResourceHandler/ETagMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ETagMiddlewareTest]]></code>
+    </ClassMustBeFinal>
+    <InvalidReturnStatement>
+      <code><![CDATA[[
+            'weak'   => [ETagMiddleware::ETAG_VALIDATION_WEAK, '/\.png$/', $filename, $weakETag],
+            'strong' => [ETagMiddleware::ETAG_VALIDATION_STRONG, '/\.png$/', $filename, $strongETag],
+        ]]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array<array-key, array{
+     *     0: string,
+     *     1: string,
+     *     2: string,
+     *     3: string,
+     * }>]]></code>
+    </InvalidReturnType>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$filesize]]></code>
+      <code><![CDATA[$lastModified]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="test/StaticResourceHandler/FileLocationRepositoryFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FileLocationRepositoryFactoryTest]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$cwd]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="test/StaticResourceHandler/FileLocationRepositoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FileLocationRepositoryTest]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$cwd]]></code>
+      <code><![CDATA[$dir]]></code>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$dir]]></code>
+      <code><![CDATA[getcwd()]]></code>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="test/StaticResourceHandler/GzipMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[GzipMiddlewareTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testMiddlewareInjectsResponseContentCallbackWhenItDetectsAnAcceptEncodingItCanHandle</code>
-      <code>testResponseContentCallbackEmitsExpectedHeadersAndCompressesContent</code>
+      <code><![CDATA[testMiddlewareInjectsResponseContentCallbackWhenItDetectsAnAcceptEncodingItCanHandle]]></code>
+      <code><![CDATA[testResponseContentCallbackEmitsExpectedHeadersAndCompressesContent]]></code>
     </InvalidArgument>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$expected]]></code>
+      <code><![CDATA[$expected]]></code>
+    </PossiblyFalseArgument>
   </file>
   <file src="test/StaticResourceHandler/HeadMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HeadMiddlewareTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testMiddlewareDoesNothingIfRequestMethodIsNotHead</code>
+      <code><![CDATA[testMiddlewareDoesNothingIfRequestMethodIsNotHead]]></code>
     </InvalidArgument>
   </file>
   <file src="test/StaticResourceHandler/IntegrationMappedTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[IntegrationMappedTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile</code>
+      <code><![CDATA[testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile]]></code>
     </InvalidArgument>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$lastModified]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="test/StaticResourceHandler/IntegrationTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[IntegrationTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile</code>
+      <code><![CDATA[testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile]]></code>
     </InvalidArgument>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$lastModified]]></code>
+    </PossiblyFalseOperand>
+  </file>
+  <file src="test/StaticResourceHandler/LastModifiedMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[LastModifiedMiddlewareTest]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[MethodNotAllowedMiddlewareTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testMiddlewareDoesNothingForAllowedMethods</code>
-      <code>testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods</code>
+      <code><![CDATA[testMiddlewareDoesNothingForAllowedMethods]]></code>
+      <code><![CDATA[testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods]]></code>
     </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/MiddlewareQueueTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[MiddlewareQueueTest]]></code>
+    </ClassMustBeFinal>
   </file>
   <file src="test/StaticResourceHandler/OptionsMiddlewareTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[OptionsMiddlewareTest]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
-      <code>testMiddlewareDoesNothingForNonOptionsRequests</code>
+      <code><![CDATA[testMiddlewareDoesNothingForNonOptionsRequests]]></code>
     </InvalidArgument>
   </file>
+  <file src="test/StaticResourceHandler/StaticResourceResponseTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceResponseTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticResourceHandlerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceHandlerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/StaticResourceHandlerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[StaticResourceHandlerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/SwooleEmitterTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleEmitterTest]]></code>
+    </ClassMustBeFinal>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$stream]]></code>
+      <code><![CDATA[$stream]]></code>
+      <code><![CDATA[$stream]]></code>
+      <code><![CDATA[$stream]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="test/SwooleRequestHandlerRunnerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleRequestHandlerRunnerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/SwooleRequestHandlerRunnerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleRequestHandlerRunnerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/SwooleStreamTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SwooleStreamTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/DeferredListenerDelegatorTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[DeferredListenerDelegatorTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/DeferredListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[DeferredListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/DeferredServiceListenerDelegatorTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[DeferredServiceListenerDelegatorTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/DeferredServiceListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[DeferredServiceListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/ServiceBasedTaskTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ServiceBasedTaskTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/TaskEventDispatchListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskEventDispatchListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/TaskEventDispatchListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskEventDispatchListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/TaskInvokerListenerFactoryTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskInvokerListenerFactoryTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/TaskInvokerListenerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskInvokerListenerTest]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/Task/TaskTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[TaskTest]]></code>
+    </ClassMustBeFinal>
+  </file>
   <file src="test/TestAsset/CallableObject.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[CallableObject]]></code>
+    </ClassMustBeFinal>
     <LessSpecificReturnStatement>
-      <code>$params</code>
+      <code><![CDATA[$params]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code><![CDATA[list<mixed>]]></code>
     </MoreSpecificReturnType>
   </file>
   <file src="test/TestAsset/ClassWithCallbacks.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ClassWithCallbacks]]></code>
+    </ClassMustBeFinal>
     <PossiblyUnusedMethod>
-      <code>instanceCallback</code>
-      <code>staticCallback</code>
+      <code><![CDATA[instanceCallback]]></code>
+      <code><![CDATA[staticCallback]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedParam>
-      <code>$payload</code>
-      <code>$payload</code>
+      <code><![CDATA[$payload]]></code>
+      <code><![CDATA[$payload]]></code>
     </PossiblyUnusedParam>
+  </file>
+  <file src="test/WhoopsPrettyPageHandlerDelegatorTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[WhoopsPrettyPageHandlerDelegatorTest]]></code>
+    </ClassMustBeFinal>
   </file>
 </files>

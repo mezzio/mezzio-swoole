@@ -22,6 +22,7 @@ use function is_array;
 use function method_exists;
 
 use const SWOOLE_BASE;
+use const SWOOLE_HOOK_ALL;
 use const SWOOLE_PROCESS;
 use const SWOOLE_SOCK_TCP;
 use const SWOOLE_SOCK_TCP6;
@@ -111,7 +112,7 @@ class HttpServerFactory
 
         $enableCoroutine = $swooleConfig['enable_coroutine'] ?? false;
         if ($enableCoroutine && method_exists(SwooleRuntime::class, 'enableCoroutine')) {
-            SwooleRuntime::enableCoroutine(true);
+            SwooleRuntime::enableCoroutine(flags: SWOOLE_HOOK_ALL);
         }
 
         $httpServer    = new SwooleHttpServer($host, $port, $mode, $protocol);

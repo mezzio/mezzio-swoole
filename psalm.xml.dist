@@ -28,26 +28,18 @@
             <errorLevel type="suppress">
                 <referencedMethod name="Mezzio\Swoole\Log\StrftimeToICUFormatMap::mapStrftimeToICU"/>
             </errorLevel>
-
-            <errorLevel type="suppress">
-                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::method"/>
-            </errorLevel>
-
-            <errorLevel type="suppress">
-                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::willReturn"/>
-            </errorLevel>
-
-            <errorLevel type="suppress">
-                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with"/>
-            </errorLevel>
         </InternalMethod>
-
+        <MissingOverrideAttribute>
+            <errorLevel type="suppress">
+               <directory name="src" />
+               <directory name="test" />
+            </errorLevel>
+        </MissingOverrideAttribute>
         <MissingClosureParamType errorLevel="suppress"/>
         <MixedArgument errorLevel="suppress"/>
         <MixedArgumentTypeCoercion errorLevel="suppress"/>
         <MixedArrayAccess errorLevel="suppress"/>
         <MixedAssignment errorLevel="suppress"/>
-        <MixedInferredReturnType errorLevel="suppress"/>
         <MixedMethodCall errorLevel="suppress"/>
         <MixedReturnStatement errorLevel="suppress"/>
         <PossiblyNullArgument errorLevel="suppress"/>
