@@ -55,7 +55,7 @@ that Swoole will not reload any of the following:
 
 - New routes
 - New pipeline middleware
-- The `Application` instance, _or any delegators used to modify it_.
+- The `Application` instance, *or any delegators used to modify it*.
 - The Swoole HTTP server itself.
 
 This limitation exists because the hot code reload features use the

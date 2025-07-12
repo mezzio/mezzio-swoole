@@ -243,18 +243,18 @@ We define the following listeners for the specified events.
 All events and listeners are in the `Mezzio\Swoole\Event` namespace.
 
 - `ServerStartEvent`:
-  - `ServerStartListener`: initializes the master and manager PIDs, sets the working directory, sets the master process name, and logs that the server has started.
+    - `ServerStartListener`: initializes the master and manager PIDs, sets the working directory, sets the master process name, and logs that the server has started.
 - `WorkerStartEvent`:
-  - `WorkerStartListener`: sets the working directory, sets the worker process name, and logs the worker has started.
-  - `HotCodeReloaderWorkerStartListener`: initiates a hot code reload within the worker.
+    - `WorkerStartListener`: sets the working directory, sets the worker process name, and logs the worker has started.
+    - `HotCodeReloaderWorkerStartListener`: initiates a hot code reload within the worker.
 - `RequestEvent`
-  - `RequestHandlerRequestListener`: marshals a PSR-7 request from the Swoole HTTP request, passes it to the application request handler to generate a PSR-7 response, marshals and sends the Swoole HTTP Response from the PSR-7 response, and logs the request.
+    - `RequestHandlerRequestListener`: marshals a PSR-7 request from the Swoole HTTP request, passes it to the application request handler to generate a PSR-7 response, marshals and sends the Swoole HTTP Response from the PSR-7 response, and logs the request.
     If an error occurs marshaling the PSR-7 request, it will generate a PSR-7 error response, emit it, and log the request.
     In both cases, it marks the `responseSent()` in the event, stopping propagation.
-  - `StaticResourceRequestListener`: attempts to process a static resource request; if it was able, it sends the Swoole HTTP Response, logs the access, and marks the `responseSent()` in the event, stopping propagation.
-    Otherwise, it returns, allowing the next listener to handle the event.
+    - `StaticResourceRequestListener`: attempts to process a static resource request; if it was able, it sends the Swoole HTTP Response, logs the access, and marks the `responseSent()` in the event, stopping propagation.
+      Otherwise, it returns, allowing the next listener to handle the event.
 - `ServerShutdownEvent`:
-  - `ServerShutdownListener`: destroys the master and manager PIDs, all worker processes, and logs the server shutdown.
+    - `ServerShutdownListener`: destroys the master and manager PIDs, all worker processes, and logs the server shutdown.
 
 > ### Short-circuiting
 >
