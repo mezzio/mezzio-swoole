@@ -4,4 +4,12 @@ JOB=$3
 PHP_VERSION=$(echo "${JOB}" | jq -r '.php')
 
 apt update
-apt install -y "php${PHP_VERSION}-swoole"
+
+# Build package list
+PACKAGES="php${PHP_VERSION}-swoole"
+if [ "$PHP_VERSION" != "8.4" ]; then
+    PACKAGES="$PACKAGES php${PHP_VERSION}-inotify"
+fi
+
+# Install all packages at once
+apt install -y $PACKAGES
