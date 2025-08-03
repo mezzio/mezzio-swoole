@@ -82,8 +82,6 @@ class SwooleRequestHandlerRunnerTest extends TestCase
     {
         if (PHP_VERSION_ID >= 80300) {
             $reflection = new ReflectionProperty($this->httpServer, 'mode');
-            /** @psalm-suppress UnusedMethodCall */
-            $reflection->setAccessible(true);
             $reflection->setValue($this->httpServer, SWOOLE_BASE);
         }
 
@@ -117,8 +115,6 @@ class SwooleRequestHandlerRunnerTest extends TestCase
         }
 
         $reflection = new ReflectionProperty($this->httpServer, 'mode');
-        /** @psalm-suppress UnusedMethodCall */
-        $reflection->setAccessible(true);
         $reflection->setValue($this->httpServer, SWOOLE_PROCESS);
         $this->httpServer
             ->expects($this->exactly(12))
