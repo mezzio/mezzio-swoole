@@ -21,12 +21,14 @@ use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use ReflectionProperty;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Swoole\Http\Server as SwooleHttpServer;
 
 use function random_int;
 
+use const PHP_VERSION_ID;
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
 
@@ -78,7 +80,11 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testRunRegistersExpectedHttpServerListenersAndStartsServerWhenInBaseMode(): void
     {
-        $this->httpServer->mode = SWOOLE_BASE;
+        if (PHP_VERSION_ID >= 80300) {
+            $reflection = new ReflectionProperty($this->httpServer, 'mode');
+            $reflection->setValue($this->httpServer, SWOOLE_BASE);
+        }
+
         $this->httpServer
             ->expects($this->exactly(10))
             ->method('on')
@@ -104,7 +110,12 @@ class SwooleRequestHandlerRunnerTest extends TestCase
 
     public function testRunRegistersExpectedHttpServerListenersAndStartsServerWhenInProcessMode(): void
     {
-        $this->httpServer->mode = SWOOLE_PROCESS;
+        if (PHP_VERSION_ID >= 80200 && PHP_VERSION_ID < 80300) {
+            $this->markTestSkipped('Test relies on modifying readonly properties, which is not allowed in PHP 8.2+');
+        }
+
+        $reflection = new ReflectionProperty($this->httpServer, 'mode');
+        $reflection->setValue($this->httpServer, SWOOLE_PROCESS);
         $this->httpServer
             ->expects($this->exactly(12))
             ->method('on')

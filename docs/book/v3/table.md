@@ -10,7 +10,7 @@ tables by extending the `Swoole\Table` class, defining the appropriate columns
 and table size inside of the constructor.
 
 <!-- markdownlint-disable-next-line header-increment-->
-> ### Initialize the Table Within the Constructor
+> ## Initialize the Table Within the Constructor
 >
 > You **must** call your table's `create()` method, and this **must** be done
 > prior to initializing any worker processes; if you fail to do so, your table

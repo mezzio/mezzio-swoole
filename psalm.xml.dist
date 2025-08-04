@@ -77,12 +77,6 @@
         <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Http/Server.php" />
         <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Http2/Client.php" />
         <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Iterator.php" />
-        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/MySQL.php" />
-        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/MySQL/Exception.php" />
-        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/MySQL/Statement.php" />
-        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/PostgreSQL.php" />
-        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/PostgreSQLStatement.php" />
-        <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Redis.php" />
         <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Scheduler.php" />
         <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Socket.php" />
         <file name="vendor/swoole/ide-helper/src/swoole/Swoole/Coroutine/Socket/Exception.php" />

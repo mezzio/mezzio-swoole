@@ -38,7 +38,7 @@ $aggregator = new ConfigAggregator([
 ```
 
 Note the position of the `Mezzio\Swoole\ConfigProvider::class` entry at the top.
-This can happen if you have previously removed the original entry from the `config/config.php` as provided by the skeleton project, or if you hand-crafted your `config/config.php` file`, and then later used `composer require mezzio/mezzio-swoole`, as the [component installer](https://docs.laminas.dev/laminas-component-installer/) injects at the start of the aggregator definition.
+This can happen if you have previously removed the original entry from the `config/config.php` as provided by the skeleton project, or if you hand-crafted your `config/config.php` file, and then later used `composer require mezzio/mezzio-swoole`, as the [component installer](https://docs.laminas.dev/laminas-component-installer/) injects at the start of the aggregator definition.
 
 The mezzio-swoole package provides a custom implementation of an [HTTP Handler Runner](https://docs.laminas.dev/laminas-httphandlerrunner/).
 Because it defines the _same service name_ as the one provided by laminas/laminas-httphandlerrunner, the mezzio-swoole `ConfigProvider` must appear _later_ during aggregation to ensure it takes precedence:

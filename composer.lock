@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7889e27593f51ecf32844e51c3c17e59",
+    "content-hash": "02c91fe29f2a28b890a31b6da25a1697",
     "packages": [
         {
             "name": "dflydev/fig-cookies",
@@ -5093,16 +5093,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "5.1.1",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "69b374d982e7139fc904cc61757e7fede1d9c3d8"
+                "reference": "86a61562a1f1634339ee52f3b8988591f51a2799"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/69b374d982e7139fc904cc61757e7fede1d9c3d8",
-                "reference": "69b374d982e7139fc904cc61757e7fede1d9c3d8",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/86a61562a1f1634339ee52f3b8988591f51a2799",
+                "reference": "86a61562a1f1634339ee52f3b8988591f51a2799",
                 "shasum": ""
             },
             "type": "library",
@@ -5119,9 +5119,9 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/5.1.1"
+                "source": "https://github.com/swoole/ide-helper/tree/6.0.0"
             },
-            "time": "2023-12-08T17:56:23+00:00"
+            "time": "2025-01-03T19:08:24+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -5404,13 +5404,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "~8.2.0 || ~8.3.0"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2.99"
     },
