@@ -113,7 +113,12 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../..">mezzio-swoole</a>
+            <a href="../..">
+                
+                
+    mezzio-swoole
+
+            </a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -278,7 +283,12 @@
                     Mezzio
 
                     
-                        <small class="header__subtitle">mezzio-swoole</small>
+                        <small class="header__subtitle">
+                            
+                            
+    mezzio-swoole
+
+                        </small>
                     
                 </h1>
             </div>
@@ -390,7 +400,13 @@
             <li class="breadcrumb-item"><a href="https://docs.mezzio.dev/">Mezzio</a></li>
 
             
-                <li class="breadcrumb-item"><a href="../..">mezzio-swoole</a></li>
+                <li class="breadcrumb-item">
+                    <a href="../..">
+                        
+    mezzio-swoole
+
+                    </a>
+                </li>
 
                 
                     
@@ -608,19 +624,27 @@ class ServerShutdownEvent
 <p>We define the following listeners for the specified events.
 All events and listeners are in the <code>Mezzio\Swoole\Event</code> namespace.</p>
 <ul>
-<li><code>ServerStartEvent</code>:</li>
+<li><code>ServerStartEvent</code>:<ul>
 <li><code>ServerStartListener</code>: initializes the master and manager PIDs, sets the working directory, sets the master process name, and logs that the server has started.</li>
-<li><code>WorkerStartEvent</code>:</li>
+</ul>
+</li>
+<li><code>WorkerStartEvent</code>:<ul>
 <li><code>WorkerStartListener</code>: sets the working directory, sets the worker process name, and logs the worker has started.</li>
 <li><code>HotCodeReloaderWorkerStartListener</code>: initiates a hot code reload within the worker.</li>
-<li><code>RequestEvent</code></li>
+</ul>
+</li>
+<li><code>RequestEvent</code><ul>
 <li><code>RequestHandlerRequestListener</code>: marshals a PSR-7 request from the Swoole HTTP request, passes it to the application request handler to generate a PSR-7 response, marshals and sends the Swoole HTTP Response from the PSR-7 response, and logs the request.
-    If an error occurs marshaling the PSR-7 request, it will generate a PSR-7 error response, emit it, and log the request.
-    In both cases, it marks the <code>responseSent()</code> in the event, stopping propagation.</li>
+If an error occurs marshaling the PSR-7 request, it will generate a PSR-7 error response, emit it, and log the request.
+In both cases, it marks the <code>responseSent()</code> in the event, stopping propagation.</li>
 <li><code>StaticResourceRequestListener</code>: attempts to process a static resource request; if it was able, it sends the Swoole HTTP Response, logs the access, and marks the <code>responseSent()</code> in the event, stopping propagation.
-    Otherwise, it returns, allowing the next listener to handle the event.</li>
-<li><code>ServerShutdownEvent</code>:</li>
+  Otherwise, it returns, allowing the next listener to handle the event.</li>
+</ul>
+</li>
+<li><code>ServerShutdownEvent</code>:<ul>
 <li><code>ServerShutdownListener</code>: destroys the master and manager PIDs, all worker processes, and logs the server shutdown.</li>
+</ul>
+</li>
 </ul>
 <blockquote>
 <h3 id="short-circuiting">Short-circuiting</h3>
@@ -715,7 +739,12 @@ Most PSR-14 libraries have functionality for aggregating multiple providers, and
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../..">mezzio-swoole</a>
+            <a href="../..">
+                
+                
+    mezzio-swoole
+
+            </a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -924,7 +953,7 @@ Most PSR-14 libraries have functionality for aggregating multiple providers, and
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/mezzio/mezzio-swoole/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2024 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2025 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>
