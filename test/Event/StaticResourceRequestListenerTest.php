@@ -20,17 +20,16 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 final class StaticResourceRequestListenerTest extends TestCase
 {
-    /** @psalm-var StaticResourceHandlerInterface&MockObject */
-    private StaticResourceHandlerInterface $handler;
+    private StaticResourceHandlerInterface&MockObject $handler;
 
     private StaticResourceRequestListener $listener;
 
-    /** @psalm-var AccessLogInterface&MockObject */
-    private AccessLogInterface $logger;
+    /** @psalm-var  */
+    private AccessLogInterface&MockObject $logger;
 
-    private SwooleHttpRequest $swooleRequest;
+    private SwooleHttpRequest&MockObject $swooleRequest;
 
-    private SwooleHttpResponse $swooleResponse;
+    private SwooleHttpResponse&MockObject $swooleResponse;
 
     protected function setUp(): void
     {

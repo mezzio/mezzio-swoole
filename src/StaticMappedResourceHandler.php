@@ -43,7 +43,7 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
         SwooleHttpResponse $response
     ): ?StaticResourceResponse {
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
-        if (! $filename) {
+        if ($filename === null) {
             return null;
         }
 

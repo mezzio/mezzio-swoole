@@ -12,8 +12,12 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 class WorkerErrorEvent extends AbstractSwooleWorkerEvent
 {
-    public function __construct(SwooleHttpServer $server, int $workerId, private int $exitCode, private int $signal)
-    {
+    public function __construct(
+        SwooleHttpServer $server,
+        int $workerId,
+        private readonly int $exitCode,
+        private readonly int $signal
+    ) {
         $this->server   = $server;
         $this->workerId = $workerId;
     }

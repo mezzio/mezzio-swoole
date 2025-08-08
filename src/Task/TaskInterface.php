@@ -26,8 +26,6 @@ interface TaskInterface extends JsonSerializable
 {
     /**
      * Tasks are invokable; implement this method to do the work of the task.
-     *
-     * @return mixed
      */
-    public function __invoke(ContainerInterface $container);
+    public function __invoke(ContainerInterface $container): mixed;
 }

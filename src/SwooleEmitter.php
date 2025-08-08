@@ -105,12 +105,15 @@ class SwooleEmitter implements EmitterInterface
         foreach (SetCookies::fromResponse($response)->getAll() as $cookie) {
             $sameSite = $cookie->getSameSite() !== null ? substr($cookie->getSameSite()->asString(), 9) : '';
 
+            $path   = $cookie->getPath();
+            $domain = $cookie->getDomain();
+
             $this->swooleResponse->cookie(
                 $cookie->getName(),
                 (string) $cookie->getValue(),
                 $cookie->getExpires(),
-                $cookie->getPath() ?: '/',
-                $cookie->getDomain() ?: '',
+                $path ?? '/',
+                $domain ?? '',
                 $cookie->getSecure(),
                 $cookie->getHttpOnly(),
                 $sameSite

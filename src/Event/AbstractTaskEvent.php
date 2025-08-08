@@ -10,8 +10,7 @@ namespace Mezzio\Swoole\Event;
 
 abstract class AbstractTaskEvent extends AbstractServerAwareEvent
 {
-    /** @var mixed */
-    protected $data;
+    protected mixed $data;
 
     protected int $taskId;
 
@@ -20,8 +19,7 @@ abstract class AbstractTaskEvent extends AbstractServerAwareEvent
         return $this->taskId;
     }
 
-    /** @return mixed */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }

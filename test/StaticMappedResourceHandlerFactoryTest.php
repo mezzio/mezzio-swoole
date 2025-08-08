@@ -32,11 +32,9 @@ final class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /** @psalm-var MockObject&ContainerInterface */
-    private ContainerInterface|MockObject $container;
+    private ContainerInterface&MockObject $container;
 
-    /** @psalm-var MockObject&FileLocationRepositoryInterface */
-    private FileLocationRepositoryInterface|MockObject $fileLocRepo;
+    private FileLocationRepositoryInterface&MockObject $fileLocRepo;
 
     protected function setUp(): void
     {

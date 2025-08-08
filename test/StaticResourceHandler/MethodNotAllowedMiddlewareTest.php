@@ -19,8 +19,7 @@ final class MethodNotAllowedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /** @psalm-var MockObject&Request */
-    private Request|MockObject $request;
+    private Request&MockObject $request;
 
     protected function setUp(): void
     {
@@ -79,7 +78,7 @@ final class MethodNotAllowedMiddlewareTest extends TestCase
         $this->request->server = [
             'request_method' => $method,
         ];
-        $next                  = function (): void {
+        $next                  = function (): never {
             $this->fail('Should not have reached next()');
         };
         $middleware            = new MethodNotAllowedMiddleware();

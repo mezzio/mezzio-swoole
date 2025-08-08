@@ -31,14 +31,9 @@ final class ReloadCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @psalm-var MockObject&InputInterface */
-    private InputInterface|MockObject $input;
+    private InputInterface&MockObject $input;
 
-    /**
-     * @var OutputInterface|MockObject
-     * @psalm-var MockObject&OutputInterface
-     */
-    private $output;
+    private OutputInterface&MockObject $output;
 
     protected function setUp(): void
     {
@@ -143,7 +138,7 @@ final class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg): bool => 'stop' === (string) $arg),
                 $this->output
             )
             ->willReturn(1);
@@ -181,7 +176,7 @@ final class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg): bool => 'stop' === (string) $arg),
                 $this->output
             )
             ->willReturn(0);
@@ -190,7 +185,9 @@ final class ReloadCommandTest extends TestCase
         $startCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'start --daemonize=1 --num-workers=5' === (string) $arg),
+                $this->callback(
+                    static fn(ArrayInput $arg): bool => 'start --daemonize=1 --num-workers=5' === (string) $arg
+                ),
                 $this->output
             )
             ->willReturn(1);
@@ -248,7 +245,7 @@ final class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg): bool => 'stop' === (string) $arg),
                 $this->output
             )
             ->willReturn(0);
@@ -258,7 +255,7 @@ final class ReloadCommandTest extends TestCase
             ->method('run')
             ->with(
                 $this->callback(
-                    static fn(ArrayInput $arg)
+                    static fn(ArrayInput $arg): bool
                         => 'start --daemonize=1 --num-workers=5 --num-task-workers=2' === (string) $arg
                 ),
                 $this->output

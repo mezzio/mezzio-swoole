@@ -16,8 +16,10 @@ class RequestEvent implements StoppableEventInterface
 {
     private bool $responseSent = false;
 
-    public function __construct(private SwooleHttpRequest $request, private SwooleHttpResponse $response)
-    {
+    public function __construct(
+        private readonly SwooleHttpRequest $request,
+        private readonly SwooleHttpResponse $response
+    ) {
     }
 
     public function isPropagationStopped(): bool

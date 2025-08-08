@@ -27,8 +27,7 @@ final class LastModifiedMiddlewareTest extends TestCase
     /** @var callable */
     private $next;
 
-    /** @psalm-var MockObject&Request */
-    private Request|MockObject $request;
+    private Request&MockObject $request;
 
     protected function setUp(): void
     {

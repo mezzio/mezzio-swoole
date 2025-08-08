@@ -23,8 +23,7 @@ use function is_string;
 
 abstract class AbstractStaticResourceHandlerFactory
 {
-    /** @return StaticResourceHandlerInterface */
-    abstract public function __invoke(ContainerInterface $container);
+    abstract public function __invoke(ContainerInterface $container): StaticResourceHandlerInterface;
 
     /**
      * Prepare the list of middleware based on configuration provided.
@@ -70,7 +69,7 @@ abstract class AbstractStaticResourceHandlerFactory
         }
 
         $clearStatCacheInterval = $config['clearstatcache-interval'] ?? false;
-        if ($clearStatCacheInterval) {
+        if ($clearStatCacheInterval !== false) {
             $middleware[] = new ClearStatCacheMiddleware((int) $clearStatCacheInterval);
         }
 

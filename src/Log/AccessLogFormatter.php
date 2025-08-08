@@ -68,7 +68,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
         /**
          * Message format to use when generating a log message.
          */
-        private string $format = self::FORMAT_COMMON
+        private readonly string $format = self::FORMAT_COMMON
     ) {
     }
 
@@ -87,7 +87,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     ): string {
         return preg_replace_callback(
             '#%(?:[<>])?([%aABbDfhHklLmpPqrRstTuUvVXIOS])#',
-            static fn(array $matches) => match ($matches[1]) {
+            static fn(array $matches): string => match ($matches[1]) {
                 '%' => '%',
                 'a' => $map->getClientIp(),
                 'A' => $map->getLocalIp(),
@@ -114,7 +114,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
                 default => '-',
             },
             $format
-        );
+        ) ?? $format;
     }
 
     private function replaceVariableDirectives(
@@ -123,7 +123,7 @@ class AccessLogFormatter implements AccessLogFormatterInterface
     ): string {
         return preg_replace_callback(
             '#%(?:[<>])?{([^}]+)}([aCeinopPtT])#',
-            static fn(array $matches) => match ($matches[2]) {
+            static fn(array $matches): string => match ($matches[2]) {
                 'a' => $map->getClientIp(),
                 'C' => $map->getCookie($matches[1]),
                 'e' => $map->getEnv($matches[1]),
@@ -135,6 +135,6 @@ class AccessLogFormatter implements AccessLogFormatterInterface
                 default => '-',
             },
             $format
-        );
+        ) ?? $format;
     }
 }

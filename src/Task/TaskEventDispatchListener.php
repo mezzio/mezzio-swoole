@@ -19,7 +19,7 @@ use function sprintf;
 /**
  * Listener that dispatches TaskEvent `$data` arguments as events.
  */
-final class TaskEventDispatchListener
+final readonly class TaskEventDispatchListener
 {
     public function __construct(private EventDispatcherInterface $dispatcher, private ?LoggerInterface $logger = null)
     {

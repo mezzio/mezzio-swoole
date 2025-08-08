@@ -26,21 +26,18 @@ use Webmozart\Assert\Assert;
  */
 final class ServiceBasedTask implements TaskInterface
 {
-    private array $payload;
+    private readonly array $payload;
 
     /**
      * @param array $payload Array of arguments for the $serviceName.
      * @psalm-param list<mixed> $payload
      */
-    public function __construct(private string $serviceName, ...$payload)
+    public function __construct(private readonly string $serviceName, ...$payload)
     {
         $this->payload = $payload;
     }
 
-    /**
-     * @return mixed
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): mixed
     {
         $deferred = $container->get($this->serviceName);
         Assert::isCallable($deferred);
@@ -55,11 +52,9 @@ final class ServiceBasedTask implements TaskInterface
     /**
      * Cannot add return types to internal interface methods in implementing
      * classes.
-     *
-     * @return array
      */
     #[ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'handler'   => $this->serviceName,

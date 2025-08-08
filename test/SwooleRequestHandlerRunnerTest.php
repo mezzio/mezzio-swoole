@@ -35,10 +35,10 @@ use const SWOOLE_PROCESS;
 final class SwooleRequestHandlerRunnerTest extends TestCase
 {
     /** @var EventDispatcherInterface&MockObject */
-    private EventDispatcherInterface $dispatcher;
+    private MockObject $dispatcher;
 
     /** @var SwooleHttpServer&MockObject */
-    private SwooleHttpServer $httpServer;
+    private MockObject $httpServer;
 
     private SwooleRequestHandlerRunner $runner;
 
@@ -330,11 +330,8 @@ final class SwooleRequestHandlerRunnerTest extends TestCase
 
             public array $data = ['values', 'to', 'process'];
 
-            private SwooleHttpServer $server;
-
-            public function __construct(SwooleHttpServer $server)
+            public function __construct(private readonly SwooleHttpServer $server)
             {
-                $this->server = $server;
             }
 
             public function finish(string $returnValue): void

@@ -16,13 +16,13 @@ use Swoole\Http\Request;
 class Psr3AccessLogDecorator implements AccessLogInterface
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private AccessLogFormatterInterface $formatter,
+        private readonly LoggerInterface $logger,
+        private readonly AccessLogFormatterInterface $formatter,
         /**
          * Whether or not to look up remote host names when preparing the access
          * log message
          */
-        private bool $useHostnameLookups = false
+        private readonly bool $useHostnameLookups = false
     ) {
     }
 

@@ -28,8 +28,7 @@ final class SwooleStreamTest extends TestCase
      */
     public const DEFAULT_CONTENT = 'This is a test!';
 
-    /** @var SwooleHttpRequest&MockObject */
-    private MockObject $request;
+    private SwooleHttpRequest&MockObject $request;
 
     private SwooleStream $stream;
 

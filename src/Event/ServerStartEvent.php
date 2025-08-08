@@ -12,7 +12,7 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 class ServerStartEvent
 {
-    public function __construct(private SwooleHttpServer $server)
+    public function __construct(private readonly SwooleHttpServer $server)
     {
     }
 

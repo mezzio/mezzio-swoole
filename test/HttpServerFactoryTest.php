@@ -43,8 +43,7 @@ use const SWOOLE_UNIX_STREAM;
 
 final class HttpServerFactoryTest extends TestCase
 {
-    /** @psalm-var MockObject&ContainerInterface */
-    private ContainerInterface|MockObject $container;
+    private ContainerInterface&MockObject $container;
 
     protected function setUp(): void
     {
@@ -103,7 +102,7 @@ final class HttpServerFactoryTest extends TestCase
         $data = $process->read();
         Process::wait(true);
 
-        $result = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+        $result = json_decode((string) $data, true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame([
             'host' => '0.0.0.0',
             'port' => 8081,
@@ -234,7 +233,7 @@ final class HttpServerFactoryTest extends TestCase
         });
         $process->start();
 
-        $setOptions = json_decode($process->read(), true, 512, JSON_THROW_ON_ERROR);
+        $setOptions = json_decode((string) $process->read(), true, 512, JSON_THROW_ON_ERROR);
         Process::wait(true);
         $this->assertSame($serverOptions, $setOptions);
     }

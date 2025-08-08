@@ -24,30 +24,23 @@ use Throwable;
 
 final class RequestHandlerRequestListenerTest extends TestCase
 {
-    /** @psalm-var SwooleEmitter&MockObject */
-    private SwooleEmitter $emitter;
+    private SwooleEmitter&MockObject $emitter;
 
-    /** @psalm-var ResponseInterface&MockObject */
-    private ResponseInterface $errorResponse;
+    private ResponseInterface&MockObject $errorResponse;
 
     private ?Throwable $exceptionToThrowOnRequestGeneration = null;
 
     private RequestHandlerRequestListener $listener;
 
-    /** @psalm-var AccessLogInterface&MockObject */
-    private AccessLogInterface $logger;
+    private AccessLogInterface&MockObject $logger;
 
-    /** @psalm-var ServerRequestInterface&MockObject */
-    private ServerRequestInterface $request;
+    private ServerRequestInterface&MockObject $request;
 
-    /** @psalm-var RequestHandlerInterface&MockObject */
-    private RequestHandlerInterface $requestHandler;
+    private RequestHandlerInterface&MockObject $requestHandler;
 
-    /** @psalm-var SwooleHttpRequest&MockObject */
-    private SwooleHttpRequest $swooleRequest;
+    private SwooleHttpRequest&MockObject $swooleRequest;
 
-    /** @psalm-var SwooleHttpResponse&MockObject */
-    private SwooleHttpResponse $swooleResponse;
+    private SwooleHttpResponse&MockObject $swooleResponse;
 
     protected function setUp(): void
     {

@@ -38,7 +38,7 @@ class GzipMiddleware implements MiddlewareInterface
         ZLIB_ENCODING_GZIP    => 'gzip',
     ];
 
-    private int $compressionLevel;
+    private readonly int $compressionLevel;
 
     /**
      * @param int $compressionLevel Compression level to use. Values less than
@@ -123,7 +123,7 @@ class GzipMiddleware implements MiddlewareInterface
      */
     private function getCompressionEncoding(Request $request): ?int
     {
-        foreach (explode(',', $request->header['accept-encoding']) as $acceptEncoding) {
+        foreach (explode(',', (string) $request->header['accept-encoding']) as $acceptEncoding) {
             $acceptEncoding = trim($acceptEncoding);
             if ('gzip' === $acceptEncoding) {
                 return ZLIB_ENCODING_GZIP;

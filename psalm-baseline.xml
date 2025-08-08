@@ -4,16 +4,6 @@
     <MixedArrayOffset>
       <code><![CDATA[$cacheControlDirectives[$regex]]]></code>
     </MixedArrayOffset>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$clearStatCacheInterval]]></code>
-    </RiskyTruthyFalsyComparison>
-  </file>
-  <file src="src/Command/IsRunningTrait.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$managerPid]]></code>
-      <code><![CDATA[$masterPid]]></code>
-      <code><![CDATA[$masterPid]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Command/ReloadCommand.php">
     <DeprecatedMethod>
@@ -64,14 +54,6 @@
     <PossiblyFalseIterator>
       <code><![CDATA[scandir($path)]]></code>
     </PossiblyFalseIterator>
-    <RedundantCondition>
-      <code><![CDATA[isArray]]></code>
-    </RedundantCondition>
-  </file>
-  <file src="src/HttpServerFactory.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$enableCoroutine]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
     <FalsableReturnStatement>
@@ -99,64 +81,6 @@
     <PossiblyNullReference>
       <code><![CDATA[getHeaderSize]]></code>
     </PossiblyNullReference>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$port]]></code>
-      <code><![CDATA[(string) $this->psrResponse->getBody()->getSize()]]></code>
-      <code><![CDATA[getenv($name)]]></code>
-    </RiskyTruthyFalsyComparison>
-  </file>
-  <file src="src/Log/AccessLogFormatter.php">
-    <InvalidNullableReturnType>
-      <code><![CDATA[string]]></code>
-      <code><![CDATA[string]]></code>
-    </InvalidNullableReturnType>
-    <NullableReturnStatement>
-      <code><![CDATA[preg_replace_callback(
-            '#%(?:[<>])?([%aABbDfhHklLmpPqrRstTuUvVXIOS])#',
-            static fn(array $matches) => match ($matches[1]) {
-                '%' => '%',
-                'a' => $map->getClientIp(),
-                'A' => $map->getLocalIp(),
-                'B' => $map->getBodySize('0'),
-                'b' => $map->getBodySize('-'),
-                'D' => $map->getRequestDuration('ms'),
-                'f' => $map->getFilename(),
-                'h' => $map->getRemoteHostname(),
-                'H' => $map->getProtocol(),
-                'm' => $map->getMethod(),
-                'p' => $map->getPort('canonical'),
-                'q' => $map->getQuery(),
-                'r' => $map->getRequestLine(),
-                's' => $map->getStatus(),
-                't' => $map->getRequestTime('begin:%d/%b/%Y:%H:%M:%S %z'),
-                'T' => $map->getRequestDuration('s'),
-                'u' => $map->getRemoteUser(),
-                'U' => $map->getPath(),
-                'v' => $map->getHost(),
-                'V' => $map->getServerName(),
-                'I' => (string) ($map->getRequestMessageSize() ?? '-'),
-                'O' => (string) ($map->getResponseMessageSize() ?? '-'),
-                'S' => $map->getTransferredSize(),
-                default => '-',
-            },
-            $format
-        )]]></code>
-      <code><![CDATA[preg_replace_callback(
-            '#%(?:[<>])?{([^}]+)}([aCeinopPtT])#',
-            static fn(array $matches) => match ($matches[2]) {
-                'a' => $map->getClientIp(),
-                'C' => $map->getCookie($matches[1]),
-                'e' => $map->getEnv($matches[1]),
-                'i' => $map->getRequestHeader($matches[1]),
-                'o' => $map->getResponseHeader($matches[1]),
-                'p' => $map->getPort($matches[1]),
-                't' => $map->getRequestTime($matches[1]),
-                'T' => $map->getRequestDuration($matches[1]),
-                default => '-',
-            },
-            $format
-        )]]></code>
-    </NullableReturnStatement>
   </file>
   <file src="src/Log/Psr3AccessLogDecorator.php">
     <MissingParamType>
@@ -195,9 +119,6 @@
     <MixedPropertyTypeCoercion>
       <code><![CDATA[$middleware]]></code>
     </MixedPropertyTypeCoercion>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[! $filename]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler.php">
     <MixedOperand>
@@ -214,9 +135,6 @@
     <MixedPropertyTypeCoercion>
       <code><![CDATA[$cacheControlDirectives]]></code>
     </MixedPropertyTypeCoercion>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$cacheControl]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
     <ArgumentTypeCoercion>
@@ -228,11 +146,6 @@
     <PossiblyFalseArgument>
       <code><![CDATA[$etag]]></code>
     </PossiblyFalseArgument>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$ifMatch]]></code>
-      <code><![CDATA[filemtime($filename)]]></code>
-      <code><![CDATA[filesize($filename)]]></code>
-    </RiskyTruthyFalsyComparison>
     <UnusedProperty>
       <code><![CDATA[$allowedETagValidationTypes]]></code>
     </UnusedProperty>
@@ -269,17 +182,11 @@
     <ArgumentTypeCoercion>
       <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[filemtime($filename)]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler/StaticResourceResponse.php">
     <PossiblyFalsePropertyAssignmentValue>
       <code><![CDATA[filesize($filename)]]></code>
     </PossiblyFalsePropertyAssignmentValue>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$responseContentCallback]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
     <ArgumentTypeCoercion>
@@ -295,10 +202,6 @@
     <PossiblyNullReference>
       <code><![CDATA[asString]]></code>
     </PossiblyNullReference>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$cookie->getDomain()]]></code>
-      <code><![CDATA[$cookie->getPath()]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/SwooleRequestHandlerRunner.php">
     <PossiblyUnusedReturnValue>
@@ -319,11 +222,6 @@
     <PossiblyUnusedReturnValue>
       <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$key]]></code>
-      <code><![CDATA[$this->body]]></code>
-      <code><![CDATA[$this->request->rawContent()]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Task/DeferredListenerDelegator.php">
     <UnusedParam>

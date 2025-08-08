@@ -28,11 +28,7 @@ final class SwooleEmitterTest extends TestCase
 {
     private SwooleEmitter $emitter;
 
-    /**
-     * @var SwooleHttpResponse|MockObject
-     * @psalm-var MockObject&SwooleHttpResponse
-     */
-    private $swooleResponse;
+    private SwooleHttpResponse&MockObject $swooleResponse;
 
     protected function setUp(): void
     {

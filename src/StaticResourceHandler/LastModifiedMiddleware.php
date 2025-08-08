@@ -41,7 +41,8 @@ class LastModifiedMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        $lastModified = filemtime($filename) ?: 0;
+        $fileTime     = filemtime($filename);
+        $lastModified = $fileTime !== false ? $fileTime : 0;
         $lastModified = new DateTimeImmutable('@' . $lastModified, new DateTimeZone('GMT'));
 
         $formattedLastModified = IntlDateFormatter::formatObject(

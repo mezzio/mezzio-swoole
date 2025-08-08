@@ -39,7 +39,7 @@ final class SwooleStream implements StreamInterface, Stringable
         /**
          * Swoole request containing the body contents.
          */
-        private SwooleHttpRequest $request
+        private readonly SwooleHttpRequest $request
     ) {
     }
 
@@ -90,7 +90,7 @@ final class SwooleStream implements StreamInterface, Stringable
             if ($this->body === null) {
                 $this->initRawContent();
             }
-            $this->bodySize = strlen($this->body);
+            $this->bodySize = strlen((string) $this->body);
         }
 
         return $this->bodySize;
@@ -119,7 +119,7 @@ final class SwooleStream implements StreamInterface, Stringable
         if ($this->body === null) {
             $this->initRawContent();
         }
-        $result = substr($this->body, $this->index, $length);
+        $result = substr((string) $this->body, $this->index, $length);
 
         // Reset index based on legnth; should not be > EOF position.
         $size        = $this->getSize();
@@ -206,12 +206,11 @@ final class SwooleStream implements StreamInterface, Stringable
 
     // phpcs:enable
     /**
-     * @param string $key
      * @return null|array
      */
-    public function getMetadata($key = null): ?array
+    public function getMetadata(?string $key = null): ?array
     {
-        return $key ? null : [];
+        return $key !== null ? null : [];
     }
 
     public function detach(): SwooleHttpRequest
@@ -229,10 +228,12 @@ final class SwooleStream implements StreamInterface, Stringable
      */
     private function initRawContent(): void
     {
-        if ($this->body) {
+        if ($this->body !== null) {
             return;
         }
 
-        $this->body = $this->request->rawContent() ?: '';
+        $raw = $this->request->rawContent();
+
+        $this->body = $raw === false ? '' : $raw;
     }
 }

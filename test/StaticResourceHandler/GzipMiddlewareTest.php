@@ -30,11 +30,9 @@ final class GzipMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /** @psalm-var StaticResourceResponse&MockObject */
-    private StaticResourceResponse|MockObject $staticResponse;
+    private StaticResourceResponse&MockObject $staticResponse;
 
-    /** @psalm-var SwooleHttpRequest&MockObject */
-    private SwooleHttpRequest|MockObject $swooleRequest;
+    private SwooleHttpRequest&MockObject $swooleRequest;
 
     /** @var callable */
     private $next;
