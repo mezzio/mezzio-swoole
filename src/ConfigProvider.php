@@ -69,7 +69,7 @@ class ConfigProvider
 {
     public function __invoke(): array
     {
-        if (! extension_loaded('swoole') && ! extension_loaded('openswoole')) {
+        if (! extension_loaded('swoole')) {
             throw new ExtensionNotLoadedException(
                 'One of either the Swoole (https://github.com/swoole/swoole-src) or'
                 . ' Open Swoole (https://www.swoole.co.uk) extensions must be loaded'

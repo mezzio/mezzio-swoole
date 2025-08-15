@@ -40,7 +40,7 @@ class SwooleEmitter implements EmitterInterface
      */
     public function emit(ResponseInterface $response): bool
     {
-        if (! extension_loaded('swoole') && ! extension_loaded('openswoole')) {
+        if (! extension_loaded('swoole')) {
             return false;
         }
 
