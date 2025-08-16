@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8345e8abca3af731490550f49b180436",
+    "content-hash": "d1229d390452be1b4a61b9b87dc02014",
     "packages": [
         {
             "name": "dflydev/fig-cookies",
@@ -5093,16 +5093,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "6.0.0",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "86a61562a1f1634339ee52f3b8988591f51a2799"
+                "reference": "6f12243dce071714c5febe059578d909698f9a52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/86a61562a1f1634339ee52f3b8988591f51a2799",
-                "reference": "86a61562a1f1634339ee52f3b8988591f51a2799",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/6f12243dce071714c5febe059578d909698f9a52",
+                "reference": "6f12243dce071714c5febe059578d909698f9a52",
                 "shasum": ""
             },
             "type": "library",
@@ -5119,9 +5119,9 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/6.0.0"
+                "source": "https://github.com/swoole/ide-helper/tree/6.0.2"
             },
-            "time": "2025-01-03T19:08:24+00:00"
+            "time": "2025-03-23T07:31:41+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -5409,7 +5409,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
-        "ext-swoole": "*"
+        "ext-swoole": "^6.0"
     },
     "platform-dev": {},
     "platform-overrides": {
