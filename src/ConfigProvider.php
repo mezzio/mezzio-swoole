@@ -37,7 +37,6 @@ use Mezzio\Swoole\Event\SwooleListenerProviderFactory;
 use Mezzio\Swoole\Event\WorkerStartEvent;
 use Mezzio\Swoole\Event\WorkerStartListener;
 use Mezzio\Swoole\Event\WorkerStartListenerFactory;
-use Mezzio\Swoole\Exception\ExtensionNotLoadedException;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
 use Mezzio\Swoole\Log\AccessLogFactory;
@@ -53,7 +52,6 @@ use Mezzio\Swoole\Task\TaskInvokerListenerFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
-use function extension_loaded;
 use function getcwd;
 
 use const PHP_SAPI;
@@ -69,14 +67,6 @@ class ConfigProvider
 {
     public function __invoke(): array
     {
-        if (! extension_loaded('swoole')) {
-            throw new ExtensionNotLoadedException(
-                'One of either the Swoole (https://github.com/swoole/swoole-src) or'
-                . ' Open Swoole (https://www.swoole.co.uk) extensions must be loaded'
-                . ' to use mezzio/mezzio-swoole'
-            );
-        }
-
         $config = PHP_SAPI === 'cli'
             ? ['dependencies' => $this->getDependencies()]
             : [];

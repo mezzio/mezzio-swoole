@@ -13,10 +13,6 @@ $ pecl install swoole
 
 For more information on the extension, [visit its package details on PECL](https://pecl.php.net/package/swoole).
 
-> ### Legacy Swoole compatibility
->
-> Since version 3.4.0, mezzio-swoole can work with either the original [Swoole](https://github.com/swoole/swoole-src) extension or the new community Swoole extension, as each defines the same classes, interfaces, and constants consumed by mezzio-swoole.
-
 ## Install mezzio-swoole
 
 To install this package, use [Composer](https://getcomposer.org/):
@@ -27,7 +23,7 @@ $ composer require mezzio/mezzio-swoole
 
 ## Swoole with Mezzio
 
-mezzio-swoole enables an Mezzio application to be executed with the [Swoole](https://wiki.swoole.com/) or original [Swoole](https://github.com/swoole/swoole-src) extensions.
+mezzio-swoole enables an Mezzio application to be executed with the [Swoole](https://github.com/swoole/swoole-src) extension.
 This means you can run the application from the command line, **without requiring a web server**.
 
 You can run the application using the following command:
