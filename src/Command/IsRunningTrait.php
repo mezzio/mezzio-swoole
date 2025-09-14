@@ -20,7 +20,7 @@ trait IsRunningTrait
     public function isRunning(): bool
     {
         /**
-         * @var array<string>
+         * @var array<string> $pids
          */
         $pids = $this->pidManager->read();
 
