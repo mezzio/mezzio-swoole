@@ -23,7 +23,7 @@ use function filesize;
 use function md5_file;
 use function sprintf;
 
-class ETagMiddlewareTest extends TestCase
+final class ETagMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 

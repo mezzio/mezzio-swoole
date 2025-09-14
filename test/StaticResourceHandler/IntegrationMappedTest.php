@@ -34,7 +34,7 @@ use function sprintf;
 /**
  * Integraiton tests for StaticMappedResourceHandler
  */
-class IntegrationMappedTest extends TestCase
+final class IntegrationMappedTest extends TestCase
 {
     use FormatTimestampTrait;
 

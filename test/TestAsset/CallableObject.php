@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\TestAsset;
 
-class CallableObject
+final class CallableObject
 {
     /**
      * @param array $params Array of arguments

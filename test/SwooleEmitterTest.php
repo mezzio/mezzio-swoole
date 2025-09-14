@@ -24,7 +24,7 @@ use function random_bytes;
 use function rewind;
 use function substr;
 
-class SwooleEmitterTest extends TestCase
+final class SwooleEmitterTest extends TestCase
 {
     private SwooleEmitter $emitter;
 

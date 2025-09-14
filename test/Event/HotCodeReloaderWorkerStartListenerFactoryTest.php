@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 
 use function getcwd;
 
-class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
+final class HotCodeReloaderWorkerStartListenerFactoryTest extends TestCase
 {
     public function testProducesHotCodeReloaderListenerWithDefaultConfiguration(): void
     {

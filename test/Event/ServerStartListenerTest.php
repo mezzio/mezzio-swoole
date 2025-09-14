@@ -19,7 +19,7 @@ use function chdir;
 use function getcwd;
 use function random_int;
 
-class ServerStartListenerTest extends TestCase
+final class ServerStartListenerTest extends TestCase
 {
     private string $cwd;
 

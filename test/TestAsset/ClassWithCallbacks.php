@@ -8,21 +8,13 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\TestAsset;
 
-class ClassWithCallbacks
+final class ClassWithCallbacks
 {
-    /**
-     * @param array $payload Array of arguments
-     * @psalm-param list<mixed> $payload
-     */
-    public static function staticCallback(...$payload): void
+    public static function staticCallback(): void
     {
     }
 
-    /**
-     * @param array $payload Array of arguments
-     * @psalm-param list<mixed> $payload
-     */
-    public function instanceCallback(...$payload): void
+    public function instanceCallback(): void
     {
     }
 }

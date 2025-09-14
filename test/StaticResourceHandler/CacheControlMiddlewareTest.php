@@ -15,7 +15,7 @@ use MezzioTest\Swoole\AssertResponseTrait;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
-class CacheControlMiddlewareTest extends TestCase
+final class CacheControlMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 

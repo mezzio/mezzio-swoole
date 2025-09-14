@@ -20,7 +20,7 @@ use function rmdir;
 use function sys_get_temp_dir;
 use function time;
 
-class FileLocationRepositoryTest extends TestCase
+final class FileLocationRepositoryTest extends TestCase
 {
     /** @psalm-var non-empty-string */
     private string $testDir;

@@ -19,7 +19,7 @@ use Swoole\Http\Request;
 
 use function time;
 
-class LastModifiedMiddlewareTest extends TestCase
+final class LastModifiedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
     use FormatTimestampTrait;

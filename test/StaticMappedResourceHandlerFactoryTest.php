@@ -28,7 +28,7 @@ use Webmozart\Assert\Assert;
 
 use function sprintf;
 
-class StaticMappedResourceHandlerFactoryTest extends TestCase
+final class StaticMappedResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 

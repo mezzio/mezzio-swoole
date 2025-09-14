@@ -14,7 +14,7 @@ use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
-class StatusCommandFactoryTest extends TestCase
+final class StatusCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 

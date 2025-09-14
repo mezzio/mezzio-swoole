@@ -21,7 +21,7 @@ use function time;
 
 use const UPLOAD_ERR_OK;
 
-class ServerRequestSwooleFactoryTest extends TestCase
+final class ServerRequestSwooleFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

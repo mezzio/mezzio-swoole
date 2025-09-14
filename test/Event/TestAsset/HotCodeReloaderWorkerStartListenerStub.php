@@ -8,7 +8,7 @@ use Closure;
 use Mezzio\Swoole\Event\HotCodeReloaderWorkerStartListener;
 use Override;
 
-class HotCodeReloaderWorkerStartListenerStub extends HotCodeReloaderWorkerStartListener
+final class HotCodeReloaderWorkerStartListenerStub extends HotCodeReloaderWorkerStartListener
 {
     public Closure $callbackTickAssertion;
     #[Override]

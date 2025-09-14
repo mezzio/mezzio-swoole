@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
-class StaticMappedResourceHandlerTest extends TestCase
+final class StaticMappedResourceHandlerTest extends TestCase
 {
     /**
      * @var FileLocationRepositoryInterface|MockObject

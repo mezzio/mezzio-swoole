@@ -26,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
 
-class ReloadCommandTest extends TestCase
+final class ReloadCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
     use ReflectMethodTrait;

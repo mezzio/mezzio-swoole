@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use function gethostname;
 use function implode;
 
-class AccessLogFormatterTest extends TestCase
+final class AccessLogFormatterTest extends TestCase
 {
     public function testFormatterDelegatesToDataMapToReplacePlaceholdersInFormat(): void
     {

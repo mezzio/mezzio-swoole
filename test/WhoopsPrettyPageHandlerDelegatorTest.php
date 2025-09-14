@@ -14,7 +14,7 @@ use Mezzio\Swoole\ConfigProvider;
 use PHPUnit\Framework\TestCase;
 use Whoops\Handler\PrettyPageHandler;
 
-class WhoopsPrettyPageHandlerDelegatorTest extends TestCase
+final class WhoopsPrettyPageHandlerDelegatorTest extends TestCase
 {
     private ServiceManager $container;
 

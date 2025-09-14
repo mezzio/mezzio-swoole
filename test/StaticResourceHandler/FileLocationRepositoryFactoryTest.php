@@ -20,7 +20,7 @@ use function rmdir;
 use function sys_get_temp_dir;
 use function time;
 
-class FileLocationRepositoryFactoryTest extends TestCase
+final class FileLocationRepositoryFactoryTest extends TestCase
 {
     /** @psalm-var MockObject&ContainerInterface */
     private ContainerInterface|MockObject $mockContainer;

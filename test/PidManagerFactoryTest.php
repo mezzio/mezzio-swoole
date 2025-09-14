@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
-class PidManagerFactoryTest extends TestCase
+final class PidManagerFactoryTest extends TestCase
 {
     /** @psalm-var MockObject&ContainerInterface */
     private ContainerInterface|MockObject $container;

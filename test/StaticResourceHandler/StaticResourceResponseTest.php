@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Response as SwooleResponse;
 
-class StaticResourceResponseTest extends TestCase
+final class StaticResourceResponseTest extends TestCase
 {
     public function testSendSwooleResponsePopulatesStatusAndHeadersAndCallsContentCallback(): void
     {

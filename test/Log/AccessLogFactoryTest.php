@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use ReflectionProperty;
 use Webmozart\Assert\Assert;
 
-class AccessLogFactoryTest extends TestCase
+final class AccessLogFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
     use LoggerFactoryHelperTrait;

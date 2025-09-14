@@ -9,7 +9,7 @@ use Mezzio\Swoole\Log\StrftimeToICUFormatMap;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class StrftimeToICUFormatMapTest extends TestCase
+final class StrftimeToICUFormatMapTest extends TestCase
 {
     public function testPatternsUsedInAccessLogFormatter(): void
     {

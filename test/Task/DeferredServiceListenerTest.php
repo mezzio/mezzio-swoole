@@ -21,7 +21,7 @@ use function array_shift;
 use function count;
 use function is_array;
 
-class DeferredServiceListenerTest extends TestCase
+final class DeferredServiceListenerTest extends TestCase
 {
     public function testListenerIsAccessibleAfterInstantiation(): void
     {

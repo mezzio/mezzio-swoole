@@ -8,6 +8,6 @@ declare(strict_types=1);
 
 namespace MezzioTest\Swoole\Event\TestAsset;
 
-class TestEvent
+final class TestEvent
 {
 }

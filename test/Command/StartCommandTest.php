@@ -32,7 +32,7 @@ use function sprintf;
 
 use const PATH_SEPARATOR;
 
-class StartCommandTest extends TestCase
+final class StartCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
     use ReflectMethodTrait;

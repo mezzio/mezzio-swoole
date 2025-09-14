@@ -17,7 +17,7 @@ use function fwrite;
 use function stream_get_meta_data;
 use function tmpfile;
 
-class InotifyFileWatcherTest extends TestCase
+final class InotifyFileWatcherTest extends TestCase
 {
     /** @var resource */
     private $file;

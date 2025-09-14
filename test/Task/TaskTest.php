@@ -14,7 +14,7 @@ use MezzioTest\Swoole\TestAsset\ClassWithCallbacks;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
-class TaskTest extends TestCase
+final class TaskTest extends TestCase
 {
     public function testInvocationReturnsResultOfExecutingCallableWithPayloadArguments(): void
     {

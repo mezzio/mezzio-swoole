@@ -14,7 +14,7 @@ use Mezzio\Swoole\StaticResourceHandlerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
-class StaticResourceRequestListenerFactoryTest extends TestCase
+final class StaticResourceRequestListenerFactoryTest extends TestCase
 {
     public function testFactoryCreatesListenerWithServicesFromContainer(): void
     {

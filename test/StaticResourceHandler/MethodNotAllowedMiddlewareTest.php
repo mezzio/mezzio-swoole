@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
-class MethodNotAllowedMiddlewareTest extends TestCase
+final class MethodNotAllowedMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 

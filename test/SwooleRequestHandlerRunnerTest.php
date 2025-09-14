@@ -32,7 +32,7 @@ use const PHP_VERSION_ID;
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
 
-class SwooleRequestHandlerRunnerTest extends TestCase
+final class SwooleRequestHandlerRunnerTest extends TestCase
 {
     /** @var EventDispatcherInterface&MockObject */
     private EventDispatcherInterface $dispatcher;

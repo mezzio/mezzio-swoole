@@ -21,7 +21,7 @@ use function array_key_exists;
 use function is_string;
 use function str_contains;
 
-class TaskEventDispatchListenerTest extends TestCase
+final class TaskEventDispatchListenerTest extends TestCase
 {
     /**
      * @var EventDispatcherInterface|MockObject

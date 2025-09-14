@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionProperty;
 
-class TaskInvokerListenerFactoryTest extends TestCase
+final class TaskInvokerListenerFactoryTest extends TestCase
 {
     public function assertPropertySame(mixed $expected, string $property, object $instance, string $message = ''): void
     {
