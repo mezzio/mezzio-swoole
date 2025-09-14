@@ -15,7 +15,6 @@ use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use Swoole\Http\Request as SwooleHttpRequest;
 
-use function extension_loaded;
 use function strlen;
 use function substr;
 
@@ -36,10 +35,6 @@ class SwooleStreamTest extends TestCase
 
     protected function setUp(): void
     {
-        if (! extension_loaded('swoole')) {
-            $this->markTestSkipped('The Swoole extension is not available');
-        }
-
         $this->request = $this->createMock(SwooleHttpRequest::class);
         $this->request
             ->method('rawContent')

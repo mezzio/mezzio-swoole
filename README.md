@@ -20,7 +20,7 @@
 >
 > You trust us enough to use our software. We ask that you trust us to say the truth on this. We need your help. Go out and protest this unnecessary war. Stop the bloodshed. Say "stop the war!"
 
-This library provides support for [Swoole](https://github.com/swoole/swoole-src) or [Open Swoole](https://www.swoole.co.uk/) for [Mezzio](https://docs.mezzio.dev/) applications.
+This library provides the support of [Swoole](https://github.com/swoole/swoole-src) into an [Mezzio](https://docs.mezzio.dev/) application.
 This means you can execute your Mezzio application using Swoole directly from the command line.
 
 ## Installation

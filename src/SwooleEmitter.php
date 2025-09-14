@@ -14,7 +14,6 @@ use Laminas\HttpHandlerRunner\Emitter\SapiEmitterTrait;
 use Psr\Http\Message\ResponseInterface;
 use Swoole\Http\Response as SwooleHttpResponse;
 
-use function extension_loaded;
 use function implode;
 use function substr;
 
@@ -40,10 +39,6 @@ class SwooleEmitter implements EmitterInterface
      */
     public function emit(ResponseInterface $response): bool
     {
-        if (! extension_loaded('swoole') && ! extension_loaded('openswoole')) {
-            return false;
-        }
-
         if (PHP_SAPI !== 'cli') {
             return false;
         }

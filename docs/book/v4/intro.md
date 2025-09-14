@@ -1,21 +1,17 @@
 # Swoole
 
-[Open Swoole](https://www.swoole.co.uk/) is a PECL extension for developing asynchronous applications in PHP.
+[Swoole](https://wiki.swoole.com/) is a PECL extension for developing asynchronous applications in PHP.
 It enables PHP developers to write high-performance, scalable, concurrent TCP, UDP, Unix socket, HTTP, or Websocket services without requiring in-depth knowledge about non-blocking I/O programming or the low-level Linux kernel.
 
 ## Install swoole
 
-You can install the Open Swoole extension on Linux or Mac environments using the following commands:
+You can install the Swoole extension on Linux or Mac environments using the following commands:
 
 ```bash
-$ pecl install openswoole
+$ pecl install swoole
 ```
 
-For more information on the extension, [visit its package details on PECL](https://pecl.php.net/package/openswoole).
-
-> ### Legacy Swoole compatibility
->
-> Since version 3.4.0, mezzio-swoole can work with either the original [Swoole](https://github.com/swoole/swoole-src) extension or the new community Open Swoole extension, as each defines the same classes, interfaces, and constants consumed by mezzio-swoole.
+For more information on the extension, [visit its package details on PECL](https://pecl.php.net/package/swoole).
 
 ## Install mezzio-swoole
 
@@ -27,7 +23,7 @@ $ composer require mezzio/mezzio-swoole
 
 ## Swoole with Mezzio
 
-mezzio-swoole enables an Mezzio application to be executed with the [Open Swoole](https://www.swoole.co.uk/) or original [Swoole](https://github.com/swoole/swoole-src) extensions.
+mezzio-swoole enables an Mezzio application to be executed with the [Swoole](https://github.com/swoole/swoole-src) extension.
 This means you can run the application from the command line, **without requiring a web server**.
 
 You can run the application using the following command:
