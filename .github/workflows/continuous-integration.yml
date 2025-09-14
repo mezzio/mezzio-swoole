@@ -6,9 +6,6 @@ on:
     branches:
     tags:
 
-env:
-  default_php: 8.2
-
 jobs:
   ci:
     uses: laminas/workflow-continuous-integration/.github/workflows/continuous-integration.yml@1.x
