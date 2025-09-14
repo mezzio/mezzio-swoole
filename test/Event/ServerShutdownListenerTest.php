@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
-class ServerShutdownListenerTest extends TestCase
+final class ServerShutdownListenerTest extends TestCase
 {
     public function testLitenerHasPidManagerDeleteAndEmitsLogNotice(): void
     {

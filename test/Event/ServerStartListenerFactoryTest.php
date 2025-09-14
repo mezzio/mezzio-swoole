@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-class ServerStartListenerFactoryTest extends TestCase
+final class ServerStartListenerFactoryTest extends TestCase
 {
     public function testFactoryCreatesListenerUsingServicesFromContainer(): void
     {

@@ -17,7 +17,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionProperty;
 
-class TaskEventDispatchListenerFactoryTest extends TestCase
+final class TaskEventDispatchListenerFactoryTest extends TestCase
 {
     public function asssertPropertySame(mixed $expected, string $property, object $instance, string $message = ''): void
     {

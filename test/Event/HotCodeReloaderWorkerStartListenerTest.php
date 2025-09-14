@@ -17,7 +17,7 @@ use Swoole\Http\Server;
 
 use function random_int;
 
-class HotCodeReloaderWorkerStartListenerTest extends TestCase
+final class HotCodeReloaderWorkerStartListenerTest extends TestCase
 {
     public function testListenerCreatesServerTickWhenWorkerIdIsZero(): void
     {

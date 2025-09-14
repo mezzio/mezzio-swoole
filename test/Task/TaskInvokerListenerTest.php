@@ -25,7 +25,7 @@ use function is_string;
 use function json_encode;
 use function str_contains;
 
-class TaskInvokerListenerTest extends TestCase
+final class TaskInvokerListenerTest extends TestCase
 {
     /**
      * @var ContainerInterface|MockObject

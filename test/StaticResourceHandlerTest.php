@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
-class StaticResourceHandlerTest extends TestCase
+final class StaticResourceHandlerTest extends TestCase
 {
     /** @psalm-var non-empty-string */
     private string $docRoot;

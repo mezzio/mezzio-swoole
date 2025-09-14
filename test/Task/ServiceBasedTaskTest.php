@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Swoole\Http\Server as SwooleHttpServer;
 
-class ServiceBasedTaskTest extends TestCase
+final class ServiceBasedTaskTest extends TestCase
 {
     public function testDirectlyInvokesNonDeferredListenerPulledFromContainerWithTaskPayload(): void
     {

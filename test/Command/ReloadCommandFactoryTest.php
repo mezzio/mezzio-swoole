@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 use const SWOOLE_BASE;
 use const SWOOLE_PROCESS;
 
-class ReloadCommandFactoryTest extends TestCase
+final class ReloadCommandFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 

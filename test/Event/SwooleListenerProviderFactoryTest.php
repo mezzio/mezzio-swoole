@@ -17,7 +17,7 @@ use stdClass;
 
 use function iterator_to_array;
 
-class SwooleListenerProviderFactoryTest extends TestCase
+final class SwooleListenerProviderFactoryTest extends TestCase
 {
     /**
      * @psalm-return iterable<array-key, list<mixed>>

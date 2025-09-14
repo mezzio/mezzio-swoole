@@ -19,7 +19,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Throwable;
 
-class RequestHandlerRequestListenerFactoryTest extends TestCase
+final class RequestHandlerRequestListenerFactoryTest extends TestCase
 {
     public function testFactoryProducesListenerUsingServicesFromContainer(): void
     {

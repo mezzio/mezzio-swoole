@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-class ServerShutdownListenerFactoryTest extends TestCase
+final class ServerShutdownListenerFactoryTest extends TestCase
 {
     public function testFactoryProducesListenerUsingServicesFromContainer(): void
     {

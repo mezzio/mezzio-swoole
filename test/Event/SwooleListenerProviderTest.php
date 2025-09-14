@@ -15,7 +15,7 @@ use stdClass;
 
 use function iterator_to_array;
 
-class SwooleListenerProviderTest extends TestCase
+final class SwooleListenerProviderTest extends TestCase
 {
     public function testProviderAllowsListenerRegistrationAndReturnsListenersBasedOnEventType(): void
     {

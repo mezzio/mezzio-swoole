@@ -29,7 +29,7 @@ use function filesize;
 use function md5_file;
 use function sprintf;
 
-class IntegrationTest extends TestCase
+final class IntegrationTest extends TestCase
 {
     use FormatTimestampTrait;
 

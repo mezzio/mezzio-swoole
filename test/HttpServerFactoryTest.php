@@ -41,7 +41,7 @@ use const SWOOLE_SSL;
 use const SWOOLE_UNIX_DGRAM;
 use const SWOOLE_UNIX_STREAM;
 
-class HttpServerFactoryTest extends TestCase
+final class HttpServerFactoryTest extends TestCase
 {
     /** @psalm-var MockObject&ContainerInterface */
     private ContainerInterface|MockObject $container;

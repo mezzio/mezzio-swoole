@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class SwooleLoggerFactoryTest extends TestCase
+final class SwooleLoggerFactoryTest extends TestCase
 {
     use LoggerFactoryHelperTrait;
 

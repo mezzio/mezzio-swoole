@@ -15,7 +15,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class EventDispatcherTest extends TestCase
+final class EventDispatcherTest extends TestCase
 {
     /**
      * @var ListenerProviderInterface|MockObject

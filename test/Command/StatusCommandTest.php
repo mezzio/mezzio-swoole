@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function getmypid;
 
-class StatusCommandTest extends TestCase
+final class StatusCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
     use ReflectMethodTrait;

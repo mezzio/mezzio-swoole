@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
-class EventDispatcherFactoryTest extends TestCase
+final class EventDispatcherFactoryTest extends TestCase
 {
     public function testReturnsDispatcherInstanceWithProviderFromContainer(): void
     {

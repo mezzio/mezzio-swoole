@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 
-class OptionsMiddlewareTest extends TestCase
+final class OptionsMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 

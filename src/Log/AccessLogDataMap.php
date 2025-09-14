@@ -402,7 +402,7 @@ class AccessLogDataMap
      */
     public function getRequestTime(string $format): string
     {
-        $begin = $this->getServerParam('request_time_float');
+        $begin = (float) $this->getServerParam('request_time_float');
         $time  = $begin;
 
         if (str_starts_with($format, 'begin:')) {
@@ -434,7 +434,7 @@ class AccessLogDataMap
      */
     public function getRequestDuration(string $format): string
     {
-        $begin = $this->getServerParam('request_time_float');
+        $begin = (float) $this->getServerParam('request_time_float');
         return match ($format) {
             'us' => (string) round(($this->endTime - $begin) * 1E6),
             'ms' => (string) round(($this->endTime - $begin) * 1E3),

@@ -22,7 +22,7 @@ use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 use Throwable;
 
-class RequestHandlerRequestListenerTest extends TestCase
+final class RequestHandlerRequestListenerTest extends TestCase
 {
     /** @psalm-var SwooleEmitter&MockObject */
     private SwooleEmitter $emitter;

@@ -17,7 +17,7 @@ use ReflectionProperty;
 use stdClass;
 use Swoole\Http\Server as SwooleHttpServer;
 
-class DeferredListenerDelegatorTest extends TestCase
+final class DeferredListenerDelegatorTest extends TestCase
 {
     public function testDelegatorReturnsResultOfFactoryVerbatimIfNotCallable(): void
     {

@@ -12,7 +12,7 @@ use Mezzio\Swoole\ConfigProvider;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use PHPUnit\Framework\TestCase;
 
-class ConfigProviderTest extends TestCase
+final class ConfigProviderTest extends TestCase
 {
     private ConfigProvider $provider;
 

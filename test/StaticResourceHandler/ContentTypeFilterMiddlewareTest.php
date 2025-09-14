@@ -16,7 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request;
 
-class ContentTypeFilterMiddlewareTest extends TestCase
+final class ContentTypeFilterMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
     use AttributeAssertionTrait;

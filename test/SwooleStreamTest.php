@@ -21,7 +21,7 @@ use function substr;
 use const SEEK_CUR;
 use const SEEK_END;
 
-class SwooleStreamTest extends TestCase
+final class SwooleStreamTest extends TestCase
 {
     /**
      * @var string

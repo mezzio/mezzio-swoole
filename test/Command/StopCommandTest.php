@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function getmypid;
 
-class StopCommandTest extends TestCase
+final class StopCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
     use ReflectMethodTrait;

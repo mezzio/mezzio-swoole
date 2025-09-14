@@ -19,7 +19,7 @@ use Swoole\Http\Request as SwooleHttpRequest;
 
 use function date_default_timezone_get;
 
-class AccessLogDataMapTest extends TestCase
+final class AccessLogDataMapTest extends TestCase
 {
     /** @psalm-var MockObject&SwooleHttpRequest */
     private SwooleHttpRequest|MockObject $request;

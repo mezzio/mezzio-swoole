@@ -20,7 +20,7 @@ use function array_shift;
 use function count;
 use function is_array;
 
-class DeferredListenerTest extends TestCase
+final class DeferredListenerTest extends TestCase
 {
     public function testListenerQuestsTaskComposingListenerAndEventWithServer(): void
     {

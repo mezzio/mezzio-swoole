@@ -26,7 +26,7 @@ use function file_get_contents;
 use function gzcompress;
 use function mb_strlen;
 
-class GzipMiddlewareTest extends TestCase
+final class GzipMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 

@@ -22,7 +22,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use Swoole\Http\Request;
 
-class Psr3AccessLogDecoratorTest extends TestCase
+final class Psr3AccessLogDecoratorTest extends TestCase
 {
     use AttributeAssertionTrait;
 

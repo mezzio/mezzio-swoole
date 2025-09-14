@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Swoole\Http\Request as SwooleHttpRequest;
 use Swoole\Http\Response as SwooleHttpResponse;
 
-class StaticResourceRequestListenerTest extends TestCase
+final class StaticResourceRequestListenerTest extends TestCase
 {
     /** @psalm-var StaticResourceHandlerInterface&MockObject */
     private StaticResourceHandlerInterface $handler;

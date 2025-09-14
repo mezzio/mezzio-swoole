@@ -1,123 +1,240 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.19.0@06b71be009a6bd6d81b9811855d6629b9fe90e1b">
+<files psalm-version="6.13.1@1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51">
   <file src="src/AbstractStaticResourceHandlerFactory.php">
     <MixedArrayOffset>
-      <code>$cacheControlDirectives[$regex]</code>
+      <code><![CDATA[$cacheControlDirectives[$regex]]]></code>
     </MixedArrayOffset>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$clearStatCacheInterval]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Command/IsRunningTrait.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$managerPid]]></code>
+      <code><![CDATA[$masterPid]]></code>
+      <code><![CDATA[$masterPid]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Command/ReloadCommand.php">
+    <DeprecatedMethod>
+      <code><![CDATA[StartCommand::getDefaultName()]]></code>
+      <code><![CDATA[StopCommand::getDefaultName()]]></code>
+    </DeprecatedMethod>
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Command/StartCommand.php">
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Command/StatusCommand.php">
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Command/StopCommand.php">
     <PossiblyUnusedProperty>
-      <code>$defaultName</code>
+      <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Event/ServerShutdownEvent.php">
     <PossiblyUnusedMethod>
-      <code>getServer</code>
+      <code><![CDATA[getServer]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Event/ServerShutdownListener.php">
     <PossiblyUnusedParam>
-      <code>$event</code>
+      <code><![CDATA[$event]]></code>
     </PossiblyUnusedParam>
   </file>
   <file src="src/Event/WorkerErrorEvent.php">
     <PossiblyUnusedMethod>
-      <code>getExitCode</code>
-      <code>getSignal</code>
+      <code><![CDATA[getExitCode]]></code>
+      <code><![CDATA[getSignal]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Exception/InvalidConfigException.php">
     <UnusedClass>
-      <code>InvalidConfigException</code>
+      <code><![CDATA[InvalidConfigException]]></code>
     </UnusedClass>
   </file>
+  <file src="src/HotCodeReload/FileWatcher/InotifyFileWatcher.php">
+    <PossiblyFalseIterator>
+      <code><![CDATA[scandir($path)]]></code>
+    </PossiblyFalseIterator>
+    <RedundantCondition>
+      <code><![CDATA[isArray]]></code>
+    </RedundantCondition>
+  </file>
   <file src="src/HttpServerFactory.php">
-    <InvalidConstantAssignmentValue>
-      <code>PROTOCOLS = [
-        SWOOLE_SOCK_TCP,
-        SWOOLE_SOCK_TCP6,
-        SWOOLE_SOCK_UDP,
-        SWOOLE_SOCK_UDP6,
-        SWOOLE_UNIX_DGRAM,
-        SWOOLE_UNIX_STREAM,
-    ]</code>
-    </InvalidConstantAssignmentValue>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$enableCoroutine]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Log/AccessLogDataMap.php">
-    <InvalidOperand>
-      <code>$begin</code>
-      <code>$begin</code>
-      <code>$begin</code>
-    </InvalidOperand>
+    <FalsableReturnStatement>
+      <code><![CDATA[$ip !== '-' && $this->useHostnameLookups
+            ? gethostbyaddr($ip)
+            : $ip]]></code>
+      <code><![CDATA[gethostname()]]></code>
+    </FalsableReturnStatement>
+    <InvalidFalsableReturnType>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+    </InvalidFalsableReturnType>
     <MixedOperand>
-      <code>$firstLineSize</code>
-      <code>$strlen($firstLine)</code>
+      <code><![CDATA[$firstLineSize]]></code>
+      <code><![CDATA[$strlen($firstLine)]]></code>
     </MixedOperand>
-    <PossiblyInvalidArgument>
-      <code>$time</code>
-    </PossiblyInvalidArgument>
-    <PossiblyInvalidOperand>
-      <code>$time</code>
-      <code>$time</code>
-    </PossiblyInvalidOperand>
+    <PossiblyFalseOperand>
+      <code><![CDATA[getcwd()]]></code>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
     <PossiblyNullOperand>
       <code><![CDATA[$this->getRequestMessageSize(0)]]></code>
       <code><![CDATA[$this->getResponseMessageSize(0)]]></code>
     </PossiblyNullOperand>
     <PossiblyNullReference>
-      <code>getHeaderSize</code>
+      <code><![CDATA[getHeaderSize]]></code>
     </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$port]]></code>
+      <code><![CDATA[(string) $this->psrResponse->getBody()->getSize()]]></code>
+      <code><![CDATA[getenv($name)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Log/AccessLogFormatter.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace_callback(
+            '#%(?:[<>])?([%aABbDfhHklLmpPqrRstTuUvVXIOS])#',
+            static fn(array $matches) => match ($matches[1]) {
+                '%' => '%',
+                'a' => $map->getClientIp(),
+                'A' => $map->getLocalIp(),
+                'B' => $map->getBodySize('0'),
+                'b' => $map->getBodySize('-'),
+                'D' => $map->getRequestDuration('ms'),
+                'f' => $map->getFilename(),
+                'h' => $map->getRemoteHostname(),
+                'H' => $map->getProtocol(),
+                'm' => $map->getMethod(),
+                'p' => $map->getPort('canonical'),
+                'q' => $map->getQuery(),
+                'r' => $map->getRequestLine(),
+                's' => $map->getStatus(),
+                't' => $map->getRequestTime('begin:%d/%b/%Y:%H:%M:%S %z'),
+                'T' => $map->getRequestDuration('s'),
+                'u' => $map->getRemoteUser(),
+                'U' => $map->getPath(),
+                'v' => $map->getHost(),
+                'V' => $map->getServerName(),
+                'I' => (string) ($map->getRequestMessageSize() ?? '-'),
+                'O' => (string) ($map->getResponseMessageSize() ?? '-'),
+                'S' => $map->getTransferredSize(),
+                default => '-',
+            },
+            $format
+        )]]></code>
+      <code><![CDATA[preg_replace_callback(
+            '#%(?:[<>])?{([^}]+)}([aCeinopPtT])#',
+            static fn(array $matches) => match ($matches[2]) {
+                'a' => $map->getClientIp(),
+                'C' => $map->getCookie($matches[1]),
+                'e' => $map->getEnv($matches[1]),
+                'i' => $map->getRequestHeader($matches[1]),
+                'o' => $map->getResponseHeader($matches[1]),
+                'p' => $map->getPort($matches[1]),
+                't' => $map->getRequestTime($matches[1]),
+                'T' => $map->getRequestDuration($matches[1]),
+                default => '-',
+            },
+            $format
+        )]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Log/Psr3AccessLogDecorator.php">
+    <MissingParamType>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+      <code><![CDATA[$message]]></code>
+    </MissingParamType>
+  </file>
+  <file src="src/Log/StrftimeToICUFormatMap.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace_callback(
+            '#(?P<token>%[aAbBcCdDeFgGhHIjklmMpPrRsSTuUVwWxXyYzZ])#',
+            self::generateMapCallback($requestTime),
+            $format
+        )]]></code>
+    </NullableReturnStatement>
   </file>
   <file src="src/PidManager.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[$content]]></code>
+    </PossiblyFalseArgument>
     <PossiblyUnusedReturnValue>
-      <code>bool</code>
+      <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/StaticMappedResourceHandler.php">
     <MixedPropertyTypeCoercion>
-      <code>$middleware</code>
+      <code><![CDATA[$middleware]]></code>
     </MixedPropertyTypeCoercion>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[! $filename]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler.php">
     <MixedOperand>
       <code><![CDATA[$request->server['request_uri']]]></code>
     </MixedOperand>
     <MixedPropertyTypeCoercion>
-      <code>$middleware</code>
+      <code><![CDATA[$middleware]]></code>
     </MixedPropertyTypeCoercion>
   </file>
   <file src="src/StaticResourceHandler/CacheControlMiddleware.php">
     <ArgumentTypeCoercion>
-      <code>$regexp</code>
+      <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
     <MixedPropertyTypeCoercion>
-      <code>$cacheControlDirectives</code>
+      <code><![CDATA[$cacheControlDirectives]]></code>
     </MixedPropertyTypeCoercion>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$cacheControl]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler/ETagMiddleware.php">
     <ArgumentTypeCoercion>
-      <code>$regexp</code>
+      <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
     <MixedPropertyTypeCoercion>
-      <code>$etagDirectives</code>
+      <code><![CDATA[$etagDirectives]]></code>
     </MixedPropertyTypeCoercion>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$etag]]></code>
+    </PossiblyFalseArgument>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$ifMatch]]></code>
+      <code><![CDATA[filemtime($filename)]]></code>
+      <code><![CDATA[filesize($filename)]]></code>
+    </RiskyTruthyFalsyComparison>
     <UnusedProperty>
-      <code>$allowedETagValidationTypes</code>
+      <code><![CDATA[$allowedETagValidationTypes]]></code>
     </UnusedProperty>
   </file>
   <file src="src/StaticResourceHandler/FileLocationRepository.php">
@@ -125,95 +242,149 @@
       <code><![CDATA[$this->mappedDocRoots[$prefix][]]]></code>
     </MixedArrayAssignment>
     <MixedOperand>
-      <code>$directory</code>
+      <code><![CDATA[$directory]]></code>
     </MixedOperand>
+  </file>
+  <file src="src/StaticResourceHandler/FileLocationRepositoryFactory.php">
+    <PossiblyFalseOperand>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="src/StaticResourceHandler/GzipMiddleware.php">
     <MixedOperand>
-      <code>$countBytes($line)</code>
+      <code><![CDATA[$countBytes($line)]]></code>
     </MixedOperand>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$line]]></code>
+    </PossiblyFalseArgument>
     <UnusedFunctionCall>
-      <code>stream_filter_append</code>
+      <code><![CDATA[stream_filter_append]]></code>
     </UnusedFunctionCall>
   </file>
   <file src="src/StaticResourceHandler/LastModifiedMiddleware.php">
     <ArgumentTypeCoercion>
-      <code>$regexp</code>
+      <code><![CDATA[$regexp]]></code>
     </ArgumentTypeCoercion>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[filemtime($filename)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/StaticResourceHandler/StaticResourceResponse.php">
+    <PossiblyFalsePropertyAssignmentValue>
+      <code><![CDATA[filesize($filename)]]></code>
+    </PossiblyFalsePropertyAssignmentValue>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$responseContentCallback]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/StaticResourceHandler/ValidateRegexTrait.php">
     <ArgumentTypeCoercion>
-      <code>$regex</code>
+      <code><![CDATA[$regex]]></code>
     </ArgumentTypeCoercion>
+  </file>
+  <file src="src/StaticResourceHandlerFactory.php">
+    <PossiblyFalseOperand>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="src/SwooleEmitter.php">
     <PossiblyNullReference>
-      <code>asString</code>
+      <code><![CDATA[asString]]></code>
     </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$cookie->getDomain()]]></code>
+      <code><![CDATA[$cookie->getPath()]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/SwooleRequestHandlerRunner.php">
     <PossiblyUnusedReturnValue>
-      <code>mixed</code>
+      <code><![CDATA[mixed]]></code>
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/SwooleStream.php">
     <PossiblyNullOperand>
-      <code>$size</code>
-      <code>$size</code>
+      <code><![CDATA[$size]]></code>
+      <code><![CDATA[$size]]></code>
     </PossiblyNullOperand>
     <PossiblyNullPropertyAssignmentValue>
-      <code>$size</code>
+      <code><![CDATA[$size]]></code>
       <code><![CDATA[$this->index + $length >= $size
             ? $size
             : $this->index + $length]]></code>
     </PossiblyNullPropertyAssignmentValue>
     <PossiblyUnusedReturnValue>
-      <code>int</code>
+      <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$key]]></code>
+      <code><![CDATA[$this->body]]></code>
+      <code><![CDATA[$this->request->rawContent()]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Task/DeferredListenerDelegator.php">
     <UnusedParam>
-      <code>$serviceName</code>
+      <code><![CDATA[$serviceName]]></code>
     </UnusedParam>
   </file>
   <file src="src/Task/Task.php">
     <PropertyTypeCoercion>
-      <code>$payload</code>
+      <code><![CDATA[$payload]]></code>
     </PropertyTypeCoercion>
+    <RedundantCondition>
+      <code><![CDATA[is_object($classOrObject)]]></code>
+    </RedundantCondition>
   </file>
   <file src="src/WhoopsPrettyPageHandlerDelegator.php">
     <PossiblyUnusedParam>
-      <code>$container</code>
-      <code>$serviceName</code>
+      <code><![CDATA[$container]]></code>
+      <code><![CDATA[$serviceName]]></code>
     </PossiblyUnusedParam>
   </file>
   <file src="test/AttributeAssertionTrait.php">
     <PossiblyUnusedMethod>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
-      <code>assertAttributeEmpty</code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
+      <code><![CDATA[assertAttributeEmpty]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedParam>
-      <code>$canonicalize</code>
-      <code>$delta</code>
-      <code>$ignoreCase</code>
-      <code>$maxDepth</code>
+      <code><![CDATA[$canonicalize]]></code>
+      <code><![CDATA[$delta]]></code>
+      <code><![CDATA[$ignoreCase]]></code>
+      <code><![CDATA[$maxDepth]]></code>
     </PossiblyUnusedParam>
+  </file>
+  <file src="test/Command/ReloadCommandTest.php">
+    <DeprecatedMethod>
+      <code><![CDATA[StartCommand::getDefaultName()]]></code>
+      <code><![CDATA[StartCommand::getDefaultName()]]></code>
+      <code><![CDATA[StopCommand::getDefaultName()]]></code>
+      <code><![CDATA[StopCommand::getDefaultName()]]></code>
+      <code><![CDATA[StopCommand::getDefaultName()]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="test/Command/StartCommandTest.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[realpath(__DIR__)]]></code>
+    </PossiblyFalseArgument>
   </file>
   <file src="test/Command/StatusCommandTest.php">
     <InvalidArgument>
-      <code>testExecuteIndicatesNoRunningServerWhenServerNotDetected</code>
-      <code>testExecuteIndicatesRunningServerWhenServerDetected</code>
+      <code><![CDATA[testExecuteIndicatesNoRunningServerWhenServerNotDetected]]></code>
+      <code><![CDATA[testExecuteIndicatesRunningServerWhenServerDetected]]></code>
     </InvalidArgument>
     <InvalidReturnType>
       <code><![CDATA[iterable<array-key, list<list<int|null>>>]]></code>
@@ -226,9 +397,9 @@
       <code><![CDATA[$command->waitThreshold]]></code>
     </InternalProperty>
     <InvalidArgument>
-      <code>testExecuteReturnsErrorIfUnableToStopServer</code>
-      <code>testExecuteReturnsSuccessIfAbleToStopServer</code>
-      <code>testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning</code>
+      <code><![CDATA[testExecuteReturnsErrorIfUnableToStopServer]]></code>
+      <code><![CDATA[testExecuteReturnsSuccessIfAbleToStopServer]]></code>
+      <code><![CDATA[testExecuteReturnsSuccessWhenServerIsNotCurrentlyRunning]]></code>
     </InvalidArgument>
     <InvalidReturnType>
       <code><![CDATA[iterable<array-key, list<list<null|int>>>]]></code>
@@ -236,8 +407,18 @@
   </file>
   <file src="test/Command/TestAsset/HttpServer.php">
     <PossiblyUnusedMethod>
-      <code>set</code>
+      <code><![CDATA[set]]></code>
     </PossiblyUnusedMethod>
+  </file>
+  <file src="test/Event/ServerStartListenerTest.php">
+    <PossiblyFalsePropertyAssignmentValue>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalsePropertyAssignmentValue>
+  </file>
+  <file src="test/Event/WorkerStartListenerTest.php">
+    <PossiblyFalsePropertyAssignmentValue>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalsePropertyAssignmentValue>
   </file>
   <file src="test/HotCodeReload/FileWatcher/InotifyFileWatcherTest.php">
     <InvalidPropertyAssignmentValue>
@@ -246,63 +427,157 @@
   </file>
   <file src="test/HttpServerFactoryTest.php">
     <InvalidArgument>
-      <code>testExceptionThrownForInvalidServerMode</code>
-      <code>testExceptionThrownForInvalidSocketType</code>
+      <code><![CDATA[testExceptionThrownForInvalidServerMode]]></code>
+      <code><![CDATA[testExceptionThrownForInvalidSocketType]]></code>
     </InvalidArgument>
-    <MixedReturnTypeCoercion>
-      <code>$validTypes</code>
-      <code><![CDATA[array<array-key, array{
-     *     0: int,
-     *     1: array<empty, empty>|array<string, non-empty-string>,
-     * }>]]></code>
-    </MixedReturnTypeCoercion>
   </file>
   <file src="test/Log/Psr3AccessLogDecoratorTest.php">
     <InvalidArgument>
-      <code>testProxiesToPsr3Methods</code>
+      <code><![CDATA[testProxiesToPsr3Methods]]></code>
     </InvalidArgument>
   </file>
   <file src="test/Log/SwooleLoggerFactoryTest.php">
     <InvalidArgument>
-      <code>testReturnsPsrLoggerWhenNoNamedLoggerIsFound</code>
-      <code>testReturnsStdoutLoggerWhenOtherLoggersAreNotFound</code>
+      <code><![CDATA[testReturnsPsrLoggerWhenNoNamedLoggerIsFound]]></code>
+      <code><![CDATA[testReturnsStdoutLoggerWhenOtherLoggersAreNotFound]]></code>
     </InvalidArgument>
+  </file>
+  <file src="test/StaticResourceHandler/ETagMiddlewareTest.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[[
+            'weak'   => [ETagMiddleware::ETAG_VALIDATION_WEAK, '/\.png$/', $filename, $weakETag],
+            'strong' => [ETagMiddleware::ETAG_VALIDATION_STRONG, '/\.png$/', $filename, $strongETag],
+        ]]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array<array-key, array{
+     *     0: string,
+     *     1: string,
+     *     2: string,
+     *     3: string,
+     * }>]]></code>
+    </InvalidReturnType>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$filesize]]></code>
+      <code><![CDATA[$lastModified]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="test/StaticResourceHandler/FileLocationRepositoryFactoryTest.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[$cwd]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="test/StaticResourceHandler/FileLocationRepositoryTest.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[$cwd]]></code>
+      <code><![CDATA[$dir]]></code>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$dir]]></code>
+      <code><![CDATA[getcwd()]]></code>
+      <code><![CDATA[getcwd()]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="test/StaticResourceHandler/GzipMiddlewareTest.php">
     <InvalidArgument>
-      <code>testMiddlewareInjectsResponseContentCallbackWhenItDetectsAnAcceptEncodingItCanHandle</code>
-      <code>testResponseContentCallbackEmitsExpectedHeadersAndCompressesContent</code>
+      <code><![CDATA[testMiddlewareInjectsResponseContentCallbackWhenItDetectsAnAcceptEncodingItCanHandle]]></code>
+      <code><![CDATA[testResponseContentCallbackEmitsExpectedHeadersAndCompressesContent]]></code>
     </InvalidArgument>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$expected]]></code>
+      <code><![CDATA[$expected]]></code>
+    </PossiblyFalseArgument>
   </file>
   <file src="test/StaticResourceHandler/HeadMiddlewareTest.php">
     <InvalidArgument>
-      <code>testMiddlewareDoesNothingIfRequestMethodIsNotHead</code>
+      <code><![CDATA[testMiddlewareDoesNothingIfRequestMethodIsNotHead]]></code>
     </InvalidArgument>
   </file>
   <file src="test/StaticResourceHandler/IntegrationMappedTest.php">
     <InvalidArgument>
-      <code>testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile</code>
+      <code><![CDATA[testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile]]></code>
     </InvalidArgument>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$lastModified]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="test/StaticResourceHandler/IntegrationTest.php">
     <InvalidArgument>
-      <code>testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile</code>
+      <code><![CDATA[testSendStaticResourceReturns405ResponseForUnsupportedMethodMatchingFile]]></code>
     </InvalidArgument>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[$lastModified]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+      <code><![CDATA[filesize($file)]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$lastModified]]></code>
+    </PossiblyFalseOperand>
   </file>
   <file src="test/StaticResourceHandler/MethodNotAllowedMiddlewareTest.php">
     <InvalidArgument>
-      <code>testMiddlewareDoesNothingForAllowedMethods</code>
-      <code>testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods</code>
+      <code><![CDATA[testMiddlewareDoesNothingForAllowedMethods]]></code>
+      <code><![CDATA[testMiddlewareReturns405ResponseWithAllowHeaderAndNoContentForDisallowedMethods]]></code>
     </InvalidArgument>
   </file>
   <file src="test/StaticResourceHandler/OptionsMiddlewareTest.php">
     <InvalidArgument>
-      <code>testMiddlewareDoesNothingForNonOptionsRequests</code>
+      <code><![CDATA[testMiddlewareDoesNothingForNonOptionsRequests]]></code>
     </InvalidArgument>
+  </file>
+  <file src="test/SwooleEmitterTest.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[$stream]]></code>
+      <code><![CDATA[$stream]]></code>
+      <code><![CDATA[$stream]]></code>
+      <code><![CDATA[$stream]]></code>
+    </PossiblyFalseArgument>
   </file>
   <file src="test/TestAsset/CallableObject.php">
     <LessSpecificReturnStatement>
-      <code>$params</code>
+      <code><![CDATA[$params]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code><![CDATA[list<mixed>]]></code>
@@ -310,12 +585,8 @@
   </file>
   <file src="test/TestAsset/ClassWithCallbacks.php">
     <PossiblyUnusedMethod>
-      <code>instanceCallback</code>
-      <code>staticCallback</code>
+      <code><![CDATA[instanceCallback]]></code>
+      <code><![CDATA[staticCallback]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedParam>
-      <code>$payload</code>
-      <code>$payload</code>
-    </PossiblyUnusedParam>
   </file>
 </files>
