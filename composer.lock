@@ -679,16 +679,16 @@
         },
         {
             "name": "mezzio/mezzio-template",
-            "version": "2.11.0",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-template.git",
-                "reference": "836b7e55f92277d5c557f96895d13a547c4abf14"
+                "reference": "6a3c0211b8e4d403fefce39b65f7a7cd704635fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-template/zipball/836b7e55f92277d5c557f96895d13a547c4abf14",
-                "reference": "836b7e55f92277d5c557f96895d13a547c4abf14",
+                "url": "https://api.github.com/repos/mezzio/mezzio-template/zipball/6a3c0211b8e4d403fefce39b65f7a7cd704635fd",
+                "reference": "6a3c0211b8e4d403fefce39b65f7a7cd704635fd",
                 "shasum": ""
             },
             "require": {
@@ -698,10 +698,10 @@
                 "zendframework/zend-expressive-template": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.5.0",
-                "phpunit/phpunit": "^10.5.36",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.26.1"
+                "laminas/laminas-coding-standard": "~3.1.0",
+                "phpunit/phpunit": "^10.5.45",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "vimeo/psalm": "^6.10.0"
             },
             "suggest": {
                 "mezzio/mezzio-laminasviewrenderer": "^2.0 to use the laminas-view PhpRenderer template renderer",
@@ -739,7 +739,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-10-16T20:54:53+00:00"
+            "time": "2025-09-30T08:42:10+00:00"
         },
         {
             "name": "psr/container",
