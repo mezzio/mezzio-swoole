@@ -11,3 +11,4 @@
 /.laminas-ci.json export-ignore
 /composer.lock export-ignore
 /renovate.json export-ignore
+/composer-dependency-analyser.php export-ignore
