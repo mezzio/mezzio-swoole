@@ -20,17 +20,13 @@ class LastModifiedMiddleware implements MiddlewareInterface
 {
     use ValidateRegexTrait;
 
-    /** @var string[] */
-    private array $lastModifiedDirectives = [];
-
     /**
      * @param string[] $lastModifiedDirectives Array of regexex indicating
      *     paths/file types that should emit a Last-Modified header.
      */
-    public function __construct(array $lastModifiedDirectives = [])
+    public function __construct(private array $lastModifiedDirectives = [])
     {
         $this->validateRegexList($lastModifiedDirectives, 'Last-Modified');
-        $this->lastModifiedDirectives = $lastModifiedDirectives;
     }
 
     public function __invoke(Request $request, string $filename, callable $next): StaticResourceResponse

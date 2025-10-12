@@ -38,7 +38,7 @@ final class StrftimeToICUFormatMap
      */
     private static function generateMapCallback(DateTimeInterface $requestTime): callable
     {
-        /** @psalm-param array<array-key, string> */
+        /** @psalm-param array<array-key, string> $matches */
         return static function (array $matches) use ($requestTime): string {
             Assert::keyExists($matches, 'token');
             return match (true) {

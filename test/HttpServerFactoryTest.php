@@ -269,10 +269,9 @@ final class HttpServerFactoryTest extends TestCase
 
     /**
      * @dataProvider validSocketTypes
-     * @param int $socketType
      * @psalm-param array<string, string> $additionalOptions
      */
-    public function testServerCanBeStartedForKnownSocketTypeCombinations($socketType, array $additionalOptions): void
+    public function testServerCanBeStartedForKnownSocketTypeCombinations(int $socketType, array $additionalOptions): void
     {
         $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [

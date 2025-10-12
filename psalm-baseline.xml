@@ -115,11 +115,6 @@
       <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
   </file>
-  <file src="src/StaticMappedResourceHandler.php">
-    <MixedPropertyTypeCoercion>
-      <code><![CDATA[$middleware]]></code>
-    </MixedPropertyTypeCoercion>
-  </file>
   <file src="src/StaticResourceHandler.php">
     <MixedOperand>
       <code><![CDATA[$request->server['request_uri']]]></code>
@@ -258,12 +253,6 @@
       <code><![CDATA[assertAttributeEmpty]]></code>
       <code><![CDATA[assertAttributeEmpty]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedParam>
-      <code><![CDATA[$canonicalize]]></code>
-      <code><![CDATA[$delta]]></code>
-      <code><![CDATA[$ignoreCase]]></code>
-      <code><![CDATA[$maxDepth]]></code>
-    </PossiblyUnusedParam>
   </file>
   <file src="test/Command/ReloadCommandTest.php">
     <DeprecatedMethod>

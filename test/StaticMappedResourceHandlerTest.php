@@ -44,6 +44,7 @@ final class StaticMappedResourceHandlerTest extends TestCase
     public function testConstructorRaisesExceptionForInvalidMiddlewareValue(): void
     {
         $this->expectException(Exception\InvalidStaticResourceMiddlewareException::class);
+        /** @psalm-suppress InvalidArgument */
         new StaticMappedResourceHandler($this->fileLocRepo, [$this]);
     }
 
