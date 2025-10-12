@@ -22,7 +22,7 @@ use const JSON_THROW_ON_ERROR;
 /**
  * Derived from phly/phly-swoole-taskworker, @copyright Copyright (c) Matthew Weier O'Phinney
  */
-final class TaskInvokerListener
+final readonly class TaskInvokerListener
 {
     public function __construct(private ContainerInterface $container, private ?LoggerInterface $logger = null)
     {

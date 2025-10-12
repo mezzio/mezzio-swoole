@@ -30,8 +30,7 @@ final class StaticResourceHandlerFactoryTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /** @psalm-var MockObject&ContainerInterface */
-    private ContainerInterface|MockObject $container;
+    private ContainerInterface&MockObject $container;
 
     protected function setUp(): void
     {

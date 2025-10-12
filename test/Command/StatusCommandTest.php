@@ -24,17 +24,11 @@ final class StatusCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @psalm-var MockObject&InputInterface */
-    private InputInterface|MockObject $input;
+    private InputInterface&MockObject $input;
 
-    /**
-     * @var OutputInterface|MockObject
-     * @psalm-var MockObject&OutputInterface
-     */
-    private $output;
+    private OutputInterface&MockObject $output;
 
-    /** @psalm-var MockObject&PidManager */
-    private PidManager|MockObject $pidManager;
+    private PidManager&MockObject $pidManager;
 
     protected function setUp(): void
     {

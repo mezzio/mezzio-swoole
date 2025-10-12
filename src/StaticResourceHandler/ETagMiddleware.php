@@ -100,10 +100,12 @@ class ETagMiddleware implements MiddlewareInterface
         string $filename,
         StaticResourceResponse $response
     ): StaticResourceResponse {
-        $lastModified = filemtime($filename) ?: 0;
+        $fileTime     = filemtime($filename);
+        $lastModified = $fileTime !== false ? $fileTime : 0;
         switch ($this->etagValidationType) {
             case self::ETAG_VALIDATION_WEAK:
-                $filesize = filesize($filename) ?: 0;
+                $size     = filesize($filename);
+                $filesize = $size !== false ? $size : 0;
                 if (! $lastModified || ! $filesize) {
                     return $response;
                 }
@@ -122,7 +124,7 @@ class ETagMiddleware implements MiddlewareInterface
         // Determine if ETag the client expects matches calculated ETag
         $ifMatch     = $request->header['if-match'] ?? '';
         $ifNoneMatch = $request->header['if-none-match'] ?? '';
-        $clientEtags = explode(',', $ifMatch ?: $ifNoneMatch);
+        $clientEtags = explode(',', $ifMatch !== '' ? $ifMatch : $ifNoneMatch);
         array_walk($clientEtags, 'trim');
 
         if (in_array($etag, $clientEtags, true)) {

@@ -42,7 +42,7 @@ EOH;
      */
     public static $defaultName = 'mezzio:swoole:reload';
 
-    public function __construct(private int $serverMode)
+    public function __construct(private readonly int $serverMode)
     {
         parent::__construct();
     }

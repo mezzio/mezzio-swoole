@@ -22,8 +22,7 @@ use function time;
 
 final class FileLocationRepositoryFactoryTest extends TestCase
 {
-    /** @psalm-var MockObject&ContainerInterface */
-    private ContainerInterface|MockObject $mockContainer;
+    private ContainerInterface&MockObject $mockContainer;
 
     private FileLocationRepositoryFactory $fileLocRepoFactory;
 

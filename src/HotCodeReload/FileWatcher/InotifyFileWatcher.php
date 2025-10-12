@@ -74,7 +74,6 @@ class InotifyFileWatcher implements FileWatcherInterface
         $paths  = [];
         if (is_array($events)) {
             foreach ($events as $event) {
-                Assert::isArray($event);
                 /** @var ?string $wd */
                 $wd = $event['wd'] ?? null;
                 if (null === $wd) {

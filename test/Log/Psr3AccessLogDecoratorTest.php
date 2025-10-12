@@ -26,20 +26,15 @@ final class Psr3AccessLogDecoratorTest extends TestCase
 {
     use AttributeAssertionTrait;
 
-    /** @psalm-var MockObject&LoggerInterface */
-    private LoggerInterface|MockObject $psr3Logger;
+    private LoggerInterface&MockObject $psr3Logger;
 
-    /** @psalm-var MockObject&AccessLogFormatterInterface */
-    private AccessLogFormatterInterface|MockObject $formatter;
+    private AccessLogFormatterInterface&MockObject $formatter;
 
-    /** @psalm-var MockObject&Request */
-    private Request|MockObject $request;
+    private Request&MockObject $request;
 
-    /** @psalm-var MockObject&Psr7Response */
-    private Psr7Response|MockObject $psr7Response;
+    private Psr7Response&MockObject $psr7Response;
 
-    /** @psalm-var MockObject&StaticResourceResponse */
-    private StaticResourceResponse|MockObject $staticResponse;
+    private StaticResourceResponse&MockObject $staticResponse;
 
     protected function setUp(): void
     {
@@ -50,8 +45,7 @@ final class Psr3AccessLogDecoratorTest extends TestCase
         $this->staticResponse = $this->createMock(StaticResourceResponse::class);
     }
 
-    /** @return mixed */
-    private function getPropertyForInstance(string $property, object $instance)
+    private function getPropertyForInstance(string $property, object $instance): mixed
     {
         $r = new ReflectionProperty($instance, $property);
         return $r->getValue($instance);
@@ -118,7 +112,7 @@ final class Psr3AccessLogDecoratorTest extends TestCase
         $this->formatter
             ->method('format')
             ->with($this->callback(
-                fn (AccessLogDataMap $mapper) =>
+                fn (AccessLogDataMap $mapper): bool =>
                 $this->request === $this->getPropertyForInstance('request', $mapper) &&
                     $this->staticResponse === $this->getPropertyForInstance('staticResource', $mapper) &&
                     false === $this->getPropertyForInstance('useHostnameLookups', $mapper)
@@ -149,7 +143,7 @@ final class Psr3AccessLogDecoratorTest extends TestCase
         $this->formatter
             ->method('format')
             ->with($this->callback(
-                fn (AccessLogDataMap $mapper) =>
+                fn (AccessLogDataMap $mapper): bool =>
                 $this->request === $this->getPropertyForInstance('request', $mapper) &&
                     $this->psr7Response === $this->getPropertyForInstance('psrResponse', $mapper) &&
                     false === $this->getPropertyForInstance('useHostnameLookups', $mapper)

@@ -18,11 +18,7 @@ final class SwooleLoggerFactoryTest extends TestCase
 {
     use LoggerFactoryHelperTrait;
 
-    /**
-     * @var LoggerInterface|MockObject
-     * @psalm-var LoggerInterface&MockObject
-     */
-    private $logger;
+    private LoggerInterface&MockObject $logger;
 
     protected function setUp(): void
     {

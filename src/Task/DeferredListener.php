@@ -27,7 +27,7 @@ final class DeferredListener
     /** @var callable */
     private $listener;
 
-    public function __construct(private SwooleHttpServer $server, callable $listener)
+    public function __construct(private readonly SwooleHttpServer $server, callable $listener)
     {
         $this->listener = $listener;
     }

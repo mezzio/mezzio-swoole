@@ -27,23 +27,11 @@ use function str_contains;
 
 final class TaskInvokerListenerTest extends TestCase
 {
-    /**
-     * @var ContainerInterface|MockObject
-     * @psalm-var ContainerInterface&MockObject
-     */
-    private ContainerInterface $container;
+    private ContainerInterface&MockObject $container;
 
-    /**
-     * @var TaskEvent|MockObject
-     * @psalm-var TaskEvent&MockObject
-     */
-    private TaskEvent $event;
+    private TaskEvent&MockObject $event;
 
-    /**
-     * @var LoggerInterface|MockObject
-     * @psalm-var LoggerInterface&MockObject
-     */
-    private LoggerInterface $logger;
+    private LoggerInterface&MockObject $logger;
 
     protected function setUp(): void
     {

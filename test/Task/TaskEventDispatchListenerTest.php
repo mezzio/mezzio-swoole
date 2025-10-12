@@ -23,23 +23,11 @@ use function str_contains;
 
 final class TaskEventDispatchListenerTest extends TestCase
 {
-    /**
-     * @var EventDispatcherInterface|MockObject
-     * @psalm-var EventDispatcherInterface&MockObject
-     */
-    private EventDispatcherInterface $dispatcher;
+    private EventDispatcherInterface&MockObject $dispatcher;
 
-    /**
-     * @var TaskEvent|MockObject
-     * @psalm-var TaskEvent&MockObject
-     */
-    private TaskEvent $event;
+    private TaskEvent&MockObject $event;
 
-    /**
-     * @var LoggerInterface|MockObject
-     * @psalm-var LoggerInterface&MockObject
-     */
-    private LoggerInterface $logger;
+    private LoggerInterface&MockObject $logger;
 
     protected function setUp(): void
     {

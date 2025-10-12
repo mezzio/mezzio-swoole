@@ -15,6 +15,7 @@ use Psr\Http\Message\ResponseInterface as PsrResponse;
 use RuntimeException;
 use Swoole\Http\Request as SwooleHttpRequest;
 
+use function array_key_exists;
 use function filter_var;
 use function function_exists;
 use function getcwd;
@@ -23,6 +24,7 @@ use function gethostbyaddr;
 use function gethostname;
 use function http_build_query;
 use function implode;
+use function is_numeric;
 use function is_string;
 use function microtime;
 use function preg_match;
@@ -46,7 +48,7 @@ class AccessLogDataMap
     /**
      * Timestamp when created, indicating end of request processing.
      */
-    private float $endTime;
+    private readonly float $endTime;
 
     private ?PsrResponse $psrResponse = null;
 
@@ -126,7 +128,9 @@ class AccessLogDataMap
     public function getBodySize(string $default): string
     {
         if ($this->psrResponse !== null) {
-            return (string) $this->psrResponse->getBody()->getSize() ?: $default;
+            $size = $this->psrResponse->getBody()->getSize();
+
+            return $size === null ? $default : (string) $size;
         }
 
         if ($this->staticResource !== null) {
@@ -200,7 +204,8 @@ class AccessLogDataMap
      */
     public function getEnv(string $name): string
     {
-        return getenv($name) ?: '-';
+        $value = getenv($name);
+        return $value === false ? '-' : $value;
     }
 
     /**
@@ -220,8 +225,10 @@ class AccessLogDataMap
             case 'canonical':
             case 'local':
                 preg_match(self::HOST_PORT_REGEX, $this->request->header['host'] ?? '', $matches);
-                $port   = $matches['port'] ?? null;
-                $port   = $port ?: $this->getServerParam('server_port', '80');
+                $port   = array_key_exists('port', $matches) && is_numeric($matches['port'])
+                    ? (int) $matches['port']
+                    : null;
+                $port   = $port !== null ? $this->getServerParam('server_port', '80') : '80';
                 $scheme = $this->getServerParam('https', '');
                 return $scheme && $port === '80' ? '443' : $port;
             default:
@@ -332,10 +339,8 @@ class AccessLogDataMap
 
     /**
      * Get the request message size (including first line and headers)
-     *
-     * @param null|int $default
      */
-    public function getRequestMessageSize($default = null): ?int
+    public function getRequestMessageSize(?int $default = null): ?int
     {
         $strlen = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
 
@@ -367,10 +372,8 @@ class AccessLogDataMap
 
     /**
      * Get the response message size (including first line and headers)
-     *
-     * @param null|int $default
      */
-    public function getResponseMessageSize($default = null): ?int
+    public function getResponseMessageSize(?int $default = null): ?int
     {
         if ($this->psrResponse !== null) {
             $bodySize = $this->psrResponse->getBody()->getSize();
@@ -443,8 +446,8 @@ class AccessLogDataMap
     }
 
     private function __construct(
-        private SwooleHttpRequest $request,
-        private bool $useHostnameLookups
+        private readonly SwooleHttpRequest $request,
+        private readonly bool $useHostnameLookups
     ) {
         $this->endTime = microtime(true);
     }

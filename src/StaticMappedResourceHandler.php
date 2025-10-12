@@ -20,22 +20,16 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
     use ValidateMiddlewareTrait;
 
     /**
-     * Middleware to execute when serving a static resource.
-     *
-     * @var StaticResourceHandler\MiddlewareInterface[]
-     */
-    private array $middleware = [];
-
-    /**
+     * @param StaticResourceHandler\MiddlewareInterface[] $middleware Middleware to execute
+     *     when serving a static resource.
      * @throws Exception\InvalidStaticResourceMiddlewareException For any
      *     non-callable middleware encountered.
      */
     public function __construct(
         private FileLocationRepositoryInterface $fileLocationRepo,
-        array $middleware = []
+        private array $middleware = []
     ) {
         $this->validateMiddleware($middleware);
-        $this->middleware = $middleware;
     }
 
     public function processStaticResource(
@@ -43,7 +37,7 @@ class StaticMappedResourceHandler implements StaticResourceHandlerInterface
         SwooleHttpResponse $response
     ): ?StaticResourceResponse {
         $filename = $this->fileLocationRepo->findFile($request->server['request_uri']);
-        if (! $filename) {
+        if ($filename === null) {
             return null;
         }
 

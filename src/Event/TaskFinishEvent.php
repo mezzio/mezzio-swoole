@@ -12,9 +12,11 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 class TaskFinishEvent extends AbstractTaskEvent
 {
-    /** @param mixed $data */
-    public function __construct(SwooleHttpServer $server, int $taskId, $data)
-    {
+    public function __construct(
+        SwooleHttpServer $server,
+        int $taskId,
+        mixed $data
+    ) {
         $this->server = $server;
         $this->taskId = $taskId;
         $this->data   = $data;

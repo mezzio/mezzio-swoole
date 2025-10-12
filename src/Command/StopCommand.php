@@ -59,7 +59,7 @@ EOH;
 
     public function __construct(private PidManager $pidManager)
     {
-        $this->killProcess = Closure::fromCallable([SwooleProcess::class, 'kill']);
+        $this->killProcess = SwooleProcess::kill(...);
         parent::__construct();
     }
 

@@ -37,22 +37,15 @@ final class StartCommandTest extends TestCase
     use AttributeAssertionTrait;
     use ReflectMethodTrait;
 
-    /** @psalm-var MockObject&ContainerInterface */
-    private ContainerInterface|MockObject $container;
+    private ContainerInterface&MockObject $container;
 
-    /** @psalm-var MockObject&InputInterface */
-    private InputInterface|MockObject $input;
+    private InputInterface&MockObject $input;
 
     private string $originalIncludePath;
 
-    /**
-     * @var OutputInterface|MockObject
-     * @psalm-var MockObject&OutputInterface
-     */
-    private $output;
+    private OutputInterface&MockObject $output;
 
-    /** @psalm-var MockObject&PidManager */
-    private PidManager|MockObject $pidManager;
+    private PidManager&MockObject $pidManager;
 
     protected function setUp(): void
     {
@@ -227,7 +220,7 @@ final class StartCommandTest extends TestCase
         $httpServer
             ->expects($this->once())
             ->method('set')
-            ->with($this->callback(static fn(array $options) => array_key_exists('daemonize', $options)
+            ->with($this->callback(static fn(array $options): bool => array_key_exists('daemonize', $options)
                 && array_key_exists('worker_num', $options)
                 && array_key_exists('task_worker_num', $options)
                 && true === $options['daemonize']

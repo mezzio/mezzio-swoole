@@ -13,14 +13,16 @@ use Swoole\Http\Server as SwooleHttpServer;
 
 class TaskEvent extends AbstractTaskEvent implements StoppableEventInterface
 {
-    /** @var mixed */
-    private $returnValue;
+    private mixed $returnValue;
 
     private bool $taskProcessed = false;
 
-    /** @param mixed $data */
-    public function __construct(SwooleHttpServer $server, int $taskId, private int $workerId, $data)
-    {
+    public function __construct(
+        SwooleHttpServer $server,
+        int $taskId,
+        private readonly int $workerId,
+        mixed $data
+    ) {
         $this->server = $server;
         $this->taskId = $taskId;
         $this->data   = $data;
@@ -41,8 +43,7 @@ class TaskEvent extends AbstractTaskEvent implements StoppableEventInterface
         $this->returnValue = $returnValue;
     }
 
-    /** @return mixed */
-    public function getReturnValue()
+    public function getReturnValue(): mixed
     {
         return $this->returnValue;
     }

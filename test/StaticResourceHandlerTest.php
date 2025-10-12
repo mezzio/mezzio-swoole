@@ -22,17 +22,9 @@ final class StaticResourceHandlerTest extends TestCase
     /** @psalm-var non-empty-string */
     private string $docRoot;
 
-    /**
-     * @var SwooleHttpRequest|MockObject
-     * @psalm-var MockObject&SwooleHttpRequest
-     */
-    private $request;
+    private SwooleHttpRequest&MockObject $request;
 
-    /**
-     * @var SwooleHttpResponse|MockObject
-     * @psalm-var MockObject&SwooleHttpResponse
-     */
-    private $response;
+    private SwooleHttpResponse&MockObject $response;
 
     protected function setUp(): void
     {
@@ -82,11 +74,8 @@ final class StaticResourceHandlerTest extends TestCase
         $expectedResponse->expects($this->once())->method('sendSwooleResponse')->with($this->response, $filename);
 
         $middleware = new class ($expectedResponse) implements MiddlewareInterface {
-            private StaticResourceResponse $response;
-
-            public function __construct(StaticResourceResponse $response)
+            public function __construct(private readonly StaticResourceResponse $response)
             {
-                $this->response = $response;
             }
 
             public function __invoke(

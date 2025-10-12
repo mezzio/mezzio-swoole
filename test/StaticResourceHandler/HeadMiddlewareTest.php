@@ -19,8 +19,7 @@ final class HeadMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /** @psalm-var MockObject&Request */
-    private Request|MockObject $request;
+    private Request&MockObject $request;
 
     /** @var callable */
     private $next;

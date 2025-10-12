@@ -14,14 +14,14 @@ use Psr\EventDispatcher\StoppableEventInterface;
 
 class EventDispatcher implements EventDispatcherInterface
 {
-    public function __construct(private ListenerProviderInterface $listenerProvider)
+    public function __construct(private readonly ListenerProviderInterface $listenerProvider)
     {
     }
 
     /**
      * @return object Returns the event passed to the method.
      */
-    public function dispatch(object $event)
+    public function dispatch(object $event): object
     {
         $stoppable = $event instanceof StoppableEventInterface;
 

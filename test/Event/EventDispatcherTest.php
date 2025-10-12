@@ -17,11 +17,7 @@ use Psr\EventDispatcher\StoppableEventInterface;
 
 final class EventDispatcherTest extends TestCase
 {
-    /**
-     * @var ListenerProviderInterface|MockObject
-     * @psalm-var ListenerProviderInterface&MockObject
-     */
-    private ListenerProviderInterface $provider;
+    private ListenerProviderInterface&MockObject $provider;
 
     private EventDispatcher $dispatcher;
 
@@ -83,11 +79,8 @@ final class EventDispatcherTest extends TestCase
         };
 
         $event = new class ($spy) implements StoppableEventInterface {
-            private object $spy;
-
-            public function __construct(object $spy)
+            public function __construct(private readonly object $spy)
             {
-                $this->spy = $spy;
             }
 
             public function isPropagationStopped(): bool

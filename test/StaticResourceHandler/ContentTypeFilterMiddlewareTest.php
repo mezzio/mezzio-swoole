@@ -21,8 +21,7 @@ final class ContentTypeFilterMiddlewareTest extends TestCase
     use AssertResponseTrait;
     use AttributeAssertionTrait;
 
-    /** @psalm-var MockObject&Request */
-    private Request|MockObject $request;
+    private Request&MockObject $request;
 
     protected function setUp(): void
     {
@@ -50,7 +49,7 @@ final class ContentTypeFilterMiddlewareTest extends TestCase
 
     public function testMiddlewareReturnsFailureResponseIfFileNotAllowedByTypeMap(): void
     {
-        $next       = static function (Request $request, string $filename): void {
+        $next       = static function (Request $request, string $filename): never {
             TestCase::fail('Should not have invoked next middleware');
         };
         $middleware = new ContentTypeFilterMiddleware([

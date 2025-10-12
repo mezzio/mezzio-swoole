@@ -62,10 +62,10 @@ class RequestHandlerRequestListener
     private $serverRequestFactory;
 
     public function __construct(
-        private RequestHandlerInterface $requestHandler,
+        private readonly RequestHandlerInterface $requestHandler,
         callable $serverRequestFactory,
         callable $serverRequestErrorResponseGenerator,
-        private AccessLogInterface $logger,
+        private readonly AccessLogInterface $logger,
         ?callable $emitterFactory = null
     ) {
         // Factories are cast as Closures to ensure return type safety.

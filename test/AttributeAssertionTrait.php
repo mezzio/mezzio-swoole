@@ -23,7 +23,7 @@ trait AttributeAssertionTrait
     /**
      * @param object $instance Instance composing attribute to test
      */
-    public static function assertAttributeEmpty(string $attributeName, $instance, string $message = ''): void
+    public static function assertAttributeEmpty(string $attributeName, object $instance, string $message = ''): void
     {
         $r = new ReflectionProperty($instance, $attributeName);
         Assert::assertEmpty($r->getValue($instance), $message);
@@ -36,12 +36,8 @@ trait AttributeAssertionTrait
     public static function assertAttributeEquals(
         mixed $expected,
         string $attributeName,
-        $instance,
+        object $instance,
         string $message = '',
-        float $delta = 0,
-        int $maxDepth = 10,
-        bool $canonicalize = false,
-        bool $ignoreCase = false
     ): void {
         $r = new ReflectionProperty($instance, $attributeName);
         Assert::assertEquals($expected, $r->getValue($instance), $message);
@@ -54,7 +50,7 @@ trait AttributeAssertionTrait
     public static function assertAttributeInstanceOf(
         mixed $expected,
         string $attributeName,
-        $instance,
+        object $instance,
         string $message = ''
     ): void {
         $r = new ReflectionProperty($instance, $attributeName);
@@ -68,7 +64,7 @@ trait AttributeAssertionTrait
     public static function assertAttributeSame(
         mixed $expected,
         string $attributeName,
-        $instance,
+        object $instance,
         string $message = ''
     ): void {
         $r = new ReflectionProperty($instance, $attributeName);

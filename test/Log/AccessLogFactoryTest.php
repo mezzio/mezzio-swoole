@@ -25,14 +25,9 @@ final class AccessLogFactoryTest extends TestCase
     use AttributeAssertionTrait;
     use LoggerFactoryHelperTrait;
 
-    /**
-     * @var LoggerInterface|MockObject
-     * @psalm-var LoggerInterface&MockObject
-     */
-    private $logger;
+    private LoggerInterface&MockObject $logger;
 
-    /** @psalm-var AccessLogFormatterInterface&MockObject */
-    private AccessLogFormatterInterface|MockObject $formatter;
+    private AccessLogFormatterInterface&MockObject $formatter;
 
     protected function setUp(): void
     {

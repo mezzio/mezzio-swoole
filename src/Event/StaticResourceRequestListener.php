@@ -15,8 +15,8 @@ use Mezzio\Swoole\StaticResourceHandlerInterface;
 class StaticResourceRequestListener
 {
     public function __construct(
-        private StaticResourceHandlerInterface $staticResourceHandler,
-        private AccessLogInterface $logger
+        private readonly StaticResourceHandlerInterface $staticResourceHandler,
+        private readonly AccessLogInterface $logger
     ) {
     }
 

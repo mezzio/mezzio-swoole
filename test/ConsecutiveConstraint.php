@@ -21,7 +21,7 @@ use PHPUnit\Framework\Constraint\Constraint;
 final class ConsecutiveConstraint extends Constraint
 {
     /** @var Iterator<array-key, Constraint> */
-    private Iterator $constraints;
+    private readonly Iterator $constraints;
     private bool $initial = true;
 
     /**

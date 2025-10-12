@@ -26,7 +26,7 @@ class ClearStatCacheMiddleware implements MiddlewareInterface
          * the stat cache should ALWAYS be cleared. Otherwise, the value is the number
          * of seconds between clear operations.
          */
-        private int $interval
+        private readonly int $interval
     ) {
     }
 

@@ -19,8 +19,7 @@ final class OptionsMiddlewareTest extends TestCase
 {
     use AssertResponseTrait;
 
-    /** @var MockObject&SwooleHttpRequest */
-    private MockObject $request;
+    private SwooleHttpRequest&MockObject $request;
 
     protected function setUp(): void
     {

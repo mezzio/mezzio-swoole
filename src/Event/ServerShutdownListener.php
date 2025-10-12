@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 
 class ServerShutdownListener
 {
-    public function __construct(private PidManager $pidManager, private LoggerInterface $logger)
+    public function __construct(private readonly PidManager $pidManager, private readonly LoggerInterface $logger)
     {
     }
 

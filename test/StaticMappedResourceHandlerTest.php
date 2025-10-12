@@ -20,23 +20,11 @@ use Swoole\Http\Response as SwooleHttpResponse;
 
 final class StaticMappedResourceHandlerTest extends TestCase
 {
-    /**
-     * @var FileLocationRepositoryInterface|MockObject
-     * @psalm-var MockObject&FileLocationRepositoryInterface
-     */
-    private $fileLocRepo;
+    private FileLocationRepositoryInterface&MockObject $fileLocRepo;
 
-    /**
-     * @var SwooleHttpRequest|MockObject
-     * @psalm-var MockObject&SwooleHttpRequest
-     */
-    private $request;
+    private SwooleHttpRequest&MockObject $request;
 
-    /**
-     * @var SwooleHttpResponse|MockObject
-     * @psalm-var MockObject&SwooleHttpResponse
-     */
-    private $response;
+    private SwooleHttpResponse&MockObject $response;
 
     /** @psalm-var non-empty-string */
     private string $uri;
@@ -56,6 +44,7 @@ final class StaticMappedResourceHandlerTest extends TestCase
     public function testConstructorRaisesExceptionForInvalidMiddlewareValue(): void
     {
         $this->expectException(Exception\InvalidStaticResourceMiddlewareException::class);
+        /** @psalm-suppress InvalidArgument */
         new StaticMappedResourceHandler($this->fileLocRepo, [$this]);
     }
 
@@ -95,11 +84,8 @@ final class StaticMappedResourceHandlerTest extends TestCase
             ->with($this->response, $this->fullPath);
 
         $middleware = new class ($expectedResponse) implements MiddlewareInterface {
-            private StaticResourceResponse $response;
-
-            public function __construct(StaticResourceResponse $response)
+            public function __construct(private readonly StaticResourceResponse $response)
             {
-                $this->response = $response;
             }
 
             public function __invoke(
@@ -130,11 +116,8 @@ final class StaticMappedResourceHandlerTest extends TestCase
         $expectedResponse->method('isFailure')->willReturn(true);
 
         $middleware = new class ($expectedResponse) implements MiddlewareInterface {
-            private StaticResourceResponse $response;
-
-            public function __construct(StaticResourceResponse $response)
+            public function __construct(private readonly StaticResourceResponse $response)
             {
-                $this->response = $response;
             }
 
             public function __invoke(

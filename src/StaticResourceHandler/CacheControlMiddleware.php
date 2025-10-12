@@ -54,7 +54,7 @@ class CacheControlMiddleware implements MiddlewareInterface
     {
         $response     = $next($request, $filename);
         $cacheControl = $this->getCacheControlForPath($request->server['request_uri']);
-        if ($cacheControl) {
+        if ($cacheControl !== null) {
             $response->addHeader('Cache-Control', $cacheControl);
         }
 

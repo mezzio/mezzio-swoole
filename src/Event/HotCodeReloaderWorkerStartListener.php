@@ -19,9 +19,9 @@ class HotCodeReloaderWorkerStartListener
         /**
          * A file watcher to monitor changes in files.
          */
-        private FileWatcherInterface $fileWatcher,
-        private LoggerInterface $logger,
-        private int $interval
+        private readonly FileWatcherInterface $fileWatcher,
+        private readonly LoggerInterface $logger,
+        private readonly int $interval
     ) {
     }
 

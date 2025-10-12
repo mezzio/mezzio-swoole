@@ -58,6 +58,7 @@
         "laminas/laminas-servicemanager": "^4.0",
         "phpunit/phpunit": "^10.5",
         "psalm/plugin-phpunit": "^0.19.5",
+        "rector/rector": "^2.1",
         "swoole/ide-helper": "^6.0",
         "vimeo/psalm": "^6.13"
     },
@@ -77,11 +78,16 @@
     "scripts": {
         "check": [
             "@cs-check",
+            "@rector",
             "@test"
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
+        "rector": "rector -n -vv",
+        "rector:fix": "rector -vv",
         "static-analysis": "psalm --shepherd --stats",
+        "static-analysis:b": "psalm --update-baseline",
+        "static-analysis:clear": "psalm --clear-cache",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },

@@ -36,7 +36,7 @@ final class Task implements TaskInterface
     private $handler;
 
     /** @psalm-var list<mixed> */
-    private array $payload;
+    private readonly array $payload;
 
     /**
      * @param array $payload Array of arguments for the $serviceName.
@@ -50,10 +50,8 @@ final class Task implements TaskInterface
 
     /**
      * Container argument ignored in this implementation.
-     *
-     * @return mixed
      */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): mixed
     {
         return ($this->handler)(...$this->payload);
     }
@@ -61,11 +59,9 @@ final class Task implements TaskInterface
     /**
      * Cannot add return types to internal interface methods in implementing
      * classes.
-     *
-     * @return array
      */
     #[ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'handler'   => $this->serializeHandler($this->handler),
