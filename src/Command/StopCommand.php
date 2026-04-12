@@ -19,10 +19,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function time;
 use function usleep;
 
-#[AsCommand('mezzio:swoole:stop')]
+#[AsCommand(self::COMMAND_NAME)]
 class StopCommand extends Command
 {
     use IsRunningTrait;
+
+    public const COMMAND_NAME = 'mezzio:swoole:stop';
 
     /**
      * @var string
@@ -39,7 +41,7 @@ EOH;
      *
      * @var null|string
      */
-    public static $defaultName = 'mezzio:swoole:stop';
+    public static $defaultName = self::COMMAND_NAME;
 
     /**
      * @internal

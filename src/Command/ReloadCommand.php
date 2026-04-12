@@ -20,9 +20,11 @@ use function sleep;
 
 use const SWOOLE_PROCESS;
 
-#[AsCommand('mezzio:swoole:reload')]
+#[AsCommand(self::COMMAND_NAME)]
 class ReloadCommand extends Command
 {
+    public const COMMAND_NAME = 'mezzio:swoole:reload';
+
     /**
      * @var string
      */
@@ -40,7 +42,7 @@ EOH;
      *
      * @var null|string
      */
-    public static $defaultName = 'mezzio:swoole:reload';
+    public static $defaultName = self::COMMAND_NAME;
 
     public function __construct(private int $serverMode)
     {
@@ -79,7 +81,7 @@ EOH;
         /** @var Application $application */
         $application = $this->getApplication();
 
-        $stop   = $application->find(StopCommand::getDefaultName());
+        $stop   = $application->find(StopCommand::COMMAND_NAME);
         $result = $stop->run(new ArrayInput([
             'command' => 'stop',
         ]), $output);
@@ -98,7 +100,7 @@ EOH;
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 
-        $start = $application->find(StartCommand::getDefaultName());
+        $start = $application->find(StartCommand::COMMAND_NAME);
 
         $inputArguments = [
             'command'       => 'start',
