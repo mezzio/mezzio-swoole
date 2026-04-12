@@ -34,7 +34,7 @@
     "extra": {
     },
     "require": {
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "ext-intl": "*",
         "ext-swoole": "^6.0",
         "ext-zlib": "*",
@@ -50,13 +50,13 @@
         "psr/http-server-handler": "^1.0.2",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
         "symfony/console": "^5.3 || ^6.0.19 || ^7.0",
-        "webmozart/assert": "^1.11"
+        "webmozart/assert": "^1.11 || ^2.0"
     },
     "require-dev": {
         "filp/whoops": "^2.15.2",
         "laminas/laminas-coding-standard": "~3.1.0",
         "laminas/laminas-servicemanager": "^4.0",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^11.5.55",
         "psalm/plugin-phpunit": "^0.19.5",
         "rector/rector": "^2.1",
         "swoole/ide-helper": "^6.0",
@@ -83,8 +83,8 @@
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "rector": "rector -n -vv",
-        "rector:fix": "rector -vv",
+        "rector": "rector -n",
+        "rector:fix": "rector",
         "static-analysis": "psalm --shepherd --stats",
         "static-analysis:b": "psalm --update-baseline",
         "static-analysis:clear": "psalm --clear-cache",
