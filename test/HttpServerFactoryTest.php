@@ -80,7 +80,7 @@ final class HttpServerFactoryTest extends TestCase
             $this->container->method('get')->with('config')->willReturn([
                 'mezzio-swoole' => [
                     'swoole-http-server' => [
-                        'host'     => '0.0.0.0',
+                        'host'     => '::1',
                         'port'     => 8081,
                         'mode'     => SWOOLE_BASE,
                         'protocol' => SWOOLE_SOCK_TCP6,
@@ -104,7 +104,7 @@ final class HttpServerFactoryTest extends TestCase
 
         $result = json_decode((string) $data, true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame([
-            'host' => '0.0.0.0',
+            'host' => '::1',
             'port' => 8081,
             'mode' => SWOOLE_BASE,
             'type' => SWOOLE_SOCK_TCP6,
@@ -241,27 +241,28 @@ final class HttpServerFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, array{
      *     0: int,
-     *     1: array<empty, empty>|array<string, non-empty-string>,
+     *     1: bool,
+     *     2: array<empty, empty>|array<string, non-empty-string>,
      * }>
      */
     public static function validSocketTypes(): array
     {
         $validTypes = [
-            [SWOOLE_SOCK_TCP, []],
-            [SWOOLE_SOCK_TCP6, []],
-            [SWOOLE_SOCK_UDP, []],
-            [SWOOLE_SOCK_UDP6, []],
-            [SWOOLE_UNIX_DGRAM, []],
-            [SWOOLE_UNIX_STREAM, []],
+            'tcp'      => [SWOOLE_SOCK_TCP, false, []],
+            'tcp v6'   => [SWOOLE_SOCK_TCP6, true, []],
+            'udp'      => [SWOOLE_SOCK_UDP, false, []],
+            'udp v6'   => [SWOOLE_SOCK_UDP6, true, []],
+            'datagram' => [SWOOLE_UNIX_DGRAM, false, []],
+            'stream'   => [SWOOLE_UNIX_STREAM, false, []],
         ];
 
         if (defined('SWOOLE_SSL')) {
-            $extraOptions = [
+            $extraOptions                  = [
                 'ssl_cert_file' => __DIR__ . '/TestAsset/ssl/server.crt',
                 'ssl_key_file'  => __DIR__ . '/TestAsset/ssl/server.key',
             ];
-            $validTypes[] = [SWOOLE_SOCK_TCP | SWOOLE_SSL, $extraOptions];
-            $validTypes[] = [SWOOLE_SOCK_TCP6 | SWOOLE_SSL, $extraOptions];
+            $validTypes['tcp with ssl']    = [SWOOLE_SOCK_TCP | SWOOLE_SSL, false, $extraOptions];
+            $validTypes['tcp v6 with ssl'] = [SWOOLE_SOCK_TCP6 | SWOOLE_SSL, true, $extraOptions];
         }
 
         return $validTypes;
@@ -271,12 +272,12 @@ final class HttpServerFactoryTest extends TestCase
      * @dataProvider validSocketTypes
      * @psalm-param array<string, string> $additionalOptions
      */
-    public function testServerCanBeStartedForKnownSocketTypeCombinations(int $socketType, array $additionalOptions): void
+    public function testServerCanBeStartedForKnownSocketTypeCombinations(int $socketType, bool $isIpv6, array $additionalOptions): void
     {
         $this->container->method('get')->with('config')->willReturn([
             'mezzio-swoole' => [
                 'swoole-http-server' => [
-                    'host'     => '127.0.0.1',
+                    'host'     => $isIpv6 ? '::1' : '127.0.0.1',
                     'port'     => 8080,
                     'protocol' => $socketType,
                     'mode'     => SWOOLE_PROCESS,
@@ -290,7 +291,7 @@ final class HttpServerFactoryTest extends TestCase
             try {
                 $factory      = new HttpServerFactory();
                 $swooleServer = $factory($this->container);
-                $swooleServer->on('Start', static function (SwooleServer $server) use ($worker): void {
+                $swooleServer->on('WorkerStart', static function (SwooleServer $server) use ($worker): void {
                     // Give the server a chance to start up and avoid zombies
                     usleep(10000);
                     $worker->write('Server Started');

@@ -40,7 +40,10 @@ final class InotifyFileWatcherTest extends TestCase
 
     protected function tearDown(): void
     {
-        fclose($this->file);
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
+        if ($this->file !== null) {
+            fclose($this->file);
+        }
         parent::tearDown();
     }
 
