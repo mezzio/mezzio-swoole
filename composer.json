@@ -50,7 +50,7 @@
         "psr/http-server-handler": "^1.0.2",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
         "symfony/console": "^5.3 || ^6.0.19 || ^7.0",
-        "webmozart/assert": "^1.11"
+        "webmozart/assert": "^1.11 || ^2.0"
     },
     "require-dev": {
         "filp/whoops": "^2.15.2",
