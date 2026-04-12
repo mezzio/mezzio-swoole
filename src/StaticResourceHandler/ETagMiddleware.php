@@ -20,6 +20,7 @@ use function in_array;
 use function md5_file;
 use function preg_match;
 use function sprintf;
+use function trim;
 
 class ETagMiddleware implements MiddlewareInterface
 {
@@ -125,7 +126,7 @@ class ETagMiddleware implements MiddlewareInterface
         $ifMatch     = $request->header['if-match'] ?? '';
         $ifNoneMatch = $request->header['if-none-match'] ?? '';
         $clientEtags = explode(',', $ifMatch !== '' ? $ifMatch : $ifNoneMatch);
-        array_walk($clientEtags, 'trim');
+        array_walk($clientEtags, trim(...));
 
         if (in_array($etag, $clientEtags, true)) {
             $response->setStatus(304);
