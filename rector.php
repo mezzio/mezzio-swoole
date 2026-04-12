@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector;
 
 return RectorConfig::configure()
@@ -21,7 +21,7 @@ return RectorConfig::configure()
         // vs
         // $this->httpServer->on('managerstart', $this->onManagerStart(...)
         // is not the same
-        FirstClassCallableRector::class => [
+        ArrayToFirstClassCallableRector::class => [
             __DIR__ . '/src/SwooleRequestHandlerRunner.php',
             __DIR__ . '/test/SwooleRequestHandlerRunnerTest.php',
             __DIR__ . '/test/Task/TaskTest.php',
