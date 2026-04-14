@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function file_exists;
 
-#[AsCommand(self::COMMAND_NAME)]
+#[AsCommand('mezzio:swoole:start')]
 class StartCommand extends Command
 {
     use IsRunningTrait;
@@ -32,8 +32,6 @@ class StartCommand extends Command
      * @var int
      */
     public const DEFAULT_NUM_WORKERS = 4;
-
-    public const COMMAND_NAME = 'mezzio:swoole:start';
 
     /**
      * @var string
@@ -54,13 +52,6 @@ EOH;
         'config/pipeline.php',
         'config/routes.php',
     ];
-
-    /**
-     * @deprecated Use StartCommand::getDefaultName() instead. Will be removed in 5.0.0
-     *
-     * @var null|string
-     */
-    public static $defaultName = self::COMMAND_NAME;
 
     public function __construct(private ContainerInterface $container)
     {

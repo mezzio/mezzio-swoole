@@ -20,17 +20,7 @@
       <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
   </file>
-  <file src="src/Command/StartCommand.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$defaultName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="src/Command/StatusCommand.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$defaultName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="src/Command/StopCommand.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
