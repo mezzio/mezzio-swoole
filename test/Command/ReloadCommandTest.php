@@ -29,6 +29,7 @@ use const SWOOLE_PROCESS;
 final class ReloadCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use CommandNameTrait;
     use ReflectMethodTrait;
 
     /** @psalm-var MockObject&InputInterface */
@@ -149,7 +150,7 @@ final class ReloadCommandTest extends TestCase
             ->willReturn(1);
 
         $application = $this->mockApplication();
-        $application->method('get')->with(StopCommand::class)->willReturn($stopCommand);
+        $application->method('find')->with($this->commandName(StopCommand::class))->willReturn($stopCommand);
 
         $command->setApplication($application);
 
@@ -198,10 +199,10 @@ final class ReloadCommandTest extends TestCase
         $application = $this->mockApplication();
         $application
             ->expects($this->exactly(2))
-            ->method('get')
+            ->method('find')
             ->willReturnMap([
-                [StopCommand::class, $stopCommand],
-                [StartCommand::class, $startCommand],
+                [$this->commandName(StopCommand::class), $stopCommand],
+                [$this->commandName(StartCommand::class), $startCommand],
             ]);
 
         $command->setApplication($application);
@@ -268,10 +269,10 @@ final class ReloadCommandTest extends TestCase
         $application = $this->mockApplication();
         $application
             ->expects($this->exactly(2))
-            ->method('get')
+            ->method('find')
             ->willReturnMap([
-                [StopCommand::class, $stopCommand],
-                [StartCommand::class, $startCommand],
+                [$this->commandName(StopCommand::class), $stopCommand],
+                [$this->commandName(StartCommand::class), $startCommand],
             ]);
 
         $this->output

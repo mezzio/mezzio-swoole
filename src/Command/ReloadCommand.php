@@ -79,7 +79,7 @@ EOH;
         /** @var Application $application */
         $application = $this->getApplication();
 
-        $stop   = $application->get(StopCommand::class);
+        $stop   = $application->find('mezzio:swoole:stop');
         $result = $stop->run(new ArrayInput([
             'command' => 'stop',
         ]), $output);
@@ -98,7 +98,7 @@ EOH;
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 
-        $start = $application->get(StartCommand::class);
+        $start = $application->find('mezzio:swoole:start');
 
         $inputArguments = [
             'command'       => 'start',
