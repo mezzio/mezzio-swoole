@@ -46,6 +46,13 @@ do not provide the option, 4 workers will be started.
 EOH;
 
     /**
+     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
+     *
+     * @var null|string
+     */
+    public static $defaultName = 'mezzio:swoole:start';
+
+    /**
      * @var string[]
      */
     private const PROGRAMMATIC_CONFIG_FILES = [
