@@ -29,6 +29,7 @@ use const SWOOLE_PROCESS;
 final class ReloadCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
+    use CommandNameTrait;
     use ReflectMethodTrait;
 
     /** @psalm-var MockObject&InputInterface */
@@ -143,13 +144,13 @@ final class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg) => "'mezzio:swoole:stop'" === (string) $arg),
                 $this->output
             )
             ->willReturn(1);
 
         $application = $this->mockApplication();
-        $application->method('find')->with(StopCommand::getDefaultName())->willReturn($stopCommand);
+        $application->method('find')->with(self::commandName(StopCommand::class))->willReturn($stopCommand);
 
         $command->setApplication($application);
 
@@ -181,7 +182,7 @@ final class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg) => "'mezzio:swoole:stop'" === (string) $arg),
                 $this->output
             )
             ->willReturn(0);
@@ -190,7 +191,10 @@ final class ReloadCommandTest extends TestCase
         $startCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'start --daemonize=1 --num-workers=5' === (string) $arg),
+                $this->callback(
+                    static fn(ArrayInput $arg)
+                        => "'mezzio:swoole:start' --daemonize=1 --num-workers=5" === (string) $arg
+                ),
                 $this->output
             )
             ->willReturn(1);
@@ -200,8 +204,8 @@ final class ReloadCommandTest extends TestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->willReturnMap([
-                [StopCommand::getDefaultName(), $stopCommand],
-                [StartCommand::getDefaultName(), $startCommand],
+                [self::commandName(StopCommand::class), $stopCommand],
+                [self::commandName(StartCommand::class), $startCommand],
             ]);
 
         $command->setApplication($application);
@@ -248,7 +252,7 @@ final class ReloadCommandTest extends TestCase
         $stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg) => 'stop' === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg) => "'mezzio:swoole:stop'" === (string) $arg),
                 $this->output
             )
             ->willReturn(0);
@@ -259,7 +263,7 @@ final class ReloadCommandTest extends TestCase
             ->with(
                 $this->callback(
                     static fn(ArrayInput $arg)
-                        => 'start --daemonize=1 --num-workers=5 --num-task-workers=2' === (string) $arg
+                        => "'mezzio:swoole:start' --daemonize=1 --num-workers=5 --num-task-workers=2" === (string) $arg
                 ),
                 $this->output
             )
@@ -270,8 +274,8 @@ final class ReloadCommandTest extends TestCase
             ->expects($this->exactly(2))
             ->method('find')
             ->willReturnMap([
-                [StopCommand::getDefaultName(), $stopCommand],
-                [StartCommand::getDefaultName(), $startCommand],
+                [self::commandName(StopCommand::class), $stopCommand],
+                [self::commandName(StartCommand::class), $startCommand],
             ]);
 
         $this->output

@@ -36,7 +36,7 @@ configuration value is set to SWOOLE_PROCESS.
 EOH;
 
     /**
-     * @deprecated Use ReloadCommand::getDefaultName() instead. Will be removed in 5.0.0
+     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
      *
      * @var null|string
      */
@@ -79,9 +79,9 @@ EOH;
         /** @var Application $application */
         $application = $this->getApplication();
 
-        $stop   = $application->find(StopCommand::getDefaultName());
+        $stop   = $application->find('mezzio:swoole:stop');
         $result = $stop->run(new ArrayInput([
-            'command' => 'stop',
+            'command' => 'mezzio:swoole:stop',
         ]), $output);
 
         if (0 !== $result) {
@@ -98,10 +98,10 @@ EOH;
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
 
-        $start = $application->find(StartCommand::getDefaultName());
+        $start = $application->find('mezzio:swoole:start');
 
         $inputArguments = [
-            'command'       => 'start',
+            'command'       => 'mezzio:swoole:start',
             '--daemonize'   => true,
             '--num-workers' => $input->getOption('num-workers') ?? StartCommand::DEFAULT_NUM_WORKERS,
         ];

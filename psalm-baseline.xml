@@ -16,10 +16,6 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="src/Command/ReloadCommand.php">
-    <DeprecatedMethod>
-      <code><![CDATA[StartCommand::getDefaultName()]]></code>
-      <code><![CDATA[StopCommand::getDefaultName()]]></code>
-    </DeprecatedMethod>
     <PossiblyUnusedProperty>
       <code><![CDATA[$defaultName]]></code>
     </PossiblyUnusedProperty>
@@ -366,15 +362,6 @@
       <code><![CDATA[$ignoreCase]]></code>
       <code><![CDATA[$maxDepth]]></code>
     </PossiblyUnusedParam>
-  </file>
-  <file src="test/Command/ReloadCommandTest.php">
-    <DeprecatedMethod>
-      <code><![CDATA[StartCommand::getDefaultName()]]></code>
-      <code><![CDATA[StartCommand::getDefaultName()]]></code>
-      <code><![CDATA[StopCommand::getDefaultName()]]></code>
-      <code><![CDATA[StopCommand::getDefaultName()]]></code>
-      <code><![CDATA[StopCommand::getDefaultName()]]></code>
-    </DeprecatedMethod>
   </file>
   <file src="test/Command/StartCommandTest.php">
     <PossiblyFalseArgument>

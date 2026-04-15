@@ -35,7 +35,7 @@ This command is only relevant when the server was started using the
 EOH;
 
     /**
-     * @deprecated Use StopCommand::getDefaultName() instead. Will be removed in 5.0.0
+     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
      *
      * @var null|string
      */
