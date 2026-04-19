@@ -15,9 +15,7 @@ use MezzioTest\Swoole\AttributeAssertionTrait;
 use MezzioTest\Swoole\ConsecutiveConstraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,33 +27,27 @@ use const SWOOLE_PROCESS;
 final class ReloadCommandTest extends TestCase
 {
     use AttributeAssertionTrait;
-    use CommandNameTrait;
     use ReflectMethodTrait;
 
     private InputInterface&MockObject $input;
 
     private OutputInterface&MockObject $output;
 
+    private StartCommand&MockObject $startCommand;
+
+    private StopCommand&MockObject $stopCommand;
+
     protected function setUp(): void
     {
-        $this->input  = $this->createMock(InputInterface::class);
-        $this->output = $this->createMock(OutputInterface::class);
-    }
-
-    /**
-     * @psalm-return MockObject&Application
-     */
-    public function mockApplication(): Application|MockObject
-    {
-        $helperSet   = $this->createMock(HelperSet::class);
-        $application = $this->createMock(Application::class);
-        $application->method('getHelperSet')->willReturn($helperSet);
-        return $application;
+        $this->input        = $this->createMock(InputInterface::class);
+        $this->output       = $this->createMock(OutputInterface::class);
+        $this->startCommand = $this->createMock(StartCommand::class);
+        $this->stopCommand  = $this->createMock(StopCommand::class);
     }
 
     public function testConstructorAcceptsServerMode(): ReloadCommand
     {
-        $command = new ReloadCommand(SWOOLE_PROCESS);
+        $command = new ReloadCommand(SWOOLE_PROCESS, $this->stopCommand, $this->startCommand);
         $this->assertAttributeSame(SWOOLE_PROCESS, 'serverMode', $command);
         return $command;
     }
@@ -120,7 +112,7 @@ final class ReloadCommandTest extends TestCase
 
     public function testExecuteEndsWithErrorWhenServerModeIsNotProcessMode(): void
     {
-        $command = new ReloadCommand(SWOOLE_BASE);
+        $command = new ReloadCommand(SWOOLE_BASE, $this->stopCommand, $this->startCommand);
 
         $this->output
             ->expects($this->once())
@@ -128,28 +120,20 @@ final class ReloadCommandTest extends TestCase
             ->with($this->stringContains('not configured to run in SWOOLE_PROCESS mode'));
 
         $execute = $this->reflectMethod($command, 'execute');
-        $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
+        $this->assertSame(Command::FAILURE, $execute->invoke($command, $this->input, $this->output));
     }
 
     public function testExecuteEndsWithErrorWhenStopCommandFails(): void
     {
-        $command = new ReloadCommand(SWOOLE_PROCESS);
+        $command = new ReloadCommand(SWOOLE_PROCESS, $this->stopCommand, $this->startCommand);
 
-        $stopCommand = $this->createMock(Command::class);
-        $stopCommand
+        $this->stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg): bool => "'mezzio:swoole:stop'" === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg): bool => "'" . StopCommand::NAME . "'" === (string) $arg),
                 $this->output
             )
-            ->willReturn(1);
-
-        $application = $this->mockApplication();
-        $application->method('find')
-            ->with(self::commandName(StopCommand::class))
-            ->willReturn($stopCommand);
-
-        $command->setApplication($application);
+            ->willReturn(Command::FAILURE);
 
         $this->output
             ->expects($this->exactly(2))
@@ -160,12 +144,12 @@ final class ReloadCommandTest extends TestCase
             ]));
 
         $execute = $this->reflectMethod($command, 'execute');
-        $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
+        $this->assertSame(Command::FAILURE, $execute->invoke($command, $this->input, $this->output));
     }
 
     public function testExecuteEndsWithErrorWhenStartCommandFails(): void
     {
-        $command = new ReloadCommand(SWOOLE_PROCESS);
+        $command = new ReloadCommand(SWOOLE_PROCESS, $this->stopCommand, $this->startCommand);
 
         $this->input
             ->expects($this->exactly(2))
@@ -175,37 +159,24 @@ final class ReloadCommandTest extends TestCase
                 ['num-task-workers', null],
             ]);
 
-        $stopCommand = $this->createMock(Command::class);
-        $stopCommand
+        $this->stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg): bool => "'mezzio:swoole:stop'" === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg): bool => "'" . StopCommand::NAME . "'" === (string) $arg),
                 $this->output
             )
-            ->willReturn(0);
+            ->willReturn(Command::SUCCESS);
 
-        $startCommand = $this->createMock(Command::class);
-        $startCommand
+        $this->startCommand
             ->method('run')
             ->with(
                 $this->callback(
                     static fn(ArrayInput $arg): bool
-                        => "'mezzio:swoole:start' --daemonize=1 --num-workers=5" === (string) $arg
+                        => "'" . StartCommand::NAME . "' --daemonize=1 --num-workers=5" === (string) $arg
                 ),
                 $this->output
             )
-            ->willReturn(1);
-
-        $application = $this->mockApplication();
-        $application
-            ->expects($this->exactly(2))
-            ->method('find')
-            ->willReturnMap([
-                [self::commandName(StopCommand::class), $stopCommand],
-                [self::commandName(StartCommand::class), $startCommand],
-            ]);
-
-        $command->setApplication($application);
+            ->willReturn(Command::FAILURE);
 
         $this->output
             ->expects($this->exactly(4))
@@ -230,12 +201,12 @@ final class ReloadCommandTest extends TestCase
             ]));
 
         $execute = $this->reflectMethod($command, 'execute');
-        $this->assertSame(1, $execute->invoke($command, $this->input, $this->output));
+        $this->assertSame(Command::FAILURE, $execute->invoke($command, $this->input, $this->output));
     }
 
     public function testExecuteEndsWithSuccessWhenBothStopAndStartCommandsSucceed(): void
     {
-        $command = new ReloadCommand(SWOOLE_PROCESS);
+        $command = new ReloadCommand(SWOOLE_PROCESS, $this->stopCommand, $this->startCommand);
 
         $this->input
             ->expects($this->exactly(2))
@@ -245,35 +216,25 @@ final class ReloadCommandTest extends TestCase
                 ['num-task-workers', 2],
             ]);
 
-        $stopCommand = $this->createMock(Command::class);
-        $stopCommand
+        $this->stopCommand
             ->method('run')
             ->with(
-                $this->callback(static fn(ArrayInput $arg): bool => "'mezzio:swoole:stop'" === (string) $arg),
+                $this->callback(static fn(ArrayInput $arg): bool => "'" . StopCommand::NAME . "'" === (string) $arg),
                 $this->output
             )
-            ->willReturn(0);
+            ->willReturn(Command::SUCCESS);
 
-        $startCommand = $this->createMock(Command::class);
-        $startCommand
+        $this->startCommand
             ->method('run')
             ->with(
                 $this->callback(
                     static fn(ArrayInput $arg): bool
-                        => "'mezzio:swoole:start' --daemonize=1 --num-workers=5 --num-task-workers=2" === (string) $arg
+                        => "'" . StartCommand::NAME . "' --daemonize=1 --num-workers=5 --num-task-workers=2"
+                            === (string) $arg
                 ),
                 $this->output
             )
-            ->willReturn(0);
-
-        $application = $this->mockApplication();
-        $application
-            ->expects($this->exactly(2))
-            ->method('find')
-            ->willReturnMap([
-                [self::commandName(StopCommand::class), $stopCommand],
-                [self::commandName(StartCommand::class), $startCommand],
-            ]);
+            ->willReturn(Command::SUCCESS);
 
         $this->output
             ->expects($this->exactly(3))
@@ -296,9 +257,7 @@ final class ReloadCommandTest extends TestCase
                 $this->stringContains('<info>.</info>'),
             ]));
 
-        $command->setApplication($application);
-
         $execute = $this->reflectMethod($command, 'execute');
-        $this->assertSame(0, $execute->invoke($command, $this->input, $this->output));
+        $this->assertSame(Command::SUCCESS, $execute->invoke($command, $this->input, $this->output));
     }
 }

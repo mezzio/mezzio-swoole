@@ -19,10 +19,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function time;
 use function usleep;
 
-#[AsCommand('mezzio:swoole:stop')]
+#[AsCommand(
+    self::NAME,
+    'Stop the web server.',
+    help: self::HELP,
+)]
 class StopCommand extends Command
 {
     use IsRunningTrait;
+
+    /**
+     * @var string
+     */
+    public const NAME = 'mezzio:swoole:stop';
 
     /**
      * @var string
@@ -33,13 +42,6 @@ Stop the web server. Kills all worker processes and stops the web server.
 This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
-
-    /**
-     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
-     *
-     * @var null|string
-     */
-    public static $defaultName = 'mezzio:swoole:stop';
 
     /**
      * @internal
@@ -57,34 +59,29 @@ EOH;
      */
     public int $waitThreshold = 60;
 
-    public function __construct(private PidManager $pidManager)
-    {
+    public function __construct(
+        private PidManager $pidManager
+    ) {
         $this->killProcess = SwooleProcess::kill(...);
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this->setDescription('Stop the web server.');
-        $this->setHelp(self::HELP);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (! $this->isRunning()) {
             $output->writeln('<info>Server is not running</info>');
-            return 0;
+            return Command::SUCCESS;
         }
 
         $output->writeln('<info>Stopping server ...</info>');
 
         if (! $this->stopServer()) {
             $output->writeln('<error>Error stopping server; check logs for details</error>');
-            return 1;
+            return Command::FAILURE;
         }
 
         $output->writeln('<info>Server stopped</info>');
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function stopServer(): bool

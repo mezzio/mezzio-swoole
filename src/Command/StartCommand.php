@@ -21,10 +21,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function file_exists;
 
-#[AsCommand('mezzio:swoole:start')]
+#[AsCommand(
+    self::NAME,
+    'Start the web server.',
+    help: self::HELP,
+)]
 class StartCommand extends Command
 {
     use IsRunningTrait;
+
+    /**
+     * @var string
+     */
+    public const NAME = 'mezzio:swoole:start';
 
     public PidManager $pidManager;
 
@@ -46,13 +55,6 @@ do not provide the option, 4 workers will be started.
 EOH;
 
     /**
-     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
-     *
-     * @var null|string
-     */
-    public static $defaultName = 'mezzio:swoole:start';
-
-    /**
      * @var string[]
      */
     private const PROGRAMMATIC_CONFIG_FILES = [
@@ -60,15 +62,14 @@ EOH;
         'config/routes.php',
     ];
 
-    public function __construct(private ContainerInterface $container)
-    {
+    public function __construct(
+        private ContainerInterface $container
+    ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Start the web server.');
-        $this->setHelp(self::HELP);
         $this->addOption(
             'daemonize',
             'd',
@@ -91,12 +92,13 @@ EOH;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var PidManager $this->pidManager */
-        $this->pidManager = $this->container->get(PidManager::class);
+        /** @var PidManager $pidManager */
+        $pidManager       = $this->container->get(PidManager::class);
+        $this->pidManager = $pidManager;
 
         if ($this->isRunning()) {
             $output->writeln('<error>Server is already running!</error>');
-            return 1;
+            return Command::FAILURE;
         }
 
         $serverOptions = [];
@@ -141,6 +143,6 @@ EOH;
         // Run the application
         $app->run();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
