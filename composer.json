@@ -55,7 +55,7 @@
         "filp/whoops": "^2.15.2",
         "laminas/laminas-coding-standard": "~3.1.0",
         "laminas/laminas-servicemanager": "^4.0",
-        "phpunit/phpunit": "^11.5.55",
+        "phpunit/phpunit": "^12.5.22",
         "psalm/plugin-phpunit": "^0.19.5",
         "rector/rector": "^2.1",
         "swoole/ide-helper": "^6.0",
