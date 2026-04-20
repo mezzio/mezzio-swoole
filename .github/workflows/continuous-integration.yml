@@ -23,5 +23,5 @@ jobs:
           php-version: ${{ env.default_php }}
           extensions: swoole
           tools: composer
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@3.2.1
       - run: composer rector
