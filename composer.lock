@@ -420,16 +420,16 @@
         },
         {
             "name": "mezzio/mezzio",
-            "version": "3.28.0",
+            "version": "3.28.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio.git",
-                "reference": "b177a8e6b60219f6ccafacea69527663ce53c513"
+                "reference": "b67f3f4a090d444e94e1ef3c49085b8e313ad501"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio/zipball/b177a8e6b60219f6ccafacea69527663ce53c513",
-                "reference": "b177a8e6b60219f6ccafacea69527663ce53c513",
+                "url": "https://api.github.com/repos/mezzio/mezzio/zipball/b67f3f4a090d444e94e1ef3c49085b8e313ad501",
+                "reference": "b67f3f4a090d444e94e1ef3c49085b8e313ad501",
                 "shasum": ""
             },
             "require": {
@@ -522,7 +522,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2026-05-18T11:17:11+00:00"
+            "time": "2026-06-10T09:37:33+00:00"
         },
         {
             "name": "mezzio/mezzio-router",
@@ -1464,16 +1464,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92"
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/14c5439eec4ccff081ac14eca2dc57feb2a66d92",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
                 "shasum": ""
             },
             "require": {
@@ -1525,7 +1525,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -1545,7 +1545,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:59:30+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -2661,28 +2661,29 @@
         },
         {
             "name": "composer/pcre",
-            "version": "3.3.2",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "b2bed4734f0cc156ee1fe9c0da2550420d99a21e"
+                "reference": "d5a341b3fb61f3001970940afb1d332968a183ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/b2bed4734f0cc156ee1fe9c0da2550420d99a21e",
-                "reference": "b2bed4734f0cc156ee1fe9c0da2550420d99a21e",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/d5a341b3fb61f3001970940afb1d332968a183ed",
+                "reference": "d5a341b3fb61f3001970940afb1d332968a183ed",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0"
             },
             "conflict": {
-                "phpstan/phpstan": "<1.11.10"
+                "phpstan/phpstan": "<2.2.2"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.12 || ^2",
-                "phpstan/phpstan-strict-rules": "^1 || ^2",
-                "phpunit/phpunit": "^8 || ^9"
+                "phpstan/phpstan": "^2",
+                "phpstan/phpstan-deprecation-rules": "^2",
+                "phpstan/phpstan-strict-rules": "^2",
+                "phpunit/phpunit": "^9"
             },
             "type": "library",
             "extra": {
@@ -2720,7 +2721,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/3.3.2"
+                "source": "https://github.com/composer/pcre/tree/3.4.0"
             },
             "funding": [
                 {
@@ -2730,13 +2731,9 @@
                 {
                     "url": "https://github.com/composer",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2024-11-12T16:29:46+00:00"
+            "time": "2026-06-07T11:47:49+00:00"
         },
         {
             "name": "composer/semver",
