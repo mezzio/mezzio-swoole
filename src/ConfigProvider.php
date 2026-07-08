@@ -188,10 +188,10 @@ class ConfigProvider
     {
         return [
             'commands' => [
-                'mezzio:swoole:reload' => ReloadCommand::class,
-                'mezzio:swoole:start'  => StartCommand::class,
-                'mezzio:swoole:status' => StatusCommand::class,
-                'mezzio:swoole:stop'   => StopCommand::class,
+                ReloadCommand::NAME => ReloadCommand::class,
+                StartCommand::NAME  => StartCommand::class,
+                StatusCommand::NAME => StatusCommand::class,
+                StopCommand::NAME   => StopCommand::class,
             ],
         ];
     }

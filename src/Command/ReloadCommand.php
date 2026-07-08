@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Swoole\Command;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -20,9 +19,18 @@ use function sleep;
 
 use const SWOOLE_PROCESS;
 
-#[AsCommand('mezzio:swoole:reload')]
+#[AsCommand(
+    self::NAME,
+    'Reload the web server.',
+    help: self::HELP,
+)]
 class ReloadCommand extends Command
 {
+    /**
+     * @var string
+     */
+    public const NAME = 'mezzio:swoole:reload';
+
     /**
      * @var string
      */
@@ -35,22 +43,16 @@ This command is only relevant when the server was started using the
 configuration value is set to SWOOLE_PROCESS.
 EOH;
 
-    /**
-     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
-     *
-     * @var null|string
-     */
-    public static $defaultName = 'mezzio:swoole:reload';
-
-    public function __construct(private readonly int $serverMode)
-    {
+    public function __construct(
+        private readonly int $serverMode,
+        private readonly StopCommand $stopCommand,
+        private readonly StartCommand $startCommand,
+    ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Reload the web server.');
-        $this->setHelp(self::HELP);
         $this->addOption(
             'num-workers',
             'w',
@@ -71,18 +73,11 @@ EOH;
             $output->writeln(
                 '<error>Server is not configured to run in SWOOLE_PROCESS mode; cannot reload</error>'
             );
-            return 1;
+            return Command::FAILURE;
         }
 
         $output->writeln('<info>Reloading server ...</info>');
-
-        /** @var Application $application */
-        $application = $this->getApplication();
-
-        $stop   = $application->find('mezzio:swoole:stop');
-        $result = $stop->run(new ArrayInput([
-            'command' => 'mezzio:swoole:stop',
-        ]), $output);
+        $result = $this->stopCommand->run($this->createStopInput(), $output);
 
         if (0 !== $result) {
             $output->writeln('<error>Cannot reload server: unable to stop current server</error>');
@@ -97,11 +92,27 @@ EOH;
 
         $output->writeln('<info>[DONE]</info>');
         $output->writeln('<info>Starting server</info>');
+        $result = $this->startCommand->run($this->createStartInput($input), $output);
 
-        $start = $application->find('mezzio:swoole:start');
+        if (0 !== $result) {
+            $output->writeln('<error>Cannot reload server: unable to start server</error>');
+            return $result;
+        }
 
+        return Command::SUCCESS;
+    }
+
+    private function createStopInput(): ArrayInput
+    {
+        return new ArrayInput([
+            'command' => StopCommand::NAME,
+        ]);
+    }
+
+    private function createStartInput(InputInterface $input): ArrayInput
+    {
         $inputArguments = [
-            'command'       => 'mezzio:swoole:start',
+            'command'       => StartCommand::NAME,
             '--daemonize'   => true,
             '--num-workers' => $input->getOption('num-workers') ?? StartCommand::DEFAULT_NUM_WORKERS,
         ];
@@ -111,13 +122,6 @@ EOH;
             $inputArguments['--num-task-workers'] = (int) $numTaskWorkers;
         }
 
-        $result = $start->run(new ArrayInput($inputArguments), $output);
-
-        if (0 !== $result) {
-            $output->writeln('<error>Cannot reload server: unable to start server</error>');
-            return $result;
-        }
-
-        return 0;
+        return new ArrayInput($inputArguments);
     }
 }
