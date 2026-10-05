@@ -10,6 +10,8 @@ namespace MezzioTest\Swoole\Command;
 
 use Mezzio\Swoole\Command\ReloadCommand;
 use Mezzio\Swoole\Command\ReloadCommandFactory;
+use Mezzio\Swoole\Command\StartCommand;
+use Mezzio\Swoole\Command\StopCommand;
 use MezzioTest\Swoole\AttributeAssertionTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -25,6 +27,10 @@ final class ReloadCommandFactoryTest extends TestCase
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(false);
+        $container->method('get')->willReturnMap([
+            [StopCommand::class, $this->createMock(StopCommand::class)],
+            [StartCommand::class, $this->createMock(StartCommand::class)],
+        ]);
 
         $factory = new ReloadCommandFactory();
 
@@ -69,7 +75,11 @@ final class ReloadCommandFactoryTest extends TestCase
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
-        $container->method('get')->with('config')->willReturn($config);
+        $container->method('get')->willReturnMap([
+            ['config', $config],
+            [StopCommand::class, $this->createMock(StopCommand::class)],
+            [StartCommand::class, $this->createMock(StartCommand::class)],
+        ]);
 
         $factory = new ReloadCommandFactory();
 

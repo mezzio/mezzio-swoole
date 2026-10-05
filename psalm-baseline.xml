@@ -5,26 +5,6 @@
       <code><![CDATA[$cacheControlDirectives[$regex]]]></code>
     </MixedArrayOffset>
   </file>
-  <file src="src/Command/ReloadCommand.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$defaultName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="src/Command/StartCommand.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$defaultName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="src/Command/StatusCommand.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$defaultName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="src/Command/StopCommand.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$defaultName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="src/Event/ServerShutdownEvent.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[getServer]]></code>

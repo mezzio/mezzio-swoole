@@ -3,5 +3,6 @@
         "inotify"
     ],
     "ignore_php_platform_requirements": {
-    }
+    },
+    "backwardCompatibilityCheck": true
 }

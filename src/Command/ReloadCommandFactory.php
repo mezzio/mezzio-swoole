@@ -20,6 +20,11 @@ class ReloadCommandFactory
 
         $mode = $config['mezzio-swoole']['swoole-http-server']['mode'] ?? SWOOLE_BASE;
 
-        return new ReloadCommand($mode);
+        /** @var StopCommand $stopCommand */
+        $stopCommand = $container->get(StopCommand::class);
+        /** @var StartCommand $startCommand */
+        $startCommand = $container->get(StartCommand::class);
+
+        return new ReloadCommand($mode, $stopCommand, $startCommand);
     }
 }

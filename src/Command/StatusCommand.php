@@ -14,10 +14,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand('mezzio:swoole:status')]
+#[AsCommand(
+    self::NAME,
+    'Get the status of the web server.',
+    help: self::HELP,
+)]
 class StatusCommand extends Command
 {
     use IsRunningTrait;
+
+    /**
+     * @var string
+     */
+    public const NAME = 'mezzio:swoole:status';
 
     /**
      * @var string
@@ -29,22 +38,10 @@ This command is only relevant when the server was started using the
 --daemonize option.
 EOH;
 
-    /**
-     * @deprecated Use the #[AsCommand] attribute to retrieve the command name. Will be removed in 5.0.0.
-     *
-     * @var null|string
-     */
-    public static $defaultName = 'mezzio:swoole:status';
-
-    public function __construct(private PidManager $pidManager)
-    {
+    public function __construct(
+        private PidManager $pidManager
+    ) {
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this->setDescription('Get the status of the web server.');
-        $this->setHelp(self::HELP);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -55,6 +52,6 @@ EOH;
 
         $output->writeln($message);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
